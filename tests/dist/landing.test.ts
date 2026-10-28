@@ -74,7 +74,7 @@ describe('landing page sharing and requests', () => {
   });
 
   it('"Request your city" opens the request-a-city issue form', () => {
-    expect(html).toMatch(/<form[^>]*action="https:\/\/github\.com\/JGailor\/public-budgets\/issues\/new"[^>]*method="get"/);
+    expect(html).toMatch(/<form[^>]*action="https:\/\/github\.com\/PlayFrameStudios\/wtmw\/issues\/new"[^>]*method="get"/);
     expect(html).toContain('name="template" value="request-a-city.yml"');
   });
 });

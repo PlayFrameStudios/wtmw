@@ -221,7 +221,7 @@ test.describe('desktop shell', () => {
     await page.goto(`${berkeley.path}gap/`);
     const href = await page.locator('.strip .report').getAttribute('href');
     const url = new URL(href!);
-    expect(url.origin + url.pathname).toBe('https://github.com/JGailor/public-budgets/issues/new');
+    expect(url.origin + url.pathname).toBe('https://github.com/PlayFrameStudios/wtmw/issues/new');
     expect(url.searchParams.get('template')).toBe('report-an-error.yml');
     expect(url.searchParams.get('page')).toBe('https://wherethemoneywent.com/us/ca/berkeley/gap/');
   });
