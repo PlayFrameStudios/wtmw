@@ -46,7 +46,7 @@ test.describe('landing page', () => {
     await page.getByPlaceholder('State').fill('CA');
     const [popup] = await Promise.all([page.waitForEvent('popup'), page.getByRole('button', { name: 'Request it' }).click()]);
     const url = new URL(popup.url());
-    expect(url.origin + url.pathname).toBe('https://github.com/JGailor/public-budgets/issues/new');
+    expect(url.origin + url.pathname).toBe('https://github.com/PlayFrameStudios/wtmw/issues/new');
     expect(Object.fromEntries(url.searchParams)).toEqual({ template: 'request-a-city.yml', title: 'City request', city: 'Oakland', state: 'CA' });
   });
 });

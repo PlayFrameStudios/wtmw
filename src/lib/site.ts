@@ -5,7 +5,7 @@ export const SITE = {
   /** Compact form for tight spots: the mobile header, favicon, social handles. */
   short: 'WTMW',
   domain: 'wherethemoneywent.com',
-  repo: 'https://github.com/JGailor/public-budgets',
+  repo: 'https://github.com/PlayFrameStudios/wtmw',
   /** The copyright holder, named and linked in the footer. */
   publisher: { name: 'PlayFrame Studios', url: 'https://playframestudios.com/' },
   /** The tool the site is built with, credited in the footer. */
