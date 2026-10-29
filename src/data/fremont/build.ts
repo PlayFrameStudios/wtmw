@@ -40,7 +40,7 @@ const DEPARTMENTS = [
 const CITYWIDE: [label: string, name: string][] = [
   ['Non-departmental Expenditures', 'Non-departmental'],
   ['Debt Service', 'Debt service'],
-  ['Less: Citywide Savings', 'Citywide Savings'],
+  ['Less: Citywide Savings', 'Citywide savings'],
 ];
 const REVENUES = [
   'Property Tax',

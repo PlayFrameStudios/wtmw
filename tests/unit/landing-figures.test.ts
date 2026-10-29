@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { gapPlan } from '../../src/data/types';
 import { budgetFor } from '../../src/lib/budget';
 import { cities } from '../../src/lib/cities';
 import { familiesFor, loadFamilies } from '../../src/lib/families';
@@ -8,7 +9,7 @@ import { headlines } from '../../src/lib/headlines';
 import { per100, squares } from '../../src/lib/waffle';
 
 const city = cities[0];
-const budget = budgetFor(city)!;
+const budget = gapPlan(budgetFor(city)!, 'test');
 const families = familiesFor(city, budget);
 const fy27 = budget.departmentReductions[0].departments;
 

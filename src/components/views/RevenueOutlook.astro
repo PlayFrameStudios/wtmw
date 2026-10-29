@@ -65,8 +65,12 @@ const recoveryFigure: Figure | undefined = recovery && {
           <thead>
             <tr>
               <th scope="col">Source</th>
-              {r.columns.map((c) => <th scope="col" class:list={['num', { 'ro-primary': c.primary }]}>{c.label}</th>)}
-              {r.before && <th scope="col" class="num">Change</th>}
+              {r.columns.map((c) => (
+                <>
+                  <th scope="col" class:list={['num', { 'ro-primary': c.primary }]}>{c.label}</th>
+                  {c.primary && r.before && <th scope="col" class="num">Change</th>}
+                </>
+              ))}
             </tr>
           </thead>
           {
@@ -89,13 +93,15 @@ const recoveryFigure: Figure | undefined = recovery && {
                         {l.name}
                       </th>
                       {l.cells.map((c, i) => (
-                        <td class:list={['num', { 'ro-primary': r.columns[i].primary }]}>
-                          <Sourced city={city} figure={c.figure}>
-                            {shortMoney(c.figure.value)}
-                          </Sourced>
-                        </td>
+                        <>
+                          <td class:list={['num', { 'ro-primary': r.columns[i].primary }]}>
+                            <Sourced city={city} figure={c.figure}>
+                              {shortMoney(c.figure.value)}
+                            </Sourced>
+                          </td>
+                          {r.columns[i].primary && r.before && <td class="num ro-change">{l.change === null ? '—' : signedPct(l.change)}</td>}
+                        </>
                       ))}
-                      {r.before && <td class="num ro-change">{l.change === null ? '—' : signedPct(l.change)}</td>}
                     </tr>
                   );
                 })}
@@ -107,14 +113,16 @@ const recoveryFigure: Figure | undefined = recovery && {
               <th scope="row">Total</th>
               {
                 r.total.cells.map((c, i) => (
-                  <td class:list={['num', { 'ro-primary': r.columns[i].primary }]}>
-                    <Sourced city={city} figure={c.figure}>
-                      {shortMoney(c.figure.value)}
-                    </Sourced>
-                  </td>
+                  <>
+                    <td class:list={['num', { 'ro-primary': r.columns[i].primary }]}>
+                      <Sourced city={city} figure={c.figure}>
+                        {shortMoney(c.figure.value)}
+                      </Sourced>
+                    </td>
+                    {r.columns[i].primary && r.before && <td class="num ro-change">{r.total.change === null ? '—' : signedPct(r.total.change)}</td>}
+                  </>
                 ))
               }
-              {r.before && <td class="num ro-change">{r.total.change === null ? '—' : signedPct(r.total.change)}</td>}
             </tr>
           </tfoot>
         </table>

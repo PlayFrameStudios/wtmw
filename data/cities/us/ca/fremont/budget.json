@@ -167,7 +167,7 @@
         },
         {
           "id": "citywide-savings",
-          "name": "Citywide Savings",
+          "name": "Citywide savings",
           "kind": "citywide",
           "amount": -19700000,
           "source": "S1",

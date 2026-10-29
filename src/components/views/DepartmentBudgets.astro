@@ -35,7 +35,7 @@ const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 
       <h1>What each department gets in {y}</h1>
       <p class="db-lede">
         The City's departments have <Sourced city={city} figure={p.departments}>{shortMoney(p.departments.value)}</Sourced> of General Fund money this year.
-        Non-departmental costs and debt service add to that, and a citywide savings assumption takes some back, for
+        Non-departmental costs and debt service add to that, and a citywide savings assumption takes some back, for{' '}
         <Sourced city={city} figure={p.total}>{shortMoney(p.total.value)}</Sourced> in all.
       </p>
     </section>
@@ -156,7 +156,8 @@ const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 
   }
   .db-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    /* A fixed second column, so every row's bar ends at the same place. */
+    grid-template-columns: minmax(0, 1fr) 9.5rem;
     grid-template-areas: 'name amount' 'bar per';
     gap: 0.25rem 1rem;
     align-items: center;

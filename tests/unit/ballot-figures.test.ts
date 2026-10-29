@@ -2,12 +2,13 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { ballotFileFor, ballotPage, ballotState, checkBallotFile, type BallotFile } from '../../src/lib/ballot';
+import { gapPlan } from '../../src/data/types';
 import { budgetFor } from '../../src/lib/budget';
 import { cities } from '../../src/lib/cities';
 import { shortNames } from '../../src/lib/departments';
 
 const city = cities[0];
-const budget = budgetFor(city)!;
+const budget = gapPlan(budgetFor(city)!, 'test');
 const file = ballotFileFor(city.path);
 const p = ballotPage(budget, file, shortNames(city.path, budget));
 const [passes, fails] = p.scenarios;

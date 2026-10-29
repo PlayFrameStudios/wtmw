@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { gapPlan } from '../../src/data/types';
 import { budgetFor } from '../../src/lib/budget';
 import { cities } from '../../src/lib/cities';
 
@@ -28,7 +29,7 @@ describe('the one-time bridge is never called tax money', () => {
   });
 
   it('the pool really is reserves and a Successor Agency transfer, as the pages say', () => {
-    const b = budgetFor(cities[0])!;
+    const b = gapPlan(budgetFor(cities[0])!, 'test');
     expect(b.oneTimeResources.sources.map((s) => s.label)).toEqual(['Operating Reserve (2025 AAO #1)', 'Dissolution of Successor Agency — Transfer to City']);
     expect(b.oneTimeResources.uses.find((u) => /sales & use tax/i.test(u.label))!.amount).toBe(9_443_000);
   });

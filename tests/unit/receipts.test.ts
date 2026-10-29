@@ -5,12 +5,13 @@ import { describe, expect, it } from 'vitest';
 import type { CityBudget } from '../../src/data/types';
 import { buildUsage, fillPlaceholders } from '../../src/integrations/source-usage';
 import { sourceList } from '../../src/lib/receipt-target';
+import { gapPlan } from '../../src/data/types';
 import { budgetFor } from '../../src/lib/budget';
 import { cities } from '../../src/lib/cities';
 import { figureReceipt, formatValue, longDate, sourceReceipt, sourcesById, type Figure } from '../../src/lib/receipts';
 
 const city = cities[0];
-const budget = budgetFor(city)!;
+const budget = gapPlan(budgetFor(city)!, 'test');
 const page = new URL('https://wherethemoneywent.com/us/ca/berkeley/gap/');
 const step = (key: string) => budget.deficitBridge.steps.find((s) => s.key === key)!;
 const gap = step('final-gap');

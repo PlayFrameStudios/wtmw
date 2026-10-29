@@ -7,11 +7,11 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { CityBudget } from '../../src/data/types';
+import type { GapBudget } from '../../src/data/types';
 import { shortMoney } from '../../src/lib/format';
 
 const root = join(import.meta.dirname, '../..');
-const b: CityBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
+const b: GapBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
 const page = (p: string) => readFileSync(join(root, 'dist/us/ca/berkeley', p, 'index.html'), 'utf8');
 const ballot = page('ballot');
 const departments = page('departments');

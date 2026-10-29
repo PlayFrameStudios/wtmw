@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { gapPlan } from '../../src/data/types';
 import { budgetFor } from '../../src/lib/budget';
 import { cities } from '../../src/lib/cities';
 import { fy } from '../../src/lib/city-settings';
@@ -8,7 +9,7 @@ import { gapPage } from '../../src/lib/gap';
 import { figureReceipt } from '../../src/lib/receipts';
 
 const city = cities[0];
-const budget = budgetFor(city)!;
+const budget = gapPlan(budgetFor(city)!, 'test');
 const label = (y: number) => fy(city.budget.labels, y);
 const g = gapPage(budget, city.budget.years, label);
 const page = new URL('https://wherethemoneywent.com/us/ca/berkeley/gap/');

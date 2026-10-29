@@ -33,7 +33,8 @@ function cell(token: string): number | null {
   if (!m || /[^\d]/.test(m[2].replace(/[,.]/g, '')) || Boolean(m[1]) !== Boolean(m[4])) return null;
   const n = Number(m[2].replace(/,/g, ''));
   if (!Number.isFinite(n)) return null;
-  return (m[1] ? -n : n) / (m[3] ? 100 : 1);
+  // A percent is a rate, rounded so 76.2% is 0.762 and not 0.7620000000000001.
+  return m[3] ? Math.round(((m[1] ? -n : n) / 100) * 1e9) / 1e9 : m[1] ? -n : n;
 }
 
 /** Splits a printed line into its label and trailing cells (a "$" before a figure is dropped). */
