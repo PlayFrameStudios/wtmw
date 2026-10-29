@@ -5,6 +5,7 @@
  */
 import type { CityBudget, DocCapitalLine } from '../data/types.ts';
 import { shortMoney } from './format.ts';
+import { dataDirOf } from './cities.ts';
 import type { Figure } from './receipts.ts';
 
 export interface CapitalGroupDef {
@@ -32,7 +33,7 @@ export interface BlockLine {
 const files = import.meta.glob<CapitalGroupsFile>('/data/cities/*/*/*/capital-groups.json', { eager: true, import: 'default' });
 
 export function capitalGroupsFor(cityPath: string): CapitalGroupsFile {
-  const f = files[`/data/cities${cityPath}capital-groups.json`];
+  const f = files[`${dataDirOf(cityPath)}capital-groups.json`];
   if (!f) throw new Error(`${cityPath} has no capital-groups.json`);
   return f;
 }

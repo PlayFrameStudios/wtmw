@@ -1,70 +1,42 @@
 /**
  * The city registry. Every folder at data/cities/{country}/{state}/{city}/
  * holding a city.json is a city, and gets its pages generated. Adding a city
- * is adding a folder; no routing code changes.
+ * is adding a folder; no routing code changes. The rules for reading a
+ * city.json are in city-registry.ts.
+ *
+ * Test fixture cities live at data/fixtures/{name}/ and are served under
+ * /test/cities/{name}/ (#42): built so tests can drive them, but kept out of
+ * search, the city lists and the landing page, like /test/receipts/.
  */
+import { pagesFor, type CityPage, type CityPageSlug } from './city-pages.ts';
+import { buildRegistry, type City } from './city-registry.ts';
 
-export interface CityMeta {
-  name: string;
-  state: string;
-  stateCode: string;
-  country: string;
-  countryCode: string;
-  government: string;
+export { buildRegistry, parseCity, type City, type CityMeta } from './city-registry.ts';
+export { CITY_PAGES, pagesFor, hasPage, type CityPage, type CityPageSlug } from './city-pages.ts';
+
+const files = import.meta.glob(['/data/cities/*/*/*/city.json', '/data/fixtures/*/city.json'], { eager: true, import: 'default' });
+// Only the names: which data files exist, so a city can't declare a page it has no data for.
+const present = new Set(Object.keys(import.meta.glob(['/data/cities/*/*/*/*.json', '/data/fixtures/*/*.json'])));
+
+/** Every city that gets pages, test fixtures included. */
+export const allCities: City[] = buildRegistry(files, (p) => present.has(p));
+
+/** The published cities: the city switcher, the landing page's list, the tests that read every city. */
+export const cities: City[] = allCities.filter((c) => !c.fixture);
+
+/** The city whose figures the landing page shows. */
+export const featuredCity: City = cities.find((c) => c.featured)!;
+
+/** The folder a city's budget data is read from, by its site path (a fixture borrows another city's). */
+export function dataDirOf(cityPath: string): string {
+  return allCities.find((c) => c.path === cityPath)?.dataDir ?? `/data/cities${cityPath}`;
 }
 
-export interface City extends CityMeta {
-  /** URL segments, lowercase: { country: 'us', state: 'ca', city: 'berkeley' } */
-  slug: { country: string; state: string; city: string };
-  /** Site path with trailing slash, e.g. /us/ca/berkeley/ */
-  path: string;
-}
+/** The pages this city gets, in nav order. */
+export const cityPages = (city: City): CityPage[] => pagesFor(city);
 
-export { CITY_PAGES, type CityPageSlug } from './city-pages';
-
-
-const SEGMENT = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const REQUIRED: (keyof CityMeta)[] = ['name', 'state', 'stateCode', 'country', 'countryCode', 'government'];
-
-/** Turns a registry file path plus its parsed JSON into a City, or throws with the reason. */
-export function parseCity(file: string, meta: unknown): City {
-  const m = file.match(/data\/cities\/([^/]+)\/([^/]+)\/([^/]+)\/city\.json$/);
-  if (!m) throw new Error(`${file}: not at data/cities/{country}/{state}/{city}/city.json`);
-  const [, country, state, city] = m;
-  for (const seg of [country, state, city]) {
-    if (!SEGMENT.test(seg)) throw new Error(`${file}: path segment "${seg}" must be lowercase letters, digits and hyphens`);
-  }
-  if (typeof meta !== 'object' || meta === null) throw new Error(`${file}: expected a JSON object`);
-  const record = meta as Record<string, unknown>;
-  for (const key of REQUIRED) {
-    if (typeof record[key] !== 'string' || record[key] === '') throw new Error(`${file}: missing "${key}"`);
-  }
-  const typed = record as unknown as CityMeta;
-  if (typed.countryCode.toLowerCase() !== country) {
-    throw new Error(`${file}: countryCode "${typed.countryCode}" does not match folder "${country}"`);
-  }
-  if (typed.stateCode.toLowerCase() !== state) {
-    throw new Error(`${file}: stateCode "${typed.stateCode}" does not match folder "${state}"`);
-  }
-  return { ...typed, slug: { country, state, city }, path: `/${country}/${state}/${city}/` };
-}
-
-/** Builds the registry from {path: json} entries; rejects duplicates, sorts by path. */
-export function buildRegistry(entries: Record<string, unknown>): City[] {
-  const cities = Object.entries(entries).map(([file, json]) => parseCity(file, json));
-  const seen = new Set<string>();
-  for (const c of cities) {
-    if (seen.has(c.path)) throw new Error(`duplicate city ${c.path}`);
-    seen.add(c.path);
-  }
-  return cities.sort((a, b) => a.path.localeCompare(b.path));
-}
-
-const files = import.meta.glob('/data/cities/*/*/*/city.json', { eager: true, import: 'default' });
-
-export const cities: City[] = buildRegistry(files);
-
-/** getStaticPaths result for a city route: one entry per registered city. */
-export function cityStaticPaths() {
-  return cities.map((city) => ({ params: city.slug, props: { city } }));
+/** getStaticPaths for a city route: one entry per city that has `page` (every city, for the overview). */
+export function cityStaticPaths(page?: CityPageSlug) {
+  return () =>
+    allCities.filter((city) => !page || pagesFor(city).some((p) => p.slug === page)).map((city) => ({ params: city.slug, props: { city } }));
 }

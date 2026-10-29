@@ -1,14 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { readdirSync } from 'node:fs';
-import { join } from 'node:path';
-import { CITY_PAGES } from '../../src/lib/city-pages';
+import { cityRoutes } from './cities';
 
-const dataDir = join(import.meta.dirname, '../../data/cities');
-const cityPaths = readdirSync(dataDir).flatMap((country) =>
-  readdirSync(join(dataDir, country)).flatMap((state) => readdirSync(join(dataDir, country, state)).map((city) => `/${country}/${state}/${city}/`)),
-);
-const ROUTES = ['/', ...cityPaths.flatMap((c) => [c, ...CITY_PAGES.map((p) => `${c}${p.slug}/`)]), '/test/receipts/', '/us/ca/nowhere/'];
+const ROUTES = ['/', ...cityRoutes, '/test/receipts/', '/us/ca/nowhere/'];
 
 async function violations(page: Page) {
   const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();

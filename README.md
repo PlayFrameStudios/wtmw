@@ -40,7 +40,7 @@ CI (`.github/workflows/ci.yml`) runs lint, unit tests, build and dist tests on e
 
 `src/styles/tokens.css` holds the epic's colors, fonts and layout values as CSS custom properties. Red means only "money short" (deficits and cuts) and gold only one-time money; don't use either for decoration. Headlines are set in Gelasio (metric-compatible with Georgia) and UI and numbers in Nunito Sans (an open stand-in for Avenir Next), both self-hosted from `@fontsource`. Tables and `.num` use tabular numerals.
 
-Every page renders inside `src/layouts/Base.astro`: the dark top strip (path, independence line, "Report an error"), the header (full nav at 1024px and up, compact `WTMW` header with a menu below), and the footer. Nav links come from `CITY_PAGES` in `src/lib/city-pages.ts`; the "19 sources" pill counts the city's sources from its data. At 1024px the nav has about 50px to spare, so adding pages to the nav needs a layout change; the browser tests will fail if items overlap.
+Every page renders inside `src/layouts/Base.astro`: the dark top strip (path, independence line, "Report an error"), the header (full nav at 1024px and up, compact `WTMW` header with a menu below), and the footer. Nav links come from the city's page set, `pagesFor()` in `src/lib/city-pages.ts` (see *Which pages a city gets* below); the "19 sources" pill counts the city's sources from its data. The full nav shows from 1200px, sized for the 7-link nav; the browser tests check it, and the 6-link nav with Balance & Reserves, for overlap.
 
 ## Showing a number: source chips, receipts and glossary terms
 
@@ -65,7 +65,7 @@ Describe what the City did in the City's terms. No adjectives on money ("proppin
 
 ## The landing page
 
-`src/pages/index.astro` quotes the first city's headline figures, computed by `headlines()` in `src/lib/headlines.ts`; `tests/dist/landing.test.ts` recomputes each one independently from `budget.json`, and a unit test fails if any of them is typed into the page. Department families (for the waffle colors) are in `data/cities/{city}/families.json`, an editorial grouping that the build checks covers every department exactly once. The link-preview image is `public/og/wherethemoneywent.png`, made by `node scripts/og-image.ts`.
+`src/pages/index.astro` quotes the featured city's headline figures, computed by `headlines()` in `src/lib/headlines.ts`; `tests/dist/landing.test.ts` recomputes each one independently from `budget.json`, and a unit test fails if any of them is typed into the page. Department families (for the waffle colors) are in `data/cities/{city}/families.json`, an editorial grouping that the build checks covers every department exactly once. The link-preview image is `public/og/wherethemoneywent.png`, made by `node scripts/og-image.ts`.
 
 ## The overview page
 
@@ -87,11 +87,38 @@ Describe what the City did in the City's terms. No adjectives on money ("proppin
 data/cities/{country}/{state}/{city}/city.json
 ```
 
-Each folder is one city, and its path is its URL: `data/cities/us/ca/berkeley/` is served at `/us/ca/berkeley/`. `src/lib/cities.ts` loads the registry at build time and fails the build if a `city.json` is missing a field or its `countryCode`/`stateCode` disagree with the folder.
+Each folder is one city, and its path is its URL: `data/cities/us/ca/berkeley/` is served at `/us/ca/berkeley/`. `src/lib/cities.ts` loads the registry at build time and fails the build if a `city.json` is missing a field or its `countryCode`/`stateCode` disagree with the folder. A path that isn't in the registry is a 404.
 
-Every city gets an overview at its root plus the sub-pages in `CITY_PAGES` (`/revenue/`, `/gap/`, `/departments/`, `/ballot/`, `/capital/`, `/sources/`). A path that isn't in the registry is a 404.
+### Which pages a city gets
 
-**To add a city**, create its folder and `city.json` (copy Berkeley's). The budget data for each city lives in the same folder.
+Every city gets an overview at its root, plus the pages `pagesFor()` in `src/lib/city-pages.ts` picks from its `city.json`. Revenue, Departments, Capital, Sources and the Glossary are always there. The rest are settings, so changing them is a data change, not a code change:
+
+```json
+"featured": true,
+"budget": {
+  "cadence": "biennial",
+  "years": [2027, 2028],
+  "labels": { "long": "FY{end}", "short": "FY{yy}", "spoken": "fiscal year {end}" }
+},
+"fiscalPosition": {
+  "variant": "gap",
+  "reason": { "text": "…", "cites": [{ "source": "S20", "page": 2, "quote": "…" }] }
+},
+"ballot": true
+```
+
+- **`fiscalPosition`** fills one nav slot. `gap` is The Gap (`/gap/`) for a city with a deficit, and `reserves` is Balance & Reserves (`/reserves/`) for one in balance. An editor chooses the variant; it isn't computed, because a city can be balanced only by cuts or one-time money. It needs a `reason` that quotes a City document, and the data check confirms the quote is on that PDF page. The overview follows the variant: its third headline figure, its "Jump to…" link, card 2 and its meta description.
+- **`ballot`** turns the Ballot page on or off: the page, its nav item and the overview's ballot card, which becomes a capital card when it's off. Turn it on while the city has a measure that matters to its budget.
+- **`budget`** is the cadence (`annual` with one year, or `biennial` with two consecutive years) and how the city writes a fiscal year. The tokens are `{start}` 2026, `{end}` 2027, `{ss}` 26 and `{yy}` 27, for the year ending in 2027. Berkeley writes `FY2027`; Fremont writes `FY 2026/27` (`"FY {start}/{yy}"`). Use the city's own style, because receipts quote its documents. Every label the page-set code shows comes from `fy()` in `src/lib/city-settings.ts`. The data model still has two fixed years (`fy2027`/`fy2028`); making it per-year is #43.
+- **`featured`**: exactly one city has it. The landing page's headline figures come from that city, and its Cities section lists every city.
+
+The build fails if a city switches on a page without the data that page needs: `gap` and `ballot` need `budget.json` and `ballot.json`, and `reserves` needs `reserves.json` in the city's folder. That file lists each reserve's name, what it's for in plain words, and its amount as a quote and PDF page. The amount is parsed from the quote, which must hold exactly one dollar figure, and the quote is checked against its page. `src/components/Reserves.astro` renders it, for the Balance & Reserves page now and the Gap page later.
+
+**To add a city**, create its folder and `city.json` (copy Berkeley's and set the settings above). The budget data for each city lives in the same folder.
+
+### Test fixture cities
+
+`data/fixtures/{name}/city.json` is a city that only tests see. It is served at `/test/cities/{name}/`, marked noindex, and left out of the city switcher, the landing page and Berkeley's receipts, like `/test/receipts/`. `fixtureville` is in balance, has no ballot and budgets one year at a time. It borrows Berkeley's budget data (`"fixture": { "data": "us/ca/berkeley" }`) so its other pages have something to show; its settings and `reserves.json` are its own, and are quote-checked like a real city's. The browser tests run the nav, overflow and accessibility checks on its 6-link nav as well as Berkeley's 7-link one.
 
 ### Budget data: workbook → `budget.json`
 

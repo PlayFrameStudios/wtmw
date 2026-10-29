@@ -4,5 +4,25 @@
   "stateCode": "CA",
   "country": "United States",
   "countryCode": "US",
-  "government": "City of Berkeley"
+  "government": "City of Berkeley",
+  "featured": true,
+  "budget": {
+    "cadence": "biennial",
+    "years": [2027, 2028],
+    "labels": { "long": "FY{end}", "short": "FY{yy}", "spoken": "fiscal year {end}" }
+  },
+  "fiscalPosition": {
+    "variant": "gap",
+    "reason": {
+      "text": "The City projects a General Fund structural deficit in both years of its budget, after one-time money.",
+      "cites": [
+        {
+          "source": "S20",
+          "page": 2,
+          "quote": "The City projects General Fund structural deficits of $29.25 million in FY27 (after the allocation of one-time resources) and $29.53 million in FY28."
+        }
+      ]
+    }
+  },
+  "ballot": true
 }

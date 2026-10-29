@@ -9,10 +9,11 @@ import { basename, join } from 'node:path';
 import type { APIRoute } from 'astro';
 import { csvTables, toCsv } from '../../../../../data/csv.ts';
 import { budgetFor } from '../../../../../lib/budget.ts';
-import { cities } from '../../../../../lib/cities.ts';
+import { allCities } from '../../../../../lib/cities.ts';
 
 export function getStaticPaths() {
-  return cities.flatMap((city) => {
+  // Test fixtures too (#42): their receipts link to their own downloads, of the data they borrow.
+  return allCities.flatMap((city) => {
     const budget = budgetFor(city);
     if (!budget) return [];
     const files: { file: string; body: string | Uint8Array; type: string }[] = [
@@ -20,7 +21,7 @@ export function getStaticPaths() {
       ...csvTables(budget).map((t) => ({ file: `${t.name}.csv`, body: toCsv(t), type: 'text/csv; charset=utf-8' })),
       {
         file: basename(budget.workbook.file),
-        body: readFileSync(join(process.cwd(), 'data/cities', city.path, budget.workbook.file)),
+        body: readFileSync(join(process.cwd(), city.dataDir, budget.workbook.file)),
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       },
     ];

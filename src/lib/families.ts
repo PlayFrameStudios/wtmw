@@ -55,7 +55,7 @@ export function loadFamilies(file: FamiliesFile, departments: { id: string; base
 }
 
 export function familiesFor(city: City, budget: CityBudget): Families {
-  const file = files[`/data/cities${city.path}families.json`];
+  const file = files[`${city.dataDir}families.json`];
   if (!file) throw new Error(`${city.path} has no families.json`);
   return loadFamilies(file, budget.departmentReductions[0].departments, `${city.path}families.json`);
 }

@@ -8,6 +8,7 @@
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { checkCities } from '../src/data/city-check.ts';
 import { PIPELINES, buildCity, serialize } from '../src/data/pipeline.ts';
 
 const root = join(import.meta.dirname, '..');
@@ -36,6 +37,16 @@ for (const city of Object.keys(PIPELINES)) {
     await writeFile(out, json);
     console.log(`✓ ${city}: wrote budget.json (${budget.sources.length} sources, all checks pass)`);
   }
+}
+
+// Every city's settings (city.json), and the quotes behind its fiscal position and reserves (#42).
+const settings = await checkCities(root);
+if (settings.errors.length) {
+  failed = true;
+  console.error(`✘ city settings: ${settings.errors.length} check(s) failed`);
+  for (const e of settings.errors) console.error(`  - ${e}`);
+} else {
+  console.log(`✓ city settings: ${settings.cities.map((c) => c.path).join(', ')} pass all checks`);
 }
 
 process.exit(failed ? 1 : 0);

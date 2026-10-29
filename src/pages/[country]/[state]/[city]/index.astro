@@ -1,25 +1,31 @@
 ---
 /**
- * A city's overview (D1/M1): where every $100 goes, and why there's a gap.
+ * A city's overview (D1/M1): where every $100 goes, and where the city stands.
  * Every number comes from overview() in src/lib/overview.ts; tests/dist
  * recomputes the story's checks from budget.json.
+ * The hero's third figure, its "Jump to…" link, card 2 and the meta description follow
+ * the city's fiscal-position variant; card 3 is the ballot only while the city has
+ * one, otherwise its capital program (#42). Year labels are in the city's own style.
  */
 import SourceChip from '../../../../components/SourceChip.astro';
 import Sourced from '../../../../components/Sourced.astro';
 import StepInfo from '../../../../components/StepInfo.astro';
 import Term from '../../../../components/Term.astro';
 import Waffle from '../../../../components/Waffle.astro';
+import ReservesCard from '../../../../components/ReservesCard.astro';
 import Base from '../../../../layouts/Base.astro';
 import { budgetFor } from '../../../../lib/budget';
-import { CITY_PAGES, cityStaticPaths, type City } from '../../../../lib/cities';
+import { cityStaticPaths, hasPage, type City } from '../../../../lib/cities';
+import { fy } from '../../../../lib/city-settings';
 import { departmentItems } from '../../../../lib/departments';
 import { familiesFor } from '../../../../lib/families';
 import { shortMoney } from '../../../../lib/format';
 import { overview } from '../../../../lib/overview';
-import { formatValue } from '../../../../lib/receipts';
+import { formatValue, type Figure } from '../../../../lib/receipts';
+import { reservesFor } from '../../../../lib/reserves';
 import { revenueGroupsFor } from '../../../../lib/revenue-groups';
 
-export const getStaticPaths = cityStaticPaths;
+export const getStaticPaths = cityStaticPaths();
 
 const { city } = Astro.props as { city: City };
 const budget = budgetFor(city)!;
@@ -27,7 +33,22 @@ const families = familiesFor(city, budget);
 const o = overview(budget, families, revenueGroupsFor(city, budget));
 // Card 2's "Why?" (#38): the City's own reasons, cost side and revenue side together, in its order, not ranked.
 const why = [budget.documentFacts.notes.costDrivers, budget.documentFacts.notes.payAndBenefits];
-const has = (slug: string) => CITY_PAGES.some((p) => (p.slug as string) === slug);
+const has = (slug: Parameters<typeof hasPage>[1]) => hasPage(city, slug);
+const gapCity = city.fiscalPosition.variant === 'gap';
+// The budget's first year, and the year before it (revenue is reported for the year in progress).
+const year = city.budget.years[0];
+const label = (y: number, form: 'long' | 'short' | 'spoken' = 'long') => fy(city.budget.labels, y, form);
+const reserves = gapCity ? undefined : reservesFor(city)!;
+const reserveTotal: Figure | undefined = reserves && {
+  value: reserves.reserves.reduce((a, r) => a + r.figure.value, 0),
+  label: `${reserves.reserves.length === 1 ? reserves.reserves[0].name : 'Reserves'}, ${label(reserves.year)}`,
+  ref: reserves.reserves[0].figure.ref,
+  tone: 'neutral',
+  ...(reserves.reserves.length > 1 && { parts: reserves.reserves.map((r) => ({ label: r.name, value: r.figure.value })) }),
+};
+const description = gapCity
+  ? `Where every $100 of ${city.name}'s budget goes, and why there's a gap. Every number links to the public document it came from.`
+  : `Where every $100 of ${city.name}'s budget goes, and what it keeps in reserve. Every number links to the public document it came from.`;
 const pct = (share: number) => `${Math.round(share * 100)}%`;
 const fte = Math.round(o.fte.value).toLocaleString('en-US');
 
@@ -49,7 +70,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
 
 ---
 
-<Base title={`${city.name}, ${city.stateCode}`} city={city} description={`Where every $100 of ${city.name}'s budget goes, and why there's a gap. Every number links to the public document it came from.`}>
+<Base title={`${city.name}, ${city.stateCode}`} city={city} description={description}>
   <section class="hero wrap">
     <div class="hero-copy">
       <h1>Where every $100 of {city.name}'s budget goes.</h1>
@@ -60,7 +81,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
       <!-- #33: the three sizes, a tap away. Each keeps its receipt, and no difference between them is computed. -->
       <StepInfo city={city} id="lede-sizes" label="the City plans to spend on departments" part="panel">
         <p class="sizes">
-          {city.name}'s whole budget for fiscal year 2027 is <Sourced city={city} figure={o.size.allFunds}>{shortMoney(o.size.allFunds.value)}</Sourced>. Most
+          {city.name}'s whole budget for {label(year, 'spoken')} is <Sourced city={city} figure={o.size.allFunds}>{shortMoney(o.size.allFunds.value)}</Sourced>. Most
           of it is set aside for specific uses, like sewers, parking or grants. The <Sourced city={city} figure={o.size.generalFund}
             >{shortMoney(o.size.generalFund.value)}</Sourced
           >{' '}
@@ -71,16 +92,22 @@ const numberWords: Record<number, string> = { 10: 'ten' };
       <!-- Phones: the tour sits above the waffle, which fills a screen (#24). Wide screens show the copy in .hero-more. -->
       <p class="ctas ctas--narrow">
         <a class="btn btn--ink" href="#three-things">Start the 3-minute tour <span aria-hidden="true">→</span></a>
-        <a class="btn btn--ghost" href={`${city.path}gap/`}>Jump to the {shortMoney(Math.abs(o.gap.value), 0)} gap</a>
+        {
+          gapCity ? (
+            <a class="btn btn--ghost" href={`${city.path}gap/`}>Jump to the {shortMoney(Math.abs(o.gap.value), 0)} gap</a>
+          ) : (
+            <a class="btn btn--ghost" href={`${city.path}reserves/`}>See balance &amp; reserves</a>
+          )
+        }
       </p>
     </div>
 
     <div class="hero-waffle">
       <Waffle
         items={departmentItems(city.path, budget, o.shares, families)}
-        label={`${city.name}'s FY2027 department baseline`}
+        label={`${city.name}'s ${label(year)} department baseline`}
         noun="department"
-        table={{ caption: 'FY2027 General Fund department baseline, per $100', name: 'Department', value: 'FY2027 baseline' }}
+        table={{ caption: `${label(year)} General Fund department baseline, per $100`, name: 'Department', value: `${label(year)} baseline` }}
       />
       <ul class="legend">
         {
@@ -102,22 +129,45 @@ const numberWords: Record<number, string> = { 10: 'ten' };
     <div class="hero-more">
       <dl class="stats">
         <div>
-          <dt>department baseline, FY27</dt>
+          <dt>department baseline, {label(year, 'short')}</dt>
           <dd class="num"><Sourced city={city} figure={o.baseline}>{shortMoney(o.baseline.value)}</Sourced></dd>
         </div>
         <div>
-          <dt>staff positions (FTE), FY27</dt>
+          <dt>staff positions (FTE), {label(year, 'short')}</dt>
           <dd class="num"><Sourced city={city} figure={o.fte}>{fte}</Sourced></dd>
         </div>
-        <div>
-          <dt>gap the city must close</dt>
-          <dd class="num short"><Sourced city={city} figure={o.gap}>{shortMoney(Math.abs(o.gap.value))}</Sourced></dd>
-        </div>
+        {
+          gapCity ? (
+            <div>
+              <dt>gap the city must close</dt>
+              <dd class="num short">
+                <Sourced city={city} figure={o.gap}>
+                  {shortMoney(Math.abs(o.gap.value))}
+                </Sourced>
+              </dd>
+            </div>
+          ) : (
+            <div>
+              <dt>in reserve, {label(reserves!.year, 'short')}</dt>
+              <dd class="num">
+                <Sourced city={city} figure={reserveTotal!}>
+                  {shortMoney(reserveTotal!.value)}
+                </Sourced>
+              </dd>
+            </div>
+          )
+        }
       </dl>
 
       <p class="ctas ctas--wide">
         <a class="btn btn--ink" href="#three-things">Start the 3-minute tour <span aria-hidden="true">→</span></a>
-        <a class="btn btn--ghost" href={`${city.path}gap/`}>Jump to the {shortMoney(Math.abs(o.gap.value), 0)} gap</a>
+        {
+          gapCity ? (
+            <a class="btn btn--ghost" href={`${city.path}gap/`}>Jump to the {shortMoney(Math.abs(o.gap.value), 0)} gap</a>
+          ) : (
+            <a class="btn btn--ghost" href={`${city.path}reserves/`}>See balance &amp; reserves</a>
+          )
+        }
       </p>
     </div>
   </section>
@@ -131,81 +181,98 @@ const numberWords: Record<number, string> = { 10: 'ten' };
           About $1 of every ${o.revenue.oneIn} the City collects is property tax. Another {pct(o.revenue.transfer.share)} comes from a tax paid when a home is
           sold.
         </p>
-        <div class="mix" role="img" aria-label={`FY2026 General Fund revenue by source: ${o.revenue.mix.map((g) => `${g.name} ${pct(g.share)}`).join(', ')}.`}>
+        <div class="mix" role="img" aria-label={`${label(year - 1)} General Fund revenue by source: ${o.revenue.mix.map((g) => `${g.name} ${pct(g.share)}`).join(', ')}.`}>
           {o.revenue.mix.map((g) => <span style={`flex:${g.adopted};background:${g.color}`} title={`${g.name}: ${pct(g.share)}`} />)}
         </div>
         <p class="mix-labels">
           <span class="bay">{o.revenue.property.name} {pct(o.revenue.property.share)}</span>
-          <span><Sourced city={city} figure={o.revenue.total}>{shortMoney(o.revenue.total.value)}</Sourced> total, FY26</span>
+          <span><Sourced city={city} figure={o.revenue.total}>{shortMoney(o.revenue.total.value)}</Sourced> total, {label(year - 1, 'short')}</span>
         </p>
         {has('revenue') && <a class="more" href={`${city.path}revenue/`}>See where every $100 comes from <span aria-hidden="true">→</span></a>}
       </li>
 
-      <li class="card">
-        <p class="n n--red">2</p>
-        <h2>Costs are growing faster than income.</h2>
-        <p class="body">
-          For {numberWords[g.years] ?? g.years} years, the City's costs grew about <Sourced city={city} figure={o.growth.figure}>{rate(g.spendingRate)}</Sourced>{' '}
-          a year and its income about {rate(g.revenueRate)}. So it starts each year short.
-        </p>
-        <p class="why">
-          {
-            why.map((n, i) => (
-              <>
-                {i > 0 && ' '}
-                {n.text}
-                <SourceChip city={city} source={n.cites[0].source} at={n.cites[0]} also={n.cites.slice(1)} />
-              </>
-            ))
-          }
-        </p>
-        <!-- Each bar's value is its own receipt (#29), so the values are HTML buttons over the SVG's top margin. -->
-        <ul class="wf-values" style={`--n:${wf.length}`} role="list">
-          {
-            wf.map((w) => (
-              <li class:list={['wf-label', w.kind]}>
-                <Sourced city={city} figure={w.figure}>
-                  {w.value > 0 ? '+' : ''}
-                  {shortMoney(w.value)}
-                </Sourced>
-              </li>
-            ))
-          }
-        </ul>
-        <svg class="mini-wf" viewBox={`0 0 ${o.waterfall.length * 62} 110`} role="img" aria-label={`FY2027 deficit bridge: ${o.waterfall.map((w) => `${w.label} ${formatValue(w.value)}`).join(', ')}.`}>
-          <line x1="0" y1="14" x2={o.waterfall.length * 62} y2="14" stroke="var(--muted)" stroke-width="1"></line>
-          {
-            wf.map((w, i) => (
-              <g>
-                <rect x={i * 62 + 8} y={w.y} width="46" height={w.h} rx="2" class={`wf-bar wf-bar--${w.kind}`} />
-              </g>
-            ))
-          }
-        </svg>
-        <!-- One label per bar, in the bars' columns, each with its "what is this?" (#25). -->
-        <ul class="wf-names" style={`--n:${wf.length}`} role="list">
-          {
-            wf.map((w) => (
-              <li>
-                <span>{w.short}</span>
-                <StepInfo city={city} id={`note-overview-${w.key}`} label={w.short} note={w.note} part="button" />
-              </li>
-            ))
-          }
-        </ul>
-        <div class="wf-notes">{wf.map((w) => <StepInfo city={city} id={`note-overview-${w.key}`} label={w.short} note={w.note} part="panel" />)}</div>
-        <a class="more" href={`${city.path}gap/`}>See the gap step by step <span aria-hidden="true">→</span></a>
-      </li>
+      {
+        gapCity ? (
+          <li class="card">
+            <p class="n n--red">2</p>
+            <h2>Costs are growing faster than income.</h2>
+            <p class="body">
+              For {numberWords[g.years] ?? g.years} years, the City's costs grew about <Sourced city={city} figure={o.growth.figure}>{rate(g.spendingRate)}</Sourced>{' '}
+              a year and its income about {rate(g.revenueRate)}. So it starts each year short.
+            </p>
+            <p class="why">
+              {
+                why.map((n, i) => (
+                  <>
+                    {i > 0 && ' '}
+                    {n.text}
+                    <SourceChip city={city} source={n.cites[0].source} at={n.cites[0]} also={n.cites.slice(1)} />
+                  </>
+                ))
+              }
+            </p>
+            <!-- Each bar's value is its own receipt (#29), so the values are HTML buttons over the SVG's top margin. -->
+            <ul class="wf-values" style={`--n:${wf.length}`} role="list">
+              {
+                wf.map((w) => (
+                  <li class:list={['wf-label', w.kind]}>
+                    <Sourced city={city} figure={w.figure}>
+                      {w.value > 0 ? '+' : ''}
+                      {shortMoney(w.value)}
+                    </Sourced>
+                  </li>
+                ))
+              }
+            </ul>
+            <svg class="mini-wf" viewBox={`0 0 ${o.waterfall.length * 62} 110`} role="img" aria-label={`${label(year)} deficit bridge: ${o.waterfall.map((w) => `${w.label} ${formatValue(w.value)}`).join(', ')}.`}>
+              <line x1="0" y1="14" x2={o.waterfall.length * 62} y2="14" stroke="var(--muted)" stroke-width="1"></line>
+              {
+                wf.map((w, i) => (
+                  <g>
+                    <rect x={i * 62 + 8} y={w.y} width="46" height={w.h} rx="2" class={`wf-bar wf-bar--${w.kind}`} />
+                  </g>
+                ))
+              }
+            </svg>
+            <!-- One label per bar, in the bars' columns, each with its "what is this?" (#25). -->
+            <ul class="wf-names" style={`--n:${wf.length}`} role="list">
+              {
+                wf.map((w) => (
+                  <li>
+                    <span>{w.short}</span>
+                    <StepInfo city={city} id={`note-overview-${w.key}`} label={w.short} note={w.note} part="button" />
+                  </li>
+                ))
+              }
+            </ul>
+            <div class="wf-notes">{wf.map((w) => <StepInfo city={city} id={`note-overview-${w.key}`} label={w.short} note={w.note} part="panel" />)}</div>
+            <a class="more" href={`${city.path}gap/`}>See the gap step by step <span aria-hidden="true">→</span></a>
+          </li>
+        ) : (
+          <ReservesCard city={city} reserves={reserves!} n={2} />
+        )
+      }
 
-      <li class="card">
-        <p class="n n--ink">3</p>
-        <h2>The sales-tax vote changes how deep the cuts go.</h2>
-        <p class="body">
-          <Sourced city={city} figure={o.ballot.withTax}>{o.ballot.withTax.value}</Sourced> positions cut if Measure {o.ballot.salesTaxLetter} passes,{' '}
-          <Sourced city={city} figure={o.ballot.withoutTax}>{o.ballot.withoutTax.value}</Sourced> if it fails.
-        </p>
-        <a class="more" href={`${city.path}${has('ballot') ? 'ballot' : 'gap'}/`}>Compare both outcomes <span aria-hidden="true">→</span></a>
-      </li>
+      {
+        city.ballot ? (
+          <li class="card">
+            <p class="n n--ink">3</p>
+            <h2>The sales-tax vote changes how deep the cuts go.</h2>
+            <p class="body">
+              <Sourced city={city} figure={o.ballot.withTax}>{o.ballot.withTax.value}</Sourced> positions cut if Measure {o.ballot.salesTaxLetter} passes,{' '}
+              <Sourced city={city} figure={o.ballot.withoutTax}>{o.ballot.withoutTax.value}</Sourced> if it fails.
+            </p>
+            <a class="more" href={`${city.path}${has('ballot') ? 'ballot' : 'gap'}/`}>Compare both outcomes <span aria-hidden="true">→</span></a>
+          </li>
+        ) : (
+          <li class="card">
+            <p class="n n--bay">3</p>
+            <h2>Streets, buildings and parks have their own budget.</h2>
+            <p class="body">The capital program is planned separately from day-to-day spending.</p>
+            {has('capital') && <a class="more" href={`${city.path}capital/`}>See the capital program <span aria-hidden="true">→</span></a>}
+          </li>
+        )
+      }
     </ol>
   </section>
 

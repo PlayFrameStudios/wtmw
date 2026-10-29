@@ -30,8 +30,10 @@ const {
   dataCity,
   sections,
   description = 'City budgets, made readable. Every number links to the public document it came from.',
-  noindex,
+  noindex: noindexProp,
 } = Astro.props;
+// Test fixture cities (#42) stay out of search like the other test pages.
+const noindex = noindexProp || city?.fixture;
 const receiptCity = city ?? dataCity;
 const ogImage = new URL('/og/wherethemoneywent.png', Astro.site);
 const fullTitle = title === SITE.name ? title : `${title} · ${SITE.name}`;

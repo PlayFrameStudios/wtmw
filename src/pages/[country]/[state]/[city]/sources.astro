@@ -17,7 +17,7 @@ import { shortMoney } from '../../../../lib/format';
 import { ballotFileFor } from '../../../../lib/ballot';
 import { pagesBySource, sourcesById } from '../../../../lib/receipts';
 
-export const getStaticPaths = cityStaticPaths;
+export const getStaticPaths = cityStaticPaths();
 
 const { city } = Astro.props as { city: City };
 const budget = budgetFor(city)!;

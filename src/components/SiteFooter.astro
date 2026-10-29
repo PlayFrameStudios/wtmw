@@ -1,14 +1,14 @@
 ---
 import Logo from './Logo.astro';
-import { cities, type City } from '../lib/cities';
+import { featuredCity, type City } from '../lib/cities';
 import { SITE, reportErrorUrl } from '../lib/site';
 
 interface Props {
   city?: City;
 }
 
-// Off a city's pages (e.g. the landing page) the data links go to the first city.
-const city = Astro.props.city ?? cities[0];
+// Off a city's pages (e.g. the landing page) the data links go to the featured city.
+const city = Astro.props.city ?? featuredCity;
 const pageUrl = new URL(Astro.url.pathname, Astro.site);
 // The build year: the first deploy each January moves it on.
 const year = new Date().getFullYear();

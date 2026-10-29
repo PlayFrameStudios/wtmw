@@ -15,7 +15,7 @@ import { shortMoney } from '../../../../lib/format';
 import { revenuePage, SORTS, VISIBLE, type Pace } from '../../../../lib/revenue';
 import { revenueGroupsFor } from '../../../../lib/revenue-groups';
 
-export const getStaticPaths = cityStaticPaths;
+export const getStaticPaths = cityStaticPaths();
 
 const { city } = Astro.props as { city: City };
 const budget = budgetFor(city)!;

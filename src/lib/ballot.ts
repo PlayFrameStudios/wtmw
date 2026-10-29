@@ -4,6 +4,7 @@
  * when they're in, are a data change in data/cities/{city}/ballot.json.
  */
 import type { CityBudget, SourceId } from '../data/types.ts';
+import { dataDirOf } from './cities.ts';
 import type { Figure } from './receipts.ts';
 
 export type Status = 'pending' | 'passed' | 'failed';
@@ -49,7 +50,7 @@ export interface BallotFile {
 const files = import.meta.glob<BallotFile>('/data/cities/*/*/*/ballot.json', { eager: true, import: 'default' });
 
 export function ballotFileFor(cityPath: string): BallotFile {
-  const f = files[`/data/cities${cityPath}ballot.json`];
+  const f = files[`${dataDirOf(cityPath)}ballot.json`];
   if (!f) throw new Error(`${cityPath} has no ballot.json`);
   return f;
 }
