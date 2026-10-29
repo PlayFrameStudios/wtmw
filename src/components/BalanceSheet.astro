@@ -1,0 +1,294 @@
+---
+/**
+ * The body of the Balance & Reserves page for a city with balance facts (#44): its sources and
+ * uses, what is left after them, what the budget assumes, and the City's forecast. Sources and
+ * uses are two bars on one scale, the Gap page's grammar; what is left closes the uses bar, so a
+ * balanced budget reads as two bars of one length. No red (money short) and no gold (one-time money).
+ * Every figure is a receipt; the page shows no difference it computed.
+ */
+import SourceChip from './SourceChip.astro';
+import Sourced from './Sourced.astro';
+import type { Balance, Segment } from '../lib/balance';
+import type { City } from '../lib/cities';
+import { fy } from '../lib/city-settings';
+import { shortMoney } from '../lib/format';
+
+interface Props {
+  city: City;
+  balance: Balance;
+}
+
+const { city, balance: b } = Astro.props;
+const label = (y: number, form: 'long' | 'short' = 'long') => fy(city.budget.labels, y, form);
+const scale = b.sources.total.value;
+const width = (s: Segment) => `${((s.figure.value / scale) * 100).toFixed(3)}%`;
+const usesRow = [...b.uses.segments, ...b.left];
+const pct = (v: number) => `${(v * 100).toLocaleString('en-US', { maximumFractionDigits: 1 })}%`;
+---
+
+<section class="bs" aria-labelledby="bs-flow">
+  <h2 id="bs-flow">Money in and money out, {label(b.year)}</h2>
+  <p class="bs-lede">
+    The General Fund's sources cover its uses. What they leave goes to the Contingency Reserve and to the balance the City carries into the next year.
+  </p>
+
+  <div class="bs-bars">
+    <div class="bs-bar-row">
+      <p class="bs-bar-head">
+        <span>Sources</span>
+        <Sourced city={city} figure={b.sources.total}>{shortMoney(b.sources.total.value)}</Sourced>
+      </p>
+      <div class="bs-bar" role="img" aria-label={`Sources, ${label(b.year)}: ${b.sources.segments.map((s) => `${s.label} ${shortMoney(s.figure.value)}`).join(', ')}.`}>
+        {b.sources.segments.map((s) => <span class={`bs-seg bs-seg--${s.key}`} style={`width:${width(s)}`} />)}
+      </div>
+    </div>
+    <div class="bs-bar-row">
+      <p class="bs-bar-head">
+        <span>Uses</span>
+        <Sourced city={city} figure={b.uses.total}>{shortMoney(b.uses.total.value)}</Sourced>
+      </p>
+      <div class="bs-bar" role="img" aria-label={`Uses, ${label(b.year)}, and what is left: ${usesRow.map((s) => `${s.label} ${shortMoney(s.figure.value)}`).join(', ')}.`}>
+        {usesRow.map((s) => <span class={`bs-seg bs-seg--${s.key}`} style={`width:${width(s)}`} />)}
+      </div>
+    </div>
+  </div>
+
+  <div class="bs-keys">
+    {
+      [
+        { title: 'Sources', items: b.sources.segments },
+        { title: 'Uses', items: b.uses.segments },
+        { title: 'Left after uses', items: b.left },
+      ].map((group) => (
+        <div>
+          <h3>{group.title}</h3>
+          <ul role="list">
+            {group.items.map((s) => (
+              <li>
+                <span class={`bs-sw bs-seg--${s.key}`} aria-hidden="true" />
+                <span class="bs-key-label">{s.label}</span>
+                <Sourced city={city} figure={s.figure}>
+                  {shortMoney(s.figure.value)}
+                </Sourced>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<section class="bs" aria-labelledby="bs-reserve-history">
+  <h2 id="bs-reserve-history">The Budget Uncertainty Reserve</h2>
+  <p>
+    In FY 2024/25 the City used <Sourced city={city} figure={b.uncertainty.draw}>{shortMoney(b.uncertainty.draw.value)}</Sourced> of the reserve to cover a one-time revenue
+    shortfall, which it attributes to the State's sales-tax recovery: the State took back about{' '}
+    <Sourced city={city} figure={b.uncertainty.salesTaxRecovery}>{shortMoney(b.uncertainty.salesTaxRecovery.value)}</Sourced> of FY 2022/23 overpayments. The reserve holds{' '}
+    <Sourced city={city} figure={b.uncertainty.now}>{shortMoney(b.uncertainty.now.value)}</Sourced> now, and the adopted budget adds nothing to it.
+    <SourceChip city={city} source={b.uncertainty.noNewFunding.source} at={b.uncertainty.noNewFunding} />
+  </p>
+</section>
+
+<section class="bs" aria-labelledby="bs-assumes">
+  <h2 id="bs-assumes">What the budget assumes</h2>
+  <ul class="bs-list" role="list">
+    <li>
+      A <Sourced city={city} figure={b.salary}>{pct(b.salary.value)}</Sourced> placeholder salary adjustment, while the City negotiates with its employee groups.
+    </li>
+    <li>
+      <Sourced city={city} figure={b.savings}>{shortMoney(b.savings.value)}</Sourced> of Citywide Savings: spending it expects to go unused, mostly from vacant positions.
+    </li>
+    <li>
+      A Contingency Reserve at <Sourced city={city} figure={b.contingencyPolicy}>{pct(b.contingencyPolicy.value)}</Sourced> of budgeted expenditures and transfers out.
+    </li>
+    <li>
+      No new money for the Budget Uncertainty Reserve.
+      <SourceChip city={city} source={b.uncertainty.noNewFunding.source} at={b.uncertainty.noNewFunding} />
+    </li>
+    <li>
+      No restoration of <Sourced city={city} figure={b.notRestored.maintenance}>{shortMoney(b.notRestored.maintenance.value)}</Sourced> of ongoing maintenance support, or of{' '}
+      <Sourced city={city} figure={b.notRestored.personnel}>{shortMoney(b.notRestored.personnel.value)}</Sourced> of ongoing personnel, supplies and services reductions, both
+      made in FY 2025/26.
+    </li>
+  </ul>
+</section>
+
+<section class="bs" aria-labelledby="bs-forecast">
+  <h2 id="bs-forecast">What the City's forecast shows</h2>
+  <p>
+    The City projects its reserves and its unreserved balance two years past the adopted budget. This is its forecast, not an adopted budget, and it assumes the placeholder salary
+    adjustment again in each forecast year.
+    <SourceChip city={city} source={b.forecast.salary.source} at={b.forecast.salary} />
+  </p>
+  <div class="bs-table-scroll">
+    <table class="bs-table">
+      <caption class="visually-hidden">General Fund reserves and unreserved balance at year end, adopted and City forecast</caption>
+      <thead>
+        <tr>
+          <th scope="col">End of year</th>
+          {
+            b.forecast.years.map((y) => (
+              <th scope="col">
+                {label(y.year, 'short')}
+                <span class="bs-basis">{y.projected ? 'forecast' : 'adopted'}</span>
+              </th>
+            ))
+          }
+        </tr>
+      </thead>
+      <tbody>
+        {
+          (
+            [
+              ['Contingency Reserve', 'contingency'],
+              ['Budget Uncertainty Reserve', 'uncertainty'],
+              ['Unreserved balance', 'unreserved'],
+            ] as const
+          ).map(([name, key]) => (
+            <tr>
+              <th scope="row">{name}</th>
+              {b.forecast.years.map((y) => (
+                <td class="num">
+                  <Sourced city={city} figure={y[key]}>
+                    {shortMoney(y[key].value)}
+                  </Sourced>
+                </td>
+              ))}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+  .bs {
+    max-width: 48rem;
+    margin-block: 2.5rem;
+  }
+  .bs h2 {
+    margin: 0 0 0.75rem;
+  }
+  .bs p {
+    margin: 0 0 1rem;
+    line-height: 1.6;
+  }
+  .bs-lede {
+    color: var(--muted);
+  }
+  .bs-bars {
+    display: grid;
+    gap: 1rem;
+    margin-block: 1.5rem;
+  }
+  .bs-bar-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 0 0.375rem !important;
+    font-weight: 800;
+  }
+  .bs-bar {
+    display: flex;
+    height: 2.75rem;
+    overflow: hidden;
+    border-radius: 3px;
+    background: var(--paper);
+  }
+  .bs-seg {
+    display: block;
+    height: 100%;
+  }
+  .bs-bar .bs-seg + .bs-seg {
+    border-left: 2px solid var(--card);
+  }
+  .bs-seg--totalRevenues {
+    background: var(--bay);
+  }
+  .bs-seg--transfersIn {
+    background: #5a9b9a;
+  }
+  .bs-seg--beginningBalance {
+    background: var(--bay-light);
+    box-shadow: inset 0 0 0 1.5px var(--bay);
+  }
+  .bs-seg--totalExpenditures {
+    background: var(--muted);
+  }
+  .bs-seg--transfersOut {
+    background: var(--faint);
+  }
+  .bs-seg--contingencyIncrease {
+    background: repeating-linear-gradient(135deg, var(--bay) 0 2.5px, var(--bay-light) 2.5px 6px);
+  }
+  .bs-seg--unreservedBalance {
+    background: var(--bay-light);
+    box-shadow: inset 0 0 0 1.5px var(--bay);
+  }
+  .bs-keys {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1rem 2rem;
+  }
+  .bs-keys h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+  }
+  .bs-keys ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .bs-keys li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.375rem;
+    border-top: 1px solid var(--rule);
+  }
+  .bs-sw {
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 2px;
+  }
+  .bs-key-label {
+    color: var(--muted);
+  }
+  .bs-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .bs-list li {
+    padding-block: 0.625rem;
+    border-top: 1px solid var(--rule);
+    line-height: 1.55;
+  }
+  .bs-table-scroll {
+    overflow-x: auto;
+  }
+  .bs-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .bs-table :is(th, td) {
+    padding: 0.5rem 0.75rem;
+    border-top: 1px solid var(--rule);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .bs-table th[scope='row'],
+  .bs-table thead th:first-child {
+    text-align: left;
+    white-space: normal;
+  }
+  .bs-basis {
+    display: block;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    font-weight: 400;
+  }
+</style>

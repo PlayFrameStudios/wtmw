@@ -18,11 +18,11 @@ describe('built site', () => {
     for (const c of cities) expect(html).toContain(`href="${c.path}"`);
   });
 
-  it.each(cities.flatMap((c) => ['', ...pagesFor(c).map((p) => `${p.slug}/`)].map((sub) => c.path + sub)))(
+  it.each(cities.flatMap((c) => ['', ...pagesFor(c).map((p) => `${p.slug}/`)].map((sub) => [c.path + sub, c.government])))(
     'renders %s with the independence line',
-    (path) => {
+    (path, government) => {
       const html = readFileSync(page(path), 'utf8');
-      expect(html).toContain('Independent. Not affiliated with the City of Berkeley.');
+      expect(html).toContain(`Independent. Not affiliated with the ${government}.`);
     },
   );
 

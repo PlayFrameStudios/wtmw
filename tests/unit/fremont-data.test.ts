@@ -10,7 +10,7 @@ import { csvTables } from '../../src/data/csv';
 import { buildCity, readDocuments } from '../../src/data/pipeline';
 import { readTable, splitRow } from '../../src/data/tables';
 import { hasGapPlan, type CityBudget } from '../../src/data/types';
-import { allCities, buildRegistry, cities } from '../../src/lib/cities';
+import { allCities, buildRegistry, cities, published } from '../../src/lib/cities';
 import { parseReserves } from '../../src/lib/city-settings';
 import { departmentBudgets } from '../../src/lib/department-budgets';
 import { familiesFor } from '../../src/lib/families';
@@ -166,9 +166,9 @@ describe('table rows', () => {
 });
 
 describe('Fremont: the site', () => {
-  it('is a draft: it gets pages but is on no list of cities', () => {
-    expect(fremont.draft).toBe(true);
-    expect(cities.map((c) => c.path)).not.toContain('/us/ca/fremont/');
+  it('is published (#44), and the draft flag it left still keeps a city off every list', () => {
+    expect(fremont.draft).toBe(false);
+    expect(cities.map((c) => c.path)).toContain('/us/ca/fremont/');
     const meta = { name: 'X', state: 'S', stateCode: 'CA', country: 'C', countryCode: 'US', government: 'G' };
     const settings = {
       budget: { cadence: 'annual', years: [2027], labels: { long: 'FY{end}', short: 'FY{yy}', spoken: 'fiscal year {end}' } },
@@ -176,6 +176,12 @@ describe('Fremont: the site', () => {
       ballot: false,
     };
     expect(() => buildRegistry({ '/data/cities/us/ca/x/city.json': { ...meta, ...settings, draft: true, featured: true } }, () => true)).toThrow(/a draft city can't be the featured city/);
+    const registry = buildRegistry(
+      { '/data/cities/us/ca/x/city.json': { ...meta, ...settings, draft: true }, '/data/cities/us/ca/y/city.json': { ...meta, ...settings, name: 'Y', featured: true } },
+      () => true,
+    );
+    expect(registry).toHaveLength(2);
+    expect(published(registry).map((c) => c.path)).toEqual(['/us/ca/y/']);
   });
 
   it('reads its reserves from the table row, in thousands', () => {

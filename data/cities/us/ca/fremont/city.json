@@ -5,7 +5,6 @@
   "country": "United States",
   "countryCode": "US",
   "government": "City of Fremont",
-  "draft": true,
   "budget": {
     "cadence": "annual",
     "years": [2027],

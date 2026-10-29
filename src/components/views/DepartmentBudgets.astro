@@ -96,8 +96,8 @@ const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 
         <section class="db-section" aria-labelledby="db-staff">
           <h2 id="db-staff">Staff positions</h2>
           <p class="db-note">
-            Full-time-equivalent positions in every fund, not just the General Fund: <Sourced city={city} figure={p.staff.total}>{fte(p.staff.total.value)}</Sourced> in all. The
-            budget lists administrative departments one by one here.
+            Full-time-equivalent positions in every fund, not just the General Fund: <Sourced city={city} figure={p.staff.total}>{fte(p.staff.total.value)}</Sourced> in all. This
+            table lists the administrative departments separately.
           </p>
           <ol class="db-list" role="list">
             {p.staff.rows.map((r) => (
