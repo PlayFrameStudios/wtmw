@@ -239,15 +239,15 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
         check(tab, `${col}${r}`, running[col]);
         return running[col];
       };
-      return { key, label, kind, fy2027: value('B'), fy2028: value('C'), ...ref(r) };
+      return { key, label, kind, years: { 2027: value('B'), 2028: value('C') }, ...ref(r) };
     });
     tab.expectText('A15', 'Reduction achieved');
     return { title: tab.text('A1'), note: tab.text('A15'), steps };
   })();
 
   // Dept Reductions FY27 / FY28
-  const departmentReductions = (['FY2027', 'FY2028'] as const).map((year): DepartmentReductions => {
-    const { tab, ref } = sourced(`Dept Reductions FY${year.slice(4)}`);
+  const departmentReductions = [2027, 2028].map((year): DepartmentReductions => {
+    const { tab, ref } = sourced(`Dept Reductions FY${String(year).slice(2)}`);
     tab.expectRow(4, [
       'Department',
       'GF Baseline',
@@ -317,23 +317,24 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
       ] as const
     ).map(([r, key, label]) => {
       if (tab.text(`A${r}`) !== label) throw new Error(`FTE & Positions!A${r}: expected "${label}"`);
-      const fy2026AdoptedFte = tab.input(`B${r}`);
-      const fy2026Rif = tab.input(`C${r}`);
-      const fy2027BaselineFte = tab.input(`D${r}`);
-      const fy2027Reduction = tab.input(`E${r}`);
+      const adoptedFte = tab.input(`B${r}`);
+      const rif = tab.input(`C${r}`);
+      const baselineFte = tab.input(`D${r}`);
+      const reduction = tab.input(`E${r}`);
       const s = {
         key,
         label,
-        fy2026AdoptedFte,
-        fy2026Rif,
-        fy2027BaselineFte,
-        fy2027Reduction,
-        fy2027NetFte: Math.round((fy2027BaselineFte - fy2027Reduction) * 100) / 100,
-        cumulativeRif: fy2026Rif + fy2027Reduction,
-        cumulativeReductionPct: (fy2026Rif + fy2027Reduction) / fy2026AdoptedFte,
+        year: 2027,
+        adoptedFte,
+        rif,
+        baselineFte,
+        reduction,
+        netFte: Math.round((baselineFte - reduction) * 100) / 100,
+        cumulativeRif: rif + reduction,
+        cumulativeReductionPct: (rif + reduction) / adoptedFte,
         ...ref(r),
       };
-      check(tab, `F${r}`, s.fy2027NetFte);
+      check(tab, `F${r}`, s.netFte);
       check(tab, `G${r}`, s.cumulativeRif);
       check(tab, `H${r}`, s.cumulativeReductionPct);
       return s;
@@ -392,7 +393,7 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
       const fy2027 = tab.input(`C${r}`);
       const fy2028 = tab.input(`D${r}`);
       check(tab, `E${r}`, fy2027 + fy2028);
-      return { name: tab.text(`A${r}`), category: tab.text(`B${r}`), fy2027, fy2028, total: fy2027 + fy2028, ...ref(r) };
+      return { name: tab.text(`A${r}`), category: tab.text(`B${r}`), years: { 2027: fy2027, 2028: fy2028 }, total: fy2027 + fy2028, ...ref(r) };
     });
     const fy2027 = tab.value(`C${totalRow}`);
     const fy2028 = tab.value(`D${totalRow}`);
@@ -400,7 +401,7 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
     return {
       title: tab.text('A1'),
       lines,
-      total: { name: tab.text(`A${totalRow}`), category: '', fy2027, fy2028, total: fy2027 + fy2028, ...ref(totalRow) },
+      total: { name: tab.text(`A${totalRow}`), category: '', years: { 2027: fy2027, 2028: fy2028 }, total: fy2027 + fy2028, ...ref(totalRow) },
     };
   })();
 

@@ -3,12 +3,14 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { budgetFor } from '../../src/lib/budget';
 import { cities } from '../../src/lib/cities';
+import { fy } from '../../src/lib/city-settings';
 import { gapPage } from '../../src/lib/gap';
 import { figureReceipt } from '../../src/lib/receipts';
 
 const city = cities[0];
 const budget = budgetFor(city)!;
-const g = gapPage(budget);
+const label = (y: number) => fy(city.budget.labels, y);
+const g = gapPage(budget, city.budget.years, label);
 const page = new URL('https://wherethemoneywent.com/us/ca/berkeley/gap/');
 
 describe('the waterfall', () => {
@@ -61,8 +63,8 @@ describe('the waterfall', () => {
 
   it('refuses a bridge whose totals do not follow from its steps', () => {
     const b = structuredClone(budget);
-    b.deficitBridge.steps.find((s) => s.key === 'revenue-projections')!.fy2027 += 1;
-    expect(() => gapPage(b)).toThrow("fy2027 before-one-time-resources: -31349339 doesn't follow from the steps before it (-31349338)");
+    b.deficitBridge.steps.find((s) => s.key === 'revenue-projections')!.years[2027] += 1;
+    expect(() => gapPage(b, city.budget.years, label)).toThrow("FY2027 before-one-time-resources: -31349339 doesn't follow from the steps before it (-31349338)");
   });
 });
 

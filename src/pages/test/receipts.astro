@@ -31,15 +31,15 @@ const fy2021 = b.personnelAndPension.unfundedLiabilities.find((l) => l.asOf === 
           class="num"
           city={city}
           figure={{
-            value: gap.fy2027,
+            value: gap.years[2027],
             label: 'FY2027 General Fund gap, after adjustments',
             ref: gap,
             related: ['S15'],
             parts: [
-              { label: 'Initial estimate', value: step('initial-estimate').fy2027 },
-              { label: 'Revenue projections', value: step('revenue-projections').fy2027 },
-              { label: 'Three adjustments', value: adjustments.reduce((a, s) => a + s.fy2027, 0) },
-              { label: 'One-time money', value: step('one-time-resources').fy2027 },
+              { label: 'Initial estimate', value: step('initial-estimate').years[2027] },
+              { label: 'Revenue projections', value: step('revenue-projections').years[2027] },
+              { label: 'Three adjustments', value: adjustments.reduce((a, s) => a + s.years[2027], 0) },
+              { label: 'One-time money', value: step('one-time-resources').years[2027] },
             ],
           }}>−$29.2M</Sourced
         > FY2027 gap

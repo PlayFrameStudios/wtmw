@@ -74,7 +74,7 @@ describe('overview figures', () => {
   it('follows the data when it changes', () => {
     const b = structuredClone(budget);
     b.citedFacts.growth.spendingRate = 0.09;
-    b.fte.scenarios.find((s) => s.key === 'without-sales-tax')!.fy2027BaselineFte = 1500;
+    b.fte.scenarios.find((s) => s.key === 'without-sales-tax')!.baselineFte = 1500;
     const changed = overview(b, families, groups);
     expect(Math.round(changed.growth.series.at(-1)!.spending)).toBe(237);
     expect(changed.fte.value).toBe(1500);

@@ -38,17 +38,17 @@ export function validateBerkeley(budget: WorkbookBudget, checks: CrossCheck[] = 
     PINNED.fy2027NetReductionsWithSalesTax,
   );
   for (const year of [fy27, fy28]) {
-    expectEqual(`${year.year} TOTAL row baseline (expected = sum of department rows)`, year.total.baseline, sum(year.departments, (d) => d.baseline));
-    expectEqual(`${year.year} TOTAL row reduction (expected = sum of department rows)`, year.total.reduction, sum(year.departments, (d) => d.reduction));
+    expectEqual(`FY${year.year} TOTAL row baseline (expected = sum of department rows)`, year.total.baseline, sum(year.departments, (d) => d.baseline));
+    expectEqual(`FY${year.year} TOTAL row reduction (expected = sum of department rows)`, year.total.reduction, sum(year.departments, (d) => d.reduction));
     expectEqual(
-      `${year.year} TOTAL row sales-tax allocation (expected = sum of department rows)`,
+      `FY${year.year} TOTAL row sales-tax allocation (expected = sum of department rows)`,
       year.total.salesTaxAllocation,
       sum(year.departments, (d) => d.salesTaxAllocation),
     );
     const charter = year.departments.filter((d) => d.charter).map((d) => d.id);
-    if (charter.length !== 4) errors.push(`${year.year}: expected 4 charter offices, found [${charter.join(', ')}]`);
+    if (charter.length !== 4) errors.push(`FY${year.year}: expected 4 charter offices, found [${charter.join(', ')}]`);
     const ids = year.departments.map((d) => d.id);
-    if (new Set(ids).size !== ids.length) errors.push(`${year.year}: duplicate department ids [${ids.join(', ')}]`);
+    if (new Set(ids).size !== ids.length) errors.push(`FY${year.year}: duplicate department ids [${ids.join(', ')}]`);
   }
   if (fy28.departments.map((d) => d.id).join() !== fy27.departments.map((d) => d.id).join()) {
     errors.push('FY27 and FY28 list different departments');
@@ -75,24 +75,23 @@ export function validateBerkeley(budget: WorkbookBudget, checks: CrossCheck[] = 
   const steps = budget.deficitBridge.steps;
   const final = steps.find((s) => s.key === 'final-gap');
   if (!final) errors.push('deficit bridge has no final-gap step');
-  for (const year of ['fy2027', 'fy2028'] as const) {
+  for (const year of [2027, 2028]) {
     const inputs = sum(
       steps.filter((s) => s.kind === 'estimate' || s.kind === 'change'),
-      (s) => s[year],
+      (s) => s.years[year],
     );
-    if (final) expectEqual(`${year} bridge: initial + revenue + adjustments + one-time = final gap`, inputs, final[year]);
+    if (final) expectEqual(`FY${year} bridge: initial + revenue + adjustments + one-time = final gap`, inputs, final.years[year]);
   }
   if (final) {
-    expectEqual('FY27 final gap', final.fy2027, PINNED.fy2027FinalGap);
-    expectEqual('FY28 final gap', final.fy2028, PINNED.fy2028FinalGap);
+    expectEqual('FY27 final gap', final.years[2027], PINNED.fy2027FinalGap);
+    expectEqual('FY28 final gap', final.years[2028], PINNED.fy2028FinalGap);
   }
 
   // One-time resources, capital, personnel
   const ot = budget.oneTimeResources;
   expectEqual('one-time remaining = sources - uses', ot.remaining, ot.totalSources - ot.totalUses);
   const cap = budget.capitalProgram;
-  expectEqual('CIP FY2027 lines vs TOTAL row', sum(cap.lines, (l) => l.fy2027), cap.total.fy2027);
-  expectEqual('CIP FY2028 lines vs TOTAL row', sum(cap.lines, (l) => l.fy2028), cap.total.fy2028);
+  for (const year of [2027, 2028]) expectEqual(`CIP FY${year} lines vs TOTAL row`, sum(cap.lines, (l) => l.years[year]), cap.total.years[year]);
   expectEqual(
     'GF cost composition total vs FY26 revenue total',
     budget.personnelAndPension.compositionTotal.amount,

@@ -10,7 +10,8 @@ import Sourced from '../../../../components/Sourced.astro';
 import Base from '../../../../layouts/Base.astro';
 import { budgetFor } from '../../../../lib/budget';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
-import { departmentsPage, shortNames, SORTS, TAXES, YEARS, type Year } from '../../../../lib/departments';
+import { fy } from '../../../../lib/city-settings';
+import { departmentsPage, shortNames, SORTS, TAXES, type Year } from '../../../../lib/departments';
 import { familiesFor } from '../../../../lib/families';
 import { shortMoney } from '../../../../lib/format';
 import { sourcesById } from '../../../../lib/receipts';
@@ -19,12 +20,16 @@ export const getStaticPaths = cityStaticPaths();
 
 const { city } = Astro.props as { city: City };
 const budget = budgetFor(city)!;
-const p = departmentsPage(budget, familiesFor(city, budget), shortNames(city.path, budget));
+const p = departmentsPage(budget, familiesFor(city, budget), shortNames(city.path, budget), city.budget.years, (y) => fy(city.budget.labels, y));
+const YEARS = p.years;
 // Every cut says which ballot outcome it assumes (#33).
 const measure = `Measure ${budget.documentFacts.salesTaxMeasure.letter}`;
 const primary = sourcesById(budget).get('S1')!;
-const yearLabel = (y: Year) => (y === 'fy2027' ? 'FY2027' : 'FY2028');
-const short = (y: Year) => (y === 'fy2027' ? 'FY27' : 'FY28');
+const yearOf = (y: Year) => Number(y.slice(2));
+const yearLabel = (y: Year) => fy(city.budget.labels, yearOf(y));
+const short = (y: Year) => fy(city.budget.labels, yearOf(y), 'short');
+// Only one year shows at a time: hide the others' figures.
+const yearRules = YEARS.map((y) => `.dept-page:has(#year-${y}:checked) .yr:not(.yr--${y}) { display: none !important; }`).join('\n');
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
 const money = (v: number) => shortMoney(v);
 const width = (v: number, y: Year) => `${((v / p.max[y]) * 100).toFixed(3)}%`;
@@ -40,10 +45,10 @@ const selectRules = p.rows
   .join('\n');
 ---
 
-<Base title={`Departments · ${city.name}`} city={city} description={`Who's being asked to cut, and by how much, in ${city.name}'s FY2027 and FY2028 budgets, with and without the November sales tax.`}>
+<Base title={`Departments · ${city.name}`} city={city} description={`Who's being asked to cut, and by how much, in ${city.name}'s ${YEARS.map(yearLabel).join(' and ')} budgets, with and without the November sales tax.`}>
   <div class="dept-page wrap" data-dept-page>
     <section class="intro">
-      <h1>Who's being asked to cut in <span class="yr yr--fy2027">FY2027</span><span class="yr yr--fy2028">FY2028</span>, and by how much</h1>
+      <h1>Who's being asked to cut in {YEARS.map((y) => <span class={`yr yr--${y}`}>{yearLabel(y)}</span>)}, and by how much</h1>
       <p class="lede">
         Every department was asked to find savings in the proposed budget. Together they come to <Sourced city={city} figure={p.total.cut}>{money(p.total.cut.value)}</Sourced>,
         about {Math.round(p.total.pct * 100)}% of the {money(p.total.baseline)} baseline. Toggle the sales tax to see which cuts it would soften.
@@ -81,7 +86,7 @@ const selectRules = p.rows
       <div class="list">
         <p class="list-head" aria-hidden="true">
           <span>Department</span>
-          <span><span class="yr yr--fy2027">FY27</span><span class="yr yr--fy2028">FY28</span> baseline</span>
+          <span>{YEARS.map((y) => <span class={`yr yr--${y}`}>{short(y)}</span>)} baseline</span>
           <span>Net cut</span>
         </p>
         <ol class="rows">
@@ -153,8 +158,7 @@ const selectRules = p.rows
               </h2>
               {YEARS.map((y) => {
                 const v = r.years[y];
-                const other = y === 'fy2027' ? 'fy2028' : 'fy2027';
-                const o = r.years[other];
+                const others = YEARS.filter((x) => x !== y);
                 return (
                   <div class={`yr yr--${y}`}>
                     <p class="per100">
@@ -201,14 +205,17 @@ const selectRules = p.rows
                           </dd>
                         </div>
                       ))}
-                      {TAXES.map((t) => (
-                        <div class={`tax tax--${t}`}>
-                          <dt>{short(other)} net cut</dt>
-                          <dd class="num">
-                            <Sourced city={city} figure={o.figures.net[t]}>{o.netIf[t].value === 0 ? 'none' : money(o.netIf[t].value)}</Sourced>
-                          </dd>
-                        </div>
-                      ))}
+                      {others.map((other) => {
+                        const o = r.years[other];
+                        return TAXES.map((t) => (
+                          <div class={`tax tax--${t}`}>
+                            <dt>{short(other)} net cut</dt>
+                            <dd class="num">
+                              <Sourced city={city} figure={o.figures.net[t]}>{o.netIf[t].value === 0 ? 'none' : money(o.netIf[t].value)}</Sourced>
+                            </dd>
+                          </div>
+                        ));
+                      })}
                     </dl>
                   </div>
                 );
@@ -230,7 +237,7 @@ const selectRules = p.rows
   </div>
 </Base>
 
-<style is:global set:html={orderRules + '\n' + selectRules}></style>
+<style is:global set:html={orderRules + '\n' + selectRules + '\n' + yearRules}></style>
 
 <script>
   const root = document.querySelector<HTMLElement>('[data-dept-page]')!;
@@ -306,8 +313,6 @@ const selectRules = p.rows
   }
 
   /* Year / tax / sort visibility, driven by the radios. */
-  .dept-page:has(#year-fy2027:checked) .yr--fy2028,
-  .dept-page:has(#year-fy2028:checked) .yr--fy2027,
   .dept-page:has(#tax-passes:checked) .tax--fails,
   .dept-page:has(#tax-fails:checked) .tax--passes {
     display: none !important;

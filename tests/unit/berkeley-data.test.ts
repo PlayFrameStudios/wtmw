@@ -68,8 +68,8 @@ describe('Berkeley workbook → budget.json', () => {
       'non-departmental',
       'one-time-resources',
     ]);
-    expect(inputs.reduce((a, s) => a + s.fy2027, 0)).toBe(-29_249_339);
-    expect(budget.deficitBridge.steps.at(-1)).toMatchObject({ key: 'final-gap', fy2027: -29_249_339, fy2028: -29_532_958 });
+    expect(inputs.reduce((a, s) => a + s.years[2027], 0)).toBe(-29_249_339);
+    expect(budget.deficitBridge.steps.at(-1)).toMatchObject({ key: 'final-gap', years: { 2027: -29_249_339, 2028: -29_532_958 } });
   });
 
   it("every record's source resolves to a row in Sources", () => {

@@ -21,7 +21,7 @@ describe('ballot page (built)', () => {
 
   it('passes 105 positions (85 vacant, 20 filled), FTE 1,455; fails 138 (100 / 38), FTE 1,422', () => {
     const pos = (k: string) => b.fte.positions.find((p) => p.key === k)!;
-    const fte = (k: string) => Math.round(b.fte.scenarios.find((s) => s.key === k)!.fy2027NetFte).toLocaleString('en-US');
+    const fte = (k: string) => Math.round(b.fte.scenarios.find((s) => s.key === k)!.netFte).toLocaleString('en-US');
     const [passes, fails] = cards;
     const w = pos('with-sales-tax');
     const wo = pos('without-sales-tax');

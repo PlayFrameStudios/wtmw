@@ -4,7 +4,7 @@
  * number is parsed from the quote, never typed in: the same rule the workbook's
  * sentence-stated facts follow (citedFacts).
  */
-import type { CityBudget, DocCapitalLine, DocCapitalPart, DocRef, DocumentFacts, Source, SourceId, StepNote, WorkbookBudget } from './types.ts';
+import type { ByYear, CityBudget, DocCapitalLine, DocCapitalPart, DocRef, DocumentFacts, Source, SourceId, StepNote, WorkbookBudget } from './types.ts';
 
 export interface DocumentsFile {
   sources: Omit<Source, 'number' | 'row'>[];
@@ -60,20 +60,24 @@ const MONTH = ['january', 'february', 'march', 'april', 'may', 'june', 'july', '
 const iso = (month: string, day: string, year: string) => `${year}-${String(MONTH.indexOf(month.toLowerCase()) + 1).padStart(2, '0')}-${day.padStart(2, '0')}`;
 
 const AMOUNT = String.raw`\$ (-|[\d,]+)`;
+/** The two proposed years of Berkeley's five-year CIP tables (the first two columns). */
+const CIP_YEARS = [2027, 2028];
+const any = (years: ByYear) => Object.values(years).some((v) => v !== 0);
+const sumYears = (years: ByYear) => Object.values(years).reduce((a, v) => a + v, 0);
 const amount = (s: string) => (s === '-' ? 0 : money(s));
 
 /**
  * A five-year CIP table (Proposed FY27, FY28, Planned FY29–31, 5-year total) on one page: each "name $ a $ b $ c $ d $ e $ f"
  * row, with its FY27 and FY28 columns. The 5-year column is checked against the other five, so a misread row fails.
  */
-function cipRows(text: string, where: string, byLine = false): { name: string; fy2027: number; fy2028: number; quote: string }[] {
+function cipRows(text: string, where: string, byLine = false): { name: string; years: ByYear; quote: string }[] {
   const re = new RegExp(String.raw`([A-Za-z][^$\n]*?) ${Array(6).fill(AMOUNT).join(' ')}`, 'g');
   // One row per line where the table prints it so; otherwise (names that wrap) the page as one line.
   const flat = byLine ? text.split('\n').map(normalize).join('\n') : normalize(text);
   return [...flat.matchAll(re)].map((m) => {
     const cols = m.slice(2, 8).map(amount);
     if (cols.slice(0, 5).reduce((a, x) => a + x, 0) !== cols[5]) throw new Error(`${where}: "${m[0]}": the five years don't sum to the 5-year total`);
-    return { name: m[1].trim(), fy2027: cols[0], fy2028: cols[1], quote: m[0] };
+    return { name: m[1].trim(), years: { 2027: cols[0], 2028: cols[1] }, quote: m[0] };
   });
 }
 
@@ -96,18 +100,18 @@ export function capitalFromDocument(spec: DocumentsFile['capitalProgram'], excer
     const total = r.name.match(/^(.*) Total$/);
     if (total) {
       if (total[1] !== type) throw new Error(`${where}: "${r.name}" closes section "${type}"`);
-      for (const y of ['fy2027', 'fy2028'] as const) {
-        const sum = section.reduce((a, l) => a + l[y], 0);
-        if (sum !== r[y]) throw new Error(`${where}: ${type} rows sum to ${sum} in ${y}, but its Total row says ${r[y]}`);
+      for (const y of CIP_YEARS) {
+        const sum = section.reduce((a, l) => a + l.years[y], 0);
+        if (sum !== r.years[y]) throw new Error(`${where}: ${type} rows sum to ${sum} in FY${y}, but its Total row says ${r.years[y]}`);
       }
       lines.push(...section.filter((l) => l.total > 0));
       type = null;
       section = [];
     } else if (type === null) {
-      if (r.fy2027 || r.fy2028) throw new Error(`${where}: expected a fund-type heading, got "${r.quote}"`);
+      if (any(r.years)) throw new Error(`${where}: expected a fund-type heading, got "${r.quote}"`);
       type = r.name;
     } else {
-      section.push({ source: spec.source, page: spec.byFund, quote: r.quote, name: r.name, fundType: type, fy2027: r.fy2027, fy2028: r.fy2028, total: r.fy2027 + r.fy2028 });
+      section.push({ source: spec.source, page: spec.byFund, quote: r.quote, name: r.name, fundType: type, years: r.years, total: sumYears(r.years) });
     }
   }
   if (type !== null) throw new Error(`${where}: section "${type}" has no Total row`);
@@ -115,25 +119,25 @@ export function capitalFromDocument(spec: DocumentsFile['capitalProgram'], excer
   const gf = lines.find((l) => l.name === spec.generalFund);
   if (!gf) throw new Error(`${where}: no "${spec.generalFund}" row`);
   const parts: DocCapitalPart[] = [];
-  let grand: { fy2027: number; fy2028: number } | undefined;
+  let grand: { years: ByYear } | undefined;
   for (const n of spec.generalFundBreakdown) {
     for (const r of cipRows(page(n), `${spec.source} p.${n}`)) {
       const cat = r.name.match(/(?:^|\s)([A-Z][\w &]*?) Total$/);
       if (!cat) continue;
       if (cat[1] === 'Grand') grand = r;
-      else if (r.fy2027 || r.fy2028) parts.push({ source: spec.source, page: n, quote: r.quote, name: cat[1], fy2027: r.fy2027, fy2028: r.fy2028, total: r.fy2027 + r.fy2028 });
+      else if (any(r.years)) parts.push({ source: spec.source, page: n, quote: r.quote, name: cat[1], years: r.years, total: sumYears(r.years) });
     }
   }
   if (!grand) throw new Error(`${spec.source} pp.${spec.generalFundBreakdown.join('-')}: no Grand Total row`);
-  for (const y of ['fy2027', 'fy2028'] as const) {
-    const sum = parts.reduce((a, p) => a + p[y], 0);
-    if (sum !== grand[y] || sum !== gf[y]) throw new Error(`capital program: ${spec.generalFund} programs sum to ${sum} in ${y}; Grand Total ${grand[y]}, p.${spec.byFund} row ${gf[y]}`);
+  for (const y of CIP_YEARS) {
+    const sum = parts.reduce((a, p) => a + p.years[y], 0);
+    if (sum !== grand.years[y] || sum !== gf.years[y])
+      throw new Error(`capital program: ${spec.generalFund} programs sum to ${sum} in FY${y}; Grand Total ${grand.years[y]}, p.${spec.byFund} row ${gf.years[y]}`);
   }
   gf.parts = parts.sort((a, b) => b.total - a.total);
 
-  const fy2027 = lines.reduce((a, l) => a + l.fy2027, 0);
-  const fy2028 = lines.reduce((a, l) => a + l.fy2028, 0);
-  return { source: spec.source, page: spec.byFund, quote: title, lines, total: { fy2027, fy2028, total: fy2027 + fy2028 }, generalFund: spec.generalFund };
+  const years: ByYear = Object.fromEntries(CIP_YEARS.map((y) => [y, lines.reduce((a, l) => a + l.years[y], 0)]));
+  return { source: spec.source, page: spec.byFund, quote: title, lines, total: { years, total: sumYears(years) }, generalFund: spec.generalFund };
 }
 
 /** Adds the documents' sources (numbered after the workbook's) and their facts to the budget; returns errors. */
@@ -217,7 +221,7 @@ export function applyDocuments(budget: WorkbookBudget, file: DocumentsFile, exce
       bondPeak: { ...bp, perHundredK: Number(bpM[1]), from: bpM[2] },
       bondAudit: { ...ba, everyYears: words[baM[1]] ?? NaN },
       adoption: { ...ad, date: s20.date },
-      adoptionGap: { ...ag, fy2027: Math.round(Number(agM[1]) * 1e6), fy2028: Math.round(Number(agM[2]) * 1e6) },
+      adoptionGap: { ...ag, years: { 2027: Math.round(Number(agM[1]) * 1e6), 2028: Math.round(Number(agM[2]) * 1e6) } },
       capitalNeed: { ...cn, amount: money(cnM[1]) },
       capitalNeedGrowth: { ...cg, rate: Number(cgM[1]) / 100 },
       allFunds,
@@ -247,9 +251,9 @@ export function applyDocuments(budget: WorkbookBudget, file: DocumentsFile, exce
   if (f.salesTaxTitle.letter !== f.salesTaxMeasure.letter) errors.push(`documents.json: the ballot measures page calls the sales tax Measure ${f.salesTaxTitle.letter}, the impartial analysis Measure ${f.salesTaxMeasure.letter}`);
   if (f.bondTitle.letter !== f.bondMeasure.letter) errors.push(`documents.json: the ballot measures page calls the bond Measure ${f.bondTitle.letter}, the impartial analysis Measure ${f.bondMeasure.letter}`);
   const gap = budget.deficitBridge.steps.find((s) => s.key === 'final-gap');
-  for (const [k, y] of [['fy2027', 'fy2027'], ['fy2028', 'fy2028']] as const) {
-    const wb = gap ? Math.abs(gap[y]) : NaN;
-    if (Math.abs(wb - f.adoptionGap[k]) > 5_000) errors.push(`adoption staff report restates the ${k} gap as ${f.adoptionGap[k]}, but the workbook says ${wb}`);
+  for (const y of [2027, 2028]) {
+    const wb = gap ? Math.abs(gap.years[y]) : NaN;
+    if (Math.abs(wb - f.adoptionGap.years[y]) > 5_000) errors.push(`adoption staff report restates the FY${y} gap as ${f.adoptionGap.years[y]}, but the workbook says ${wb}`);
   }
   if (!Number.isFinite(f.bondAudit.everyYears)) errors.push('documents.json bondAudit: unrecognized number of years');
   return { budget: { ...budget, sources: [...budget.sources, ...added], documentFacts }, errors };

@@ -182,7 +182,7 @@ const humanize = (name: string) =>
             <h3>Two capital program totals</h3>
             <p>
               The May proposal's presentation lists <Sourced city={city} source={workbookProgram.source}>{shortMoney(workbookProgram.total)}</Sourced> for
-              FY27-28; the adoption report's table by funding source totals <Sourced city={city} source={program.source} at={program}
+              FY27-28; the adoption report's table by funding source totals <Sourced city={city} source={program.source} at={{ page: program.page, quote: program.quote }}
                 >{shortMoney(program.total.total)}</Sourced
               >, with a few more funds and revised amounts. The Capital page uses the adoption report.
             </p>

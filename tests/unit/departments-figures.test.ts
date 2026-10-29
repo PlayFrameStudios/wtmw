@@ -3,13 +3,14 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { budgetFor } from '../../src/lib/budget';
 import { cities } from '../../src/lib/cities';
+import { fy } from '../../src/lib/city-settings';
 import { departmentsPage, fullNames, shortNames } from '../../src/lib/departments';
 import { familiesFor } from '../../src/lib/families';
 import { figureReceipt } from '../../src/lib/receipts';
 
 const city = cities[0];
 const budget = budgetFor(city)!;
-const p = departmentsPage(budget, familiesFor(city, budget), shortNames(city.path, budget));
+const p = departmentsPage(budget, familiesFor(city, budget), shortNames(city.path, budget), city.budget.years, (y) => fy(city.budget.labels, y));
 const police = p.rows.find((r) => r.id === 'police')!;
 const page = new URL('https://wherethemoneywent.com/us/ca/berkeley/departments/');
 

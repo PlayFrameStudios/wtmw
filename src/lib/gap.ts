@@ -20,7 +20,6 @@ const LABELS: Record<string, string> = {
 };
 
 export type StepKind = 'total' | 'subtotal' | 'up' | 'cost' | 'one-time' | 'final';
-export type Year = 'fy2027' | 'fy2028';
 
 export interface WaterfallStep {
   key: string;
@@ -38,12 +37,12 @@ export interface WaterfallStep {
 /** The City's label for the bridge use, and what it is in plain words (#25). */
 export const BRIDGE_PLAIN = 'Used to delay cuts until the sales-tax vote';
 
-function waterfall(steps: BridgeStep[], year: Year, notes: Record<string, StepNote>): WaterfallStep[] {
+function waterfall(steps: BridgeStep[], year: number, label: string, notes: Record<string, StepNote>): WaterfallStep[] {
   const shown = steps.filter((s) => s.key !== 'after-revenue-projections'); // the mockup's 8 steps
   let running = 0;
   const out: WaterfallStep[] = [];
   for (const s of shown) {
-    const value = s[year];
+    const value = s.years[year];
     const isTotal = s.kind === 'estimate' || s.kind === 'subtotal' || s.kind === 'total';
     const kind: StepKind =
       s.key === 'final-gap' ? 'final'
@@ -54,7 +53,7 @@ function waterfall(steps: BridgeStep[], year: Year, notes: Record<string, StepNo
     const from = isTotal ? 0 : running;
     const to = isTotal ? value : running + value;
     if (isTotal && Math.abs(value - running) > 0.5 && out.length) {
-      throw new Error(`${year} ${s.key}: ${value} doesn't follow from the steps before it (${running})`);
+      throw new Error(`${label} ${s.key}: ${value} doesn't follow from the steps before it (${running})`);
     }
     running = to;
     // A subtotal's receipt shows how it's built: the last total and every step since.
@@ -64,7 +63,7 @@ function waterfall(steps: BridgeStep[], year: Year, notes: Record<string, StepNo
         ? since.map((o) => ({ label: o.label, value: o.value }))
         : undefined;
     const note = notes[s.key];
-    if (!note) throw new Error(`${year} ${s.key}: no step note`);
+    if (!note) throw new Error(`${label} ${s.key}: no step note`);
     out.push({
       key: s.key,
       note,
@@ -75,7 +74,7 @@ function waterfall(steps: BridgeStep[], year: Year, notes: Record<string, StepNo
       to,
       figure: {
         value,
-        label: `${year === 'fy2027' ? 'FY2027' : 'FY2028'}: ${s.label}`,
+        label: `${label}: ${s.label}`,
         ref: s,
         tone: kind === 'up' ? 'neutral' : kind === 'one-time' ? 'one-time' : value < 0 ? 'short' : 'neutral',
         ...(parts ? { parts } : {}),
@@ -85,30 +84,39 @@ function waterfall(steps: BridgeStep[], year: Year, notes: Record<string, StepNo
   return out;
 }
 
-export function gapPage(b: CityBudget) {
-  const years = (['fy2027', 'fy2028'] as const).map((year) => {
-    const steps = waterfall(b.deficitBridge.steps, year, b.documentFacts.stepNotes);
-    return { year, label: year === 'fy2027' ? 'FY2027' : 'FY2028', steps, final: steps.at(-1)!, lowest: Math.min(...steps.flatMap((s) => [s.from, s.to])) };
+/**
+ * `years` are the city's budget years (city.json), labeled in its own style ("FY2027"). Each year's
+ * waterfall has a `key` ("fy2027") for the page's radios and ids.
+ */
+export function gapPage(b: CityBudget, years: number[], yearLabel: (year: number) => string) {
+  const first = years[0];
+  const views = years.map((year) => {
+    const label = yearLabel(year);
+    const steps = waterfall(b.deficitBridge.steps, year, label, b.documentFacts.stepNotes);
+    return { year: `fy${year}`, label, steps, final: steps.at(-1)!, lowest: Math.min(...steps.flatMap((s) => [s.from, s.to])) };
   });
 
-  const fy27 = b.departmentReductions.find((y) => y.year === 'FY2027')!.total;
+  const fy27 = b.departmentReductions.find((y) => y.year === first)!.total;
+  const L = yearLabel(first);
+  // Both budget years together: "FY2027-28".
+  const span = `${L}-${String(years.at(-1)).slice(2)}`;
   const ot = b.oneTimeResources;
   const bridge = ot.uses.find((u) => /sales & use tax/i.test(u.label))!;
   const item = (i: (typeof ot.sources)[number], label: string): Figure => ({ value: i.amount, label, ref: i, tone: 'one-time' });
 
   return {
-    years,
+    years: views,
     close: {
       fails: {
-        cuts: { value: fy27.reduction, label: 'FY2027 department cuts if the sales tax fails', ref: fy27, tone: 'short' } satisfies Figure,
+        cuts: { value: fy27.reduction, label: `${L} department cuts if the sales tax fails`, ref: fy27, tone: 'short' } satisfies Figure,
         pct: fy27.reductionPct,
       },
       passes: {
-        cuts: { value: fy27.netReduction, label: 'FY2027 department cuts if the sales tax passes', ref: fy27, tone: 'short' } satisfies Figure,
+        cuts: { value: fy27.netReduction, label: `${L} department cuts if the sales tax passes`, ref: fy27, tone: 'short' } satisfies Figure,
         pct: fy27.netReductionPct,
-        softened: { value: fy27.salesTaxAllocation, label: 'FY2027 cuts softened by one-time bridge money', ref: fy27, tone: 'one-time' } satisfies Figure,
+        softened: { value: fy27.salesTaxAllocation, label: `${L} cuts softened by one-time bridge money`, ref: fy27, tone: 'one-time' } satisfies Figure,
       },
-      bridge: item(bridge, 'One-time money used as a bridge until the sales-tax vote, FY2027-28'),
+      bridge: item(bridge, `One-time money used as a bridge until the sales-tax vote, ${span}`),
       total: fy27.reduction,
     },
     oneTime: {
@@ -117,7 +125,7 @@ export function gapPage(b: CityBudget) {
       remaining: ot.remaining,
       remainingFigure: {
         value: ot.remaining,
-        label: 'One-time resources left over, FY2027-28',
+        label: `One-time resources left over, ${span}`,
         ref: ot.uses.at(-1)!,
         tone: 'one-time',
         parts: [

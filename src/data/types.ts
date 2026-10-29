@@ -14,6 +14,9 @@ export const SCHEMA_VERSION = 1;
 
 export type SourceId = `S${number}`;
 
+/** One amount per fiscal year, keyed by the year the fiscal year ends in: `{ "2027": …, "2028": … }`. */
+export type ByYear = Record<number, number>;
+
 export interface Ref {
   source: SourceId;
   related?: SourceId[];
@@ -90,8 +93,7 @@ export interface BridgeStep extends Ref {
   key: string;
   label: string;
   kind: BridgeStepKind;
-  fy2027: number;
-  fy2028: number;
+  years: ByYear;
 }
 
 export interface DeficitBridge {
@@ -131,7 +133,8 @@ export interface DepartmentReductionTotal extends Ref {
 }
 
 export interface DepartmentReductions {
-  year: 'FY2027' | 'FY2028';
+  /** The fiscal year, by the year it ends in (2027 = FY2027). */
+  year: number;
   title: string;
   note: string;
   departments: DepartmentReduction[];
@@ -141,15 +144,17 @@ export interface DepartmentReductions {
 export interface FteScenario extends Ref {
   key: 'without-sales-tax' | 'with-sales-tax';
   label: string;
-  fy2026AdoptedFte: number;
-  fy2026Rif: number;
-  fy2027BaselineFte: number;
-  fy2027Reduction: number;
-  /** Derived: fy2027BaselineFte - fy2027Reduction. */
-  fy2027NetFte: number;
-  /** Derived: fy2026Rif + fy2027Reduction. */
+  /** The budget year the scenario is for; `adoptedFte` and `rif` are the year before. */
+  year: number;
+  adoptedFte: number;
+  rif: number;
+  baselineFte: number;
+  reduction: number;
+  /** Derived: baselineFte - reduction. */
+  netFte: number;
+  /** Derived: rif + reduction. */
   cumulativeRif: number;
-  /** Derived: cumulativeRif / fy2026AdoptedFte. */
+  /** Derived: cumulativeRif / adoptedFte. */
   cumulativeReductionPct: number;
 }
 
@@ -187,9 +192,8 @@ export interface OneTimeResources {
 export interface CapitalLine extends Ref {
   name: string;
   category: string;
-  fy2027: number;
-  fy2028: number;
-  /** Derived: fy2027 + fy2028. */
+  years: ByYear;
+  /** Derived: the sum of `years`. */
   total: number;
 }
 
@@ -262,9 +266,8 @@ export interface CitedFacts {
 /** One row of a City PDF table: `quote` is the row exactly as printed, so it's checked on its page like any quote. */
 export interface DocCapitalPart extends DocRef {
   name: string;
-  fy2027: number;
-  fy2028: number;
-  /** Derived: fy2027 + fy2028. */
+  years: ByYear;
+  /** Derived: the sum of `years`. */
   total: number;
 }
 
@@ -292,7 +295,7 @@ export interface DocumentFacts {
   /** Adopted "as amended by subsequent Council action": amendments made at the meeting aren't in the staff report. */
   adoption: DocRef & { date: string };
   /** The gap as restated in the adoption staff report, in dollars (rounded to $10k, as written). */
-  adoptionGap: DocRef & { fy2027: number; fy2028: number };
+  adoptionGap: DocRef & { years: ByYear };
   /** FY27–31 CIP "Capital & Maint. Need" total, and its stated yearly growth. */
   capitalNeed: DocRef & { amount: number };
   /** FY27 spending, all funds and General Fund (adoption report p.1): the sentence's rounded figure, the table's exact one. */
@@ -313,7 +316,7 @@ export interface DocumentFacts {
   capitalProgram: DocRef & {
     lines: DocCapitalLine[];
     /** Derived: the sum of the lines (the table prints subtotals per fund type, which the build ties out, but no grand total). */
-    total: { fy2027: number; fy2028: number; total: number };
+    total: { years: ByYear; total: number };
     /** The fund that is the General Fund's capital money ("Capital Improvements", the CIP fund). */
     generalFund: string;
   };

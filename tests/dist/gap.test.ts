@@ -37,8 +37,7 @@ describe('the Gap page waterfall', () => {
       }
       expect(s.at(-1)).toMatchObject({ kind: 'final', value: final, row: 13 });
       // …and the same numbers as budget.json, independently.
-      const key = year === 'fy2027' ? 'fy2027' : 'fy2028';
-      expect(b.deficitBridge.steps.find((x) => x.key === 'final-gap')![key]).toBe(final);
+      expect(b.deficitBridge.steps.find((x) => x.key === 'final-gap')!.years[Number(year.slice(2))]).toBe(final);
     });
   }
 

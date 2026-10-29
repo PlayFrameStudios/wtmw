@@ -233,16 +233,16 @@ export function capitalPage(b: CityBudget, file: CapitalGroupsFile) {
   return {
     total: {
       value: total,
-      fy2027: c.total.fy2027,
-      fy2028: c.total.fy2028,
+      fy2027: c.total.years[2027],
+      fy2028: c.total.years[2028],
       figure: {
         value: total,
         label: 'Capital program, FY2027 + FY2028, all funding sources',
         ref: c,
         tone: 'neutral',
         parts: [
-          { label: 'FY2027', value: c.total.fy2027 },
-          { label: 'FY2028', value: c.total.fy2028 },
+          { label: 'FY2027', value: c.total.years[2027] },
+          { label: 'FY2028', value: c.total.years[2028] },
         ],
       } satisfies Figure,
     },
@@ -263,6 +263,6 @@ export function capitalPage(b: CityBudget, file: CapitalGroupsFile) {
     blocks,
     legend,
     generalFund: gf,
-    gap: { value: Math.abs(gap.fy2027), figure: { value: gap.fy2027, label: 'FY2027 General Fund gap, after adjustments', ref: gap } satisfies Figure },
+    gap: { value: Math.abs(gap.years[2027]), figure: { value: gap.years[2027], label: 'FY2027 General Fund gap, after adjustments', ref: gap } satisfies Figure },
   };
 }

@@ -10,7 +10,7 @@ import type { RevenueGroup } from './revenue-groups.ts';
 import { per100 } from './waffle.ts';
 
 export function overview(b: CityBudget, families: Families, revenueGroups: RevenueGroup[]) {
-  const fy27 = b.departmentReductions.find((y) => y.year === 'FY2027')!;
+  const fy27 = b.departmentReductions.find((y) => y.year === 2027)!;
   const step = (key: string) => b.deficitBridge.steps.find((s) => s.key === key)!;
   const fte = b.fte.scenarios.find((s) => s.key === 'without-sales-tax')!;
   const shares = per100(fy27.departments, (d) => d.baseline);
@@ -28,11 +28,11 @@ export function overview(b: CityBudget, families: Families, revenueGroups: Reven
   // `short` labels the mini chart's bars (#25); `note` is the step's "what is this?" (src/data/documents.ts checks its quotes).
   const notes = b.documentFacts.stepNotes;
   const waterfall = [
-    { key: 'initial', label: 'Initial estimate', short: 'First estimate', note: notes['initial-estimate'], value: step('initial-estimate').fy2027, kind: 'total' as const },
-    { key: 'revenue', label: 'Revenue came in higher', short: 'Higher revenue', note: notes['revenue-projections'], value: step('revenue-projections').fy2027, kind: 'up' as const },
-    { key: 'adjustments', label: 'Three adjustments', short: `${adjustments.length} adjustments`, note: notes.adjustments, value: adjustments.reduce((a, s) => a + s.fy2027, 0), kind: 'cost' as const },
-    { key: 'one-time', label: 'One-time money', short: 'One-time money', note: notes['one-time-resources'], value: step('one-time-resources').fy2027, kind: 'one-time' as const },
-    { key: 'final', label: 'The gap', short: 'Gap left', note: notes['final-gap'], value: step('final-gap').fy2027, kind: 'total' as const },
+    { key: 'initial', label: 'Initial estimate', short: 'First estimate', note: notes['initial-estimate'], value: step('initial-estimate').years[2027], kind: 'total' as const },
+    { key: 'revenue', label: 'Revenue came in higher', short: 'Higher revenue', note: notes['revenue-projections'], value: step('revenue-projections').years[2027], kind: 'up' as const },
+    { key: 'adjustments', label: 'Three adjustments', short: `${adjustments.length} adjustments`, note: notes.adjustments, value: adjustments.reduce((a, s) => a + s.years[2027], 0), kind: 'cost' as const },
+    { key: 'one-time', label: 'One-time money', short: 'One-time money', note: notes['one-time-resources'], value: step('one-time-resources').years[2027], kind: 'one-time' as const },
+    { key: 'final', label: 'The gap', short: 'Gap left', note: notes['final-gap'], value: step('final-gap').years[2027], kind: 'total' as const },
   ];
 
   const g = b.citedFacts.growth;
@@ -62,13 +62,13 @@ export function overview(b: CityBudget, families: Families, revenueGroups: Reven
       ref: fy27.total,
     } satisfies Figure,
     fte: {
-      value: fte.fy2027BaselineFte,
+      value: fte.baselineFte,
       label: 'Staff positions (FTE), FY2027 baseline, all funds',
       ref: fte,
       format: 'number',
       tone: 'neutral',
     } satisfies Figure,
-    gap: { value: step('final-gap').fy2027, label: 'FY2027 General Fund gap, after adjustments', ref: step('final-gap') } satisfies Figure,
+    gap: { value: step('final-gap').years[2027], label: 'FY2027 General Fund gap, after adjustments', ref: step('final-gap') } satisfies Figure,
     revenue: {
       mix,
       total: { value: b.revenue.total.fy2026Adopted, label: 'General Fund revenue and transfers, FY2026 adopted', ref: b.revenue.total } satisfies Figure,
@@ -85,7 +85,7 @@ export function overview(b: CityBudget, families: Families, revenueGroups: Reven
         ref: w.key === 'adjustments' ? adjustments[0] : step(
           { initial: 'initial-estimate', revenue: 'revenue-projections', 'one-time': 'one-time-resources', final: 'final-gap' }[w.key as 'initial']),
         ...(w.key === 'adjustments'
-          ? { parts: adjustments.map((s) => ({ label: `${s.label.replace(/^Adjustment:\s*/, '')} (row ${s.row})`, value: s.fy2027 })) }
+          ? { parts: adjustments.map((s) => ({ label: `${s.label.replace(/^Adjustment:\s*/, '')} (row ${s.row})`, value: s.years[2027] })) }
           : {}),
         tone: w.kind === 'one-time' ? 'one-time' : undefined,
       } satisfies Figure,

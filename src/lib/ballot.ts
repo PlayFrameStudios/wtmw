@@ -112,7 +112,7 @@ export function checkBallotFile(file: BallotFile, b: CityBudget, where = 'ballot
 
 export function ballotPage(b: CityBudget, file: BallotFile, short: Record<string, string> = {}) {
   checkBallotFile(file, b);
-  const fy27 = b.departmentReductions.find((y) => y.year === 'FY2027')!;
+  const fy27 = b.departmentReductions.find((y) => y.year === 2027)!;
   const t = b.citedFacts.salesTax;
   const bond = b.citedFacts.bond;
   const d = b.documentFacts;
@@ -134,9 +134,9 @@ export function ballotPage(b: CityBudget, file: BallotFile, short: Record<string
       positions: { total: p.total, vacant: p.vacant, filled: p.filled, figure: { value: p.total, label: `Positions eliminated if the sales tax ${word} (${p.vacant} vacant, ${p.filled} filled)`, ref: p, format: 'number', tone: 'neutral' } satisfies Figure },
       cuts: { value: cuts, pct: cutsPct, figure: { value: cuts, label: `FY2027 department cuts if the sales tax ${word}`, ref: fy27.total, tone: 'short' } satisfies Figure },
       workforce: {
-        after: f.fy2027NetFte,
-        before: f.fy2026AdoptedFte,
-        figure: { value: f.fy2027NetFte, label: `City workforce (FTE) after FY2027 cuts if the sales tax ${word}`, ref: f, format: 'number', tone: 'neutral' } satisfies Figure,
+        after: f.netFte,
+        before: f.adoptedFte,
+        figure: { value: f.netFte, label: `City workforce (FTE) after FY2027 cuts if the sales tax ${word}`, ref: f, format: 'number', tone: 'neutral' } satisfies Figure,
       },
       rows: file.rows.map((r) => ({ key: r.key, label: r.label, ...r[outcome] })),
     };

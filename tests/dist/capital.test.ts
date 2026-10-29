@@ -25,7 +25,7 @@ describe('capital page (built)', () => {
     // "General Fund Total" is all dashes: its capital money is the Capital Improvements fund, under Capital Projects Funds.
     expect(subtotals.map((t) => t.type)).toEqual(['Capital Projects Funds', 'Enterprise Funds', 'Grants Funds', 'Internal Service Funds', 'Special Revenue Funds']);
     for (const y of ['fy2027', 'fy2028'] as const) {
-      expect(lines.reduce((a, l) => a + l[y], 0), y).toBe(subtotals.reduce((a, t) => a + t[y], 0));
+      expect(lines.reduce((a, l) => a + l.years[y === 'fy2027' ? 2027 : 2028], 0), y).toBe(subtotals.reduce((a, t) => a + t[y], 0));
     }
     const total = lines.reduce((a, l) => a + l.total, 0);
     expect(program.total.total).toBe(total);

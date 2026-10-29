@@ -50,7 +50,7 @@ describe('sources', () => {
 
 describe('figure receipts', () => {
   const figure: Figure = {
-    value: gap.fy2027,
+    value: gap.years[2027],
     label: 'FY2027 General Fund gap, after adjustments',
     ref: gap,
     related: ['S15'],

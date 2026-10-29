@@ -26,6 +26,14 @@ export function toCsv({ columns, rows }: CsvTable): string {
 
 const withRef = (columns: string[]) => [...columns, ...REF_COLUMNS];
 
+/** One `fy{year}` column per year in a record's `years` (the downloads keep their flat columns). */
+const flatYears = <T extends { years: Record<number, number> }>(r: T) => ({ ...r, ...Object.fromEntries(Object.entries(r.years).map(([y, v]) => [`fy${y}`, v])) });
+const yearColumns = (rows: { years: Record<number, number> }[]) => [...new Set(rows.flatMap((r) => Object.keys(r.years)))].map((y) => `fy${y}`);
+
+/** FTE scenario fields, and their download columns named for the years they're in (the prior year's adopted FTE and RIF). */
+const FTE_FIELDS = ['adoptedFte', 'rif', 'baselineFte', 'reduction', 'netFte'] as const;
+const fteColumns = (year: number) => [`fy${year - 1}AdoptedFte`, `fy${year - 1}Rif`, `fy${year}BaselineFte`, `fy${year}Reduction`, `fy${year}NetFte`];
+
 export function csvTables(b: CityBudget): CsvTable[] {
   const revenueColumns = [
     'name',
@@ -58,28 +66,18 @@ export function csvTables(b: CityBudget): CsvTable[] {
     },
     {
       name: 'deficit-bridge',
-      columns: withRef(['key', 'label', 'kind', 'fy2027', 'fy2028']),
-      rows: b.deficitBridge.steps,
+      columns: withRef(['key', 'label', 'kind', ...yearColumns(b.deficitBridge.steps)]),
+      rows: b.deficitBridge.steps.map(flatYears),
     },
     ...b.departmentReductions.map((y) => ({
-      name: `department-reductions-${y.year.toLowerCase()}`,
+      name: `department-reductions-fy${y.year}`,
       columns: withRef(deptColumns),
       rows: [...y.departments, { ...y.total, id: 'total', name: 'TOTAL Citywide' }],
     })),
     {
       name: 'fte-scenarios',
-      columns: withRef([
-        'key',
-        'label',
-        'fy2026AdoptedFte',
-        'fy2026Rif',
-        'fy2027BaselineFte',
-        'fy2027Reduction',
-        'fy2027NetFte',
-        'cumulativeRif',
-        'cumulativeReductionPct',
-      ]),
-      rows: b.fte.scenarios,
+      columns: withRef(['key', 'label', ...fteColumns(b.fte.scenarios[0].year), 'cumulativeRif', 'cumulativeReductionPct']),
+      rows: b.fte.scenarios.map((s) => ({ ...s, ...Object.fromEntries(fteColumns(s.year).map((c, i) => [c, s[FTE_FIELDS[i]]])) })),
     },
     {
       name: 'position-reductions',
@@ -93,8 +91,8 @@ export function csvTables(b: CityBudget): CsvTable[] {
     },
     {
       name: 'capital-program',
-      columns: withRef(['name', 'category', 'fy2027', 'fy2028', 'total']),
-      rows: [...b.capitalProgram.lines, b.capitalProgram.total],
+      columns: withRef(['name', 'category', ...yearColumns(b.capitalProgram.lines), 'total']),
+      rows: [...b.capitalProgram.lines, b.capitalProgram.total].map(flatYears),
     },
     {
       name: 'personnel-cost-composition',
