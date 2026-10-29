@@ -16,6 +16,8 @@ export interface FremontDocuments {
   sources: Omit<Source, 'number'>[];
   tables: Record<'generalFund' | 'forecast' | 'history' | 'allFunds' | 'positions' | 'pension' | 'capitalPlan', TableSpec>;
   quotes: Record<string, DocRef>;
+  /** Terms quoted from the adopted budget's glossary: the term's line and its definition, as printed. */
+  glossary: { term: string; source: SourceId; page: number; definition: string }[];
 }
 
 /** The budget year: FY 2026/27, by the year it ends in. */
@@ -180,6 +182,7 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
     note: 'The adopted budget prints figures in thousands of dollars; they are shown here in dollars. FY 2024/25 is actual, FY 2025/26 is the City’s estimate as of the adopted budget, and FY 2027/28 onward is its forecast.',
     columns,
     primary: ADOPTED,
+    totalName: 'General Fund revenue, before transfers in',
     lines: REVENUES.map((r, i) => revenueLine(r, r, revenueRows[i])),
     total: revenueLine('Total Revenues', 'Total Revenues', totalRevenues),
   };
@@ -188,7 +191,9 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
   const generalFund = [
     {
       year: YEAR,
-      basis: 'General Fund adopted budget',
+      basis: 'General Fund department budgets, before non-departmental spending, debt service and the citywide savings assumption',
+      note: 'adopted',
+      noun: 'department budgets',
       lines: [
         ...departmentRows.map((r) => ({ id: slug(r.label), name: r.label, kind: 'department' as const, amount: r.values[ADOPTED], ...r.ref })),
         ...citywideRows.map((r, i) => ({ id: slug(CITYWIDE[i][1]), name: CITYWIDE[i][1], kind: 'citywide' as const, amount: r.values[ADOPTED], ...r.ref })),
@@ -287,13 +292,20 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
     uncertaintyReserve2024: row(history.row('Budget Uncertainty Reserve'), 'actual-2024'),
     uncertaintyReserve2025: row(history.row('Budget Uncertainty Reserve'), 'actual-2025'),
   });
-  quote('proposedBalanced');
+  const statements = { adopted: quote('adopted'), contextYears: quote('contextYears'), proposedBalanced: quote('proposedBalanced') };
   // The sentences agree with the tables: the savings assumption is the summary's Citywide Savings line, and
   // the Contingency Reserve is 16.7% of expenditures and transfers out.
   const savings = citywideRows[2].values[ADOPTED];
   check('citywide savings', facts.citywideSavings.value === -savings, `the sentence says $${facts.citywideSavings.value}, the table ${savings}`);
   const policy = facts.contingencyPolicy.value * (totalExpenditures.values[ADOPTED] + transfersOut.values[ADOPTED]);
   check('contingency reserve', Math.abs(policy - reserveRows[0].values[ADOPTED]) < 1_000, `16.7% of expenditures and transfers out is ${Math.round(policy)}, but the reserve is ${reserveRows[0].values[ADOPTED]}`);
+
+  // The glossary: each term's line and its definition, together on the page as printed.
+  const glossary = file.glossary.map((g) => {
+    const ref: DocRef = { source: g.source, page: g.page, quote: `${g.term} ${g.definition}` };
+    checkQuote(ref, excerpts, `documents.json glossary "${g.term}"`);
+    return { term: g.term, definition: g.definition, source: g.source, page: g.page, quote: g.definition };
+  });
 
   const budget: CityBudget = {
     schemaVersion: SCHEMA_VERSION,
@@ -303,7 +315,9 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
     revenue,
     staffing,
     size,
+    glossary,
     facts,
+    statements,
     capitalPlan,
     pension,
   };

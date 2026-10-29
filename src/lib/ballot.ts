@@ -3,7 +3,7 @@
  * by the same function and rendered by the same template. Election results,
  * when they're in, are a data change in data/cities/{city}/ballot.json.
  */
-import type { CityBudget, SourceId } from '../data/types.ts';
+import type { GapBudget, SourceId } from '../data/types.ts';
 import { dataDirOf } from './cities.ts';
 import type { Figure } from './receipts.ts';
 
@@ -75,7 +75,7 @@ export function ballotState(file: BallotFile, measure = 'the sales tax') {
 const STATUSES: Status[] = ['pending', 'passed', 'failed'];
 
 /** Throws on a ballot.json the page can't render honestly. */
-export function checkBallotFile(file: BallotFile, b: CityBudget, where = 'ballot.json') {
+export function checkBallotFile(file: BallotFile, b: GapBudget, where = 'ballot.json') {
   for (const [k, m] of Object.entries(file.measures)) {
     if (!STATUSES.includes(m.status)) throw new Error(`${where}: ${k}.status must be one of ${STATUSES.join(', ')}, got "${m.status}"`);
   }
@@ -110,7 +110,7 @@ export function checkBallotFile(file: BallotFile, b: CityBudget, where = 'ballot
   file.countsCaveat.cites.forEach((c, i) => cites(c, `countsCaveat.cites[${i}]`));
 }
 
-export function ballotPage(b: CityBudget, file: BallotFile, short: Record<string, string> = {}) {
+export function ballotPage(b: GapBudget, file: BallotFile, short: Record<string, string> = {}) {
   checkBallotFile(file, b);
   const fy27 = b.departmentReductions.find((y) => y.year === 2027)!;
   const t = b.citedFacts.salesTax;

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "notes": {
     "coverage": "FY 2026/27",
     "basis": "Budgetary basis",
@@ -53,7 +53,9 @@
   "generalFund": [
     {
       "year": 2027,
-      "basis": "General Fund adopted budget",
+      "basis": "General Fund department budgets, before non-departmental spending, debt service and the citywide savings assumption",
+      "note": "adopted",
+      "noun": "department budgets",
       "lines": [
         {
           "id": "city-council",
@@ -222,6 +224,7 @@
       }
     ],
     "primary": "adopted-2027",
+    "totalName": "General Fund revenue, before transfers in",
     "lines": [
       {
         "name": "Property Tax",
@@ -772,6 +775,134 @@
       "quote": "Total Uses 277,806 281,821 281,821 289,089"
     }
   },
+  "glossary": [
+    {
+      "term": "Adopted Budget",
+      "definition": "The adopted budget is the annual City operating budget approved by the City Council for the fiscal year.",
+      "source": "S1",
+      "page": 276,
+      "quote": "The adopted budget is the annual City operating budget approved by the City Council for the fiscal year."
+    },
+    {
+      "term": "Appropriation",
+      "definition": "An authorization by the City Council to make expenditures and to incur obligations for a specific purpose within a specific time frame.",
+      "source": "S1",
+      "page": 276,
+      "quote": "An authorization by the City Council to make expenditures and to incur obligations for a specific purpose within a specific time frame."
+    },
+    {
+      "term": "Balanced Budget",
+      "definition": "The budget for a fund is balanced when total budgeted resources, including revenues, transfers in from other funds, and unallocated fund balance from previous years, meet or exceed total budgeted use of resources, including expenditures and transfers out to other funds.",
+      "source": "S1",
+      "page": 276,
+      "quote": "The budget for a fund is balanced when total budgeted resources, including revenues, transfers in from other funds, and unallocated fund balance from previous years, meet or exceed total budgeted use of resources, including expenditures and transfers out to other funds."
+    },
+    {
+      "term": "California Public Employees’ Retirement System (CalPERS)",
+      "definition": "The retirement system, administered by the State of California, to which all regular City employees belong.",
+      "source": "S1",
+      "page": 277,
+      "quote": "The retirement system, administered by the State of California, to which all regular City employees belong."
+    },
+    {
+      "term": "Capital Improvement Program (CIP)",
+      "definition": "The five-year financial plan for improving assets and integrating debt service and capital assets maintenance, adopted in a separate budget document and updated every two years.",
+      "source": "S1",
+      "page": 278,
+      "quote": "The five-year financial plan for improving assets and integrating debt service and capital assets maintenance, adopted in a separate budget document and updated every two years."
+    },
+    {
+      "term": "Cost Center",
+      "definition": "Cost centers are funds established to account for the transactions and activities related to specific City services, and the fees are used for the benefit of the fee payers. The Development Cost Center, for example, is a fund that accounts for services related to planning, engineering, and inspection of public and private development construction projects.",
+      "source": "S1",
+      "page": 278,
+      "quote": "Cost centers are funds established to account for the transactions and activities related to specific City services, and the fees are used for the benefit of the fee payers. The Development Cost Center, for example, is a fund that accounts for services related to planning, engineering, and inspection of public and private development construction projects."
+    },
+    {
+      "term": "Debt Service",
+      "definition": "Payment of the principal and interest on an obligation resulting from the issuance of bonds, notes, or certificates of participation (COPs).",
+      "source": "S1",
+      "page": 278,
+      "quote": "Payment of the principal and interest on an obligation resulting from the issuance of bonds, notes, or certificates of participation (COPs)."
+    },
+    {
+      "term": "Fiscal Year",
+      "definition": "A twelve-month period of time to which a budget applies. In Fremont, the fiscal year is July 1 through June 30.",
+      "source": "S1",
+      "page": 279,
+      "quote": "A twelve-month period of time to which a budget applies. In Fremont, the fiscal year is July 1 through June 30."
+    },
+    {
+      "term": "Fund",
+      "definition": "An independent fiscal and accounting entity with a self-balancing set of accounts, used to record all financial transactions related to the specific purpose for which the fund was created.",
+      "source": "S1",
+      "page": 279,
+      "quote": "An independent fiscal and accounting entity with a self-balancing set of accounts, used to record all financial transactions related to the specific purpose for which the fund was created."
+    },
+    {
+      "term": "Fund Balance",
+      "definition": "The difference between fund assets and fund liabilities.",
+      "source": "S1",
+      "page": 279,
+      "quote": "The difference between fund assets and fund liabilities."
+    },
+    {
+      "term": "General Fund",
+      "definition": "The primary fund of the City used to account for all revenues and expenditures of the City not legally restricted as to use. This fund is used to accumulate the cost of the City’s general operations.",
+      "source": "S1",
+      "page": 279,
+      "quote": "The primary fund of the City used to account for all revenues and expenditures of the City not legally restricted as to use. This fund is used to accumulate the cost of the City’s general operations."
+    },
+    {
+      "term": "Hotel/Motel Occupancy Tax",
+      "definition": "A tax imposed on travelers who stay in temporary lodging facilities within the City. Also referred to as a Transient Occupancy Tax.",
+      "source": "S1",
+      "page": 280,
+      "quote": "A tax imposed on travelers who stay in temporary lodging facilities within the City. Also referred to as a Transient Occupancy Tax."
+    },
+    {
+      "term": "Infrastructure",
+      "definition": "Facilities on which the continuance and growth of the community depend, such as roads, sidewalks, parks and public buildings.",
+      "source": "S1",
+      "page": 280,
+      "quote": "Facilities on which the continuance and growth of the community depend, such as roads, sidewalks, parks and public buildings."
+    },
+    {
+      "term": "Multi-year Forecast",
+      "definition": "The Finance Department’s three-year forecast of revenues and expenditures.",
+      "source": "S1",
+      "page": 281,
+      "quote": "The Finance Department’s three-year forecast of revenues and expenditures."
+    },
+    {
+      "term": "Non-departmental",
+      "definition": "Appropriations of the General Fund not directly associated with a specific department. Expenditure items and certain types of anticipated general savings are included.",
+      "source": "S1",
+      "page": 281,
+      "quote": "Appropriations of the General Fund not directly associated with a specific department. Expenditure items and certain types of anticipated general savings are included."
+    },
+    {
+      "term": "Proposed Budget",
+      "definition": "The proposed budget is the budget that is sent to the City Council by the City Manager. The proposed budget, including changes made by the City Council during its review, is approved and then becomes the adopted budget.",
+      "source": "S1",
+      "page": 282,
+      "quote": "The proposed budget is the budget that is sent to the City Council by the City Manager. The proposed budget, including changes made by the City Council during its review, is approved and then becomes the adopted budget."
+    },
+    {
+      "term": "Special Revenue Fund",
+      "definition": "This fund type is used to account for City revenues from sources that, by law or administrative action, are designated to finance particular functions or activities of government.",
+      "source": "S1",
+      "page": 282,
+      "quote": "This fund type is used to account for City revenues from sources that, by law or administrative action, are designated to finance particular functions or activities of government."
+    },
+    {
+      "term": "Transfers In and Transfers Out",
+      "definition": "Amounts transferred between funds; not considered a revenue or expense. For example, legally authorized transfers from a fund receiving revenue to the fund through which the resources are to be expended are shown as operating transfers.",
+      "source": "S1",
+      "page": 282,
+      "quote": "Amounts transferred between funds; not considered a revenue or expense. For example, legally authorized transfers from a fund receiving revenue to the fund through which the resources are to be expended are shown as operating transfers."
+    }
+  ],
   "facts": {
     "population": {
       "source": "S1",
@@ -915,6 +1046,23 @@
       "quote": "Budget Uncertainty Reserve 10,000 12,500 24,246 4,298 4,298 4,298",
       "value": 4298000,
       "format": "money"
+    }
+  },
+  "statements": {
+    "adopted": {
+      "source": "S1",
+      "page": 259,
+      "quote": "The operating budget for the 2026/27 fiscal year was adopted on June 9, 2026."
+    },
+    "contextYears": {
+      "source": "S1",
+      "page": 259,
+      "quote": "The fiscal years before FY 2026/27 shown in the operating budget are for contextual purposes only and are not adopted by the City Council in its budget resolution for FY 2026/27."
+    },
+    "proposedBalanced": {
+      "source": "S3",
+      "page": 10,
+      "quote": "FY 2026/27 Proposed Budget balanced"
     }
   },
   "capitalPlan": {

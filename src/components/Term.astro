@@ -13,7 +13,9 @@ interface Props {
 }
 
 const { city, name } = Astro.props;
-const entry = budgetFor(city)?.glossary.find((g) => g.term === name);
+// "General Fund (GF)" is "General Fund" in a glossary that doesn't abbreviate it.
+const glossary = budgetFor(city)?.glossary ?? [];
+const entry = glossary.find((g) => g.term === name) ?? glossary.find((g) => g.term === name.replace(/\s*\([^)]*\)$/, ''));
 if (!entry) throw new Error(`<Term name="${name}">: not on ${city.path}'s Glossary tab`);
 const id = `term-${Math.random().toString(36).slice(2, 9)}`;
 const anchor = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

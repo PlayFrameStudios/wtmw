@@ -11,10 +11,12 @@ import SourceChip from '../../../../components/SourceChip.astro';
 import Sourced from '../../../../components/Sourced.astro';
 import Base from '../../../../layouts/Base.astro';
 import { csvTables } from '../../../../data/csv';
+import { hasGapPlan } from '../../../../data/types';
 import { budgetFor } from '../../../../lib/budget';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
 import { shortMoney } from '../../../../lib/format';
 import { ballotFileFor } from '../../../../lib/ballot';
+import { folio } from '../../../../lib/open-at';
 import { pagesBySource, sourcesById } from '../../../../lib/receipts';
 
 export const getStaticPaths = cityStaticPaths();
@@ -24,26 +26,36 @@ const budget = budgetFor(city)!;
 const sources = [...sourcesById(budget).values()];
 const counts = { all: sources.length, city: sources.filter((s) => s.type === 'city').length, news: sources.filter((s) => s.type === 'news').length };
 const raw = new Map(budget.sources.map((s) => [s.id, s]));
-const pages = pagesBySource(budget.documentFacts, ballotFileFor(city.path));
-const pageList = (ps: number[]) => `${ps.length > 1 ? 'pp.' : 'p.'} ${ps.join(', ')}`;
+// A deficit-plan city (Berkeley) has its known-gaps cards and its workbook; a city built from documents (#43), its own cards.
+const plan = hasGapPlan(budget) ? budget : undefined;
+// The pages each document is cited at: every page a budget.json record quotes, for a city built from documents.
+const pages = plan ? pagesBySource(plan.documentFacts, ballotFileFor(city.path)) : pagesBySource({ ...budget, sources: [] });
+const pageList = (id: (typeof sources)[number]['id'], ps: number[]) => `${ps.length > 1 ? 'pp.' : 'p.'} ${ps.map((p) => folio(raw.get(id)!, p)).join(', ')}`;
 const meta = (id: (typeof sources)[number]['id'], date?: string) =>
-  [raw.get(id)!.publisher, date, raw.get(id)!.usedFor, pages.has(id) ? pageList(pages.get(id)!) : undefined].filter(Boolean).join(' · ');
-const adoption = budget.documentFacts.adoption;
-// #38: overview card 2's growth rates and the Auditor's finding cover different years and funds.
-const auditor = budget.documentFacts.notes.auditorRevenues;
-const growth = budget.citedFacts.growth;
+  [raw.get(id)!.publisher, date, raw.get(id)!.usedFor, pages.has(id) ? pageList(id, pages.get(id)!) : undefined].filter(Boolean).join(' · ');
 const pctOf = (r: number) => `${(r * 100).toLocaleString('en-US')}%`;
-const adoptedOn = new Date(`${adoption.date}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
-const program = budget.documentFacts.capitalProgram;
-const workbookProgram = budget.capitalProgram.total;
 const data = `${city.path}data/`;
-const workbook = basename(budget.workbook.file);
+const workbook = budget.workbook && basename(budget.workbook.file);
 const tables = csvTables(budget).map((t) => t.name);
 
 // Figures the known-gaps cards quote, where the data has them.
-const liabilities = budget.personnelAndPension.unfundedLiabilities;
-const liability = (asOf: string) => liabilities.find((l) => l.asOf.startsWith(asOf))!;
-const itAllocation = budget.departmentReductions[0].departments.find((d) => d.id === 'it-cost-allocation-plan')!;
+const g = plan && {
+  adoption: plan.documentFacts.adoption,
+  // #38: overview card 2's growth rates and the Auditor's finding cover different years and funds.
+  auditor: plan.documentFacts.notes.auditorRevenues,
+  growth: plan.citedFacts.growth,
+  program: plan.documentFacts.capitalProgram,
+  workbookProgram: plan.capitalProgram.total,
+  liabilities: plan.personnelAndPension.unfundedLiabilities,
+  itAllocation: plan.departmentReductions[0].departments.find((d) => d.id === 'it-cost-allocation-plan')!,
+};
+const adoptedOn = g && new Date(`${g.adoption.date}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
+const liability = (asOf: string) => g!.liabilities.find((l) => l.asOf.startsWith(asOf))!;
+// A city built from documents: what its gap cards cite.
+const statements = budget.statements ?? {};
+const facts = budget.facts ?? {};
+const archived = sources.filter((s) => s.archive);
+const offsets = sources.filter((s) => s.pageOffset);
 const fy = (asOf: string) => `FY${asOf.slice(-2)}`;
 const humanize = (name: string) =>
   name
@@ -101,10 +113,10 @@ const humanize = (name: string) =>
 
         <section id="downloads" class="downloads" aria-labelledby="downloads-title">
           <h2 id="downloads-title">Download the data</h2>
-          <p>Everything on these pages, as published. Each row keeps its receipt: source, table and row.</p>
+          <p>Everything on these pages, as published. Each row keeps its receipt: {workbook ? 'source, table and row' : 'source, page and the line it was read from'}.</p>
           <ul>
             <li><a href={`${data}budget.json`} download>Everything, combined (JSON)</a></li>
-            <li><a href={`${data}${workbook}`} download>The original workbook (.xlsx)</a></li>
+            {workbook && <li><a href={`${data}${workbook}`} download>The original workbook (.xlsx)</a></li>}
             {tables.map((t) => (
               <li>
                 <a href={`${data}${t}.csv`} download>
@@ -119,10 +131,11 @@ const humanize = (name: string) =>
       <aside class="side">
         <p class="buttons">
           <a class="btn btn--ink" href="#downloads">Download data</a>
-          <a class="btn btn--ghost" href={`${data}${workbook}`} download>Original workbook</a>
+          {workbook && <a class="btn btn--ghost" href={`${data}${workbook}`} download>Original workbook</a>}
         </p>
 
         <h2 class="side-title">Known gaps in the data</h2>
+        {g ? (
         <ul class="gaps">
           <li class="gap card">
             <h3>Two different FY2020 spending figures</h3>
@@ -160,9 +173,9 @@ const humanize = (name: string) =>
           <li class="gap card" data-gap="growth-vs-auditor">
             <h3>Two findings on costs and revenue measure different things</h3>
             <p>
-              The overview's {pctOf(growth.spendingRate)} vs {pctOf(growth.revenueRate)} yearly growth is City staff's figure for the General Fund, as reported by the
-              Berkeley Scanner.<SourceChip city={city} source={growth.source} />{' '}
-              {auditor.text}<SourceChip city={city} source={auditor.cites[0].source} at={auditor.cites[0]} also={auditor.cites.slice(1)} />{' '}
+              The overview's {pctOf(g.growth.spendingRate)} vs {pctOf(g.growth.revenueRate)} yearly growth is City staff's figure for the General Fund, as reported by the
+              Berkeley Scanner.<SourceChip city={city} source={g.growth.source} />{' '}
+              {g.auditor.text}<SourceChip city={city} source={g.auditor.cites[0].source} at={g.auditor.cites[0]} also={g.auditor.cites.slice(1)} />{' '}
               The years and the funds differ, so the two aren't necessarily in conflict.
             </p>
           </li>
@@ -172,8 +185,8 @@ const humanize = (name: string) =>
               The Council adopted the budget on {adoptedOn} "as amended by subsequent Council action". A Council supplemental proposed restoring nine fire positions, and reporting says the Council funded
               them. Until the minutes are posted, position and workforce counts are from the April 16 plan.<SourceChip
                 city={city}
-                source={adoption.source}
-                at={adoption}
+                source={g.adoption.source}
+                at={g.adoption}
                 also={[{ source: 'S23' }, { source: 'S24' }]}
               />
             </p>
@@ -181,25 +194,84 @@ const humanize = (name: string) =>
           <li class="gap card" data-gap="capital-total">
             <h3>Two capital program totals</h3>
             <p>
-              The May proposal's presentation lists <Sourced city={city} source={workbookProgram.source}>{shortMoney(workbookProgram.total)}</Sourced> for
-              FY27-28; the adoption report's table by funding source totals <Sourced city={city} source={program.source} at={{ page: program.page, quote: program.quote }}
-                >{shortMoney(program.total.total)}</Sourced
+              The May proposal's presentation lists <Sourced city={city} source={g.workbookProgram.source}>{shortMoney(g.workbookProgram.total)}</Sourced> for
+              FY27-28; the adoption report's table by funding source totals <Sourced city={city} source={g.program.source} at={{ page: g.program.page, quote: g.program.quote }}
+                >{shortMoney(g.program.total.total)}</Sourced
               >, with a few more funds and revised amounts. The Capital page uses the adoption report.
             </p>
           </li>
           <li class="gap card" data-gap="it-allocation">
-            <h3>Department totals differ by {shortMoney(itAllocation.baseline)}</h3>
-            <p>The comparison table leaves out the {itAllocation.name}. Totals reconcile once it's added back.<SourceChip city={city} source="S1" /></p>
+            <h3>Department totals differ by {shortMoney(g.itAllocation.baseline)}</h3>
+            <p>The comparison table leaves out the {g.itAllocation.name}. Totals reconcile once it's added back.<SourceChip city={city} source="S1" /></p>
           </li>
         </ul>
+        ) : (
+        <ul class="gaps">
+          {statements.contextYears && (
+            <li class="gap card" data-gap="context-years">
+              <h3>Only one year is adopted</h3>
+              <p>
+                The Council adopts one year at a time. Earlier years are actuals or estimates, and later years are the City's forecast; none of them was
+                adopted with this budget.
+                <SourceChip city={city} source={statements.contextYears.source} at={statements.contextYears} />
+              </p>
+            </li>
+          )}
+          {facts.citywideSavings && (
+            <li class="gap card" data-gap="citywide-savings">
+              <h3>A savings assumption no department carries</h3>
+              <p>
+                The budget counts on <Sourced city={city} figure={{ value: facts.citywideSavings.value, label: 'Citywide savings assumed in the adopted budget', ref: facts.citywideSavings, tone: 'neutral' }}>{shortMoney(facts.citywideSavings.value)}</Sourced>{' '}
+                of savings across the City that isn't assigned to any department, so the departments' budgets add up to more than the General Fund spends.
+              </p>
+            </li>
+          )}
+          {budget.staffing.byDepartment && 'quote' in budget.staffing && (
+            <li class="gap card" data-gap="staffing">
+              <h3>Staff are counted in every fund</h3>
+              <p>
+                Position counts cover all funds, while department spending is the General Fund alone, and the position table lists the administrative
+                departments one by one. Compare the two only loosely.
+                <SourceChip city={city} source={budget.staffing.source} at={{ page: budget.staffing.page, quote: budget.staffing.quote }} />
+              </p>
+            </li>
+          )}
+          {offsets.length > 0 && (
+            <li class="gap card" data-gap="page-numbers">
+              <h3>Page numbers are the printed ones</h3>
+              <p>
+                Receipts cite the page number printed on the page, as the City's own tables of contents do. {offsets.map((s) => `${s.title} has ${s.pageOffset} pages before its page 1, so its PDF page is ${s.pageOffset} more.`).join(' ')}{' '}
+                Links open the right page either way.
+              </p>
+            </li>
+          )}
+          {archived.length > 0 && (
+            <li class="gap card" data-gap="archive">
+              <h3>The City's site can refuse links</h3>
+              <p>
+                {archived[0].host} sometimes blocks visitors it takes for robots. For {archived.length === 1 ? 'one document' : `${archived.length} documents`}, each receipt also links the
+                Internet Archive's copy, which is the same file.
+              </p>
+            </li>
+          )}
+        </ul>
+        )}
 
         <section class="methods" aria-labelledby="methods-title">
           <h2 id="methods-title">How we build this site</h2>
+          {workbook ? (
           <p>
             Numbers are copied from the city's workbook, or read from the sentence or table row of a City document that states them, never retyped. The
             build checks every quoted sentence against the document's text. Groupings (like 'property tax') are sums of the city's own line items, and each
             group lists its parts.
           </p>
+          ) : (
+          <p>
+            Numbers are read from the table row or sentence of a City document that states them, never retyped. The build checks every quoted line against the
+            document's text and ties each table to its own totals. Groupings (like 'property tax') are sums of the City's own line items, and each group lists its
+            parts.
+          </p>
+          )}
           <p class="basis">{budget.notes.caveat}</p>
         </section>
       </aside>

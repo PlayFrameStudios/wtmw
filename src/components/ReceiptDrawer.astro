@@ -43,7 +43,7 @@ const data = {
 <script type="application/json" id="receipt-data" set:html={JSON.stringify(data).replace(/</g, '\\u003c')} />
 
 <script>
-  import { openAt } from '../lib/open-at';
+  import { folio, openAt } from '../lib/open-at';
   import type { Receipt, SourceView } from '../lib/receipts';
 
   interface Data {
@@ -79,7 +79,7 @@ const data = {
       {},
       h('span', { class: `mini mini--${s.type}` }, s.id),
       h('a', { href: openAt(s, cites.find((c) => c.page)?.page).href, target: '_blank', rel: 'noopener' }, `${s.publisher}${s.date ? `, ${s.date}` : ''}: ${s.title}`),
-      ...cites.flatMap((c) => [c.page ? ` (p. ${c.page})` : '', c.quote ? h('q', { class: 'quote quote--also' }, c.quote) : '']),
+      ...cites.flatMap((c) => [c.page ? ` (p. ${folio(s, c.page)})` : '', c.quote ? h('q', { class: 'quote quote--also' }, c.quote) : '']),
     );
   }
 
@@ -124,12 +124,13 @@ const data = {
         { class: 'facts' },
         row('Document', `${primary.id} · ${primary.format} · ${primary.host}`),
         r.table ? row('Table', `${r.table}, row ${r.row}`) : null,
-        r.page ? row('Page', `p. ${r.page} of the PDF`) : null,
+        // A document with front matter cites its printed page, and says which PDF page that is.
+        r.page ? row('Page', primary.pageOffset ? `p. ${folio(primary, r.page)} (page ${r.page} of the PDF)` : `p. ${r.page} of the PDF`) : null,
         r.quote ? row('It says', h('q', { class: 'quote' }, r.quote)) : null,
         // More of the same document behind the same statement (#29): its page and what it says there.
         ...(r.also ?? [])
           .filter((c) => c.source === primary.id)
-          .map((c) => row(c.page ? `Also p. ${c.page}` : 'Also', c.quote ? h('q', { class: 'quote' }, c.quote) : '')),
+          .map((c) => row(c.page ? `Also p. ${folio(primary, c.page)}` : 'Also', c.quote ? h('q', { class: 'quote' }, c.quote) : '')),
         r.page || r.quote ? null : row('Basis', data.basis),
         h('div', { 'data-used-on': '' }, h('dt', {}, 'Used on'), usedOn),
       ),
@@ -155,6 +156,15 @@ const data = {
         r.csv ? h('a', { class: 'btn btn--ghost', href: r.csv, download: '' }, 'CSV') : null,
         copyStatus,
       ),
+      // The City's server can refuse a link opened from here; the Internet Archive's copy is the same file.
+      primary.archive &&
+        h(
+          'p',
+          { class: 'archive' },
+          'If the City\u2019s site won\u2019t open it, ',
+          h('a', { href: primary.archive.url, target: '_blank', rel: 'noopener' }, `the Internet Archive\u2019s copy (${primary.archive.date})`),
+          ' is the same document.',
+        ),
       h('p', { class: 'caveat' }, data.caveat),
       ...(['city', 'news'] as const).map((type) => {
         const list = others.filter((s) => s.type === type);
@@ -459,7 +469,8 @@ const data = {
     font-weight: 700;
     font-size: 0.8125rem;
   }
-  .receipt :global(.caveat) {
+  .receipt :global(.caveat),
+  .receipt :global(.archive) {
     margin: 1rem 0 0;
     color: var(--muted);
     font-size: 0.8125rem;

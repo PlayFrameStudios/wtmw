@@ -3,7 +3,7 @@
  * repair backlog, and a squarified treemap of where the program's money comes
  * from. Legend groups are editorial, in data/cities/{city}/capital-groups.json.
  */
-import type { CityBudget, DocCapitalLine } from '../data/types.ts';
+import type { GapBudget, DocCapitalLine } from '../data/types.ts';
 import { shortMoney } from './format.ts';
 import { dataDirOf } from './cities.ts';
 import type { Figure } from './receipts.ts';
@@ -159,7 +159,7 @@ export interface Block {
   fit: Record<LayoutKey, Fit>;
 }
 
-export function capitalPage(b: CityBudget, file: CapitalGroupsFile) {
+export function capitalPage(b: GapBudget, file: CapitalGroupsFile) {
   const c = b.documentFacts.capitalProgram;
   const total = c.total.total;
   const sum = c.lines.reduce((a, l) => a + l.total, 0);

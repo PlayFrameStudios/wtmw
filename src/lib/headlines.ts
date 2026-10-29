@@ -3,12 +3,12 @@
  * budget.json (the same derivations as the approved mockups) and carrying the
  * record it came from, so its chip can open a receipt.
  */
-import type { CityBudget } from '../data/types.ts';
+import type { GapBudget } from '../data/types.ts';
 import type { Families } from './families.ts';
 import type { Figure } from './receipts.ts';
 import { per100 } from './waffle.ts';
 
-export function headlines(b: CityBudget, families: Families) {
+export function headlines(b: GapBudget, families: Families) {
   const fy27 = b.departmentReductions.find((y) => y.year === 2027)!;
   const gap = b.deficitBridge.steps.find((s) => s.key === 'final-gap')!;
   const withTax = b.fte.positions.find((p) => p.key === 'with-sales-tax')!;

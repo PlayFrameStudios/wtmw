@@ -4,7 +4,7 @@
  * the City's own documents; the rest tie each TOTAL row to its line items.
  */
 import type { CrossCheck, Ref, SourceId, WorkbookBudget } from '../types.ts';
-import { REVENUE } from './extract.ts';
+import { REVENUE } from './columns.ts';
 
 export const PINNED = {
   fy2027DepartmentCount: 16,

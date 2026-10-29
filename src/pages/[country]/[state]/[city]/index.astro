@@ -14,13 +14,14 @@ import Term from '../../../../components/Term.astro';
 import Waffle from '../../../../components/Waffle.astro';
 import ReservesCard from '../../../../components/ReservesCard.astro';
 import Base from '../../../../layouts/Base.astro';
+import { gapPlan } from '../../../../data/types';
 import { budgetFor } from '../../../../lib/budget';
 import { cityStaticPaths, hasPage, type City } from '../../../../lib/cities';
 import { fy } from '../../../../lib/city-settings';
 import { departmentItems } from '../../../../lib/departments';
 import { familiesFor } from '../../../../lib/families';
 import { shortMoney } from '../../../../lib/format';
-import { overview } from '../../../../lib/overview';
+import { cityOverview, gapOverview } from '../../../../lib/overview';
 import { formatValue, type Figure } from '../../../../lib/receipts';
 import { reservesFor } from '../../../../lib/reserves';
 import { revenueGroupsFor } from '../../../../lib/revenue-groups';
@@ -30,14 +31,17 @@ export const getStaticPaths = cityStaticPaths();
 const { city } = Astro.props as { city: City };
 const budget = budgetFor(city)!;
 const families = familiesFor(city, budget);
-const o = overview(budget, families, revenueGroupsFor(city, budget));
-// Card 2's "Why?" (#38): the City's own reasons, cost side and revenue side together, in its order, not ranked.
-const why = [budget.documentFacts.notes.costDrivers, budget.documentFacts.notes.payAndBenefits];
 const has = (slug: Parameters<typeof hasPage>[1]) => hasPage(city, slug);
 const gapCity = city.fiscalPosition.variant === 'gap';
-// The budget's first year, and the year before it (revenue is reported for the year in progress).
+// The budget's first year (revenue can be reported for the year before it: Berkeley's year in progress).
 const year = city.budget.years[0];
 const label = (y: number, form: 'long' | 'short' | 'spoken' = 'long') => fy(city.budget.labels, y, form);
+const o = cityOverview(budget, families, revenueGroupsFor(city, budget), (y) => label(y));
+// A city with a gap has a deficit plan: the bridge, cost growth and the ballot (#43).
+const plan = gapCity ? gapPlan(budget, "The overview's gap card") : undefined;
+const gp = plan && gapOverview(plan);
+// Card 2's "Why?" (#38): the City's own reasons, cost side and revenue side together, in its order, not ranked.
+const why = plan ? [plan.documentFacts.notes.costDrivers, plan.documentFacts.notes.payAndBenefits] : [];
 const reserves = gapCity ? undefined : reservesFor(city)!;
 const reserveTotal: Figure | undefined = reserves && {
   value: reserves.reserves.reduce((a, r) => a + r.figure.value, 0),
@@ -54,10 +58,11 @@ const fte = Math.round(o.fte.value).toLocaleString('en-US');
 
 // Mini waterfall geometry: a shared zero line, bars hanging below it.
 const wf = (() => {
+  if (!gp) return [];
   let running = 0;
-  const lowest = Math.min(...o.waterfall.map((w) => (w.kind === 'total' ? w.value : 0)), 0);
+  const lowest = Math.min(...gp.waterfall.map((w) => (w.kind === 'total' ? w.value : 0)), 0);
   const scale = 70 / Math.abs(lowest);
-  return o.waterfall.map((w) => {
+  return gp.waterfall.map((w) => {
     const [from, to] = w.kind === 'total' ? [0, w.value] : [running, running + w.value];
     if (w.kind === 'total') running = w.value;
     else running += w.value;
@@ -65,7 +70,7 @@ const wf = (() => {
   });
 })();
 const rate = (r: number) => `${(r * 100).toLocaleString('en-US')}%`;
-const g = o.growth.cited;
+const g = gp?.growth.cited;
 const numberWords: Record<number, string> = { 10: 'ten' };
 
 ---
@@ -86,7 +91,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
             >{shortMoney(o.size.generalFund.value)}</Sourced
           >{' '}
           <Term city={city} name="General Fund (GF)">General Fund</Term> is the part the Council can spend on anything. The chart shows the{' '}
-          <Sourced city={city} figure={o.baseline}>{shortMoney(o.baseline.value)}</Sourced> of it planned for departments, before cuts.
+          <Sourced city={city} figure={o.baseline}>{shortMoney(o.baseline.value)}</Sourced> of it {gapCity ? 'planned for departments, before cuts' : 'budgeted for departments, before citywide costs and savings'}.
         </p>
       </StepInfo>
       <!-- Phones: the tour sits above the waffle, which fills a screen (#24). Wide screens show the copy in .hero-more. -->
@@ -94,7 +99,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
         <a class="btn btn--ink" href="#three-things">Start the 3-minute tour <span aria-hidden="true">→</span></a>
         {
           gapCity ? (
-            <a class="btn btn--ghost" href={`${city.path}gap/`}>Jump to the {shortMoney(Math.abs(o.gap.value), 0)} gap</a>
+            <a class="btn btn--ghost" href={`${city.path}gap/`}>Jump to the {shortMoney(Math.abs(gp!.gap.value), 0)} gap</a>
           ) : (
             <a class="btn btn--ghost" href={`${city.path}reserves/`}>See balance &amp; reserves</a>
           )
@@ -105,9 +110,9 @@ const numberWords: Record<number, string> = { 10: 'ten' };
     <div class="hero-waffle">
       <Waffle
         items={departmentItems(city.path, budget, o.shares, families)}
-        label={`${city.name}'s ${label(year)} department baseline`}
+        label={`${city.name}'s ${label(year)} ${o.uses.noun}`}
         noun="department"
-        table={{ caption: `${label(year)} General Fund department baseline, per $100`, name: 'Department', value: `${label(year)} baseline` }}
+        table={{ caption: `${label(year)} General Fund ${o.uses.noun}, per $100`, name: 'Department', value: `${label(year)} ${o.uses.noun.replace(/^department /, '')}` }}
       />
       <ul class="legend">
         {
@@ -129,7 +134,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
     <div class="hero-more">
       <dl class="stats">
         <div>
-          <dt>department baseline, {label(year, 'short')}</dt>
+          <dt>{o.uses.noun}, {label(year, 'short')}</dt>
           <dd class="num"><Sourced city={city} figure={o.baseline}>{shortMoney(o.baseline.value)}</Sourced></dd>
         </div>
         <div>
@@ -141,8 +146,8 @@ const numberWords: Record<number, string> = { 10: 'ten' };
             <div>
               <dt>gap the city must close</dt>
               <dd class="num short">
-                <Sourced city={city} figure={o.gap}>
-                  {shortMoney(Math.abs(o.gap.value))}
+                <Sourced city={city} figure={gp!.gap}>
+                  {shortMoney(Math.abs(gp!.gap.value))}
                 </Sourced>
               </dd>
             </div>
@@ -163,7 +168,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
         <a class="btn btn--ink" href="#three-things">Start the 3-minute tour <span aria-hidden="true">→</span></a>
         {
           gapCity ? (
-            <a class="btn btn--ghost" href={`${city.path}gap/`}>Jump to the {shortMoney(Math.abs(o.gap.value), 0)} gap</a>
+            <a class="btn btn--ghost" href={`${city.path}gap/`}>Jump to the {shortMoney(Math.abs(gp!.gap.value), 0)} gap</a>
           ) : (
             <a class="btn btn--ghost" href={`${city.path}reserves/`}>See balance &amp; reserves</a>
           )
@@ -178,26 +183,34 @@ const numberWords: Record<number, string> = { 10: 'ten' };
         <p class="n n--bay">1</p>
         <h2>Property tax is the City's biggest source of money.</h2>
         <p class="body">
-          About $1 of every ${o.revenue.oneIn} the City collects is property tax. Another {pct(o.revenue.transfer.share)} comes from a tax paid when a home is
-          sold.
+          About $1 of every ${o.revenue.oneIn} the City collects is property tax.{' '}
+          {
+            o.revenue.transfer ? (
+              <>Another {pct(o.revenue.transfer.share)} comes from a tax paid when a home is sold.</>
+            ) : (
+              <>
+                {o.revenue.second.name} brings in another {pct(o.revenue.second.share)}.
+              </>
+            )
+          }
         </p>
-        <div class="mix" role="img" aria-label={`${label(year - 1)} General Fund revenue by source: ${o.revenue.mix.map((g) => `${g.name} ${pct(g.share)}`).join(', ')}.`}>
+        <div class="mix" role="img" aria-label={`${label(o.revenue.year)} General Fund revenue by source: ${o.revenue.mix.map((g) => `${g.name} ${pct(g.share)}`).join(', ')}.`}>
           {o.revenue.mix.map((g) => <span style={`flex:${g.adopted};background:${g.color}`} title={`${g.name}: ${pct(g.share)}`} />)}
         </div>
         <p class="mix-labels">
           <span class="bay">{o.revenue.property.name} {pct(o.revenue.property.share)}</span>
-          <span><Sourced city={city} figure={o.revenue.total}>{shortMoney(o.revenue.total.value)}</Sourced> total, {label(year - 1, 'short')}</span>
+          <span><Sourced city={city} figure={o.revenue.total}>{shortMoney(o.revenue.total.value)}</Sourced> total, {label(o.revenue.year, 'short')}</span>
         </p>
         {has('revenue') && <a class="more" href={`${city.path}revenue/`}>See where every $100 comes from <span aria-hidden="true">→</span></a>}
       </li>
 
       {
-        gapCity ? (
+        gp && g ? (
           <li class="card">
             <p class="n n--red">2</p>
             <h2>Costs are growing faster than income.</h2>
             <p class="body">
-              For {numberWords[g.years] ?? g.years} years, the City's costs grew about <Sourced city={city} figure={o.growth.figure}>{rate(g.spendingRate)}</Sourced>{' '}
+              For {numberWords[g.years] ?? g.years} years, the City's costs grew about <Sourced city={city} figure={gp.growth.figure}>{rate(g.spendingRate)}</Sourced>{' '}
               a year and its income about {rate(g.revenueRate)}. So it starts each year short.
             </p>
             <p class="why">
@@ -224,8 +237,8 @@ const numberWords: Record<number, string> = { 10: 'ten' };
                 ))
               }
             </ul>
-            <svg class="mini-wf" viewBox={`0 0 ${o.waterfall.length * 62} 110`} role="img" aria-label={`${label(year)} deficit bridge: ${o.waterfall.map((w) => `${w.label} ${formatValue(w.value)}`).join(', ')}.`}>
-              <line x1="0" y1="14" x2={o.waterfall.length * 62} y2="14" stroke="var(--muted)" stroke-width="1"></line>
+            <svg class="mini-wf" viewBox={`0 0 ${gp.waterfall.length * 62} 110`} role="img" aria-label={`${label(year)} deficit bridge: ${gp.waterfall.map((w) => `${w.label} ${formatValue(w.value)}`).join(', ')}.`}>
+              <line x1="0" y1="14" x2={gp.waterfall.length * 62} y2="14" stroke="var(--muted)" stroke-width="1"></line>
               {
                 wf.map((w, i) => (
                   <g>
@@ -259,8 +272,8 @@ const numberWords: Record<number, string> = { 10: 'ten' };
             <p class="n n--ink">3</p>
             <h2>The sales-tax vote changes how deep the cuts go.</h2>
             <p class="body">
-              <Sourced city={city} figure={o.ballot.withTax}>{o.ballot.withTax.value}</Sourced> positions cut if Measure {o.ballot.salesTaxLetter} passes,{' '}
-              <Sourced city={city} figure={o.ballot.withoutTax}>{o.ballot.withoutTax.value}</Sourced> if it fails.
+              <Sourced city={city} figure={gp!.ballot.withTax}>{gp!.ballot.withTax.value}</Sourced> positions cut if Measure {gp!.ballot.salesTaxLetter} passes,{' '}
+              <Sourced city={city} figure={gp!.ballot.withoutTax}>{gp!.ballot.withoutTax.value}</Sourced> if it fails.
             </p>
             <a class="more" href={`${city.path}${has('ballot') ? 'ballot' : 'gap'}/`}>Compare both outcomes <span aria-hidden="true">→</span></a>
           </li>

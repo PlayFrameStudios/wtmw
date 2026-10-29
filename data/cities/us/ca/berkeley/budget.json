@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "workbook": {
     "file": "source/Berkeley_Budget_FY25-FY28.xlsx",
     "sha256": "944ea34b26979ee07bfdbe67a00d2ccf1ae1e9c6d48d591dedd6ed0526fb8f77"
@@ -322,6 +322,7 @@
       "year": 2027,
       "basis": "General Fund department baseline before proposed cuts",
       "note": "planning figure",
+      "noun": "department baseline",
       "lines": [
         {
           "id": "city-attorney",
@@ -479,6 +480,7 @@
       "year": 2028,
       "basis": "General Fund department baseline before proposed cuts",
       "note": "planning figure",
+      "noun": "department baseline",
       "lines": [
         {
           "id": "city-attorney",
@@ -662,6 +664,7 @@
       }
     ],
     "primary": "adopted-2026",
+    "totalName": "General Fund revenue and transfers",
     "lines": [
       {
         "name": "Secured Property Tax",

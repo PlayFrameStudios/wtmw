@@ -1,0 +1,21 @@
+{
+  "note": "Department families for the $100 chart and legends: an editorial grouping of the departments on the FY 2026/27 adopted budget's General Fund summary (S1 p. 66), with Berkeley's family names and colors. Within a family, bigger departments get darker shades.",
+  "families": [
+    { "id": "safety", "name": "Public safety", "colors": ["#23395B", "#3F5E96"] },
+    { "id": "people", "name": "People & places", "colors": ["#0E6B6F", "#2E8A84", "#3E9A8F", "#7CBFB3", "#A9D6CC", "#C9E6DF"] },
+    { "id": "running", "name": "Running the city", "colors": ["#6F5536"] },
+    { "id": "oversight", "name": "Oversight & elected", "colors": ["#7A4E7E"] }
+  ],
+  "members": {
+    "police": "safety",
+    "fire": "safety",
+    "maintenance-operations": "people",
+    "human-services": "people",
+    "community-services": "people",
+    "public-works": "people",
+    "community-development": "people",
+    "economic-development": "people",
+    "administrative-departments": "running",
+    "city-council": "oversight"
+  }
+}

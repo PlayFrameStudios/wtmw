@@ -9,10 +9,11 @@ import Sourced from '../../components/Sourced.astro';
 import Term from '../../components/Term.astro';
 import Base from '../../layouts/Base.astro';
 import { budgetFor } from '../../lib/budget';
+import { gapPlan } from '../../data/types';
 import { cities } from '../../lib/cities';
 
 const city = cities.find((c) => c.path === '/us/ca/berkeley/')!;
-const b = budgetFor(city)!;
+const b = gapPlan(budgetFor(city)!, 'The receipts test page');
 const step = (key: string) => b.deficitBridge.steps.find((s) => s.key === key)!;
 const gap = step('final-gap');
 const adjustments = ['center-street-debt-service', 'parking-funds-stabilization', 'non-departmental'].map(step);

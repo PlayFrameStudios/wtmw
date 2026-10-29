@@ -10,7 +10,7 @@
  * Bump SCHEMA_VERSION when a field is renamed or removed.
  */
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export type SourceId = `S${number}`;
 
@@ -98,10 +98,12 @@ export type DepartmentLine = Cite & {
 /** General Fund uses for one budget year, by department. */
 export interface GeneralFundUses {
   year: number;
-  /** What the amounts are, for figure labels: "General Fund department baseline before proposed cuts". */
+  /** What the department lines add up to, for figure labels: "General Fund department baseline before proposed cuts". */
   basis: string;
   /** A qualifier the labels add: "planning figure". */
   note?: string;
+  /** The same in a few words, for chart labels and captions: "department baseline". */
+  noun: string;
   lines: DepartmentLine[];
   /** The table's own total of every line, which the build ties to the lines. */
   total: Cite & { amount: number };
@@ -165,6 +167,8 @@ export interface Revenue {
   columns: BudgetColumn[];
   /** The column the $100 chart, the groups and the totals use (the adopted budget). */
   primary: string;
+  /** What the total row counts, for labels: "General Fund revenue and transfers". */
+  totalName: string;
   lines: RevenueLine[];
   /** The table's own total row, tied against the sum of `lines` by validation. */
   total: RevenueLine;
@@ -308,12 +312,8 @@ export interface PersonnelAndPension {
   unfundedLiabilities: UnfundedLiability[];
 }
 
-export interface GlossaryEntry {
-  term: string;
-  definition: string;
-  table: string;
-  row: number;
-}
+/** A defined term: from the workbook's Glossary tab (table, row), or quoted from a City document's glossary. */
+export type GlossaryEntry = { term: string; definition: string } & ({ table: string; row: number } | DocRef);
 
 /** A figure stated in a sentence of the workbook rather than a table cell. */
 export interface CitedFact extends Ref {
@@ -444,6 +444,8 @@ export interface CityBudget {
   documentFacts?: DocumentFacts;
   /** Figures quoted from sentences and table rows, keyed by what they are ("contingencyPolicy"). */
   facts?: Record<string, Fact>;
+  /** Sentences the pages cite that state no figure ("contextYears"), each checked against its page. */
+  statements?: Record<string, DocRef>;
   capitalPlan?: CapitalPlan;
   pension?: Pension;
 }

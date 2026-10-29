@@ -33,6 +33,7 @@ import type {
   WorkbookBudget,
 } from '../types.ts';
 import { SCHEMA_VERSION } from '../types.ts';
+import { REVENUE } from './columns.ts';
 import type { Tab, Workbook } from '../workbook.ts';
 
 /**
@@ -135,9 +136,6 @@ export function departmentId(name: string): string {
 
 const ratio = (num: number, den: number) => (den === 0 ? null : num / den);
 
-/** The GF Revenue FY26 tab's columns, by key in budget.json's revenue table. */
-export const REVENUE = { adopted: 'adopted-2026', midYear: 'mid-year-actual-2026', priorMidYear: 'mid-year-actual-2025' } as const;
-
 /** Rows from `start` until column A starts with `stop`; returns [dataRows, stopRow]. */
 function rowsUntil(tab: Tab, start: number, stop: string): [number[], number] {
   const rows: number[] = [];
@@ -214,6 +212,7 @@ export async function extractBerkeley(wb: Workbook, meta: GapBudget['workbook'])
         { key: REVENUE.priorMidYear, year: 2025, basis: 'mid-year-actual' },
       ],
       primary: REVENUE.adopted,
+      totalName: 'General Fund revenue and transfers',
       lines: rows.map((r) => line(r, tab.input)),
       total: line(totalRow, tab.value),
     };
@@ -562,6 +561,7 @@ export async function extractBerkeley(wb: Workbook, meta: GapBudget['workbook'])
     year: t.year,
     basis: 'General Fund department baseline before proposed cuts',
     note: 'planning figure',
+    noun: 'department baseline',
     lines: t.departments.map((d) => ({ id: d.id, name: d.name, kind: 'department' as const, amount: d.baseline, source: d.source, table: d.table, row: d.row })),
     total: { amount: t.total.baseline, source: t.total.source, table: t.total.table, row: t.total.row },
   }));

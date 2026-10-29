@@ -1,0 +1,680 @@
+---
+/**
+ * Departments (D5/M2): who's being asked to cut, and by how much, under each
+ * ballot outcome. Year, sales tax and sort are radios; CSS :has() picks the
+ * view, so every view works without JavaScript, and a small script keeps the
+ * choice in the URL (?year=2028&tax=fails&sort=cut). #{id} selects a
+ * department: a side panel on desktop, a full-screen detail on phones.
+ */
+import Sourced from '../Sourced.astro';
+import Base from '../../layouts/Base.astro';
+import { gapPlan } from '../../data/types';
+import { budgetFor } from '../../lib/budget';
+import type { City } from '../../lib/cities';
+import { fy } from '../../lib/city-settings';
+import { departmentsPage, shortNames, SORTS, TAXES, type Year } from '../../lib/departments';
+import { familiesFor } from '../../lib/families';
+import { shortMoney } from '../../lib/format';
+import { sourcesById } from '../../lib/receipts';
+
+const { city } = Astro.props as { city: City };
+const budget = gapPlan(budgetFor(city)!, 'The department cuts view');
+const p = departmentsPage(budget, familiesFor(city, budget), shortNames(city.path, budget), city.budget.years, (y) => fy(city.budget.labels, y));
+const YEARS = p.years;
+// Every cut says which ballot outcome it assumes (#33).
+const measure = `Measure ${budget.documentFacts.salesTaxMeasure.letter}`;
+const primary = sourcesById(budget).get('S1')!;
+const yearOf = (y: Year) => Number(y.slice(2));
+const yearLabel = (y: Year) => fy(city.budget.labels, yearOf(y));
+const short = (y: Year) => fy(city.budget.labels, yearOf(y), 'short');
+// Only one year shows at a time: hide the others' figures.
+const yearRules = YEARS.map((y) => `.dept-page:has(#year-${y}:checked) .yr:not(.yr--${y}) { display: none !important; }`).join('\n');
+const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
+const money = (v: number) => shortMoney(v);
+const width = (v: number, y: Year) => `${((v / p.max[y]) * 100).toFixed(3)}%`;
+
+// Row order and selection, one CSS rule per view and per department.
+const orderRules = YEARS.flatMap((y) =>
+  TAXES.flatMap((t) =>
+    SORTS.map((s) => `.dept-page:has(#year-${y}:checked):has(#tax-${t}:checked):has(#sort-${s}:checked) .row { order: var(--o-${y}-${t}-${s}); }`),
+  ),
+).join('\n');
+const selectRules = p.rows
+  .map((r) => `.dept-page[data-selected='${r.id}'] .panel[data-dept='${r.id}'] { display: block; } .dept-page[data-selected='${r.id}'] .row[data-dept='${r.id}'] { background: var(--bay-light); }`)
+  .join('\n');
+---
+
+<Base title={`Departments · ${city.name}`} city={city} description={`Who's being asked to cut, and by how much, in ${city.name}'s ${YEARS.map(yearLabel).join(' and ')} budgets, with and without the November sales tax.`}>
+  <div class="dept-page wrap" data-dept-page>
+    <section class="intro">
+      <h1>Who's being asked to cut in {YEARS.map((y) => <span class={`yr yr--${y}`}>{yearLabel(y)}</span>)}, and by how much</h1>
+      <p class="lede">
+        Every department was asked to find savings in the proposed budget. Together they come to <Sourced city={city} figure={p.total.cut}>{money(p.total.cut.value)}</Sourced>,
+        about {Math.round(p.total.pct * 100)}% of the {money(p.total.baseline)} baseline. Toggle the sales tax to see which cuts it would soften.
+      </p>
+    </section>
+
+    <div class="controls">
+      <fieldset>
+        <legend>Year</legend>
+        <div class="seg">
+          {YEARS.map((y, i) => (<><input type="radio" class="visually-hidden" name="year" id={`year-${y}`} value={y.slice(2)} checked={i === 0} /><label for={`year-${y}`}>{yearLabel(y)}</label></>))}
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Nov 2026 sales tax</legend>
+        <div class="seg">
+          {TAXES.map((t, i) => (<><input type="radio" class="visually-hidden" name="tax" id={`tax-${t}`} value={t} checked={i === 0} /><label for={`tax-${t}`}>{t === 'passes' ? 'Passes' : 'Fails'}</label></>))}
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Sort</legend>
+        <div class="seg">
+          {SORTS.map((s, i) => (<><input type="radio" class="visually-hidden" name="sort" id={`sort-${s}`} value={s} checked={i === 0} /><label for={`sort-${s}`}>{s === 'budget' ? 'Biggest budget' : 'Deepest cut %'}</label></>))}
+        </div>
+      </fieldset>
+    </div>
+
+    <ul class="key" aria-label="Key">
+      <li><span class="sw sw--kept"></span>Budget after cuts</li>
+      <li><span class="sw sw--cut"></span>Cut</li>
+      <li class="tax tax--passes"><span class="sw sw--soft"></span>Softened by one-time bridge money</li>
+    </ul>
+
+    <div class="layout">
+      <div class="list">
+        <p class="list-head" aria-hidden="true">
+          <span>Department</span>
+          <span>{YEARS.map((y) => <span class={`yr yr--${y}`}>{short(y)}</span>)} baseline</span>
+          <span>Net cut</span>
+        </p>
+        <ol class="rows">
+          {
+            p.rows.map((r) => (
+              <li class="row" data-dept={r.id} style={Object.entries(p.order[r.id]).map(([k, n]) => `--o-${k}:${n}`).join(';')}>
+                <a class="row-link" href={`#${r.id}`} data-select={r.id}>
+                  <span class="name">
+                    <span class="dot" style={`background:${r.color}`} aria-hidden="true" />
+                    <span class="name-text">
+                      {r.display}
+                      {r.charter && <span class="charter">Charter</span>}
+                    </span>
+                  </span>
+                  {YEARS.map((y) => {
+                    const v = r.years[y];
+                    return (
+                      <span class={`yr yr--${y} figs`}>
+                        <span class="bar" aria-hidden="true">
+                          <span class="seg-kept" style={`width:${width(v.d.baseline - v.d.reduction, y)}`} />
+                          <span class="seg-cut" style={`width:${width(v.d.netReduction, y)}`} />
+                          <span class="seg-soft" style={`width:${width(v.d.salesTaxAllocation, y)}`} />
+                          <span class="base num">{money(v.d.baseline)}</span>
+                        </span>
+                        <span class="visually-hidden">{short(y)} baseline {money(v.d.baseline)}.</span>
+                        {TAXES.map((t) => (
+                          <span class={`net tax tax--${t}`}>
+                            {v.netIf[t].value === 0 ? (
+                              <span class="none">none</span>
+                            ) : (
+                              <>
+                                <span class="visually-hidden">Net cut </span>
+                                <span class="net-v num">{money(v.netIf[t].value)}</span>
+                                <span class="net-p num">{pct(v.netIf[t].pct)}</span>
+                              </>
+                            )}
+                          </span>
+                        ))}
+                      </span>
+                    );
+                  })}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="footnote">
+          Not shown:{' '}
+          {p.excluded.map((x, i) => (
+            <>
+              {i > 0 && ', '}
+              {x.d.name} (<Sourced city={city} figure={x.figure}>{money(x.d.baseline)}</Sourced> baseline, cut entirely)
+            </>
+          ))}.
+          {p.note}
+        </p>
+      </div>
+
+      <aside class="panels" aria-label="Department details">
+        {
+          p.rows.map((r) => (
+            <section class="panel" id={r.id} data-dept={r.id} data-default={r.id === p.defaultId ? '' : undefined} aria-labelledby={`${r.id}-title`} tabindex="-1">
+              <a class="back" href="#" data-back>
+                ‹ All departments
+              </a>
+              <h2 id={`${r.id}-title`}>
+                <span class="dot dot--big" style={`background:${r.color}`} aria-hidden="true" />
+                {r.display}
+              </h2>
+              {YEARS.map((y) => {
+                const v = r.years[y];
+                const others = YEARS.filter((x) => x !== y);
+                return (
+                  <div class={`yr yr--${y}`}>
+                    <p class="per100">
+                      ${v.per100.toFixed(2)} of every $100 · {yearLabel(y)}
+                    </p>
+                    <p class="seg seg--panel">
+                      {TAXES.map((t) => (
+                        <label for={`tax-${t}`} class={`tax-pick tax-pick--${t}`}>
+                          Tax {t}
+                        </label>
+                      ))}
+                    </p>
+                    <span class="bar bar--panel" aria-hidden="true">
+                      <span class="seg-kept" style={`flex:${v.d.baseline - v.d.reduction}`} />
+                      <span class="seg-cut" style={`flex:${v.d.netReduction}`} />
+                      <span class="seg-soft" style={`flex:${v.d.salesTaxAllocation}`} />
+                    </span>
+                    <dl class="facts">
+                      <div>
+                        <dt>{short(y)} baseline</dt>
+                        <dd class="num">
+                          <Sourced city={city} figure={v.figures.baseline}>{money(v.d.baseline)}</Sourced>
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>Proposed cut</dt>
+                        <dd class="num short">
+                          <Sourced city={city} figure={v.figures.cut}>{v.d.reduction === 0 ? 'none' : `${money(v.d.reduction)} (${pct(v.d.reductionPct)})`}</Sourced>
+                        </dd>
+                      </div>
+                      <div class="tax tax--passes">
+                        <dt>Softened by bridge money</dt>
+                        <dd class="num once">
+                          <Sourced city={city} figure={v.figures.softened}>{v.d.salesTaxAllocation === 0 ? 'none' : `+${money(v.d.salesTaxAllocation)}`}</Sourced>
+                        </dd>
+                      </div>
+                      {TAXES.map((t) => (
+                        <div class={`tax tax--${t}`}>
+                          <dt>
+                            Net cut if {measure} {t}
+                          </dt>
+                          <dd class="num short">
+                            <Sourced city={city} figure={v.figures.net[t]}>{v.netIf[t].value === 0 ? 'none' : `${money(v.netIf[t].value)} (${pct(v.netIf[t].pct)})`}</Sourced>
+                          </dd>
+                        </div>
+                      ))}
+                      {others.map((other) => {
+                        const o = r.years[other];
+                        return TAXES.map((t) => (
+                          <div class={`tax tax--${t}`}>
+                            <dt>{short(other)} net cut</dt>
+                            <dd class="num">
+                              <Sourced city={city} figure={o.figures.net[t]}>{o.netIf[t].value === 0 ? 'none' : money(o.netIf[t].value)}</Sourced>
+                            </dd>
+                          </div>
+                        ));
+                      })}
+                    </dl>
+                  </div>
+                );
+              })}
+              {p.safety.ids.includes(r.id) && p.safety.share > 0.5 && (
+                <p class="panel-note">
+                  {p.safety.names.join(' and ')} together make up more than half of the department baseline, so even similar percentage cuts are the
+                  largest in dollars.
+                </p>
+              )}
+              <a class="notes-link" href={primary.url} target="_blank" rel="noopener">
+                Read the city's department notes <span aria-hidden="true">↗</span>
+              </a>
+            </section>
+          ))
+        }
+      </aside>
+    </div>
+  </div>
+</Base>
+
+<style is:global set:html={orderRules + '\n' + selectRules + '\n' + yearRules}></style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-dept-page]')!;
+  root.setAttribute('data-js', '');
+  const narrow = () => matchMedia('(max-width: 63.99rem)').matches;
+
+  // Toggles <-> URL (?year=2028&tax=fails&sort=cut; defaults are left out).
+  const defaults: Record<string, string> = { year: '2027', tax: 'passes', sort: 'budget' };
+  const params = new URLSearchParams(location.search);
+  for (const name of Object.keys(defaults)) {
+    const want = params.get(name);
+    const input = want && root.querySelector<HTMLInputElement>(`input[name="${name}"][value="${want}"]`);
+    if (input) input.checked = true;
+  }
+  root.addEventListener('change', (e) => {
+    const input = e.target as HTMLInputElement;
+    if (input.type !== 'radio') return;
+    const url = new URL(location.href);
+    for (const name of Object.keys(defaults)) {
+      const v = root.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`)!.value;
+      if (v === defaults[name]) url.searchParams.delete(name);
+      else url.searchParams.set(name, v);
+    }
+    history.replaceState(null, '', url);
+  });
+
+  // Selecting a department: the side panel on desktop, a full-screen detail on phones.
+  let lastRow: HTMLElement | null = null;
+  function select(id: string, opener?: HTMLElement) {
+    if (!root.querySelector(`.panel[data-dept="${id}"]`)) return;
+    root.dataset.selected = id;
+    root.toggleAttribute('data-detail-open', narrow());
+    lastRow = opener ?? root.querySelector<HTMLElement>(`[data-select="${id}"]`);
+    history.replaceState(null, '', `${location.pathname}${location.search}#${id}`);
+    if (narrow()) root.querySelector<HTMLElement>(`.panel[data-dept="${id}"]`)!.focus();
+  }
+  function closeDetail() {
+    root.removeAttribute('data-detail-open');
+    if (narrow()) delete root.dataset.selected;
+    history.replaceState(null, '', `${location.pathname}${location.search}`);
+    lastRow?.focus();
+  }
+  root.addEventListener('click', (e) => {
+    const link = (e.target as Element).closest<HTMLElement>('[data-select]');
+    if (link) {
+      e.preventDefault();
+      select(link.dataset.select!, link);
+    } else if ((e.target as Element).closest('[data-back]')) {
+      e.preventDefault();
+      closeDetail();
+    }
+  });
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && root.hasAttribute('data-detail-open') && !document.querySelector('dialog[open]')) closeDetail();
+  });
+  if (location.hash.length > 1) select(location.hash.slice(1));
+</script>
+
+<style>
+  .intro {
+    padding-block: clamp(2rem, 5vw, 3.5rem) 1.5rem;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+  }
+  .lede {
+    max-width: 44rem;
+    margin: 1rem 0 0;
+    color: var(--muted);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  /* Year / tax / sort visibility, driven by the radios. */
+  .dept-page:has(#tax-passes:checked) .tax--fails,
+  .dept-page:has(#tax-fails:checked) .tax--passes {
+    display: none !important;
+  }
+  /* If the tax fails nothing is softened: the whole cut is hatched. */
+  .dept-page:has(#tax-fails:checked) .seg-soft {
+    background: repeating-linear-gradient(135deg, var(--red) 0 2px, var(--red-light) 2px 5px);
+  }
+  .dept-page:has(#tax-passes:checked) .tax-pick--passes,
+  .dept-page:has(#tax-fails:checked) .tax-pick--fails {
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgb(22 25 29 / 0.12);
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+  }
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  legend {
+    margin-bottom: 0.5rem;
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .seg {
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border-radius: var(--radius-pill);
+    background: rgb(22 25 29 / 0.06);
+  }
+  .seg label {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .seg input:checked + label {
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgb(22 25 29 / 0.12);
+  }
+  .seg input:focus-visible + label {
+    outline: 2px solid var(--bay);
+    outline-offset: 2px;
+  }
+  .key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin: 1.5rem 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+  .key li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sw {
+    width: 1.5rem;
+    height: 0.75rem;
+    border-radius: 2px;
+  }
+  .sw--kept,
+  .seg-kept {
+    background: #c3c8d4;
+  }
+  .sw--cut,
+  .seg-cut {
+    background: repeating-linear-gradient(135deg, var(--red) 0 2px, var(--red-light) 2px 5px);
+  }
+  .sw--soft,
+  .seg-soft {
+    background: var(--gold);
+  }
+
+  /* The list */
+  .layout {
+    display: grid;
+    gap: 2rem;
+  }
+  .list-head {
+    display: grid;
+    grid-template-columns: var(--cols);
+    gap: 1rem;
+    margin: 0;
+    padding: 0 0.75rem 0.5rem;
+    border-bottom: 2px solid var(--rule);
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .list-head > span:last-child {
+    text-align: right;
+  }
+  .list {
+    --cols: minmax(10rem, 1.1fr) 1.6fr 5rem;
+  }
+  .rows {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .row {
+    border-radius: 0.5rem;
+  }
+  .row-link {
+    display: grid;
+    grid-template-columns: var(--cols);
+    align-items: center;
+    gap: 1rem;
+    padding: 0.625rem 0.75rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .row-link:hover {
+    background: rgb(22 25 29 / 0.04);
+  }
+  .figs {
+    display: contents;
+  }
+  .name {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-weight: 600;
+  }
+  .name .dot {
+    align-self: center;
+  }
+  .charter {
+    margin-inline-start: 0.5rem;
+    white-space: nowrap;
+  }
+  .dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+  }
+  .dot--big {
+    width: 1rem;
+    height: 1rem;
+  }
+  .charter {
+    padding: 0.125rem 0.625rem;
+    border-radius: var(--radius-pill);
+    background: #efe4f0;
+    color: #6b3f6f;
+    font-weight: 800;
+    font-size: 0.6875rem;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    height: 1.125rem;
+    min-width: 0;
+  }
+  .bar > span:not(.base) {
+    height: 100%;
+  }
+  .seg-kept {
+    border-radius: 2px 0 0 2px;
+  }
+  .base {
+    margin-inline-start: 0.5rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    white-space: nowrap;
+  }
+  .net {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
+  .net-v {
+    color: var(--red);
+    font-weight: 800;
+    font-size: 1.1875rem;
+  }
+  .net-p {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+  .none {
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .footnote {
+    margin: 1.25rem 0 0;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+
+  /* The detail panel */
+  .panel {
+    display: none;
+    padding: 1.5rem;
+    border-radius: 0.875rem;
+    background: var(--card);
+    box-shadow: 0 1px 2px rgb(22 25 29 / 0.06), 0 8px 24px rgb(22 25 29 / 0.06);
+  }
+  /* Without JavaScript, #{id} picks the panel; with it, the script does (data-selected). */
+  .dept-page:not([data-js]) .panel:target {
+    display: block;
+  }
+  .panel:focus {
+    outline: none;
+  }
+  .panel h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin: 0;
+    font-size: 1.75rem;
+  }
+  .per100 {
+    margin: 0.375rem 0 1rem;
+    color: var(--muted);
+  }
+  .seg--panel {
+    display: none;
+  }
+  .tax-pick {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    color: var(--muted);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .bar--panel {
+    display: flex;
+    height: 1.75rem;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .facts {
+    margin: 1rem 0 0;
+  }
+  .facts > div {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.625rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .facts dt {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  .facts dd {
+    margin: 0;
+  }
+  .facts .num {
+    font-weight: 800;
+    font-size: 1.1875rem;
+  }
+  .short {
+    color: var(--red);
+  }
+  .once {
+    color: #8a5f0b;
+  }
+  .panel-note {
+    margin: 1rem 0 0;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  .notes-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--bay);
+    font-weight: 800;
+    font-size: 0.9375rem;
+    text-decoration: none;
+  }
+  .back {
+    display: none;
+  }
+
+  /* Desktop: list and a sticky side panel; Police until something is chosen. */
+  @media (min-width: 64rem) {
+    .layout {
+      grid-template-columns: 1fr 20rem;
+      align-items: start;
+    }
+    .panels {
+      position: sticky;
+      top: 1.5rem;
+    }
+    .dept-page[data-js]:not([data-selected]) .panel[data-default],
+    .dept-page:not([data-js]) .panels:not(:has(.panel:target)) .panel[data-default] {
+      display: block;
+    }
+  }
+
+  /* Phones and tablets: the panel is a full-screen detail view (M2). */
+  @media (max-width: 63.99rem) {
+    .list {
+      --cols: 1fr auto;
+    }
+    .list-head > span:nth-child(2) {
+      display: none;
+    }
+    .row-link {
+      grid-template-areas: 'name net' 'bar bar';
+      row-gap: 0.375rem;
+    }
+    .name {
+      grid-area: name;
+    }
+    .bar {
+      grid-area: bar;
+    }
+    .net {
+      grid-area: net;
+    }
+    .panel {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      overflow-y: auto;
+      border-radius: 0;
+      padding: 1.25rem var(--gutter) 2rem;
+    }
+    .dept-page[data-js]:not([data-detail-open]) .panel {
+      display: none !important;
+    }
+    .back {
+      display: inline-block;
+      margin-bottom: 1rem;
+      color: var(--bay);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .seg--panel {
+      display: inline-flex;
+      gap: 0.25rem;
+      margin: 0 0 1rem;
+      padding: 0.25rem;
+      border-radius: var(--radius-pill);
+      background: rgb(22 25 29 / 0.06);
+    }
+  }
+</style>

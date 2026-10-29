@@ -10,6 +10,7 @@ import StepInfo from '../../../../components/StepInfo.astro';
 import Term from '../../../../components/Term.astro';
 import Base from '../../../../layouts/Base.astro';
 import { budgetFor } from '../../../../lib/budget';
+import { gapPlan } from '../../../../data/types';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
 import { shortMoney } from '../../../../lib/format';
 import { fy } from '../../../../lib/city-settings';
@@ -18,7 +19,7 @@ import { gapPage } from '../../../../lib/gap';
 export const getStaticPaths = cityStaticPaths('gap');
 
 const { city } = Astro.props as { city: City };
-const budget = budgetFor(city)!;
+const budget = gapPlan(budgetFor(city)!, 'The Gap page');
 const g = gapPage(budget, city.budget.years, (y) => fy(city.budget.labels, y));
 const [fy27] = g.years;
 // The budget's years together ("FY2027-28").

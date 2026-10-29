@@ -1,0 +1,540 @@
+---
+/**
+ * Revenue (D2): where every $100 comes from. The chart's groups come from
+ * revenue-groups.json; every number from revenuePage() in src/lib/revenue.ts.
+ * Sorts and "Show all" are CSS (radios, a checkbox, :has()), so they work
+ * without JavaScript.
+ */
+import Sourced from '../Sourced.astro';
+import Term from '../Term.astro';
+import Waffle from '../Waffle.astro';
+import Base from '../../layouts/Base.astro';
+import { REVENUE } from '../../data/berkeley/columns';
+import { budgetFor } from '../../lib/budget';
+import type { City } from '../../lib/cities';
+import { shortMoney } from '../../lib/format';
+import { revenuePage, SORTS, VISIBLE, type Pace } from '../../lib/revenue';
+import { revenueGroupsFor } from '../../lib/revenue-groups';
+
+const { city } = Astro.props as { city: City };
+const budget = budgetFor(city)!;
+const r = revenuePage(budget, revenueGroupsFor(city, budget));
+const pct = (p: number) => `${Math.round(p * 100)}%`;
+const signedPct = (p: number) => `${p > 0 ? '+' : ''}${Math.round(p * 100)}%`;
+const sortLabel = { biggest: 'Biggest first', fastest: 'Fastest growing', az: 'A-Z' } as const;
+const paceLabel: Record<Pace, string> = { behind: 'Behind (under 40%)', 'on-pace': 'On pace (40-60%)', ahead: 'Ahead (over 60%)' };
+
+// Row order and "first 14" per sort, one CSS rule each.
+const sortRules = SORTS.map((s) =>
+  [
+    `.rev-page:has(#sort-${s}:checked) .line { order: var(--rank-${s}); }`,
+    `.rev-page:has(#sort-${s}:checked):not(:has(#show-all:checked)) .line[data-more-${s}] { display: none; }`,
+  ].join('\n'),
+).join('\n');
+const t = r.insights;
+---
+
+<Base title={`Revenue · ${city.name}`} city={city} description={`Where ${city.name}'s ${shortMoney(r.total.value)} in General Fund revenue comes from, line by line, and how much had arrived by mid-year.`}>
+  <div class="rev-page wrap">
+    <section class="intro">
+      <h1>Where every $100 of {city.name}'s revenue comes from</h1>
+      <p class="lede">
+        {city.name} budgeted <Sourced city={city} figure={r.total}>{shortMoney(r.total.value)}</Sourced> in General Fund revenue for FY2026, including transfers from other funds.
+        {r.totalPace === 'on-pace' ? ' By the halfway point of the year, about half had arrived. That\'s on pace.' : ` By the halfway point of the year, ${pct(r.received)} had arrived.`}
+      </p>
+    </section>
+
+    <!-- First thing on the page (#35): where every $100 comes from, the same tap-a-square chart as the overview. -->
+    <section class="chart-section" aria-labelledby="chart-title">
+      <h2 id="chart-title" class="visually-hidden">Revenue by group, per $100</h2>
+      <div class="chart-wrap">
+        <Waffle
+          items={r.chart.map((c) => c.item)}
+          label={`${city.name}'s FY2026 General Fund revenue`}
+          noun="revenue source"
+          table={{ caption: 'FY2026 General Fund revenue by group, per $100', name: 'Revenue source', value: 'FY2026 budget' }}
+        />
+        <ol class="groups" role="list">
+          {
+            r.chart.map(({ item, group, figure }) => (
+              <li id={`rev-${item.id}`}>
+                <details data-group={item.id}>
+                  <summary>
+                    <span class="sw" style={`background:${item.color}`} aria-hidden="true" />
+                    <span class="g-name">{item.name}</span>
+                    <span class="g-per num">${item.squares}</span>
+                  </summary>
+                  <div class="g-body">
+                    <p>
+                      <Sourced city={city} figure={figure}>{shortMoney(group.adopted)}</Sourced> budgeted for FY2026{group.lines.length > 1 ? ', from:' : '.'}
+                    </p>
+                    {group.lines.length > 1 && (
+                      <ul role="list">
+                        {group.lines.map((l) => (
+                          <li>
+                            <span>{l.name}</span> <span class="num">{shortMoney(l.values[REVENUE.adopted])}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </details>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <p class="hint">Grouped from {r.lineCount} line items in the city's mid-year report. Every line is listed below.</p>
+    </section>
+
+    <section class="lines-section" aria-labelledby="lines-title">
+      <div class="lines-head">
+        <h2 id="lines-title">Every line item</h2>
+        <fieldset class="seg">
+          <legend class="visually-hidden">Sort</legend>
+          {SORTS.map((s, i) => (<><input type="radio" name="sort" id={`sort-${s}`} class="visually-hidden" checked={i === 0} /><label for={`sort-${s}`}>{sortLabel[s]}</label></>))}
+        </fieldset>
+      </div>
+      <p class="cols" aria-hidden="true"><span>Source</span><span>Budgeted</span><span>Received by mid-year</span><span>Vs. last year</span></p>
+      <ol class="lines">
+        {
+          r.lines.map(({ l, pace, rank, figures }) => {
+            const more = Object.fromEntries(SORTS.filter((s) => rank[s] >= VISIBLE).map((s) => [`data-more-${s}`, '']));
+            const change = l.changeVsFy2025Pct ?? null;
+            return (
+              <li class="line" style={SORTS.map((s) => `--rank-${s}:${rank[s]}`).join(';')} {...more}>
+                <span class="l-name">{l.name}</span>
+                <span class="l-budget">
+                  <span class="num"><Sourced city={city} figure={figures.adopted}>{shortMoney(l.values[REVENUE.adopted])}</Sourced></span>
+                  <span class="mag" aria-hidden="true"><span style={`width:${((l.values[REVENUE.adopted] / r.max) * 100).toFixed(2)}%`} /></span>
+                </span>
+                <span class={`l-pace pace--${pace}`}>
+                  <span class="visually-hidden">Received by mid-year: </span>
+                  <span class="track" aria-hidden="true"><span class="fill" style={`width:${Math.min(100, (l.pctOfAdoptedReceived ?? 0) * 100).toFixed(2)}%`} /><span class="tick" /></span>
+                  <span class="num">{pct(l.pctOfAdoptedReceived ?? 0)}</span>
+                </span>
+                <span class:list={['l-change', change === null ? 'new' : change >= 0 ? 'up' : 'down']}>
+                  <span class="visually-hidden">Vs. last year: </span>
+                  {change === null ? 'new' : (<><span aria-hidden="true">{change >= 0 ? '▲' : '▼'}</span> <span class="num">{signedPct(change)}</span></>)}
+                </span>
+              </li>
+            );
+          })
+        }
+      </ol>
+      <div class="lines-foot">
+        <input type="checkbox" id="show-all" class="visually-hidden" />
+        <label for="show-all" class="show-all">
+          <span class="when-less">Show all {r.lineCount} line items</span><span class="when-all">Show fewer</span>
+        </label>
+        <ul class="pace-key" aria-label="Received by mid-year">
+          <li class="key-title" aria-hidden="true">Received by mid-year:</li>
+          {(Object.keys(paceLabel) as Pace[]).map((p) => <li class={`pace--${p}`}><span class="dot" aria-hidden="true" />{paceLabel[p]}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <ul class="insights">
+      <li class="card insight insight--bay">
+        <h2>Home sales lifted transfer taxes</h2>
+        <p>
+          Property transfer tax receipts were up <Sourced city={city} figure={t.transfer.figure}>{pct(t.transfer.line.changeVsFy2025Pct!)}</Sourced> on last year
+          at mid-year, and the Measure P share was up <Sourced city={city} figure={t.transfer.measurePFigure}>{pct(t.transfer.measureP.changeVsFy2025Pct!)}</Sourced>.
+        </p>
+      </li>
+      <li class="card insight insight--neutral">
+        <h2>Timing isn't trouble</h2>
+        <p>
+          Business license tax shows only <Sourced city={city} figure={t.timing.figure}>{pct(t.timing.line.pctOfAdoptedReceived!)}</Sourced> received by mid-year. A low mid-year number can reflect when a tax is
+          billed, so read it alongside last year's.
+        </p>
+      </li>
+      <li class="card insight insight--red">
+        <h2>A one-off jump in transfers</h2>
+        <p>
+          <Term city={city} name="Transfers">Transfers</Term> in rose from {shortMoney(t.transfers.line.values[REVENUE.priorMidYear])} to <Sourced city={city} figure={t.transfers.figure}>{shortMoney(t.transfers.line.values[REVENUE.midYear])}</Sourced>{' '}
+          at mid-year, reflecting the Successor Agency wind-down and reserve moves. That money is one-time.
+        </p>
+      </li>
+    </ul>
+  </div>
+</Base>
+
+<style is:global set:html={sortRules}></style>
+
+<script>
+  // The chart's "Line items →" link (and any #rev-… link) opens that group's list.
+  const openGroup = () => {
+    const li = location.hash.startsWith('#rev-') ? document.getElementById(location.hash.slice(1)) : null;
+    li?.querySelector('details')?.setAttribute('open', '');
+  };
+  openGroup();
+  addEventListener('hashchange', openGroup);
+</script>
+
+<style>
+  .card {
+    background: var(--card);
+    border-radius: 0.875rem;
+    box-shadow: 0 1px 2px rgb(22 25 29 / 0.06), 0 8px 24px rgb(22 25 29 / 0.06);
+  }
+  .intro {
+    padding-block: clamp(2rem, 5vw, 3.5rem) 2rem;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+  }
+  .lede {
+    max-width: 42rem;
+    margin: 1rem 0 0;
+    color: var(--muted);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  /* Where every $100 comes from (#35): the chart, then each group's line items a tap away. */
+  .chart-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+    gap: 1.5rem 2.5rem;
+    align-items: start;
+  }
+  @media (max-width: 47.99rem) {
+    .chart-wrap {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  .groups {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+  .groups > li {
+    border-bottom: 1px solid var(--rule);
+    scroll-margin-top: 5rem;
+  }
+  .groups summary {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 0;
+    cursor: pointer;
+    font-size: 0.9375rem;
+  }
+  .groups summary::-webkit-details-marker {
+    display: none;
+  }
+  .groups summary::after {
+    content: '+';
+    width: 1rem;
+    color: var(--muted);
+    text-align: center;
+  }
+  .groups details[open] summary::after {
+    content: '−';
+  }
+  .groups > li:target summary {
+    color: var(--bay);
+  }
+  .sw {
+    flex: none;
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 3px;
+  }
+  .g-name {
+    font-weight: 700;
+  }
+  .g-per {
+    margin-inline-start: auto;
+    color: var(--muted);
+  }
+  .g-body {
+    padding: 0 0 0.875rem 1.5rem;
+    font-size: 0.875rem;
+  }
+  .g-body p {
+    margin: 0;
+  }
+  .g-body ul {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .g-body li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .hint {
+    margin: 1rem 0 0;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+
+  /* Line items */
+  .lines-section {
+    margin-top: 3rem;
+  }
+  .lines-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .lines-head h2 {
+    margin: 0;
+    font-size: 1.75rem;
+  }
+  .seg {
+    display: inline-flex;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0.25rem;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: rgb(22 25 29 / 0.06);
+  }
+  .seg label {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  /* At 320px the three sort pills don't fit with full padding. */
+  @media (max-width: 22rem) {
+    .seg label {
+      padding-inline: 0.5rem;
+    }
+  }
+  .seg input:checked + label {
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgb(22 25 29 / 0.12);
+  }
+  .seg input:focus-visible + label {
+    outline: 2px solid var(--bay);
+    outline-offset: 2px;
+  }
+  .cols,
+  .line {
+    display: grid;
+    grid-template-columns: minmax(10rem, 1.3fr) 1.6fr 1.6fr 6rem;
+    gap: 1rem;
+    align-items: center;
+  }
+  .cols {
+    margin: 1.5rem 0 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--rule);
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .cols span:nth-child(4) {
+    text-align: right;
+  }
+  .lines {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .line {
+    padding-block: 0.625rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .l-name {
+    font-weight: 600;
+  }
+  .l-budget,
+  .l-pace {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .l-budget .num {
+    font-weight: 800;
+    text-align: right;
+  }
+  .mag,
+  .track {
+    position: relative;
+    height: 0.75rem;
+    border-radius: 2px;
+    background: #ebe5d8;
+  }
+  .mag span {
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--bay);
+  }
+  .l-pace {
+    grid-template-columns: 1fr 3rem;
+  }
+  .fill {
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+  }
+  .tick {
+    position: absolute;
+    top: -0.25rem;
+    bottom: -0.25rem;
+    left: 50%;
+    border-left: 2px dashed var(--ink);
+  }
+  /* Behind is neutral gray, not gold (gold means one-time money; PM, on #11): a slow
+     mid-year number is usually timing, and the legend label carries the meaning. */
+  .pace--behind .fill,
+  .pace--behind .dot {
+    background: var(--faint);
+  }
+  .pace--on-pace .fill,
+  .pace--on-pace .dot {
+    background: var(--family-people-2);
+  }
+  .pace--ahead .fill,
+  .pace--ahead .dot {
+    background: var(--bay);
+  }
+  .l-pace .num {
+    font-weight: 700;
+  }
+  .l-change {
+    text-align: right;
+    font-weight: 700;
+  }
+  .l-change.up {
+    color: var(--bay);
+  }
+  .l-change.down {
+    color: #b23a24;
+  }
+  .l-change.new {
+    color: var(--muted);
+  }
+  .lines-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .show-all {
+    padding: 0.625rem 1.25rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-pill);
+    background: var(--card);
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+  .when-all,
+  #show-all:checked + .show-all .when-less {
+    display: none;
+  }
+  #show-all:checked + .show-all .when-all {
+    display: inline;
+  }
+  #show-all:focus-visible + .show-all {
+    outline: 2px solid var(--bay);
+    outline-offset: 2px;
+  }
+  .pace-key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+  .pace-key li {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+  .key-title {
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.6875rem;
+  }
+  .dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+  }
+
+  /* Insights */
+  .insights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.5rem;
+    margin: 3.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .insight {
+    padding: 1.5rem 1.75rem;
+    border-left: 6px solid var(--accent);
+  }
+  .insight--bay {
+    --accent: var(--bay);
+  }
+  .insight--neutral {
+    --accent: var(--faint);
+  }
+  .insight--red {
+    --accent: var(--red);
+  }
+  .insight h2 {
+    margin: 0;
+    font-size: 1.375rem;
+  }
+  .insight p {
+    margin: 0.75rem 0 0;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Phones: name and change on top, the two bars below. */
+  @media (max-width: 47.99rem) {
+    .cols {
+      display: none;
+    }
+    .line {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: 'name change' 'budget budget' 'pace pace';
+      row-gap: 0.375rem;
+    }
+    .l-name {
+      grid-area: name;
+    }
+    .l-change {
+      grid-area: change;
+    }
+    .l-budget {
+      grid-area: budget;
+    }
+    .l-pace {
+      grid-area: pace;
+    }
+  }
+</style>

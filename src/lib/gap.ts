@@ -3,7 +3,7 @@
  * year, how the city plans to close the FY2027 gap, and the one-time money in
  * and out. All from budget.json; the page only renders.
  */
-import type { BridgeStep, CityBudget, StepNote } from '../data/types.ts';
+import type { BridgeStep, GapBudget, StepNote } from '../data/types.ts';
 import type { Figure } from './receipts.ts';
 
 /** Plain-language step names, keyed by bridge step (the workbook's own labels are on each receipt). */
@@ -88,7 +88,7 @@ function waterfall(steps: BridgeStep[], year: number, label: string, notes: Reco
  * `years` are the city's budget years (city.json), labeled in its own style ("FY2027"). Each year's
  * waterfall has a `key` ("fy2027") for the page's radios and ids.
  */
-export function gapPage(b: CityBudget, years: number[], yearLabel: (year: number) => string) {
+export function gapPage(b: GapBudget, years: number[], yearLabel: (year: number) => string) {
   const first = years[0];
   const views = years.map((year) => {
     const label = yearLabel(year);

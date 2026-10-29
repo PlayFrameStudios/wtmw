@@ -3,7 +3,8 @@
  * softened amount and net cut for both years, the row order for every
  * year × tax × sort view, and the receipts behind each number.
  */
-import type { CityBudget, DepartmentReduction } from '../data/types.ts';
+import type { CityBudget, GapBudget, DepartmentReduction } from '../data/types.ts';
+import { departmentsOf } from './families.ts';
 import type { Families } from './families.ts';
 import { dataDirOf } from './cities.ts';
 import type { Figure } from './receipts.ts';
@@ -16,7 +17,7 @@ const displayFiles = import.meta.glob<{ shortNames: Record<string, string>; full
 
 function names(cityPath: string, b: CityBudget, key: 'shortNames' | 'fullNames'): Record<string, string> {
   const names = displayFiles[`${dataDirOf(cityPath)}departments.json`]?.[key] ?? {};
-  const ids = new Set(b.departmentReductions[0].departments.map((d) => d.id));
+  const ids = new Set(departmentsOf(b).map((d) => d.id));
   for (const id of Object.keys(names)) if (!ids.has(id)) throw new Error(`${cityPath}departments.json: "${id}" isn't a department`);
   return names;
 }
@@ -32,20 +33,20 @@ export function shortNames(cityPath: string, b: CityBudget): Record<string, stri
  */
 export function fullNames(cityPath: string, b: CityBudget): Record<string, string> {
   const spelled = names(cityPath, b, 'fullNames');
-  const out = Object.fromEntries(b.departmentReductions[0].departments.map((d) => [d.id, spelled[d.id] ?? d.name]));
+  const out = Object.fromEntries(b.generalFund[0].lines.filter((l) => l.kind === 'department').map((d) => [d.id, spelled[d.id] ?? d.name]));
   for (const [id, n] of Object.entries(out))
     if (/\(|\b(Dir|Svcs|Rec|Dept)\.?\b/.test(n)) throw new Error(`${cityPath}departments.json: "${id}" needs a fullNames entry; "${n}" is abbreviated`);
   return out;
 }
 
 /** The department waffle's squares: each department's full name and family color, linking to its details. */
-export function departmentItems(cityPath: string, b: CityBudget, shares: Share<DepartmentReduction>[], families: Families): WaffleItem[] {
+export function departmentItems(cityPath: string, b: CityBudget, shares: Share<{ id: string; amount: number }>[], families: Families): WaffleItem[] {
   const name = fullNames(cityPath, b);
   return shares.map((s) => ({
     id: s.item.id,
     name: name[s.item.id],
     color: families.color(s.item.id),
-    value: s.item.baseline,
+    value: s.item.amount,
     squares: s.squares,
     exact: s.exact,
     href: `${cityPath}departments/#${s.item.id}`,
@@ -104,7 +105,7 @@ export interface YearView {
  * `years` are the city's budget years (city.json) and `yearLabel` names one in the city's style ("FY2027"):
  * every table, label and view is per year, in that order, and the first year is the default view.
  */
-export function departmentsPage(b: CityBudget, families: Families, names: Record<string, string>, years: number[], yearLabel: (year: number) => string) {
+export function departmentsPage(b: GapBudget, families: Families, names: Record<string, string>, years: number[], yearLabel: (year: number) => string) {
   const YEARS = years.map(yearKey);
   const labelOf = Object.fromEntries(years.map((y) => [yearKey(y), yearLabel(y)])) as Record<Year, string>;
   const byYear = Object.fromEntries(
@@ -114,7 +115,7 @@ export function departmentsPage(b: CityBudget, families: Families, names: Record
       const shares = new Map(per100(table.departments, (d) => d.baseline).map((s) => [s.item.id, s.exact]));
       return [yearKey(year), { table, shares }];
     }),
-  ) as Record<Year, { table: CityBudget['departmentReductions'][number]; shares: Map<string, number> }>;
+  ) as Record<Year, { table: GapBudget['departmentReductions'][number]; shares: Map<string, number> }>;
   const [first] = YEARS;
 
   const view = (y: Year, d: DepartmentReduction): YearView => {

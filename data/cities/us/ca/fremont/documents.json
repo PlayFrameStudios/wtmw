@@ -24,7 +24,10 @@
       "date": "2026-03-03",
       "url": "https://www.fremont.gov/home/showpublisheddocument/20068/639100281365700000",
       "format": "PDF",
-      "archive": { "url": "https://web.archive.org/web/20260615142047/https://www.fremont.gov/home/showpublisheddocument/20068/639100281365700000", "date": "2026-06-15" },
+      "archive": {
+        "url": "https://web.archive.org/web/20260615142047/https://www.fremont.gov/home/showpublisheddocument/20068/639100281365700000",
+        "date": "2026-06-15"
+      },
       "type": "city",
       "usedFor": "FY 2024/25 Budget Uncertainty Reserve draw; sales-tax recovery"
     },
@@ -36,35 +39,127 @@
       "date": "2026-05-12",
       "url": "https://www.fremont.gov/home/showpublisheddocument/20494/639142770931900000",
       "format": "PDF",
-      "archive": { "url": "https://web.archive.org/web/20260615140631/https://www.fremont.gov/home/showpublisheddocument/20494/639142770931900000", "date": "2026-06-15" },
+      "archive": {
+        "url": "https://web.archive.org/web/20260615140631/https://www.fremont.gov/home/showpublisheddocument/20494/639142770931900000",
+        "date": "2026-06-15"
+      },
       "type": "city",
       "usedFor": "The proposed budget's balance; sales-tax recovery"
     }
   ],
   "tables": {
-    "generalFund": { "source": "S1", "page": 72, "title": "General Fund Adopted Budget FY 2026/27", "unit": 1000, "columns": ["adopted-2026", "revised-2026", "estimate-2026", "adopted-2027"] },
-    "forecast": { "source": "S1", "page": 93, "title": "General Fund Adopted Budget and Forecast Through FY 2028/29", "unit": 1000, "columns": ["estimate-2026", "adopted-2027", "projected-2028", "projected-2029"] },
+    "generalFund": {
+      "source": "S1",
+      "page": 72,
+      "title": "General Fund Adopted Budget FY 2026/27",
+      "unit": 1000,
+      "columns": [
+        "adopted-2026",
+        "revised-2026",
+        "estimate-2026",
+        "adopted-2027"
+      ]
+    },
+    "forecast": {
+      "source": "S1",
+      "page": 93,
+      "title": "General Fund Adopted Budget and Forecast Through FY 2028/29",
+      "unit": 1000,
+      "columns": [
+        "estimate-2026",
+        "adopted-2027",
+        "projected-2028",
+        "projected-2029"
+      ]
+    },
     "history": {
       "source": "S1",
       "page": 95,
       "title": "General Fund Historical and Adopted Budget FY 2026/27",
       "unit": 1000,
-      "columns": ["actual-2022", "actual-2023", "actual-2024", "actual-2025", "estimate-2026", "adopted-2027"]
+      "columns": [
+        "actual-2022",
+        "actual-2023",
+        "actual-2024",
+        "actual-2025",
+        "estimate-2026",
+        "adopted-2027"
+      ]
     },
-    "allFunds": { "source": "S1", "page": 38, "title": "Summary of All Funds", "unit": 1000, "columns": ["general", "cost-center", "special-revenue", "capital", "total"] },
-    "positions": { "source": "S1", "page": 40, "title": "Citywide Position Changes FY 2021/22 to FY 2026/27", "unit": 1, "columns": ["2022", "2023", "2024", "2025", "2026", "2027"] },
-    "pension": { "source": "S1", "page": 45, "title": "Pension Obligations - FY 2026/27", "unit": 1000, "columns": ["miscellaneous", "safety", "combined"] },
-    "capitalPlan": { "source": "S1", "page": 126, "title": "CIP FY 2025/26 - 2029/30 Expenditures by Program Category (Millions of Dollars)", "unit": 1000000, "columns": ["2026", "2027", "2028", "2029", "2030", "total"] }
+    "allFunds": {
+      "source": "S1",
+      "page": 38,
+      "title": "Summary of All Funds",
+      "unit": 1000,
+      "columns": [
+        "general",
+        "cost-center",
+        "special-revenue",
+        "capital",
+        "total"
+      ]
+    },
+    "positions": {
+      "source": "S1",
+      "page": 40,
+      "title": "Citywide Position Changes FY 2021/22 to FY 2026/27",
+      "unit": 1,
+      "columns": [
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026",
+        "2027"
+      ]
+    },
+    "pension": {
+      "source": "S1",
+      "page": 45,
+      "title": "Pension Obligations - FY 2026/27",
+      "unit": 1000,
+      "columns": [
+        "miscellaneous",
+        "safety",
+        "combined"
+      ]
+    },
+    "capitalPlan": {
+      "source": "S1",
+      "page": 126,
+      "title": "CIP FY 2025/26 - 2029/30 Expenditures by Program Category (Millions of Dollars)",
+      "unit": 1000000,
+      "columns": [
+        "2026",
+        "2027",
+        "2028",
+        "2029",
+        "2030",
+        "total"
+      ]
+    }
   },
   "quotes": {
-    "population": { "source": "S1", "page": 33, "quote": "Population: 233,974" },
-    "pensionValuation": { "source": "S1", "page": 45, "quote": "Valuation Date: 6/30/2024" },
+    "population": {
+      "source": "S1",
+      "page": 33,
+      "quote": "Population: 233,974"
+    },
+    "pensionValuation": {
+      "source": "S1",
+      "page": 45,
+      "quote": "Valuation Date: 6/30/2024"
+    },
     "maintenanceNotRestored": {
       "source": "S1",
       "page": 71,
       "quote": "it does not provide capacity to restore the $3.2 million of ongoing maintenance support that was eliminated to balance the FY 2025/26 adopted budget"
     },
-    "salaryPlaceholder": { "source": "S1", "page": 73, "quote": "the FY 2026/27 adopted budget includes a placeholder salary adjustment of 2.0%." },
+    "salaryPlaceholder": {
+      "source": "S1",
+      "page": 73,
+      "quote": "the FY 2026/27 adopted budget includes a placeholder salary adjustment of 2.0%."
+    },
     "citywideSavings": {
       "source": "S1",
       "page": 73,
@@ -78,7 +173,9 @@
     "salesTaxRecovery": {
       "source": "S2",
       "page": 4,
-      "related": ["S3"],
+      "related": [
+        "S3"
+      ],
       "quote": "Sales tax in FY 2024/25 reflects the impact of the State’s recovery of FY 2022/23 overpayments – a reduction of approximately $11.9 million."
     },
     "uncertaintyReserveDraw": {
@@ -86,6 +183,130 @@
       "page": 5,
       "quote": "Addition to reserves in FY 2024/25 shows $19.9 million of the Budget Uncertainty Reserve applied to address the one-time revenue shortfall due to the State’s sales tax recovery"
     },
-    "proposedBalanced": { "source": "S3", "page": 10, "quote": "FY 2026/27 Proposed Budget balanced" }
-  }
+    "proposedBalanced": {
+      "source": "S3",
+      "page": 10,
+      "quote": "FY 2026/27 Proposed Budget balanced"
+    },
+    "adopted": {
+      "source": "S1",
+      "page": 259,
+      "quote": "The operating budget for the 2026/27 fiscal year was adopted on June 9, 2026."
+    },
+    "contextYears": {
+      "source": "S1",
+      "page": 259,
+      "quote": "The fiscal years before FY 2026/27 shown in the operating budget are for contextual purposes only and are not adopted by the City Council in its budget resolution for FY 2026/27."
+    }
+  },
+  "glossary": [
+    {
+      "term": "Adopted Budget",
+      "source": "S1",
+      "page": 276,
+      "definition": "The adopted budget is the annual City operating budget approved by the City Council for the fiscal year."
+    },
+    {
+      "term": "Appropriation",
+      "source": "S1",
+      "page": 276,
+      "definition": "An authorization by the City Council to make expenditures and to incur obligations for a specific purpose within a specific time frame."
+    },
+    {
+      "term": "Balanced Budget",
+      "source": "S1",
+      "page": 276,
+      "definition": "The budget for a fund is balanced when total budgeted resources, including revenues, transfers in from other funds, and unallocated fund balance from previous years, meet or exceed total budgeted use of resources, including expenditures and transfers out to other funds."
+    },
+    {
+      "term": "California Public Employees’ Retirement System (CalPERS)",
+      "source": "S1",
+      "page": 277,
+      "definition": "The retirement system, administered by the State of California, to which all regular City employees belong."
+    },
+    {
+      "term": "Capital Improvement Program (CIP)",
+      "source": "S1",
+      "page": 278,
+      "definition": "The five-year financial plan for improving assets and integrating debt service and capital assets maintenance, adopted in a separate budget document and updated every two years."
+    },
+    {
+      "term": "Cost Center",
+      "source": "S1",
+      "page": 278,
+      "definition": "Cost centers are funds established to account for the transactions and activities related to specific City services, and the fees are used for the benefit of the fee payers. The Development Cost Center, for example, is a fund that accounts for services related to planning, engineering, and inspection of public and private development construction projects."
+    },
+    {
+      "term": "Debt Service",
+      "source": "S1",
+      "page": 278,
+      "definition": "Payment of the principal and interest on an obligation resulting from the issuance of bonds, notes, or certificates of participation (COPs)."
+    },
+    {
+      "term": "Fiscal Year",
+      "source": "S1",
+      "page": 279,
+      "definition": "A twelve-month period of time to which a budget applies. In Fremont, the fiscal year is July 1 through June 30."
+    },
+    {
+      "term": "Fund",
+      "source": "S1",
+      "page": 279,
+      "definition": "An independent fiscal and accounting entity with a self-balancing set of accounts, used to record all financial transactions related to the specific purpose for which the fund was created."
+    },
+    {
+      "term": "Fund Balance",
+      "source": "S1",
+      "page": 279,
+      "definition": "The difference between fund assets and fund liabilities."
+    },
+    {
+      "term": "General Fund",
+      "source": "S1",
+      "page": 279,
+      "definition": "The primary fund of the City used to account for all revenues and expenditures of the City not legally restricted as to use. This fund is used to accumulate the cost of the City’s general operations."
+    },
+    {
+      "term": "Hotel/Motel Occupancy Tax",
+      "source": "S1",
+      "page": 280,
+      "definition": "A tax imposed on travelers who stay in temporary lodging facilities within the City. Also referred to as a Transient Occupancy Tax."
+    },
+    {
+      "term": "Infrastructure",
+      "source": "S1",
+      "page": 280,
+      "definition": "Facilities on which the continuance and growth of the community depend, such as roads, sidewalks, parks and public buildings."
+    },
+    {
+      "term": "Multi-year Forecast",
+      "source": "S1",
+      "page": 281,
+      "definition": "The Finance Department’s three-year forecast of revenues and expenditures."
+    },
+    {
+      "term": "Non-departmental",
+      "source": "S1",
+      "page": 281,
+      "definition": "Appropriations of the General Fund not directly associated with a specific department. Expenditure items and certain types of anticipated general savings are included."
+    },
+    {
+      "term": "Proposed Budget",
+      "source": "S1",
+      "page": 282,
+      "definition": "The proposed budget is the budget that is sent to the City Council by the City Manager. The proposed budget, including changes made by the City Council during its review, is approved and then becomes the adopted budget."
+    },
+    {
+      "term": "Special Revenue Fund",
+      "source": "S1",
+      "page": 282,
+      "definition": "This fund type is used to account for City revenues from sources that, by law or administrative action, are designated to finance particular functions or activities of government."
+    },
+    {
+      "term": "Transfers In and Transfers Out",
+      "source": "S1",
+      "page": 282,
+      "definition": "Amounts transferred between funds; not considered a revenue or expense. For example, legally authorized transfers from a fund receiving revenue to the fund through which the resources are to be expended are shown as operating transfers."
+    }
+  ]
 }
