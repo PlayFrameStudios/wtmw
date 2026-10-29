@@ -1,4 +1,5 @@
 ---
+import SourceChip from '../../../../components/SourceChip.astro';
 import Base from '../../../../layouts/Base.astro';
 import { budgetFor } from '../../../../lib/budget';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
@@ -19,7 +20,10 @@ const anchor = (term: string) => term.toLowerCase().replace(/[^a-z0-9]+/g, '-').
         glossary.map((g) => (
           <div id={anchor(g.term)}>
             <dt>{g.term}</dt>
-            <dd>{g.definition}</dd>
+            <dd>
+              {g.definition}
+              {'quote' in g && <SourceChip city={city} source={g.source} at={{ page: g.page, quote: g.quote }} />}
+            </dd>
           </div>
         ))
       }

@@ -1,20 +1,20 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { CityBudget } from '../../src/data/types';
+import type { GapBudget } from '../../src/data/types';
 import { unwrapFigures } from './figures';
 
 // Recomputes every figure on the landing page straight from budget.json, without the
 // site's helpers, and checks the built page shows it.
 const root = join(import.meta.dirname, '../..');
-const b: CityBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
+const b: GapBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
 const html = readFileSync(join(root, 'dist/index.html'), 'utf8');
 // Text only: markup can split a phrase, which would make a missing-text check pass by accident.
 const text = unwrapFigures(html).replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ').replace(/ ([,.])/g, '$1');
 const millions = (n: number) => `$${(Math.abs(n) / 1e6).toFixed(1)}M`;
 
 describe('landing page numbers trace to the data', () => {
-  const depts = b.departmentReductions.find((y) => y.year === 'FY2027')!.departments;
+  const depts = b.departmentReductions.find((y) => y.year === 2027)!.departments;
 
   it('department dollars mapped', () => {
     expect(text).toContain(`${millions(depts.reduce((a, d) => a + d.baseline, 0))} of Berkeley department spending, mapped`);
@@ -34,7 +34,7 @@ describe('landing page numbers trace to the data', () => {
   });
 
   it('the gap', () => {
-    const gap = b.deficitBridge.steps.find((s) => s.key === 'final-gap')!.fy2027;
+    const gap = b.deficitBridge.steps.find((s) => s.key === 'final-gap')!.years[2027];
     expect(text).toContain(`A ${millions(gap)} gap after adjustments.`);
     expect(text).toContain(`−$${Math.abs(gap).toLocaleString('en-US')}`);
   });

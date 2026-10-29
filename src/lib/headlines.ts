@@ -3,13 +3,13 @@
  * budget.json (the same derivations as the approved mockups) and carrying the
  * record it came from, so its chip can open a receipt.
  */
-import type { CityBudget } from '../data/types.ts';
+import type { GapBudget } from '../data/types.ts';
 import type { Families } from './families.ts';
 import type { Figure } from './receipts.ts';
 import { per100 } from './waffle.ts';
 
-export function headlines(b: CityBudget, families: Families) {
-  const fy27 = b.departmentReductions.find((y) => y.year === 'FY2027')!;
+export function headlines(b: GapBudget, families: Families) {
+  const fy27 = b.departmentReductions.find((y) => y.year === 2027)!;
   const gap = b.deficitBridge.steps.find((s) => s.key === 'final-gap')!;
   const withTax = b.fte.positions.find((p) => p.key === 'with-sales-tax')!;
   const withoutTax = b.fte.positions.find((p) => p.key === 'without-sales-tax')!;
@@ -38,7 +38,7 @@ export function headlines(b: CityBudget, families: Families) {
         { label: `Fire (row ${fire.row})`, value: fire.baseline },
       ],
     } satisfies Figure,
-    gap: { value: gap.fy2027, label: 'FY2027 General Fund gap, after adjustments', ref: gap } satisfies Figure,
+    gap: { value: gap.years[2027], label: 'FY2027 General Fund gap, after adjustments', ref: gap } satisfies Figure,
     positionsWithTax: {
       value: withTax.total,
       label: `Positions cut if the sales tax passes (${withoutTax.total} if it fails)`,

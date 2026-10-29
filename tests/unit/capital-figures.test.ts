@@ -1,12 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { gapPlan } from '../../src/data/types';
 import { budgetFor } from '../../src/lib/budget';
 import { capitalGroupsFor, capitalPage, contrast, LAYOUTS, squarify } from '../../src/lib/capital';
 import { cities } from '../../src/lib/cities';
 
 const city = cities[0];
-const budget = budgetFor(city)!;
+const budget = gapPlan(budgetFor(city)!, 'test');
 const groups = capitalGroupsFor(city.path);
 const c = capitalPage(budget, groups);
 
@@ -85,7 +86,7 @@ describe('capital page figures', () => {
   });
 
   it('has no figure typed into the page', () => {
-    const src = readFileSync(join(import.meta.dirname, '../../src/pages/[country]/[state]/[city]/capital.astro'), 'utf8');
+    const src = readFileSync(join(import.meta.dirname, '../../src/components/views/CapitalProgram.astro'), 'utf8');
     for (const lit of ['183', '24.0', '2.12', '1.65', '300+', ' 54 ', ' 95 ', '4%', '$29M', '48.1', 'Sanitary']) expect(src, lit).not.toContain(lit);
   });
 });

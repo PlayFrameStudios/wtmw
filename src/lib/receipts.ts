@@ -5,6 +5,7 @@
  * the data.
  */
 import { csvTables } from '../data/csv.ts';
+import { folio } from './open-at.ts';
 import type { CityBudget, DocRef, Ref, Source, SourceId } from '../data/types.ts';
 import type { City } from './cities.ts';
 import { SITE } from './site.ts';
@@ -50,6 +51,10 @@ export interface SourceView {
   format: string;
   host: string;
   citation: string;
+  /** PDF pages before printed page 1, when there are any: receipts cite the printed page. */
+  pageOffset?: number;
+  /** An Internet Archive copy, for a City server that refuses automated requests. */
+  archive?: { url: string; date: string };
 }
 
 /** Serialized onto a chip and rendered by the drawer. */
@@ -110,9 +115,11 @@ export function sourceView(s: Source): SourceView {
     committee,
     date,
     url: s.url,
-    format: /\.pdf$/i.test(url.pathname) ? 'PDF' : 'Web page',
+    format: s.format ?? (/\.pdf$/i.test(url.pathname) ? 'PDF' : 'Web page'),
     host: url.hostname.replace(/^www\./, ''),
     citation: `${by}. "${s.title}."${date ? ` ${date}.` : ''} ${s.url}`,
+    ...(s.pageOffset ? { pageOffset: s.pageOffset } : {}),
+    ...(s.archive ? { archive: { url: s.archive.url, date: longDate(s.archive.date) } } : {}),
   };
 }
 
@@ -122,9 +129,11 @@ export function sourcesById(budget: CityBudget): Map<SourceId, SourceView> {
 
 /** "/us/ca/berkeley/data/deficit-bridge.csv" for the table a record came from. */
 export function csvHref(budget: CityBudget, city: City, ref: Ref | DocRef): string | undefined {
-  if ('quote' in ref) return undefined;
+  // A workbook row by its table and row; a document row by its page and quoted line.
+  const same = (r: Partial<Ref & DocRef>) =>
+    'quote' in ref ? r.source === ref.source && r.page === ref.page && r.quote === ref.quote : r.table === ref.table && r.row === ref.row;
   for (const t of csvTables(budget)) {
-    if ((t.rows as Ref[]).some((r) => r.table === ref.table && r.row === ref.row)) return `${city.path}data/${t.name}.csv`;
+    if ((t.rows as Partial<Ref & DocRef>[]).some(same)) return `${city.path}data/${t.name}.csv`;
   }
   return undefined;
 }
@@ -141,7 +150,7 @@ export function figureReceipt(budget: CityBudget, city: City, figure: Figure, pa
   }
   const value = formatValue(figure.value, figure.format);
   const ref = figure.ref;
-  const where = 'quote' in ref ? (ref.page ? `p. ${ref.page}` : 'web page') : `${ref.table}, row ${ref.row}`;
+  const where = 'quote' in ref ? (ref.page ? `p. ${folio(views.get(ref.source)!, ref.page)}` : 'web page') : `${ref.table}, row ${ref.row}`;
   const citation = [
     `${figure.label}: ${value}.`,
     ...ids.map((id, i) => `${i === 0 ? 'Source' : 'Also'}: ${views.get(id)!.citation}${i === 0 ? ` (${where})` : ''}.`),
@@ -195,7 +204,7 @@ export function sourceReceipt(budget: CityBudget, id: SourceId, pageUrl: URL, at
     if (source !== id || page || quote) more.push({ source, ...(page ? { page } : {}), ...(quote ? { quote } : {}) });
   }
   const cite = (c: { source: SourceId; page?: number; quote?: string }) =>
-    `${views.get(c.source)!.citation}${c.page ? ` (p. ${c.page})` : ''}.${c.quote ? `\n"${c.quote}"` : ''}`;
+    `${views.get(c.source)!.citation}${c.page ? ` (p. ${folio(views.get(c.source)!, c.page)})` : ''}.${c.quote ? `\n"${c.quote}"` : ''}`;
   return {
     kind: 'source',
     sources,

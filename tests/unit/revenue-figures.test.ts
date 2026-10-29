@@ -1,13 +1,14 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { gapPlan } from '../../src/data/types';
 import { budgetFor } from '../../src/lib/budget';
 import { cities } from '../../src/lib/cities';
 import { pace, revenuePage, VISIBLE } from '../../src/lib/revenue';
 import { revenueGroupsFor } from '../../src/lib/revenue-groups';
 
 const city = cities[0];
-const budget = budgetFor(city)!;
+const budget = gapPlan(budgetFor(city)!, 'test');
 const r = revenuePage(budget, revenueGroupsFor(city, budget));
 const line = (name: string) => r.lines.find((x) => x.l.name === name)!;
 
@@ -38,11 +39,11 @@ describe('revenue page figures', () => {
 
   it('the transfers receipt shows how the jump is built', () => {
     const t = r.insights.transfers;
-    expect(t.figure.parts.reduce((a, p) => a + p.value, 0)).toBe(t.line.fy2026MidYearActual);
+    expect(t.figure.parts.reduce((a, p) => a + p.value, 0)).toBe(t.line.values['mid-year-actual-2026']);
   });
 
   it('has no figure typed into the page', () => {
-    const src = readFileSync(join(import.meta.dirname, '../../src/pages/[country]/[state]/[city]/revenue.astro'), 'utf8');
+    const src = readFileSync(join(import.meta.dirname, '../../src/components/views/RevenuePace.astro'), 'utf8');
     for (const lit of ['311.9', '33%', '797', '18%', '36%', '10%', '2.1M', '18.8M', '95.2', ' 24 ']) expect(src, lit).not.toContain(lit);
   });
 });

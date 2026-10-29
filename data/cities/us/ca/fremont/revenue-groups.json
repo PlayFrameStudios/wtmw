@@ -1,0 +1,18 @@
+{
+  "note": "Revenue groups for the $100 chart and the overview mix bar: an editorial grouping of the General Fund revenue lines on the FY 2026/27 adopted budget's General Fund summary (S1 p. 66), in the colors Berkeley's groups use. Every line belongs to exactly one group; the build checks it.",
+  "groups": [
+    { "id": "property-tax", "name": "Property tax", "color": "#0E6B6F", "lines": ["Property Tax"] },
+    { "id": "sales-tax", "name": "Sales tax", "color": "#3E9A8F", "lines": ["Sales Tax"] },
+    { "id": "business-tax", "name": "Business tax", "color": "#7CBFB3", "lines": ["Business Tax"] },
+    { "id": "franchise-fees", "name": "Franchise fees", "color": "#23395B", "lines": ["Franchise Fees"] },
+    { "id": "charges", "name": "Charges & fines", "color": "#3F5E96", "lines": ["Charges for Services", "Fines"] },
+    { "id": "hotel", "name": "Hotel tax", "color": "#7A93C2", "lines": ["Hotel/Motel Tax"] },
+    { "id": "interest", "name": "Interest & rents", "color": "#8C6D46", "lines": ["Use of Money and Property"] },
+    {
+      "id": "other",
+      "name": "Everything else",
+      "color": "#CFCBC2",
+      "lines": ["Property Transfer Tax", "Paramedic Tax", "Intergovernmental", "Other Revenues"]
+    }
+  ]
+}

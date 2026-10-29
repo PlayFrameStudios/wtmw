@@ -15,7 +15,7 @@ export interface RevenueGroupDef {
 
 export interface RevenueGroup extends Omit<RevenueGroupDef, 'lines'> {
   lines: RevenueLine[];
-  /** FY2026 adopted, summed over the group's lines. */
+  /** The revenue table's primary (adopted) column, summed over the group's lines. */
   adopted: number;
   /** adopted / the revenue TOTAL row. */
   share: number;
@@ -35,10 +35,10 @@ export function groupRevenue(defs: RevenueGroupDef[], revenue: CityBudget['reven
   }
   const missing = revenue.lines.filter((l) => !seen.has(l.name)).map((l) => l.name);
   if (missing.length) throw new Error(`${where}: not in any group: ${missing.join(', ')}`);
-  const total = revenue.total.fy2026Adopted;
+  const total = revenue.total.values[revenue.primary];
   return defs.map((g) => {
     const lines = g.lines.map((n) => byName.get(n)!);
-    const adopted = lines.reduce((a, l) => a + l.fy2026Adopted, 0);
+    const adopted = lines.reduce((a, l) => a + l.values[revenue.primary], 0);
     return { ...g, lines, adopted, share: adopted / total };
   });
 }

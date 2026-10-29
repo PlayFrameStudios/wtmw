@@ -91,7 +91,7 @@ describe('reserves.json', () => {
   });
 
   it('refuses a quote with no dollar figure, or more than one', () => {
-    expect(() => parseReserves('r.json', amount('Operating Reserve'))).toThrow(/exactly one dollar figure, and it has 0/);
+    expect(() => parseReserves('r.json', amount('Operating Reserve'))).toThrow(/exactly one dollar figure \(or name the row's "figure" and "unit"\), and it has 0/);
     expect(() => parseReserves('r.json', amount('$1 and $2'))).toThrow(/and it has 2/);
   });
 });
@@ -116,10 +116,10 @@ describe('the data check (npm run data:check)', () => {
     writeFileSync(file, JSON.stringify(json));
   };
 
-  it('passes the committed cities, and finds both of them', async () => {
+  it('passes the committed cities, and finds every one of them', async () => {
     const { cities, errors } = await checkCities(copy(() => {}));
     expect(errors).toEqual([]);
-    expect(cities.map((c) => c.path)).toEqual(['/test/cities/fixtureville/', '/us/ca/berkeley/']);
+    expect(cities.map((c) => c.path)).toEqual(['/test/cities/fixtureville/', '/us/ca/berkeley/', '/us/ca/fremont/']);
   });
 
   it("fails a fiscal-position reason whose quote isn't on its page", async () => {

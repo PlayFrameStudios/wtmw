@@ -1,11 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { CityBudget } from '../../src/data/types';
+import type { GapBudget } from '../../src/data/types';
 import { unwrapFigures } from './figures';
 
 const root = join(import.meta.dirname, '../..');
-const b: CityBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
+const b: GapBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
 const html = readFileSync(join(root, 'dist/us/ca/berkeley/capital/index.html'), 'utf8');
 const text = unwrapFigures(html).replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ');
 const program = b.documentFacts.capitalProgram;
@@ -25,7 +25,7 @@ describe('capital page (built)', () => {
     // "General Fund Total" is all dashes: its capital money is the Capital Improvements fund, under Capital Projects Funds.
     expect(subtotals.map((t) => t.type)).toEqual(['Capital Projects Funds', 'Enterprise Funds', 'Grants Funds', 'Internal Service Funds', 'Special Revenue Funds']);
     for (const y of ['fy2027', 'fy2028'] as const) {
-      expect(lines.reduce((a, l) => a + l[y], 0), y).toBe(subtotals.reduce((a, t) => a + t[y], 0));
+      expect(lines.reduce((a, l) => a + l.years[y === 'fy2027' ? 2027 : 2028], 0), y).toBe(subtotals.reduce((a, t) => a + t[y], 0));
     }
     const total = lines.reduce((a, l) => a + l.total, 0);
     expect(program.total.total).toBe(total);

@@ -10,6 +10,7 @@ import SourceChip from '../components/SourceChip.astro';
 import Sourced from '../components/Sourced.astro';
 import Base from '../layouts/Base.astro';
 import { budgetFor } from '../lib/budget';
+import { gapPlan } from '../data/types';
 import { cities, featuredCity, hasPage } from '../lib/cities';
 import { fy } from '../lib/city-settings';
 import { familiesFor } from '../lib/families';
@@ -19,7 +20,7 @@ import { formatValue, sourcesById } from '../lib/receipts';
 import { SITE } from '../lib/site';
 
 const city = featuredCity;
-const budget = budgetFor(city)!;
+const budget = gapPlan(budgetFor(city)!, 'The landing page');
 const families = familiesFor(city, budget);
 const h = headlines(budget, families);
 const s1 = sourcesById(budget).get(h.gap.ref.source)!;

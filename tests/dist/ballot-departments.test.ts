@@ -7,11 +7,11 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { CityBudget } from '../../src/data/types';
+import type { GapBudget } from '../../src/data/types';
 import { shortMoney } from '../../src/lib/format';
 
 const root = join(import.meta.dirname, '../..');
-const b: CityBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
+const b: GapBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
 const page = (p: string) => readFileSync(join(root, 'dist/us/ca/berkeley', p, 'index.html'), 'utf8');
 const ballot = page('ballot');
 const departments = page('departments');
@@ -19,7 +19,7 @@ const unescape = (s: string) => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'")
 const receipts = (html: string) =>
   [...html.matchAll(/data-receipt="([^"]*)"[^>]*>([\s\S]*?)<\/button/g)].map((m) => ({ ...(JSON.parse(unescape(m[1])) as { label?: string; value?: string }), shown: m[2].replace(/<[^>]+>/g, '').trim() }));
 const deptReceipts = receipts(departments);
-const fy27 = b.departmentReductions.find((t) => t.year === 'FY2027')!.departments.filter((d) => d.id !== 'it-cost-allocation-plan');
+const fy27 = b.departmentReductions.find((t) => t.year === 2027)!.departments.filter((d) => d.id !== 'it-cost-allocation-plan');
 
 const section = ballot.slice(ballot.indexOf('class="dc-section"'), ballot.indexOf('</section>', ballot.indexOf('class="dc-section"')));
 const rows = [...section.matchAll(/<li class="dc-row"[^>]*data-dept="([^"]+)"[^>]*>([\s\S]*?)<\/li>/g)].map((m) => ({ id: m[1], html: m[2] }));

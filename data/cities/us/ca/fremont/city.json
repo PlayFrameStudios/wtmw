@@ -1,0 +1,28 @@
+{
+  "name": "Fremont",
+  "state": "California",
+  "stateCode": "CA",
+  "country": "United States",
+  "countryCode": "US",
+  "government": "City of Fremont",
+  "draft": true,
+  "budget": {
+    "cadence": "annual",
+    "years": [2027],
+    "labels": { "long": "FY {start}/{yy}", "short": "FY{ss}/{yy}", "spoken": "fiscal year {start}/{yy}" }
+  },
+  "fiscalPosition": {
+    "variant": "reserves",
+    "reason": {
+      "text": "The City balanced its FY 2026/27 General Fund budget within its ongoing resources, without drawing on its Budget Uncertainty Reserve.",
+      "cites": [
+        {
+          "source": "S1",
+          "page": 71,
+          "quote": "General Fund budgeted expenditures for the coming year have been limited to fit within the projected ongoing resources without the use of the Budget Uncertainty Reserve."
+        }
+      ]
+    }
+  },
+  "ballot": false
+}

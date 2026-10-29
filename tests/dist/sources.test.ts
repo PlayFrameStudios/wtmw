@@ -1,12 +1,12 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { CityBudget } from '../../src/data/types';
+import type { GapBudget } from '../../src/data/types';
 import { unwrapFigures } from './figures';
 
 const root = join(import.meta.dirname, '../..');
 const dist = join(root, 'dist');
-const b: CityBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
+const b: GapBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
 const html = readFileSync(join(dist, 'us/ca/berkeley/sources/index.html'), 'utf8');
 const strip = (h: string) => unwrapFigures(h).replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
 const text = strip(html);

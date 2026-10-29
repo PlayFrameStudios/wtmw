@@ -10,9 +10,12 @@
  * Bump SCHEMA_VERSION when a field is renamed or removed.
  */
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export type SourceId = `S${number}`;
+
+/** One amount per fiscal year, keyed by the year the fiscal year ends in: `{ "2027": …, "2028": … }`. */
+export type ByYear = Record<number, number>;
 
 export interface Ref {
   source: SourceId;
@@ -55,32 +58,119 @@ export interface Source {
   /** The date exactly as the workbook writes it ("Apr 16 2026"). */
   dateLabel?: string;
   url: string;
-  /** city = a City of Berkeley document (primary); news = reporting (context). */
+  /** city = a document the City published (primary); news = reporting (context). */
   type: 'city' | 'news';
   usedFor: string;
   /** Row on the Sources & Links tab; absent for sources added from documents.json. */
   row?: number;
+  /** Set when the URL doesn't say (fremont.gov serves PDFs from /showpublisheddocument/{id}). */
+  format?: 'PDF';
+  /** The printed page number is the PDF page minus this (front matter before printed page 1). Receipts cite printed pages. */
+  pageOffset?: number;
+  /** An Internet Archive copy, when the City's server refuses automated requests. */
+  archive?: { url: string; date: string };
 }
 
-export interface RevenueLine extends Ref {
-  name: string;
-  fy2026Adopted: number;
-  fy2026MidYearActual: number;
-  fy2025MidYearActual: number;
-  /** Derived: fy2026MidYearActual / fy2026Adopted; null when nothing was budgeted. */
-  pctOfAdoptedReceived: number | null;
-  /** Derived: fy2026MidYearActual - fy2025MidYearActual. */
-  changeVsFy2025: number;
-  /** Derived: changeVsFy2025 / fy2025MidYearActual; null when FY2025 was zero. */
-  changeVsFy2025Pct: number | null;
+/** Where a figure came from: a workbook row, or a quoted line on a page of a City document. */
+export type Cite = Ref | DocRef;
+
+/** A column of a budget table: what kind of figure, for which fiscal year (by the year it ends in). */
+export interface BudgetColumn {
+  /** Basis and year, unique within the table: "adopted-2027". */
+  key: string;
+  year: number;
+  basis: 'adopted' | 'revised' | 'estimate' | 'actual' | 'mid-year-actual' | 'projected';
 }
+
+/**
+ * One line of the General Fund's uses for a year. 'department' lines make the "where every $100 goes"
+ * chart; 'citywide' lines (debt service, non-departmental, a citywide savings assumption) are in the
+ * table's total but not the chart.
+ */
+export type DepartmentLine = Cite & {
+  /** Stable slug for URLs: "police", "maintenance-operations". */
+  id: string;
+  name: string;
+  kind: 'department' | 'citywide';
+  amount: number;
+};
+
+/** General Fund uses for one budget year, by department. */
+export interface GeneralFundUses {
+  year: number;
+  /** What the department lines add up to, for figure labels: "General Fund department baseline before proposed cuts". */
+  basis: string;
+  /** A qualifier the labels add: "planning figure". */
+  note?: string;
+  /** The same in a few words, for chart labels and captions: "department baseline". */
+  noun: string;
+  lines: DepartmentLine[];
+  /** The table's own total of every line, which the build ties to the lines. */
+  total: Cite & { amount: number };
+}
+
+/** Staff positions (FTE) for a budget year. */
+export type Staffing = Cite & {
+  year: number;
+  fte: number;
+  /** For labels: "baseline, all funds". */
+  basis: string;
+  /** By department, where the budget lists them. */
+  byDepartment?: (DocRef & { name: string; fte: number })[];
+};
+
+/** The budget's size: all funds, and the General Fund (the part the Council can spend on anything). */
+export interface BudgetSize {
+  allFunds: DocRef & { amount: number; note?: string };
+  generalFund: DocRef & { amount: number; note?: string };
+}
+
+/** A capital plan by program category and year, from a table in a City document. */
+export interface CapitalPlan {
+  title: string;
+  years: number[];
+  lines: (DocRef & { name: string; years: ByYear; total: number })[];
+  total: DocRef & { years: ByYear; total: number };
+}
+
+/** Pension obligations as the budget reports them. */
+export interface Pension {
+  /** The actuarial valuation date: "6/30/2024". */
+  asOf: string;
+  unfunded: DocRef & { amount: number };
+  fundedRatio: DocRef & { rate: number };
+  /** The employer's contribution in the budget year. */
+  contribution: DocRef & { amount: number; year: number };
+}
+
+/** A figure a city's pages quote from a sentence or table row, parsed from the quote. */
+export type Fact = DocRef & { value: number; format: 'money' | 'percent' | 'number' };
+
+export type RevenueLine = Cite & {
+  name: string;
+  /** One figure per column, by column key. */
+  values: Record<string, number>;
+  /** Where each column's figure is quoted, when the columns come from different pages; otherwise the line is the cite. */
+  cites?: Record<string, DocRef>;
+  /** Berkeley's mid-year report only. Derived: mid-year actual / adopted; null when nothing was budgeted. */
+  pctOfAdoptedReceived?: number | null;
+  /** Derived: this year's mid-year actual - last year's. */
+  changeVsFy2025?: number;
+  /** Derived: changeVsFy2025 / last year's mid-year actual; null when that was zero. */
+  changeVsFy2025Pct?: number | null;
+};
 
 export interface Revenue {
   title: string;
-  /** The tab's note on how to read it (mid-year = Jul–Dec, …). */
+  /** How to read it (mid-year = Jul–Dec, …). */
   note: string;
+  columns: BudgetColumn[];
+  /** The column the $100 chart, the groups and the totals use (the adopted budget). */
+  primary: string;
+  /** What the total row counts, for labels: "General Fund revenue and transfers". */
+  totalName: string;
   lines: RevenueLine[];
-  /** The workbook's TOTAL row, tied against the sum of `lines` by validation. */
+  /** The table's own total row, tied against the sum of `lines` by validation. */
   total: RevenueLine;
 }
 
@@ -90,8 +180,7 @@ export interface BridgeStep extends Ref {
   key: string;
   label: string;
   kind: BridgeStepKind;
-  fy2027: number;
-  fy2028: number;
+  years: ByYear;
 }
 
 export interface DeficitBridge {
@@ -131,7 +220,8 @@ export interface DepartmentReductionTotal extends Ref {
 }
 
 export interface DepartmentReductions {
-  year: 'FY2027' | 'FY2028';
+  /** The fiscal year, by the year it ends in (2027 = FY2027). */
+  year: number;
   title: string;
   note: string;
   departments: DepartmentReduction[];
@@ -141,15 +231,17 @@ export interface DepartmentReductions {
 export interface FteScenario extends Ref {
   key: 'without-sales-tax' | 'with-sales-tax';
   label: string;
-  fy2026AdoptedFte: number;
-  fy2026Rif: number;
-  fy2027BaselineFte: number;
-  fy2027Reduction: number;
-  /** Derived: fy2027BaselineFte - fy2027Reduction. */
-  fy2027NetFte: number;
-  /** Derived: fy2026Rif + fy2027Reduction. */
+  /** The budget year the scenario is for; `adoptedFte` and `rif` are the year before. */
+  year: number;
+  adoptedFte: number;
+  rif: number;
+  baselineFte: number;
+  reduction: number;
+  /** Derived: baselineFte - reduction. */
+  netFte: number;
+  /** Derived: rif + reduction. */
   cumulativeRif: number;
-  /** Derived: cumulativeRif / fy2026AdoptedFte. */
+  /** Derived: cumulativeRif / adoptedFte. */
   cumulativeReductionPct: number;
 }
 
@@ -187,9 +279,8 @@ export interface OneTimeResources {
 export interface CapitalLine extends Ref {
   name: string;
   category: string;
-  fy2027: number;
-  fy2028: number;
-  /** Derived: fy2027 + fy2028. */
+  years: ByYear;
+  /** Derived: the sum of `years`. */
   total: number;
 }
 
@@ -221,12 +312,8 @@ export interface PersonnelAndPension {
   unfundedLiabilities: UnfundedLiability[];
 }
 
-export interface GlossaryEntry {
-  term: string;
-  definition: string;
-  table: string;
-  row: number;
-}
+/** A defined term: from the workbook's Glossary tab (table, row), or quoted from a City document's glossary. */
+export type GlossaryEntry = { term: string; definition: string } & ({ table: string; row: number } | DocRef);
 
 /** A figure stated in a sentence of the workbook rather than a table cell. */
 export interface CitedFact extends Ref {
@@ -262,9 +349,8 @@ export interface CitedFacts {
 /** One row of a City PDF table: `quote` is the row exactly as printed, so it's checked on its page like any quote. */
 export interface DocCapitalPart extends DocRef {
   name: string;
-  fy2027: number;
-  fy2028: number;
-  /** Derived: fy2027 + fy2028. */
+  years: ByYear;
+  /** Derived: the sum of `years`. */
   total: number;
 }
 
@@ -292,7 +378,7 @@ export interface DocumentFacts {
   /** Adopted "as amended by subsequent Council action": amendments made at the meeting aren't in the staff report. */
   adoption: DocRef & { date: string };
   /** The gap as restated in the adoption staff report, in dollars (rounded to $10k, as written). */
-  adoptionGap: DocRef & { fy2027: number; fy2028: number };
+  adoptionGap: DocRef & { years: ByYear };
   /** FY27–31 CIP "Capital & Maint. Need" total, and its stated yearly growth. */
   capitalNeed: DocRef & { amount: number };
   /** FY27 spending, all funds and General Fund (adoption report p.1): the sentence's rounded figure, the table's exact one. */
@@ -313,41 +399,71 @@ export interface DocumentFacts {
   capitalProgram: DocRef & {
     lines: DocCapitalLine[];
     /** Derived: the sum of the lines (the table prints subtotals per fund type, which the build ties out, but no grand total). */
-    total: { fy2027: number; fy2028: number; total: number };
+    total: { years: ByYear; total: number };
     /** The fund that is the General Fund's capital money ("Capital Improvements", the CIP fund). */
     generalFund: string;
   };
 }
 
+/**
+ * Every city's budget.json. The first group is what every city has and every page can read; the
+ * rest are a city's own modules (Berkeley's deficit plan, cuts by ballot outcome and workbook
+ * tables; Fremont's reserves facts and capital plan), and the pages that show them check for them.
+ */
 export interface CityBudget {
   schemaVersion: number;
-  workbook: { file: string; sha256: string };
-  /** From the workbook's README note; shown on every receipt. */
+  /** Shown on every receipt. */
   notes: {
-    /** Years the workbook covers, from its title: "FY2025–FY2028". */
+    /** The years the data covers: "FY2025–FY2028". */
     coverage: string;
     /** "Budgetary/cash basis" */
     basis: string;
     /** "Figures are from budget/planning documents … subject to revision. Not for investment-decision use." */
     caveat: string;
-    table: string;
-    row: number;
+    /** Where Berkeley's workbook states them. */
+    table?: string;
+    row?: number;
   };
   sources: Source[];
+  /** General Fund uses by department, one entry per budget year. */
+  generalFund: GeneralFundUses[];
   revenue: Revenue;
-  deficitBridge: DeficitBridge;
-  departmentReductions: DepartmentReductions[];
-  fte: Fte;
-  oneTimeResources: OneTimeResources;
-  capitalProgram: CapitalProgram;
-  personnelAndPension: PersonnelAndPension;
-  glossary: GlossaryEntry[];
-  citedFacts: CitedFacts;
-  documentFacts: DocumentFacts;
+  staffing: Staffing;
+  size: BudgetSize;
+
+  /** Built from a workbook (Berkeley); absent for a city built from documents alone. */
+  workbook?: { file: string; sha256: string };
+  glossary?: GlossaryEntry[];
+  deficitBridge?: DeficitBridge;
+  departmentReductions?: DepartmentReductions[];
+  fte?: Fte;
+  oneTimeResources?: OneTimeResources;
+  capitalProgram?: CapitalProgram;
+  personnelAndPension?: PersonnelAndPension;
+  citedFacts?: CitedFacts;
+  documentFacts?: DocumentFacts;
+  /** Figures quoted from sentences and table rows, keyed by what they are ("contingencyPolicy"). */
+  facts?: Record<string, Fact>;
+  /** Sentences the pages cite that state no figure ("contextYears"), each checked against its page. */
+  statements?: Record<string, DocRef>;
+  capitalPlan?: CapitalPlan;
+  pension?: Pension;
+}
+
+/** A city with a deficit plan built from a workbook (Berkeley): every module the Gap and Ballot pages read. */
+export type GapBudget = CityBudget &
+  Required<Pick<CityBudget, 'workbook' | 'glossary' | 'deficitBridge' | 'departmentReductions' | 'fte' | 'oneTimeResources' | 'capitalProgram' | 'personnelAndPension' | 'citedFacts' | 'documentFacts'>>;
+
+export const hasGapPlan = (b: CityBudget): b is GapBudget => b.deficitBridge !== undefined && b.departmentReductions !== undefined && b.documentFacts !== undefined;
+
+/** The budget as a page that needs the deficit-plan modules reads it: throws if the city has none. */
+export function gapPlan(b: CityBudget, where: string): GapBudget {
+  if (!hasGapPlan(b)) throw new Error(`${where} needs a deficit plan (deficit bridge, department reductions, documents), and this city's budget has none`);
+  return b;
 }
 
 /** budget.json as the workbook alone produces it, before documents.json is merged in. */
-export type WorkbookBudget = Omit<CityBudget, 'documentFacts'>;
+export type WorkbookBudget = Omit<GapBudget, 'documentFacts' | 'size'>;
 
 /** A formula cell the workbook computed, next to what we computed for it. */
 export interface CrossCheck {

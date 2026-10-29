@@ -3,12 +3,12 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { csvTables } from '../../src/data/csv';
-import type { CityBudget } from '../../src/data/types';
+import type { GapBudget } from '../../src/data/types';
 
 // The Sources page links to these; they're generated from budget.json at build time.
 const root = join(import.meta.dirname, '../..');
 const data = join(root, 'dist/us/ca/berkeley/data');
-const committed: CityBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
+const committed: GapBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
 
 describe('Berkeley data downloads', () => {
   it('serves the combined JSON, identical to the committed budget.json', () => {

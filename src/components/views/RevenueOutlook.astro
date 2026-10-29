@@ -1,0 +1,233 @@
+---
+/**
+ * Revenue for a city whose budget reports revenue by year (#43): where every $100 of the
+ * adopted year's General Fund revenue comes from, by group, then each line from the last
+ * actual year through the City's forecast. Every number from revenueOutlook() in
+ * src/lib/revenue-outlook.ts. Styles are inline so they ship only with this view.
+ */
+import Sourced from '../Sourced.astro';
+import Waffle from '../Waffle.astro';
+import Base from '../../layouts/Base.astro';
+import { budgetFor } from '../../lib/budget';
+import type { City } from '../../lib/cities';
+import { fy } from '../../lib/city-settings';
+import { shortMoney } from '../../lib/format';
+import type { Figure } from '../../lib/receipts';
+import { revenueGroupsFor } from '../../lib/revenue-groups';
+import { revenueOutlook } from '../../lib/revenue-outlook';
+
+interface Props {
+  city: City;
+}
+
+const { city } = Astro.props;
+const budget = budgetFor(city)!;
+const label = (y: number) => fy(city.budget.labels, y);
+const r = revenueOutlook(budget, revenueGroupsFor(city, budget), label);
+const y = label(r.year);
+const signedPct = (p: number) => `${p > 0 ? '+' : p < 0 ? '−' : ''}${Math.abs(p * 100).toFixed(1)}%`;
+const byName = new Map(r.lines.map((l) => [l.name, l]));
+const recovery = budget.facts?.salesTaxRecovery;
+const recoveryFigure: Figure | undefined = recovery && {
+  value: recovery.value,
+  label: 'Sales tax the State recovered from the City in FY 2024/25, for its FY 2022/23 overpayments',
+  ref: recovery,
+  tone: 'neutral',
+};
+---
+
+<Base title={`Revenue · ${city.name}`} city={city} description={`Where every $100 of ${city.name}'s ${y} General Fund revenue comes from, and how each source has grown. Every number links to the public document it came from.`}>
+  <div class="ro-page wrap">
+    <section class="ro-intro">
+      <h1>Where every $100 comes from</h1>
+      <p class="ro-lede">
+        The City expects <Sourced city={city} figure={r.totalFigure}>{shortMoney(r.totalFigure.value)}</Sourced> of General Fund revenue in {y}, before money
+        transferred in from its other funds. Each square is $1 of every $100.
+      </p>
+    </section>
+
+    <div class="ro-waffle">
+      <Waffle
+        items={r.chart.map((c) => c.item)}
+        label={`${city.name}'s ${y} General Fund revenue`}
+        noun="source"
+        table={{ caption: `${y} General Fund revenue, per $100`, name: 'Source', value: `${y} adopted` }}
+      />
+    </div>
+
+    <section class="ro-section" aria-labelledby="ro-lines">
+      <h2 id="ro-lines">Every source, year by year</h2>
+      <p class="ro-note">
+        Actual and estimated years for context, the adopted budget, and the City's forecast after it.{r.before && ` Change is the adopted budget against the ${r.before}.`}
+      </p>
+      <div class="ro-scroll">
+        <table class="ro-table">
+          <thead>
+            <tr>
+              <th scope="col">Source</th>
+              {r.columns.map((c) => (
+                <>
+                  <th scope="col" class:list={['num', { 'ro-primary': c.primary }]}>{c.label}</th>
+                  {c.primary && r.before && <th scope="col" class="num">Change</th>}
+                </>
+              ))}
+            </tr>
+          </thead>
+          {
+            r.chart.map(({ group }) => (
+              <tbody id={`rev-${group.id}`}>
+                {group.lines.length > 1 && (
+                  <tr class="ro-group">
+                    <th scope="rowgroup" colspan={r.columns.length + 2}>
+                      <span class="ro-swatch" style={`background:${group.color}`} aria-hidden="true" />
+                      {group.name}
+                    </th>
+                  </tr>
+                )}
+                {group.lines.map((line) => {
+                  const l = byName.get(line.name)!;
+                  return (
+                    <tr>
+                      <th scope="row">
+                        {group.lines.length === 1 && <span class="ro-swatch" style={`background:${group.color}`} aria-hidden="true" />}
+                        {l.name}
+                      </th>
+                      {l.cells.map((c, i) => (
+                        <>
+                          <td class:list={['num', { 'ro-primary': r.columns[i].primary }]}>
+                            <Sourced city={city} figure={c.figure}>
+                              {shortMoney(c.figure.value)}
+                            </Sourced>
+                          </td>
+                          {r.columns[i].primary && r.before && <td class="num ro-change">{l.change === null ? '—' : signedPct(l.change)}</td>}
+                        </>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            ))
+          }
+          <tfoot>
+            <tr>
+              <th scope="row">Total</th>
+              {
+                r.total.cells.map((c, i) => (
+                  <>
+                    <td class:list={['num', { 'ro-primary': r.columns[i].primary }]}>
+                      <Sourced city={city} figure={c.figure}>
+                        {shortMoney(c.figure.value)}
+                      </Sourced>
+                    </td>
+                    {r.columns[i].primary && r.before && <td class="num ro-change">{r.total.change === null ? '—' : signedPct(r.total.change)}</td>}
+                  </>
+                ))
+              }
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      {
+        recoveryFigure && (
+          <p class="ro-note ro-after">
+            Sales tax dipped in FY 2024/25 because the State took back about <Sourced city={city} figure={recoveryFigure}>{shortMoney(recoveryFigure.value)}</Sourced> it had
+            overpaid the City in FY 2022/23.
+          </p>
+        )
+      }
+    </section>
+  </div>
+</Base>
+
+<style is:inline>
+  .ro-intro {
+    max-width: 44rem;
+    padding-block: clamp(2rem, 5vw, 3.5rem) 1.5rem;
+  }
+  .ro-intro h1 {
+    margin: 0;
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: 1.1;
+  }
+  .ro-lede {
+    margin: 1.25rem 0 0;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+  .ro-waffle {
+    max-width: 30rem;
+  }
+  .ro-section {
+    padding-block: 2rem;
+  }
+  .ro-section h2 {
+    margin: 0 0 0.5rem;
+  }
+  .ro-note {
+    max-width: 44rem;
+    margin: 0 0 1rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .ro-after {
+    margin-top: 1rem;
+  }
+  .ro-scroll {
+    overflow-x: auto;
+  }
+  .ro-table {
+    width: 100%;
+    min-width: 46rem;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  .ro-table th,
+  .ro-table td {
+    padding: 0.5rem 0.75rem 0.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+  .ro-table thead th {
+    color: var(--muted);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    vertical-align: bottom;
+    white-space: normal;
+  }
+  .ro-table .num {
+    text-align: right;
+  }
+  .ro-table tbody th[scope='row'] {
+    font-weight: 700;
+  }
+  .ro-group th {
+    padding-top: 1rem;
+    font-weight: 800;
+  }
+  .ro-table .ro-primary {
+    background: var(--bay-light);
+    font-weight: 800;
+  }
+  .ro-table thead .ro-primary {
+    color: var(--ink);
+  }
+  .ro-change {
+    color: var(--muted);
+  }
+  .ro-table tfoot th,
+  .ro-table tfoot td {
+    border-bottom: 0;
+    border-top: 2px solid var(--ink);
+    font-weight: 800;
+  }
+  .ro-swatch {
+    display: inline-block;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-right: 0.5rem;
+    border-radius: 2px;
+    vertical-align: -0.05em;
+  }
+</style>

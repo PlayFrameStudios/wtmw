@@ -1,15 +1,15 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { CityBudget } from '../../src/data/types';
+import type { GapBudget } from '../../src/data/types';
 import { unwrapFigures } from './figures';
 
 // The story's checks, recomputed from budget.json without the site's helpers.
 const root = join(import.meta.dirname, '../..');
-const b: CityBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
+const b: GapBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
 const html = readFileSync(join(root, 'dist/us/ca/berkeley/index.html'), 'utf8');
 const text = unwrapFigures(html).replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ').replace(/ ([,.])/g, '$1');
-const depts = b.departmentReductions.find((y) => y.year === 'FY2027')!.departments;
+const depts = b.departmentReductions.find((y) => y.year === 2027)!.departments;
 const total = depts.reduce((a, d) => a + d.baseline, 0);
 
 const unescape = (s: string) => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
@@ -108,7 +108,7 @@ describe('overview checks', () => {
   });
 
   it('the gap shows $29.2M', () => {
-    const gap = b.deficitBridge.steps.find((s) => s.key === 'final-gap')!.fy2027;
+    const gap = b.deficitBridge.steps.find((s) => s.key === 'final-gap')!.years[2027];
     expect(text).toContain(`gap the city must close $${(Math.abs(gap) / 1e6).toFixed(1)}M`);
   });
 

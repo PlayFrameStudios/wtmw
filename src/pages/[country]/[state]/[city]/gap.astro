@@ -10,16 +10,22 @@ import StepInfo from '../../../../components/StepInfo.astro';
 import Term from '../../../../components/Term.astro';
 import Base from '../../../../layouts/Base.astro';
 import { budgetFor } from '../../../../lib/budget';
+import { gapPlan } from '../../../../data/types';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
 import { shortMoney } from '../../../../lib/format';
+import { fy } from '../../../../lib/city-settings';
 import { gapPage } from '../../../../lib/gap';
 
 export const getStaticPaths = cityStaticPaths('gap');
 
 const { city } = Astro.props as { city: City };
-const budget = budgetFor(city)!;
-const g = gapPage(budget);
+const budget = gapPlan(budgetFor(city)!, 'The Gap page');
+const g = gapPage(budget, city.budget.years, (y) => fy(city.budget.labels, y));
 const [fy27] = g.years;
+// The budget's years together ("FY2027-28").
+const span = `${fy27.label}-${String(city.budget.years.at(-1)).slice(2)}`;
+// Show only the chosen year's waterfall (works without JavaScript).
+const yearRules = g.years.map((y) => `.gap-page:has(#year-${y.year}:checked) .waterfall:not([data-year='${y.year}']) { display: none; }`).join('\n');
 const signed = (v: number) => (v > 0 ? `+${shortMoney(v)}` : v === 0 ? '$0' : shortMoney(v));
 const pct = (p: number) => `${(p * 100).toFixed(1)}%`;
 const headline = Math.round(Math.abs(fy27.final.value) / 1e6);
@@ -145,7 +151,7 @@ const taxStart = new Date(`${budget.documentFacts.salesTaxTerm.start}T12:00:00Z`
 
       <aside class="one-time card" aria-labelledby="one-time-title">
         <h2 id="one-time-title">One-time money, in and out</h2>
-        <p class="years-note">FY2027-28</p>
+        <p class="years-note">{span}</p>
         <ul class="flows">
           {
             g.oneTime.sources.map((s) => (
@@ -176,6 +182,8 @@ const taxStart = new Date(`${budget.documentFacts.salesTaxTerm.start}T12:00:00Z`
     </section>
   </div>
 </Base>
+
+<style is:global set:html={yearRules}></style>
 
 <style>
   .card {
@@ -234,12 +242,6 @@ const taxStart = new Date(`${budget.documentFacts.salesTaxTerm.start}T12:00:00Z`
     outline: 2px solid var(--bay);
     outline-offset: 2px;
   }
-  /* Show only the chosen year's waterfall (works without JavaScript). */
-  .gap-page:has(#year-fy2027:checked) [data-year='fy2028'],
-  .gap-page:has(#year-fy2028:checked) [data-year='fy2027'] {
-    display: none;
-  }
-
   /* Waterfall: one list, two layouts. */
   .waterfall {
     --chart: 22rem;

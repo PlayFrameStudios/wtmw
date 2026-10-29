@@ -11,6 +11,8 @@ import Sourced from '../../../../components/Sourced.astro';
 import Base from '../../../../layouts/Base.astro';
 import { ballotFileFor, ballotPage, type Outcome } from '../../../../lib/ballot';
 import { budgetFor } from '../../../../lib/budget';
+import { gapPlan } from '../../../../data/types';
+import { fy } from '../../../../lib/city-settings';
 import { byOutcome, departmentsPage, shortNames } from '../../../../lib/departments';
 import { familiesFor } from '../../../../lib/families';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
@@ -19,7 +21,7 @@ import { shortMoney } from '../../../../lib/format';
 export const getStaticPaths = cityStaticPaths('ballot');
 
 const { city } = Astro.props as { city: City };
-const budget = budgetFor(city)!;
+const budget = gapPlan(budgetFor(city)!, 'The Ballot page');
 const p = ballotPage(budget, ballotFileFor(city.path), shortNames(city.path, budget));
 const t = p.salesTax.fact;
 const bond = p.bond.fact;
@@ -39,8 +41,9 @@ const threshold = (s: string) => (s === '2/3' ? 'a two-thirds vote' : `a ${s}`);
 const resultLabel: Record<Outcome, string> = { passes: `If Measure ${v.letter} passes`, fails: `If Measure ${v.letter} fails` };
 const people = (filled: number) => Array.from({ length: p.pictogramSlots }, (_, i) => i < filled);
 // Each department's cut either way (#36): the Departments page's rows and receipts, FY2027.
-const depts = departmentsPage(budget, familiesFor(city, budget), shortNames(city.path, budget));
-const split = byOutcome(depts.rows, 'fy2027');
+const depts = departmentsPage(budget, familiesFor(city, budget), shortNames(city.path, budget), city.budget.years, (y) => fy(city.budget.labels, y));
+const [firstYear] = depts.years;
+const split = byOutcome(depts.rows, firstYear);
 const OUTCOMES = ['passes', 'fails'] as const;
 const barW = (v: number) => `${((v / split.max) * 100).toFixed(2)}%`;
 const list = (xs: string[]) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
@@ -136,7 +139,7 @@ const planDate = longDate(p.plan.date!);
       <ol class="dc-list" role="list">
         {
           split.differs.map((r) => {
-            const v = r.years.fy2027;
+            const v = r.years[firstYear];
             return (
               <li class="dc-row" data-dept={r.id}>
                 <span class="dc-name">{r.display}</span>

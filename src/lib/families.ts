@@ -54,8 +54,11 @@ export function loadFamilies(file: FamiliesFile, departments: { id: string; base
   };
 }
 
+/** The departments of the city's first budget year (its "department" lines, not citywide ones like debt service). */
+export const departmentsOf = (budget: CityBudget) => budget.generalFund[0].lines.filter((l) => l.kind === 'department').map((l) => ({ id: l.id, baseline: l.amount }));
+
 export function familiesFor(city: City, budget: CityBudget): Families {
   const file = files[`${city.dataDir}families.json`];
   if (!file) throw new Error(`${city.path} has no families.json`);
-  return loadFamilies(file, budget.departmentReductions[0].departments, `${city.path}families.json`);
+  return loadFamilies(file, departmentsOf(budget), `${city.path}families.json`);
 }

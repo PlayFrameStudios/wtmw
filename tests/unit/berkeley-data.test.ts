@@ -7,7 +7,7 @@ import { departmentId, parseSourceDocument } from '../../src/data/berkeley/extra
 import { PINNED, allRefs, validateBerkeley } from '../../src/data/berkeley/validate';
 import { csvTables, toCsv } from '../../src/data/csv';
 import { buildCity, serialize, type Result } from '../../src/data/pipeline';
-import type { CityBudget } from '../../src/data/types';
+import { gapPlan, type GapBudget } from '../../src/data/types';
 
 const root = join(import.meta.dirname, '../..');
 const CITY = 'us/ca/berkeley';
@@ -28,10 +28,10 @@ const setCell = (tab: string, address: string, value: ExcelJS.CellValue) => (wb:
 };
 
 let real: Result;
-let budget: CityBudget;
+let budget: GapBudget;
 beforeAll(async () => {
   real = await buildCity(root, CITY);
-  budget = real.budget;
+  budget = gapPlan(real.budget, 'test');
 });
 
 describe('Berkeley workbook → budget.json', () => {
@@ -53,8 +53,8 @@ describe('Berkeley workbook → budget.json', () => {
   });
 
   it('FY26 revenue lines sum to the TOTAL row, 311,935,259, within ±2', () => {
-    const lines = budget.revenue.lines.reduce((a, l) => a + l.fy2026Adopted, 0);
-    expect(budget.revenue.total.fy2026Adopted).toBe(311_935_259);
+    const lines = budget.revenue.lines.reduce((a, l) => a + l.values['adopted-2026'], 0);
+    expect(budget.revenue.total.values['adopted-2026']).toBe(311_935_259);
     expect(Math.abs(lines - 311_935_259)).toBeLessThanOrEqual(2);
   });
 
@@ -68,8 +68,8 @@ describe('Berkeley workbook → budget.json', () => {
       'non-departmental',
       'one-time-resources',
     ]);
-    expect(inputs.reduce((a, s) => a + s.fy2027, 0)).toBe(-29_249_339);
-    expect(budget.deficitBridge.steps.at(-1)).toMatchObject({ key: 'final-gap', fy2027: -29_249_339, fy2028: -29_532_958 });
+    expect(inputs.reduce((a, s) => a + s.years[2027], 0)).toBe(-29_249_339);
+    expect(budget.deficitBridge.steps.at(-1)).toMatchObject({ key: 'final-gap', years: { 2027: -29_249_339, 2028: -29_532_958 } });
   });
 
   it("every record's source resolves to a row in Sources", () => {

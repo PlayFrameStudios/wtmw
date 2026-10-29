@@ -21,8 +21,8 @@ const present = new Set(Object.keys(import.meta.glob(['/data/cities/*/*/*/*.json
 /** Every city that gets pages, test fixtures included. */
 export const allCities: City[] = buildRegistry(files, (p) => present.has(p));
 
-/** The published cities: the city switcher, the landing page's list, the tests that read every city. */
-export const cities: City[] = allCities.filter((c) => !c.fixture);
+/** The published cities: the city switcher, the landing page's list, the tests that read every city. Not fixtures or drafts. */
+export const cities: City[] = allCities.filter((c) => !c.fixture && !c.draft);
 
 /** The city whose figures the landing page shows. */
 export const featuredCity: City = cities.find((c) => c.featured)!;

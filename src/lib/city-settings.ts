@@ -9,6 +9,7 @@
  *   "ballot":         true
  *   "featured":       true
  */
+import { splitRow } from '../data/tables.ts';
 import type { DocRef, StepNote } from '../data/types.ts';
 
 /** The page explaining where a city stands: The Gap (a deficit) or Balance & Reserves (in balance). */
@@ -120,7 +121,11 @@ export function parseSettings(file: string, raw: Record<string, unknown>, exists
 export interface ReservesFile {
   /** The fiscal year the amounts are for, by the year it ends in. */
   year: number;
-  reserves: { key: string; name: string; purpose: string; amount: DocRef }[];
+  /**
+   * `amount` quotes a sentence holding one dollar figure, or a table row with `figure`, the cell to
+   * read (1 is the first), and `unit`, what a printed figure is worth (1000 for a table in thousands).
+   */
+  reserves: { key: string; name: string; purpose: string; amount: DocRef & { figure?: number; unit?: number } }[];
 }
 
 export interface Reserve {
@@ -133,7 +138,7 @@ export interface Reserve {
   ref: DocRef;
 }
 
-/** Checks a reserves.json and reads each amount from its quote, which must hold exactly one dollar figure. */
+/** Checks a reserves.json and reads each amount from its quote: its one dollar figure, or the table row's `figure`th cell times `unit`. */
 export function parseReserves(file: string, raw: unknown): { year: number; reserves: Reserve[] } {
   if (!isObject(raw) || !Number.isInteger(raw.year)) throw new Error(`${file}: needs "year", the fiscal year the amounts are for`);
   if (!Array.isArray(raw.reserves) || raw.reserves.length === 0) throw new Error(`${file}: "reserves" must list at least one reserve`);
@@ -146,10 +151,20 @@ export function parseReserves(file: string, raw: unknown): { year: number; reser
     }
     if (seen.has(r.key as string)) throw new Error(`${where}: duplicate key "${r.key}"`);
     seen.add(r.key as string);
-    const ref = docRef(r.amount, `${where}.amount`);
-    const amounts = [...ref.quote.matchAll(/\$\s?([\d,]+(?:\.\d+)?)/g)];
-    if (amounts.length !== 1) throw new Error(`${where}.amount: the quote must hold exactly one dollar figure, and it has ${amounts.length}`);
-    return { key: r.key as string, name: r.name as string, purpose: r.purpose as string, value: Number(amounts[0][1].replace(/,/g, '')), ref };
+    const { figure, unit, ...ref } = docRef(r.amount, `${where}.amount`) as DocRef & { figure?: unknown; unit?: unknown };
+    let value: number;
+    if (figure !== undefined || unit !== undefined) {
+      if (!Number.isInteger(figure) || (figure as number) < 1) throw new Error(`${where}.amount: "figure" must say which of the row's figures to read (1 is the first)`);
+      if (!(typeof unit === 'number' && unit > 0)) throw new Error(`${where}.amount: "unit" must say what a printed figure is worth (1000 for thousands)`);
+      const { cells } = splitRow(ref.quote);
+      if ((figure as number) > cells.length) throw new Error(`${where}.amount: the row has ${cells.length} figures, so there is no figure ${figure}`);
+      value = Math.round(cells[(figure as number) - 1] * unit);
+    } else {
+      const amounts = [...ref.quote.matchAll(/\$\s?([\d,]+(?:\.\d+)?)/g)];
+      if (amounts.length !== 1) throw new Error(`${where}.amount: the quote must hold exactly one dollar figure (or name the row's "figure" and "unit"), and it has ${amounts.length}`);
+      value = Number(amounts[0][1].replace(/,/g, ''));
+    }
+    return { key: r.key as string, name: r.name as string, purpose: r.purpose as string, value, ref };
   });
   return { year: raw.year as number, reserves };
 }

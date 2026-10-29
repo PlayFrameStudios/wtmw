@@ -1,15 +1,17 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { gapPlan } from '../../src/data/types';
 import { budgetFor } from '../../src/lib/budget';
 import { cities } from '../../src/lib/cities';
+import { fy } from '../../src/lib/city-settings';
 import { departmentsPage, fullNames, shortNames } from '../../src/lib/departments';
 import { familiesFor } from '../../src/lib/families';
 import { figureReceipt } from '../../src/lib/receipts';
 
 const city = cities[0];
-const budget = budgetFor(city)!;
-const p = departmentsPage(budget, familiesFor(city, budget), shortNames(city.path, budget));
+const budget = gapPlan(budgetFor(city)!, 'test');
+const p = departmentsPage(budget, familiesFor(city, budget), shortNames(city.path, budget), city.budget.years, (y) => fy(city.budget.labels, y));
 const police = p.rows.find((r) => r.id === 'police')!;
 const page = new URL('https://wherethemoneywent.com/us/ca/berkeley/departments/');
 
@@ -52,12 +54,12 @@ describe('departments page figures', () => {
 
   it('refuses a short name for a department that does not exist', () => {
     const b = structuredClone(budget);
-    b.departmentReductions[0].departments = b.departmentReductions[0].departments.filter((d) => d.id !== 'odpa');
+    b.generalFund[0].lines = b.generalFund[0].lines.filter((d) => d.id !== 'odpa');
     expect(() => shortNames(city.path, b)).toThrow('"odpa" isn\'t a department');
   });
 
   it('has no figure typed into the page', () => {
-    const src = readFileSync(join(import.meta.dirname, '../../src/pages/[country]/[state]/[city]/departments.astro'), 'utf8');
+    const src = readFileSync(join(import.meta.dirname, '../../src/components/views/DepartmentCuts.astro'), 'utf8');
     for (const literal of ['106.2', '10.6M', '5.3M', '5.2M', '4.9%', '29.3', '283.8', '600K', '37.42']) expect(src, literal).not.toContain(literal);
   });
 
@@ -69,7 +71,7 @@ describe('departments page figures', () => {
     expect(n.odpa).toBe('Office of the Director of Police Accountability');
     for (const name of Object.values(n)) expect(name).not.toMatch(/\(|Svcs|Dir\./);
     const b = structuredClone(budget);
-    b.departmentReductions[0].departments.push({ ...b.departmentReductions[0].departments[0], id: 'x', name: 'Public Svcs (PS)' });
+    b.generalFund[0].lines.push({ ...b.generalFund[0].lines[0], id: 'x', name: 'Public Svcs (PS)' });
     expect(() => fullNames(city.path, b)).toThrow('"x" needs a fullNames entry');
   });
 });

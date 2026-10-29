@@ -17,6 +17,7 @@ import type {
   BridgeStep,
   CapitalLine,
   CityBudget,
+  GapBudget,
   CostComponent,
   CrossCheck,
   DepartmentReductions,
@@ -32,6 +33,7 @@ import type {
   WorkbookBudget,
 } from '../types.ts';
 import { SCHEMA_VERSION } from '../types.ts';
+import { REVENUE } from './columns.ts';
 import type { Tab, Workbook } from '../workbook.ts';
 
 /**
@@ -146,7 +148,7 @@ function rowsUntil(tab: Tab, start: number, stop: string): [number[], number] {
   throw new Error(`${tab.name}: no "${stop}" row found below row ${start}`);
 }
 
-export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']) {
+export async function extractBerkeley(wb: Workbook, meta: GapBudget['workbook']) {
   const checks: CrossCheck[] = [];
   /** Record a formula cell the workbook computed, beside our own value for it. */
   const check = (tab: Tab, address: string, computed: number | null) => {
@@ -185,11 +187,9 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
       const adopted = read(`B${r}`);
       const actual = read(`C${r}`);
       const prior = read(`E${r}`);
-      const lineValue: RevenueLine = {
+      const lineValue = {
         name: tab.text(`A${r}`),
-        fy2026Adopted: adopted,
-        fy2026MidYearActual: actual,
-        fy2025MidYearActual: prior,
+        values: { [REVENUE.adopted]: adopted, [REVENUE.midYear]: actual, [REVENUE.priorMidYear]: prior },
         pctOfAdoptedReceived: ratio(actual, adopted),
         changeVsFy2025: actual - prior,
         changeVsFy2025Pct: ratio(actual - prior, prior),
@@ -206,6 +206,13 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
     return {
       title: tab.text('A1'),
       note: tab.text(`A${noteRow}`),
+      columns: [
+        { key: REVENUE.adopted, year: 2026, basis: 'adopted' },
+        { key: REVENUE.midYear, year: 2026, basis: 'mid-year-actual' },
+        { key: REVENUE.priorMidYear, year: 2025, basis: 'mid-year-actual' },
+      ],
+      primary: REVENUE.adopted,
+      totalName: 'General Fund revenue and transfers',
       lines: rows.map((r) => line(r, tab.input)),
       total: line(totalRow, tab.value),
     };
@@ -239,15 +246,15 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
         check(tab, `${col}${r}`, running[col]);
         return running[col];
       };
-      return { key, label, kind, fy2027: value('B'), fy2028: value('C'), ...ref(r) };
+      return { key, label, kind, years: { 2027: value('B'), 2028: value('C') }, ...ref(r) };
     });
     tab.expectText('A15', 'Reduction achieved');
     return { title: tab.text('A1'), note: tab.text('A15'), steps };
   })();
 
   // Dept Reductions FY27 / FY28
-  const departmentReductions = (['FY2027', 'FY2028'] as const).map((year): DepartmentReductions => {
-    const { tab, ref } = sourced(`Dept Reductions FY${year.slice(4)}`);
+  const departmentReductions = [2027, 2028].map((year): DepartmentReductions => {
+    const { tab, ref } = sourced(`Dept Reductions FY${String(year).slice(2)}`);
     tab.expectRow(4, [
       'Department',
       'GF Baseline',
@@ -317,23 +324,24 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
       ] as const
     ).map(([r, key, label]) => {
       if (tab.text(`A${r}`) !== label) throw new Error(`FTE & Positions!A${r}: expected "${label}"`);
-      const fy2026AdoptedFte = tab.input(`B${r}`);
-      const fy2026Rif = tab.input(`C${r}`);
-      const fy2027BaselineFte = tab.input(`D${r}`);
-      const fy2027Reduction = tab.input(`E${r}`);
+      const adoptedFte = tab.input(`B${r}`);
+      const rif = tab.input(`C${r}`);
+      const baselineFte = tab.input(`D${r}`);
+      const reduction = tab.input(`E${r}`);
       const s = {
         key,
         label,
-        fy2026AdoptedFte,
-        fy2026Rif,
-        fy2027BaselineFte,
-        fy2027Reduction,
-        fy2027NetFte: Math.round((fy2027BaselineFte - fy2027Reduction) * 100) / 100,
-        cumulativeRif: fy2026Rif + fy2027Reduction,
-        cumulativeReductionPct: (fy2026Rif + fy2027Reduction) / fy2026AdoptedFte,
+        year: 2027,
+        adoptedFte,
+        rif,
+        baselineFte,
+        reduction,
+        netFte: Math.round((baselineFte - reduction) * 100) / 100,
+        cumulativeRif: rif + reduction,
+        cumulativeReductionPct: (rif + reduction) / adoptedFte,
         ...ref(r),
       };
-      check(tab, `F${r}`, s.fy2027NetFte);
+      check(tab, `F${r}`, s.netFte);
       check(tab, `G${r}`, s.cumulativeRif);
       check(tab, `H${r}`, s.cumulativeReductionPct);
       return s;
@@ -392,7 +400,7 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
       const fy2027 = tab.input(`C${r}`);
       const fy2028 = tab.input(`D${r}`);
       check(tab, `E${r}`, fy2027 + fy2028);
-      return { name: tab.text(`A${r}`), category: tab.text(`B${r}`), fy2027, fy2028, total: fy2027 + fy2028, ...ref(r) };
+      return { name: tab.text(`A${r}`), category: tab.text(`B${r}`), years: { 2027: fy2027, 2028: fy2028 }, total: fy2027 + fy2028, ...ref(r) };
     });
     const fy2027 = tab.value(`C${totalRow}`);
     const fy2028 = tab.value(`D${totalRow}`);
@@ -400,7 +408,7 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
     return {
       title: tab.text('A1'),
       lines,
-      total: { name: tab.text(`A${totalRow}`), category: '', fy2027, fy2028, total: fy2027 + fy2028, ...ref(totalRow) },
+      total: { name: tab.text(`A${totalRow}`), category: '', years: { 2027: fy2027, 2028: fy2028 }, total: fy2027 + fy2028, ...ref(totalRow) },
     };
   })();
 
@@ -548,11 +556,25 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
     } satisfies CityBudget['citedFacts'];
   })();
 
+  // What every city has: each year's department baselines, and the baseline staff count.
+  const generalFund = departmentReductions.map((t) => ({
+    year: t.year,
+    basis: 'General Fund department baseline before proposed cuts',
+    note: 'planning figure',
+    noun: 'department baseline',
+    lines: t.departments.map((d) => ({ id: d.id, name: d.name, kind: 'department' as const, amount: d.baseline, source: d.source, table: d.table, row: d.row })),
+    total: { amount: t.total.baseline, source: t.total.source, table: t.total.table, row: t.total.row },
+  }));
+  const baseline = fte.scenarios.find((s) => s.key === 'without-sales-tax')!;
+  const staffing = { year: baseline.year, fte: baseline.baselineFte, basis: 'baseline, all funds', source: baseline.source, table: baseline.table, row: baseline.row };
+
   const budget: WorkbookBudget = {
     schemaVersion: SCHEMA_VERSION,
     workbook: meta,
     notes,
     sources,
+    generalFund,
+    staffing,
     revenue,
     deficitBridge,
     departmentReductions,

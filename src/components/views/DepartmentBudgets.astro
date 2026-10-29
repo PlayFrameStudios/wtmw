@@ -1,0 +1,237 @@
+---
+/**
+ * Departments for a city without a deficit plan (#43): what each department's General Fund
+ * budget is, per $100, then the citywide lines (non-departmental spending, debt service, a
+ * citywide savings assumption) that bring the departments to the budget's total, and staff
+ * positions by department. Every number from departmentBudgets() in src/lib/department-budgets.ts.
+ * Styles are inline so they ship only with this view, never on a deficit-plan city's page.
+ */
+import Sourced from '../Sourced.astro';
+import Base from '../../layouts/Base.astro';
+import { budgetFor } from '../../lib/budget';
+import type { City } from '../../lib/cities';
+import { fy } from '../../lib/city-settings';
+import { departmentBudgets } from '../../lib/department-budgets';
+import { fullNames } from '../../lib/departments';
+import { familiesFor } from '../../lib/families';
+import { shortMoney } from '../../lib/format';
+
+interface Props {
+  city: City;
+}
+
+const { city } = Astro.props;
+const budget = budgetFor(city)!;
+const label = (y: number) => fy(city.budget.labels, y);
+const p = departmentBudgets(budget, familiesFor(city, budget), fullNames(city.path, budget), label);
+const y = label(p.year);
+const width = (v: number, max: number) => `${((Math.abs(v) / max) * 100).toFixed(3)}%`;
+const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 });
+---
+
+<Base title={`Departments · ${city.name}`} city={city} description={`What each of ${city.name}'s departments gets from the ${y} General Fund, per $100, and how many people work there. Every number links to the public document it came from.`}>
+  <div class="db-page wrap">
+    <section class="db-intro">
+      <h1>What each department gets in {y}</h1>
+      <p class="db-lede">
+        The City's departments have <Sourced city={city} figure={p.departments}>{shortMoney(p.departments.value)}</Sourced> of General Fund money this year.
+        Non-departmental costs and debt service add to that, and a citywide savings assumption takes some back, for{' '}
+        <Sourced city={city} figure={p.total}>{shortMoney(p.total.value)}</Sourced> in all.
+      </p>
+    </section>
+
+    <section class="db-section" aria-labelledby="db-depts">
+      <h2 id="db-depts">By department, per $100</h2>
+      <ol class="db-list" role="list">
+        {
+          p.rows.map((r) => (
+            <li class="db-row" id={r.id}>
+              <span class="db-name">
+                <span class="db-swatch" style={`background:${r.color}`} aria-hidden="true" />
+                {r.name}
+              </span>
+              <span class="db-amount num">
+                <Sourced city={city} figure={r.figure}>
+                  {shortMoney(r.figure.value)}
+                </Sourced>
+              </span>
+              <span class="db-per num">${r.per100.toFixed(2)} of every $100</span>
+              <span class="db-bar" aria-hidden="true">
+                <span style={`width:${width(r.figure.value, p.max)};background:${r.color}`} />
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+      <table class="db-sum">
+        <caption>From the departments to the General Fund's total, {y}</caption>
+        <tbody>
+          <tr>
+            <th scope="row">Departments</th>
+            <td class="num"><Sourced city={city} figure={p.departments}>{shortMoney(p.departments.value)}</Sourced></td>
+          </tr>
+          {
+            p.citywide.map((c) => (
+              <tr>
+                <th scope="row">{c.name}</th>
+                <td class="num">
+                  <Sourced city={city} figure={c.figure}>
+                    {c.figure.value < 0 ? '−' : '+'}
+                    {shortMoney(Math.abs(c.figure.value))}
+                  </Sourced>
+                </td>
+              </tr>
+            ))
+          }
+          <tr class="db-total">
+            <th scope="row">General Fund spending</th>
+            <td class="num"><Sourced city={city} figure={p.total}>{shortMoney(p.total.value)}</Sourced></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    {
+      p.staff.rows.length > 0 && (
+        <section class="db-section" aria-labelledby="db-staff">
+          <h2 id="db-staff">Staff positions</h2>
+          <p class="db-note">
+            Full-time-equivalent positions in every fund, not just the General Fund: <Sourced city={city} figure={p.staff.total}>{fte(p.staff.total.value)}</Sourced> in all. The
+            budget lists administrative departments one by one here.
+          </p>
+          <ol class="db-list" role="list">
+            {p.staff.rows.map((r) => (
+              <li class="db-row db-row--staff">
+                <span class="db-name">{r.name}</span>
+                <span class="db-amount num">
+                  <Sourced city={city} figure={r.figure}>
+                    {fte(r.figure.value)}
+                  </Sourced>
+                </span>
+                <span class="db-bar" aria-hidden="true">
+                  <span style={`width:${width(r.figure.value, p.staff.max)}`} />
+                </span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+  </div>
+</Base>
+
+<style is:inline>
+  .db-intro {
+    max-width: 44rem;
+    padding-block: clamp(2rem, 5vw, 3.5rem) 1.5rem;
+  }
+  .db-intro h1 {
+    margin: 0;
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: 1.1;
+  }
+  .db-lede {
+    margin: 1.25rem 0 0;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+  .db-section {
+    max-width: 52rem;
+    padding-block: 1rem 2rem;
+  }
+  .db-section h2 {
+    margin: 0 0 1rem;
+  }
+  .db-note {
+    max-width: 44rem;
+    margin: 0 0 1rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .db-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+  .db-row {
+    display: grid;
+    /* A fixed second column, so every row's bar ends at the same place. */
+    grid-template-columns: minmax(0, 1fr) 9.5rem;
+    grid-template-areas: 'name amount' 'bar per';
+    gap: 0.25rem 1rem;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .db-row--staff {
+    grid-template-areas: 'name amount' 'bar bar';
+  }
+  .db-name {
+    grid-area: name;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-weight: 700;
+    min-width: 0;
+  }
+  .db-swatch {
+    flex: none;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 2px;
+  }
+  .db-amount {
+    grid-area: amount;
+    font-weight: 800;
+    text-align: right;
+  }
+  .db-per {
+    grid-area: per;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .db-bar {
+    grid-area: bar;
+    display: block;
+    height: 0.5rem;
+    border-radius: 0.25rem;
+    background: var(--rule);
+    overflow: hidden;
+  }
+  .db-bar > span {
+    display: block;
+    height: 100%;
+    background: var(--bay);
+  }
+  .db-sum {
+    width: 100%;
+    max-width: 30rem;
+    margin-top: 1.5rem;
+    border-collapse: collapse;
+  }
+  .db-sum caption {
+    margin-bottom: 0.5rem;
+    color: var(--muted);
+    font-weight: 700;
+    text-align: left;
+  }
+  .db-sum th,
+  .db-sum td {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+    font-weight: 400;
+  }
+  .db-sum td {
+    text-align: right;
+  }
+  .db-total th,
+  .db-total td {
+    border-bottom: 0;
+    border-top: 2px solid var(--ink);
+    font-weight: 800;
+  }
+</style>

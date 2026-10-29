@@ -1,13 +1,13 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { CityBudget } from '../../src/data/types';
+import type { GapBudget } from '../../src/data/types';
 import type { Receipt } from '../../src/lib/receipts';
 
 // #30: a drawer opens a PDF at the quoted page, so every quote from a PDF must carry its page.
 const root = join(import.meta.dirname, '../..');
 const dist = join(root, 'dist');
-const b: CityBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
+const b: GapBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
 const isPdf = new Map(b.sources.map((s) => [s.id, /\.pdf$/i.test(new URL(s.url).pathname)]));
 const pages = (dir: string): string[] =>
   readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? pages(join(dir, e.name)) : e.name === 'index.html' ? [join(dir, e.name)] : []));

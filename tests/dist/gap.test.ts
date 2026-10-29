@@ -1,12 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { CityBudget } from '../../src/data/types';
+import type { GapBudget } from '../../src/data/types';
 import { unwrapFigures } from './figures';
 
 // Reads the rendered Gap page: every waterfall step's chip carries its exact figure.
 const root = join(import.meta.dirname, '../..');
-const b: CityBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
+const b: GapBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
 const html = readFileSync(join(root, 'dist/us/ca/berkeley/gap/index.html'), 'utf8');
 const unescape = (s: string) => s.replace(/&quot;/g, '"').replace(/&#34;/g, '"').replace(/&amp;/g, '&').replace(/&#39;/g, "'");
 const parse = (v: string) => Number(v.replace(/[$,]/g, '').replace('−', '-'));
@@ -37,8 +37,7 @@ describe('the Gap page waterfall', () => {
       }
       expect(s.at(-1)).toMatchObject({ kind: 'final', value: final, row: 13 });
       // …and the same numbers as budget.json, independently.
-      const key = year === 'fy2027' ? 'fy2027' : 'fy2028';
-      expect(b.deficitBridge.steps.find((x) => x.key === 'final-gap')![key]).toBe(final);
+      expect(b.deficitBridge.steps.find((x) => x.key === 'final-gap')!.years[Number(year.slice(2))]).toBe(final);
     });
   }
 

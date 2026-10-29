@@ -3,6 +3,7 @@
  * with its mid-year pace and change on last year, and the insight cards. All
  * from budget.json and revenue-groups.json.
  */
+import { REVENUE } from '../data/berkeley/columns.ts';
 import type { CityBudget, RevenueLine } from '../data/types.ts';
 import type { Figure } from './receipts.ts';
 import type { RevenueGroup } from './revenue-groups.ts';
@@ -15,9 +16,13 @@ export const VISIBLE = 14;
 
 export type Pace = 'behind' | 'on-pace' | 'ahead';
 /** Under 40% received by mid-year is behind, 40–60% on pace, over 60% ahead. */
-export const pace = (p: number | null): Pace => (p === null || p < 0.4 ? 'behind' : p <= 0.6 ? 'on-pace' : 'ahead');
+export const pace = (p: number | null | undefined): Pace => (p == null || p < 0.4 ? 'behind' : p <= 0.6 ? 'on-pace' : 'ahead');
+
+/** True when the revenue table has Berkeley's mid-year columns, which the pace view reads. */
+export const hasMidYearPace = (b: CityBudget) => Object.values(REVENUE).every((k) => b.revenue.columns.some((c) => c.key === k));
 
 export function revenuePage(b: CityBudget, groups: RevenueGroup[]) {
+  if (!hasMidYearPace(b)) throw new Error('revenue page: the mid-year pace view needs the adopted and mid-year actual columns');
   const rev = b.revenue;
   const line = (name: string) => {
     const l = rev.lines.find((x) => x.name === name);
@@ -25,7 +30,7 @@ export function revenuePage(b: CityBudget, groups: RevenueGroup[]) {
     return l;
   };
   const figure = (l: RevenueLine) => ({
-    adopted: { value: l.fy2026Adopted, label: `${l.name}: FY2026 adopted budget`, ref: l } satisfies Figure,
+    adopted: { value: l.values[REVENUE.adopted], label: `${l.name}: FY2026 adopted budget`, ref: l } satisfies Figure,
     received: { value: l.pctOfAdoptedReceived ?? 0, label: `${l.name}: share of the FY2026 budget received by mid-year`, ref: l, format: 'percent', tone: 'neutral' } satisfies Figure,
     change: {
       value: l.changeVsFy2025Pct ?? 0,
@@ -38,10 +43,10 @@ export function revenuePage(b: CityBudget, groups: RevenueGroup[]) {
 
   const lines = rev.lines.map((l) => ({ l, pace: pace(l.pctOfAdoptedReceived), figures: figure(l) }));
   const ranked: Record<Sort, string[]> = {
-    biggest: [...rev.lines].sort((a, c) => c.fy2026Adopted - a.fy2026Adopted).map((l) => l.name),
+    biggest: [...rev.lines].sort((a, c) => c.values[REVENUE.adopted] - a.values[REVENUE.adopted]).map((l) => l.name),
     // Fastest growing: biggest change on last year first; a line with no FY2025 figure goes last.
     fastest: [...rev.lines]
-      .sort((a, c) => (c.changeVsFy2025Pct ?? -Infinity) - (a.changeVsFy2025Pct ?? -Infinity) || c.fy2026Adopted - a.fy2026Adopted)
+      .sort((a, c) => (c.changeVsFy2025Pct ?? -Infinity) - (a.changeVsFy2025Pct ?? -Infinity) || c.values[REVENUE.adopted] - a.values[REVENUE.adopted])
       .map((l) => l.name),
     az: [...rev.lines].sort((a, c) => a.name.localeCompare(c.name)).map((l) => l.name),
   };
@@ -67,7 +72,7 @@ export function revenuePage(b: CityBudget, groups: RevenueGroup[]) {
       value: s.item.adopted,
       label: `${s.item.name}: FY2026 adopted budget, ${s.item.lines.length} line ${s.item.lines.length === 1 ? 'item' : 'items'}`,
       ref: s.item.lines[0],
-      ...(s.item.lines.length > 1 ? { parts: s.item.lines.map((l) => ({ label: l.name, value: l.fy2026Adopted })) } : {}),
+      ...(s.item.lines.length > 1 ? { parts: s.item.lines.map((l) => ({ label: l.name, value: l.values[REVENUE.adopted] })) } : {}),
     } satisfies Figure,
   }));
 
@@ -78,27 +83,27 @@ export function revenuePage(b: CityBudget, groups: RevenueGroup[]) {
   const property = groups.find((g) => g.id === 'property-tax')!;
 
   return {
-    total: { value: rev.total.fy2026Adopted, label: 'General Fund revenue and transfers, FY2026 adopted', ref: rev.total } satisfies Figure,
+    total: { value: rev.total.values[REVENUE.adopted], label: 'General Fund revenue and transfers, FY2026 adopted', ref: rev.total } satisfies Figure,
     received: rev.total.pctOfAdoptedReceived ?? 0,
     totalPace: pace(rev.total.pctOfAdoptedReceived),
     lineCount: rev.lines.length,
     chart,
     property,
     lines: lines.map((x) => ({ ...x, rank: rank(x.l.name) })),
-    max: Math.max(...rev.lines.map((l) => l.fy2026Adopted)),
+    max: Math.max(...rev.lines.map((l) => l.values[REVENUE.adopted])),
     insights: {
       transfer: { line: transfer, measureP, figure: figure(transfer).change, measurePFigure: figure(measureP).change },
       timing: { line: blt, figure: figure(blt).received },
       transfers: {
         line: transfers,
         figure: {
-          value: transfers.fy2026MidYearActual,
+          value: transfers.values[REVENUE.midYear],
           label: 'Transfers in, received by mid-year FY2026',
           ref: transfers,
           tone: 'one-time',
           parts: [
-            { label: 'FY2025 mid-year', value: transfers.fy2025MidYearActual },
-            { label: 'Increase', value: transfers.changeVsFy2025 },
+            { label: 'FY2025 mid-year', value: transfers.values[REVENUE.priorMidYear] },
+            { label: 'Increase', value: transfers.changeVsFy2025! },
           ],
         } satisfies Figure,
       },

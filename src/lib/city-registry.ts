@@ -24,6 +24,8 @@ export interface City extends CityMeta, CitySettings {
   dataDir: string;
   /** A test fixture: noindex, and in no list of cities. */
   fixture: boolean;
+  /** Built and tested but not launched ("draft": true in city.json): noindex, and in no list of cities. */
+  draft: boolean;
 }
 
 const SEGMENT = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -66,6 +68,9 @@ export function parseCity(file: string, meta: unknown, exists: (path: string) =>
   // reserves.json is the city's own; everything else comes from where its budget data lives.
   const settings = parseSettings(file, record, (name) => exists(`${name === 'reserves.json' ? dir : dataDir}${name}`));
   if (!real && settings.featured) throw new Error(`${file}: a fixture can't be the featured city`);
+  if (record.draft !== undefined && typeof record.draft !== 'boolean') throw new Error(`${file}: "draft" must be true or false`);
+  const draft = record.draft === true;
+  if (draft && settings.featured) throw new Error(`${file}: a draft city can't be the featured city`);
   const { name, state: stateName, stateCode, country: countryName, countryCode, government } = typed;
   return {
     name,
@@ -80,6 +85,7 @@ export function parseCity(file: string, meta: unknown, exists: (path: string) =>
     dir,
     dataDir,
     fixture: !real,
+    draft,
   };
 }
 

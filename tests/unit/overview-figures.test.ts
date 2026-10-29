@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { gapPlan } from '../../src/data/types';
 import { budgetFor } from '../../src/lib/budget';
 import { cities } from '../../src/lib/cities';
 import { familiesFor } from '../../src/lib/families';
@@ -8,7 +9,7 @@ import { overview } from '../../src/lib/overview';
 import { groupRevenue, revenueGroupsFor } from '../../src/lib/revenue-groups';
 
 const city = cities[0];
-const budget = budgetFor(city)!;
+const budget = gapPlan(budgetFor(city)!, 'test');
 const families = familiesFor(city, budget);
 const groups = revenueGroupsFor(city, budget);
 const o = overview(budget, families, groups);
@@ -17,7 +18,7 @@ const defs = JSON.parse(readFileSync(join(import.meta.dirname, '../../data/citie
 describe('revenue groups', () => {
   it('cover every revenue line once and add up to the TOTAL row (±2)', () => {
     expect(groups).toHaveLength(11);
-    expect(Math.abs(groups.reduce((a, g) => a + g.adopted, 0) - budget.revenue.total.fy2026Adopted)).toBeLessThanOrEqual(2);
+    expect(Math.abs(groups.reduce((a, g) => a + g.adopted, 0) - budget.revenue.total.values['adopted-2026'])).toBeLessThanOrEqual(2);
   });
 
   it('refuse a line in two groups, a missing line, or an unknown one', () => {
@@ -35,7 +36,7 @@ describe('revenue groups', () => {
   it('make property tax about 1 in 3, and home-sale taxes about 10%', () => {
     expect(Math.round(o.revenue.property.share * 100)).toBe(33);
     expect(o.revenue.oneIn).toBe(3);
-    expect(Math.round(o.revenue.transfer.share * 100)).toBe(10);
+    expect(Math.round(o.revenue.transfer!.share * 100)).toBe(10);
   });
 });
 
@@ -74,7 +75,7 @@ describe('overview figures', () => {
   it('follows the data when it changes', () => {
     const b = structuredClone(budget);
     b.citedFacts.growth.spendingRate = 0.09;
-    b.fte.scenarios.find((s) => s.key === 'without-sales-tax')!.fy2027BaselineFte = 1500;
+    b.staffing.fte = 1500;
     const changed = overview(b, families, groups);
     expect(Math.round(changed.growth.series.at(-1)!.spending)).toBe(237);
     expect(changed.fte.value).toBe(1500);

@@ -3,7 +3,8 @@
  * softened amount and net cut for both years, the row order for every
  * year × tax × sort view, and the receipts behind each number.
  */
-import type { CityBudget, DepartmentReduction } from '../data/types.ts';
+import type { CityBudget, GapBudget, DepartmentReduction } from '../data/types.ts';
+import { departmentsOf } from './families.ts';
 import type { Families } from './families.ts';
 import { dataDirOf } from './cities.ts';
 import type { Figure } from './receipts.ts';
@@ -16,7 +17,7 @@ const displayFiles = import.meta.glob<{ shortNames: Record<string, string>; full
 
 function names(cityPath: string, b: CityBudget, key: 'shortNames' | 'fullNames'): Record<string, string> {
   const names = displayFiles[`${dataDirOf(cityPath)}departments.json`]?.[key] ?? {};
-  const ids = new Set(b.departmentReductions[0].departments.map((d) => d.id));
+  const ids = new Set(departmentsOf(b).map((d) => d.id));
   for (const id of Object.keys(names)) if (!ids.has(id)) throw new Error(`${cityPath}departments.json: "${id}" isn't a department`);
   return names;
 }
@@ -32,20 +33,20 @@ export function shortNames(cityPath: string, b: CityBudget): Record<string, stri
  */
 export function fullNames(cityPath: string, b: CityBudget): Record<string, string> {
   const spelled = names(cityPath, b, 'fullNames');
-  const out = Object.fromEntries(b.departmentReductions[0].departments.map((d) => [d.id, spelled[d.id] ?? d.name]));
+  const out = Object.fromEntries(b.generalFund[0].lines.filter((l) => l.kind === 'department').map((d) => [d.id, spelled[d.id] ?? d.name]));
   for (const [id, n] of Object.entries(out))
     if (/\(|\b(Dir|Svcs|Rec|Dept)\.?\b/.test(n)) throw new Error(`${cityPath}departments.json: "${id}" needs a fullNames entry; "${n}" is abbreviated`);
   return out;
 }
 
 /** The department waffle's squares: each department's full name and family color, linking to its details. */
-export function departmentItems(cityPath: string, b: CityBudget, shares: Share<DepartmentReduction>[], families: Families): WaffleItem[] {
+export function departmentItems(cityPath: string, b: CityBudget, shares: Share<{ id: string; amount: number }>[], families: Families): WaffleItem[] {
   const name = fullNames(cityPath, b);
   return shares.map((s) => ({
     id: s.item.id,
     name: name[s.item.id],
     color: families.color(s.item.id),
-    value: s.item.baseline,
+    value: s.item.amount,
     squares: s.squares,
     exact: s.exact,
     href: `${cityPath}departments/#${s.item.id}`,
@@ -75,17 +76,17 @@ export function byOutcome<R extends { years: Record<Year, YearView> }>(rows: R[]
   return { differs, same, max };
 }
 
-export const YEARS = ['fy2027', 'fy2028'] as const;
 export const TAXES = ['passes', 'fails'] as const;
 export const SORTS = ['budget', 'cut'] as const;
-export type Year = (typeof YEARS)[number];
+/** A budget year's key in the page's radios, ids and URL: "fy2027". */
+export type Year = `fy${number}`;
+export const yearKey = (year: number): Year => `fy${year}`;
 export type Tax = (typeof TAXES)[number];
 export type Sort = (typeof SORTS)[number];
 
 /** Not drawn: an accounting line, cut to zero (see the page's footnote). */
 export const EXCLUDED = ['it-cost-allocation-plan'];
 
-const yearLabel = (y: Year) => (y === 'fy2027' ? 'FY2027' : 'FY2028');
 
 export interface YearView {
   d: DepartmentReduction;
@@ -100,17 +101,25 @@ export interface YearView {
   };
 }
 
-export function departmentsPage(b: CityBudget, families: Families, names: Record<string, string> = {}) {
+/**
+ * `years` are the city's budget years (city.json) and `yearLabel` names one in the city's style ("FY2027"):
+ * every table, label and view is per year, in that order, and the first year is the default view.
+ */
+export function departmentsPage(b: GapBudget, families: Families, names: Record<string, string>, years: number[], yearLabel: (year: number) => string) {
+  const YEARS = years.map(yearKey);
+  const labelOf = Object.fromEntries(years.map((y) => [yearKey(y), yearLabel(y)])) as Record<Year, string>;
   const byYear = Object.fromEntries(
-    YEARS.map((y) => {
-      const table = b.departmentReductions.find((t) => t.year === yearLabel(y))!;
+    years.map((year) => {
+      const table = b.departmentReductions.find((t) => t.year === year);
+      if (!table) throw new Error(`departments: no department table for ${yearLabel(year)}`);
       const shares = new Map(per100(table.departments, (d) => d.baseline).map((s) => [s.item.id, s.exact]));
-      return [y, { table, shares }];
+      return [yearKey(year), { table, shares }];
     }),
-  ) as Record<Year, { table: CityBudget['departmentReductions'][number]; shares: Map<string, number> }>;
+  ) as Record<Year, { table: GapBudget['departmentReductions'][number]; shares: Map<string, number> }>;
+  const [first] = YEARS;
 
   const view = (y: Year, d: DepartmentReduction): YearView => {
-    const L = `${d.name}, ${yearLabel(y)}`;
+    const L = `${d.name}, ${labelOf[y]}`;
     return {
       d,
       per100: byYear[y].shares.get(d.id)!,
@@ -136,11 +145,11 @@ export function departmentsPage(b: CityBudget, families: Families, names: Record
     };
   };
 
-  const ids = byYear.fy2027.table.departments.map((d) => d.id).filter((id) => !EXCLUDED.includes(id));
+  const ids = byYear[first].table.departments.map((d) => d.id).filter((id) => !EXCLUDED.includes(id));
   const rows = ids.map((id) => {
-    const years = Object.fromEntries(YEARS.map((y) => [y, view(y, byYear[y].table.departments.find((d) => d.id === id)!)])) as Record<Year, YearView>;
-    const name = years.fy2027.d.name;
-    return { id, name, display: names[id] ?? name, charter: years.fy2027.d.charter, family: families.of(id), color: families.color(id), years };
+    const views = Object.fromEntries(YEARS.map((y) => [y, view(y, byYear[y].table.departments.find((d) => d.id === id)!)])) as Record<Year, YearView>;
+    const name = views[first].d.name;
+    return { id, name, display: names[id] ?? name, charter: views[first].d.charter, family: families.of(id), color: families.color(id), years: views };
   });
 
   // Row order for every view: biggest baseline first, or deepest net cut % first.
@@ -158,23 +167,25 @@ export function departmentsPage(b: CityBudget, families: Families, names: Record
 
   const max = Object.fromEntries(YEARS.map((y) => [y, Math.max(...rows.map((r) => r.years[y].d.baseline))])) as Record<Year, number>;
   const excluded = EXCLUDED.map((id) => {
-    const d = byYear.fy2027.table.departments.find((x) => x.id === id)!;
-    return { d, figure: { value: d.baseline, label: `${d.name}, FY2027: baseline (cut entirely)`, ref: d } satisfies Figure };
+    const d = byYear[first].table.departments.find((x) => x.id === id)!;
+    return { d, figure: { value: d.baseline, label: `${d.name}, ${labelOf[first]}: baseline (cut entirely)`, ref: d } satisfies Figure };
   });
-  const total = byYear.fy2027.table.total;
-  const safety = rows.filter((r) => r.family.id === 'safety').sort((a, c) => c.years.fy2027.d.baseline - a.years.fy2027.d.baseline);
-  const safetyShare = safety.reduce((a, r) => a + r.years.fy2027.per100, 0) / 100;
+  const total = byYear[first].table.total;
+  const safety = rows.filter((r) => r.family.id === 'safety').sort((a, c) => c.years[first].d.baseline - a.years[first].d.baseline);
+  const safetyShare = safety.reduce((a, r) => a + r.years[first].per100, 0) / 100;
 
   return {
+    /** The year keys, in order; the first is the default view. */
+    years: YEARS,
     rows,
     order,
     /** Shown before anything is selected: the first row in the default view. */
-    defaultId: rows.find((r) => order[r.id]['fy2027-passes-budget'] === 0)!.id,
+    defaultId: rows.find((r) => order[r.id][`${first}-passes-budget`] === 0)!.id,
     max,
     excluded,
-    note: byYear.fy2027.table.note.replace(/^Note:\s*/, ''),
+    note: byYear[first].table.note.replace(/^Note:\s*/, ''),
     total: {
-      cut: { value: total.reduction, label: 'FY2027 proposed department cuts, citywide', ref: total, tone: 'short' } satisfies Figure,
+      cut: { value: total.reduction, label: `${labelOf[first]} proposed department cuts, citywide`, ref: total, tone: 'short' } satisfies Figure,
       pct: total.reductionPct,
       baseline: total.baseline,
     },
