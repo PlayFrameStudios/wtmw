@@ -43,6 +43,8 @@ export interface DocRef {
   /** Absent for a web page. */
   page?: number;
   quote: string;
+  /** For a figure read from a table row: the heading of its column, as printed. */
+  column?: string;
 }
 
 export interface Source {
@@ -129,8 +131,9 @@ export interface BudgetSize {
 export interface CapitalPlan {
   title: string;
   years: number[];
-  lines: (DocRef & { name: string; years: ByYear; total: number })[];
-  total: DocRef & { years: ByYear; total: number };
+  /** The ref is the five-year total's; `cites` holds each year's. */
+  lines: (DocRef & { name: string; years: ByYear; cites?: Record<number, DocRef>; total: number })[];
+  total: DocRef & { years: ByYear; cites?: Record<number, DocRef>; total: number };
 }
 
 /** Pension obligations as the budget reports them. */

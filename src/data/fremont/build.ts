@@ -14,10 +14,13 @@ import { SCHEMA_VERSION } from '../types.ts';
 export interface FremontDocuments {
   notes: CityBudget['notes'];
   sources: Omit<Source, 'number'>[];
-  tables: Record<'generalFund' | 'forecast' | 'history' | 'allFunds' | 'positions' | 'pension' | 'capitalPlan', TableSpec>;
+  tables: Record<'generalFund' | 'forecast' | 'history' | 'reserves' | 'allFunds' | 'positions' | 'pension' | 'capitalPlan', TableSpec>;
   quotes: Record<string, DocRef>;
-  /** Terms quoted from the adopted budget's glossary: the term's line and its definition, as printed. */
-  glossary: { term: string; source: SourceId; page: number; definition: string }[];
+  /**
+   * Terms quoted from the adopted budget's glossary: the term's line and its definition, as printed. A term
+   * the glossary doesn't define is defined from the text: `quote` is the City's words, and the definition holds them verbatim.
+   */
+  glossary: { term: string; source: SourceId; page: number; definition: string; quote?: string }[];
 }
 
 /** The budget year: FY 2026/27, by the year it ends in. */
@@ -148,6 +151,26 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
   }
   tieOut(REVENUES.map((r) => history.row(r)), history.row('Total Revenues'), 'actual-2025', history.where);
 
+  // The reserves table (p.73): each reserve's balance, increase and use. Its balances are the summary's, each
+  // balance carries forward, and what sources leave after uses is the Contingency Reserve's increase plus the
+  // unreserved balance: the Balance & Reserves page shows those two figures, never a difference of its own.
+  const reservesTable = readTable(file.tables.reserves, excerpts);
+  const reserveTableRows = reserveRows.map((r) => reservesTable.row(r.label));
+  for (const c of file.tables.reserves.columns) tieOut(reserveTableRows, reservesTable.row('Total General Fund Reserves'), c, reservesTable.where);
+  reserveTableRows.forEach((r, i) => {
+    check(reservesTable.where, r.values['balance-2027'] === reserveRows[i].values[ADOPTED], `"${r.label}" ends at ${r.values['balance-2027']}, but the summary says ${reserveRows[i].values[ADOPTED]}`);
+    check(reservesTable.where, r.values['balance-2026'] + r.values['increase-2027'] - r.values['use-2027'] === r.values['balance-2027'], `"${r.label}" doesn't carry forward`);
+  });
+  const contingencyIncrease = reserveTableRows[0];
+  const leftOver = totalSources.values[ADOPTED] - totalUses.values[ADOPTED];
+  const added = reserveTableRows.reduce((a, r) => a + r.values['increase-2027'] - r.values['use-2027'], 0);
+  check(gf.where, reserveTableRows[1].values['increase-2027'] === 0 && reserveTableRows[1].values['use-2027'] === 0, 'the Budget Uncertainty Reserve changes, so "left over" is more than the Contingency Reserve\'s increase');
+  check(gf.where, leftOver === added + unreserved.values[ADOPTED], `sources less uses is ${leftOver}, but the reserves' increase and the unreserved balance are ${added} and ${unreserved.values[ADOPTED]}`);
+  for (const c of ['projected-2028', 'projected-2029']) {
+    tieOut(['Contingency Reserve', 'Budget Uncertainty Reserve'].map((r) => forecast.row(r)), forecast.row('Reserved Fund Balance'), c, forecast.where);
+    tieOut([forecast.row('Reserved Fund Balance'), forecast.row('Unreserved Fund Balance')], forecast.row('Total Ending Fund Balance'), c, forecast.where);
+  }
+
   // Revenue: each category's actual (FY 2024/25), adopted, revised and estimate (FY 2025/26), adopted
   // (FY 2026/27) and projected (FY 2027/28-2028/29) figures, each cited to the page that prints it.
   const columns: BudgetColumn[] = [
@@ -173,8 +196,17 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
         'projected-2028': ahead.values['projected-2028'],
         'projected-2029': ahead.values['projected-2029'],
       },
-      cites: { 'actual-2025': past.ref, 'projected-2028': ahead.ref, 'projected-2029': ahead.ref },
-      ...row.ref,
+      // Each column's own receipt: the page that prints it, and the column it's in.
+      cites: {
+        'actual-2025': past.at('actual-2025'),
+        'adopted-2026': row.at('adopted-2026'),
+        'revised-2026': row.at('revised-2026'),
+        'estimate-2026': row.at('estimate-2026'),
+        [ADOPTED]: row.at(ADOPTED),
+        'projected-2028': ahead.at('projected-2028'),
+        'projected-2029': ahead.at('projected-2029'),
+      },
+      ...row.at(ADOPTED),
     };
   };
   const revenue = {
@@ -195,10 +227,10 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
       note: 'adopted',
       noun: 'department budgets',
       lines: [
-        ...departmentRows.map((r) => ({ id: slug(r.label), name: r.label, kind: 'department' as const, amount: r.values[ADOPTED], ...r.ref })),
-        ...citywideRows.map((r, i) => ({ id: slug(CITYWIDE[i][1]), name: CITYWIDE[i][1], kind: 'citywide' as const, amount: r.values[ADOPTED], ...r.ref })),
+        ...departmentRows.map((r) => ({ id: slug(r.label), name: r.label, kind: 'department' as const, amount: r.values[ADOPTED], ...r.at(ADOPTED) })),
+        ...citywideRows.map((r, i) => ({ id: slug(CITYWIDE[i][1]), name: CITYWIDE[i][1], kind: 'citywide' as const, amount: r.values[ADOPTED], ...r.at(ADOPTED) })),
       ],
-      total: { amount: totalExpenditures.values[ADOPTED], ...totalExpenditures.ref },
+      total: { amount: totalExpenditures.values[ADOPTED], ...totalExpenditures.at(ADOPTED) },
     },
   ];
 
@@ -217,18 +249,18 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
     year: YEAR,
     fte: citywide.values[String(YEAR)],
     basis: 'adopted, all funds',
-    byDepartment: byDepartment.map((r) => ({ name: r.label, fte: r.values[String(YEAR)], ...r.ref })),
-    ...citywide.ref,
+    byDepartment: byDepartment.map((r) => ({ name: r.label, fte: r.values[String(YEAR)], ...r.at(String(YEAR)) })),
+    ...citywide.at(String(YEAR)),
   };
 
   // Size: all funds (p.32) and the General Fund (p.66), total uses; the all-funds table's General Funds column must match.
   const allFunds = readTable(file.tables.allFunds, excerpts);
   const allUses = allFunds.row('Total Uses');
   check(allFunds.where, allUses.values.general === totalUses.values[ADOPTED], `General Funds total uses ${allUses.values.general} isn't the summary's ${totalUses.values[ADOPTED]}`);
-  tieOut(['general', 'cost-center', 'special-revenue', 'capital'].map((c) => ({ label: c, values: { v: allUses.values[c] }, ref: allUses.ref })), { label: 'Total', values: { v: allUses.values.total }, ref: allUses.ref }, 'v', allFunds.where);
+  tieOut(['general', 'cost-center', 'special-revenue', 'capital'].map((c) => ({ label: c, values: { v: allUses.values[c] }, ref: allUses.ref, at: allUses.at })), { label: 'Total', values: { v: allUses.values.total }, ref: allUses.ref, at: allUses.at }, 'v', allFunds.where);
   const size = {
-    allFunds: { amount: allUses.values.total, note: 'total uses, including transfers between funds', ...allUses.ref },
-    generalFund: { amount: totalUses.values[ADOPTED], note: 'total uses, including transfers out', ...totalUses.ref },
+    allFunds: { amount: allUses.values.total, note: 'total uses, including transfers between funds', ...allUses.at('total') },
+    generalFund: { amount: totalUses.values[ADOPTED], note: 'total uses, including transfers out', ...totalUses.at(ADOPTED) },
   };
 
   // Capital plan by program category (p.120), in millions to the thousand: each row's years add up to its five-year total.
@@ -244,11 +276,12 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
   }
   for (const c of [...years.map(String), 'total']) tieOut(capitalRows, cipTotal, c, cip.where, rounding(capitalRows.length + 1));
   const byYear = (r: TableRow) => Object.fromEntries(years.map((y) => [y, r.values[String(y)]]));
+  const citesByYear = (r: TableRow) => Object.fromEntries(years.map((y) => [y, r.at(String(y))]));
   const capitalPlan = {
     title: 'Capital Improvement Program, FY 2025/26–2029/30, by program category',
     years,
-    lines: capitalRows.map((r) => ({ name: r.label, years: byYear(r), total: r.values.total, ...r.ref })),
-    total: { years: byYear(cipTotal), total: cipTotal.values.total, ...cipTotal.ref },
+    lines: capitalRows.map((r) => ({ name: r.label, years: byYear(r), cites: citesByYear(r), total: r.values.total, ...r.at('total') })),
+    total: { years: byYear(cipTotal), cites: citesByYear(cipTotal), total: cipTotal.values.total, ...cipTotal.at('total') },
   };
 
   // Pension (p.39): the combined column.
@@ -259,9 +292,9 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
   const valuation = quote('pensionValuation');
   const pension = {
     asOf: normalize(valuation.quote).replace(/^Valuation Date: /, ''),
-    unfunded: { amount: ual.values.combined, ...ual.ref },
-    fundedRatio: { rate: ratio.values.combined, ...ratio.ref },
-    contribution: { amount: contribution.values.combined, year: YEAR, ...contribution.ref },
+    unfunded: { amount: ual.values.combined, ...ual.at('combined') },
+    fundedRatio: { rate: ratio.values.combined, ...ratio.at('combined') },
+    contribution: { amount: contribution.values.combined, year: YEAR, ...contribution.at('combined') },
   };
   for (const r of [ual, contribution]) check(pensionTable.where, Math.abs(r.values.miscellaneous + r.values.safety - r.values.combined) < 1, `"${r.label}" doesn't add up`);
 
@@ -276,8 +309,11 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
     cipTransfer: factFrom('cipTransfer', quote('cipTransfer'), 'money'),
     salesTaxRecovery: factFrom('salesTaxRecovery', quote('salesTaxRecovery'), 'money'),
     uncertaintyReserveDraw: factFrom('uncertaintyReserveDraw', quote('uncertaintyReserveDraw'), 'money'),
+    // The City's own framing of where the money goes, and the second reduction it can't yet restore.
+    directCostShare: factFrom('directCostShare', quote('directCostShare'), 'percent'),
+    personnelNotRestored: factFrom('personnelNotRestored', quote('personnelNotRestored'), 'money'),
   };
-  const row = (r: TableRow, column = ADOPTED): Fact => ({ ...r.ref, value: r.values[column], format: 'money' });
+  const row = (r: TableRow, column = ADOPTED): Fact => ({ ...r.at(column), value: r.values[column], format: 'money' });
   Object.assign(facts, {
     beginningBalance: row(beginning),
     totalRevenues: row(totalRevenues),
@@ -293,8 +329,28 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
     // FY 2024/25: the reserve before and after the draw (the history table).
     uncertaintyReserve2024: row(history.row('Budget Uncertainty Reserve'), 'actual-2024'),
     uncertaintyReserve2025: row(history.row('Budget Uncertainty Reserve'), 'actual-2025'),
+    unreservedBalance: row(unreserved),
+    // What is left after uses: the Contingency Reserve's increase (the reserves table) and the unreserved balance.
+    contingencyIncrease: row(contingencyIncrease, 'increase-2027'),
+    // The City's forecast (p.87): each reserve and the unreserved balance, two years out.
+    ...Object.fromEntries(
+      (['projected-2028', 'projected-2029'] as const).flatMap((c) => {
+        const y = c.slice(-4);
+        return [
+          [`forecastContingency${y}`, row(forecast.row('Contingency Reserve'), c)],
+          [`forecastUncertainty${y}`, row(forecast.row('Budget Uncertainty Reserve'), c)],
+          [`forecastUnreserved${y}`, row(forecast.row('Unreserved Fund Balance'), c)],
+        ];
+      }),
+    ),
   });
-  const statements = { adopted: quote('adopted'), contextYears: quote('contextYears'), proposedBalanced: quote('proposedBalanced') };
+  const statements = {
+    adopted: quote('adopted'),
+    contextYears: quote('contextYears'),
+    proposedBalanced: quote('proposedBalanced'),
+    noUncertaintyFunding: quote('noUncertaintyFunding'),
+    forecastSalary: quote('forecastSalary'),
+  };
   // The sentences agree with the tables: the savings assumption is the summary's Citywide Savings line, and
   // the Contingency Reserve is 16.7% of expenditures and transfers out.
   const savings = citywideRows[2].values[ADOPTED];
@@ -302,10 +358,16 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
   const policy = facts.contingencyPolicy.value * (totalExpenditures.values[ADOPTED] + transfersOut.values[ADOPTED]);
   check('contingency reserve', Math.abs(policy - reserveRows[0].values[ADOPTED]) < 1_000, `16.7% of expenditures and transfers out is ${Math.round(policy)}, but the reserve is ${reserveRows[0].values[ADOPTED]}`);
 
-  // The glossary: each term's line and its definition, together on the page as printed.
+  // The glossary: each term's line and its definition, together on the page as printed, or a definition
+  // from the text that shows the City's words exactly.
   const glossary = file.glossary.map((g) => {
-    const ref: DocRef = { source: g.source, page: g.page, quote: `${g.term} ${g.definition}` };
-    checkQuote(ref, excerpts, `documents.json glossary "${g.term}"`);
+    const where = `documents.json glossary "${g.term}"`;
+    if (g.quote !== undefined) {
+      check(where, normalize(g.definition).includes(normalize(g.quote)), 'the definition must hold its quote, word for word');
+      checkQuote({ source: g.source, page: g.page, quote: g.quote }, excerpts, where);
+      return { term: g.term, definition: g.definition, source: g.source, page: g.page, quote: g.quote };
+    }
+    checkQuote({ source: g.source, page: g.page, quote: `${g.term} ${g.definition}` }, excerpts, where);
     return { term: g.term, definition: g.definition, source: g.source, page: g.page, quote: g.definition };
   });
 

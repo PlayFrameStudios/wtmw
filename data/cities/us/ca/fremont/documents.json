@@ -58,6 +58,12 @@
         "revised-2026",
         "estimate-2026",
         "adopted-2027"
+      ],
+      "headings": [
+        "2025/26 Adopted",
+        "2025/26 Revised",
+        "2025/26 Est Actual",
+        "2026/27 Adopted"
       ]
     },
     "forecast": {
@@ -70,6 +76,12 @@
         "adopted-2027",
         "projected-2028",
         "projected-2029"
+      ],
+      "headings": [
+        "2025/26 Est Actual",
+        "2026/27 Adopted",
+        "2027/28 Projected",
+        "2028/29 Projected"
       ]
     },
     "history": {
@@ -84,6 +96,32 @@
         "actual-2025",
         "estimate-2026",
         "adopted-2027"
+      ],
+      "headings": [
+        "2021/22 Actual",
+        "2022/23 Actual",
+        "2023/24 Actual",
+        "2024/25 Actual",
+        "2025/26 Est Actual",
+        "2026/27 Adopted"
+      ]
+    },
+    "reserves": {
+      "source": "S1",
+      "page": 79,
+      "title": "General Fund Reserves (Thousands of Dollars)",
+      "unit": 1000,
+      "columns": [
+        "balance-2026",
+        "increase-2027",
+        "use-2027",
+        "balance-2027"
+      ],
+      "headings": [
+        "FY 2025/26 Balance",
+        "FY 2026/27 Increase",
+        "FY 2026/27 Projected Use",
+        "FY 2026/27 Balance"
       ]
     },
     "allFunds": {
@@ -97,6 +135,13 @@
         "special-revenue",
         "capital",
         "total"
+      ],
+      "headings": [
+        "General Funds",
+        "Cost Center Internal Service Funds",
+        "Special Revenue Funds",
+        "Capital Funds",
+        "Total"
       ]
     },
     "positions": {
@@ -111,6 +156,14 @@
         "2025",
         "2026",
         "2027"
+      ],
+      "headings": [
+        "2021/22",
+        "2022/23",
+        "2023/24",
+        "2024/25",
+        "2025/26",
+        "2026/27"
       ]
     },
     "pension": {
@@ -122,6 +175,11 @@
         "miscellaneous",
         "safety",
         "combined"
+      ],
+      "headings": [
+        "Miscellaneous",
+        "Safety",
+        "Combined"
       ]
     },
     "capitalPlan": {
@@ -136,6 +194,14 @@
         "2029",
         "2030",
         "total"
+      ],
+      "headings": [
+        "FY 2025/2026",
+        "FY 2026/2027",
+        "FY 2027/2028",
+        "FY 2028/2029",
+        "FY 2029/2030",
+        "Five Year Total"
       ]
     }
   },
@@ -144,6 +210,11 @@
       "source": "S1",
       "page": 33,
       "quote": "Population: 233,974"
+    },
+    "directCostShare": {
+      "source": "S1",
+      "page": 77,
+      "quote": "allocating 87% of the budget to direct costs for public safety and maintenance"
     },
     "pensionValuation": {
       "source": "S1",
@@ -154,6 +225,11 @@
       "source": "S1",
       "page": 71,
       "quote": "it does not provide capacity to restore the $3.2 million of ongoing maintenance support that was eliminated to balance the FY 2025/26 adopted budget"
+    },
+    "personnelNotRestored": {
+      "source": "S1",
+      "page": 71,
+      "quote": "the $3.1 million of ongoing personnel, supplies, and services reductions that were needed to rebalance the FY 2025/26 budget after labor negotiations concluded"
     },
     "salaryPlaceholder": {
       "source": "S1",
@@ -187,6 +263,16 @@
       "source": "S2",
       "page": 5,
       "quote": "Addition to reserves in FY 2024/25 shows $19.9 million of the Budget Uncertainty Reserve applied to address the one-time revenue shortfall due to the State’s sales tax recovery"
+    },
+    "noUncertaintyFunding": {
+      "source": "S1",
+      "page": 74,
+      "quote": "The adopted budget does not include funding to increase the General Fund Budget Uncertainty Reserve"
+    },
+    "forecastSalary": {
+      "source": "S1",
+      "page": 91,
+      "quote": "The placeholder salary adjustment of 2% included in the FY 2026/27 adopted budget is assumed to be part of a three-year agreement. Accordingly, additional 2% adjustments are included in the two forecast years."
     },
     "proposedBalanced": {
       "source": "S3",
@@ -224,6 +310,13 @@
       "definition": "The budget for a fund is balanced when total budgeted resources, including revenues, transfers in from other funds, and unallocated fund balance from previous years, meet or exceed total budgeted use of resources, including expenditures and transfers out to other funds."
     },
     {
+      "term": "Budget Uncertainty Reserve",
+      "source": "S1",
+      "page": 79,
+      "definition": "The Budget Uncertainty Reserve is intended to offset revenue shortfalls resulting from future economic downturns and unanticipated cost increases (including increases in fuel and utility prices and increases to CalPERS pension contribution requirements resulting from changes in actuarial assumptions, poor investment performance, or updated demographic data).",
+      "quote": "The Budget Uncertainty Reserve is intended to offset revenue shortfalls resulting from future economic downturns and unanticipated cost increases (including increases in fuel and utility prices and increases to CalPERS pension contribution requirements resulting from changes in actuarial assumptions, poor investment performance, or updated demographic data)."
+    },
+    {
       "term": "California Public Employees’ Retirement System (CalPERS)",
       "source": "S1",
       "page": 277,
@@ -234,6 +327,20 @@
       "source": "S1",
       "page": 278,
       "definition": "The five-year financial plan for improving assets and integrating debt service and capital assets maintenance, adopted in a separate budget document and updated every two years."
+    },
+    {
+      "term": "Citywide Savings",
+      "source": "S1",
+      "page": 73,
+      "definition": "A line in the General Fund summary that lowers total spending by an amount the City expects to go unspent, “to reflect the City’s historical experience of under-spending total allocated resources, primarily due to salary savings from vacant positions.”",
+      "quote": "to reflect the City’s historical experience of under-spending total allocated resources, primarily due to salary savings from vacant positions."
+    },
+    {
+      "term": "Contingency Reserve",
+      "source": "S1",
+      "page": 79,
+      "definition": "The General Fund Contingency Reserve is intended to mitigate the effects of unanticipated situations such as natural disasters and severe unforeseen events, as well as serving as backup liquidity to the Risk Management Fund if this need were to arise.",
+      "quote": "The General Fund Contingency Reserve is intended to mitigate the effects of unanticipated situations such as natural disasters and severe unforeseen events, as well as serving as backup liquidity to the Risk Management Fund if this need were to arise."
     },
     {
       "term": "Cost Center",

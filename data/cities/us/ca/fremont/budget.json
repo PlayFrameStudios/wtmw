@@ -64,7 +64,8 @@
           "amount": 898000,
           "source": "S1",
           "page": 72,
-          "quote": "City Council 700 694 646 898"
+          "quote": "City Council 700 694 646 898",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "community-development",
@@ -73,7 +74,8 @@
           "amount": 2286000,
           "source": "S1",
           "page": 72,
-          "quote": "Community Development 2,253 2,289 2,129 2,286"
+          "quote": "Community Development 2,253 2,289 2,129 2,286",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "community-services",
@@ -82,7 +84,8 @@
           "amount": 3256000,
           "source": "S1",
           "page": 72,
-          "quote": "Community Services 2,995 3,013 2,803 3,256"
+          "quote": "Community Services 2,995 3,013 2,803 3,256",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "economic-development",
@@ -91,7 +94,8 @@
           "amount": 1588000,
           "source": "S1",
           "page": 72,
-          "quote": "Economic Development 1,535 1,567 1,458 1,588"
+          "quote": "Economic Development 1,535 1,567 1,458 1,588",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "fire",
@@ -100,7 +104,8 @@
           "amount": 78517000,
           "source": "S1",
           "page": 72,
-          "quote": "Fire 77,086 77,282 74,982 78,517"
+          "quote": "Fire 77,086 77,282 74,982 78,517",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "human-services",
@@ -109,7 +114,8 @@
           "amount": 5558000,
           "source": "S1",
           "page": 72,
-          "quote": "Human Services 5,167 5,201 4,838 5,558"
+          "quote": "Human Services 5,167 5,201 4,838 5,558",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "maintenance-operations",
@@ -118,7 +124,8 @@
           "amount": 38861000,
           "source": "S1",
           "page": 72,
-          "quote": "Maintenance Operations 37,061 37,535 34,916 38,861"
+          "quote": "Maintenance Operations 37,061 37,535 34,916 38,861",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "police",
@@ -127,7 +134,8 @@
           "amount": 129087000,
           "source": "S1",
           "page": 72,
-          "quote": "Police 124,396 124,714 116,012 129,087"
+          "quote": "Police 124,396 124,714 116,012 129,087",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "public-works",
@@ -136,7 +144,8 @@
           "amount": 2326000,
           "source": "S1",
           "page": 72,
-          "quote": "Public Works 2,282 2,309 2,148 2,326"
+          "quote": "Public Works 2,282 2,309 2,148 2,326",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "administrative-departments",
@@ -145,7 +154,8 @@
           "amount": 23606000,
           "source": "S1",
           "page": 72,
-          "quote": "Administrative Departments 22,747 22,755 21,167 23,606"
+          "quote": "Administrative Departments 22,747 22,755 21,167 23,606",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "non-departmental",
@@ -154,7 +164,8 @@
           "amount": 4440000,
           "source": "S1",
           "page": 72,
-          "quote": "Non-departmental Expenditures 2,483 2,373 1,633 4,440"
+          "quote": "Non-departmental Expenditures 2,483 2,373 1,633 4,440",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "debt-service",
@@ -163,7 +174,8 @@
           "amount": 6249000,
           "source": "S1",
           "page": 72,
-          "quote": "Debt Service 7,327 7,327 7,327 6,249"
+          "quote": "Debt Service 7,327 7,327 7,327 6,249",
+          "column": "2026/27 Adopted"
         },
         {
           "id": "citywide-savings",
@@ -172,14 +184,16 @@
           "amount": -19700000,
           "source": "S1",
           "page": 72,
-          "quote": "Less: Citywide Savings (20,000) (17,000) - (19,700)"
+          "quote": "Less: Citywide Savings (20,000) (17,000) - (19,700)",
+          "column": "2026/27 Adopted"
         }
       ],
       "total": {
         "amount": 276972000,
         "source": "S1",
         "page": 72,
-        "quote": "Total Expenditures 266,032 270,059 270,059 276,972"
+        "quote": "Total Expenditures 266,032 270,059 270,059 276,972",
+        "column": "2026/27 Adopted"
       }
     }
   ],
@@ -241,22 +255,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Property Tax 118,943 130,525 140,361 145,460 152,527 158,193"
+            "quote": "Property Tax 118,943 130,525 140,361 145,460 152,527 158,193",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Property Tax 152,832 152,509 152,527 158,193",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Property Tax 152,832 152,509 152,527 158,193",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Property Tax 152,832 152,509 152,527 158,193",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Property Tax 152,832 152,509 152,527 158,193",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Property Tax 152,527 158,193 164,440 171,702"
+            "quote": "Property Tax 152,527 158,193 164,440 171,702",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Property Tax 152,527 158,193 164,440 171,702"
+            "quote": "Property Tax 152,527 158,193 164,440 171,702",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Property Tax 152,832 152,509 152,527 158,193"
+        "quote": "Property Tax 152,832 152,509 152,527 158,193",
+        "column": "2026/27 Adopted"
       },
       {
         "name": "Sales Tax",
@@ -273,22 +315,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Sales Tax 86,799 111,575 50,887 58,087 69,335 71,218"
+            "quote": "Sales Tax 86,799 111,575 50,887 58,087 69,335 71,218",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Sales Tax 65,484 68,484 69,335 71,218",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Sales Tax 65,484 68,484 69,335 71,218",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Sales Tax 65,484 68,484 69,335 71,218",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Sales Tax 65,484 68,484 69,335 71,218",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Sales Tax 69,335 71,218 73,369 75,585"
+            "quote": "Sales Tax 69,335 71,218 73,369 75,585",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Sales Tax 69,335 71,218 73,369 75,585"
+            "quote": "Sales Tax 69,335 71,218 73,369 75,585",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Sales Tax 65,484 68,484 69,335 71,218"
+        "quote": "Sales Tax 65,484 68,484 69,335 71,218",
+        "column": "2026/27 Adopted"
       },
       {
         "name": "Business Tax",
@@ -305,22 +375,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Business Tax 13,933 14,234 13,330 13,048 14,850 15,105"
+            "quote": "Business Tax 13,933 14,234 13,330 13,048 14,850 15,105",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Business Tax 13,414 14,814 14,850 15,105",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Business Tax 13,414 14,814 14,850 15,105",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Business Tax 13,414 14,814 14,850 15,105",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Business Tax 13,414 14,814 14,850 15,105",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Business Tax 14,850 15,105 15,634 16,184"
+            "quote": "Business Tax 14,850 15,105 15,634 16,184",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Business Tax 14,850 15,105 15,634 16,184"
+            "quote": "Business Tax 14,850 15,105 15,634 16,184",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Business Tax 13,414 14,814 14,850 15,105"
+        "quote": "Business Tax 13,414 14,814 14,850 15,105",
+        "column": "2026/27 Adopted"
       },
       {
         "name": "Hotel/Motel Tax",
@@ -337,22 +435,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Hotel/Motel Tax 4,722 6,012 6,071 6,195 6,911 7,256"
+            "quote": "Hotel/Motel Tax 4,722 6,012 6,071 6,195 6,911 7,256",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Hotel/Motel Tax 6,128 6,528 6,911 7,256",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Hotel/Motel Tax 6,128 6,528 6,911 7,256",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Hotel/Motel Tax 6,128 6,528 6,911 7,256",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Hotel/Motel Tax 6,128 6,528 6,911 7,256",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Hotel/Motel Tax 6,911 7,256 7,619 8,000"
+            "quote": "Hotel/Motel Tax 6,911 7,256 7,619 8,000",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Hotel/Motel Tax 6,911 7,256 7,619 8,000"
+            "quote": "Hotel/Motel Tax 6,911 7,256 7,619 8,000",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Hotel/Motel Tax 6,128 6,528 6,911 7,256"
+        "quote": "Hotel/Motel Tax 6,128 6,528 6,911 7,256",
+        "column": "2026/27 Adopted"
       },
       {
         "name": "Property Transfer Tax",
@@ -369,22 +495,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Property Transfer Tax 3,398 1,818 2,133 1,747 2,159 2,159"
+            "quote": "Property Transfer Tax 3,398 1,818 2,133 1,747 2,159 2,159",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Property Transfer Tax 1,879 1,879 2,159 2,159",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Property Transfer Tax 1,879 1,879 2,159 2,159",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Property Transfer Tax 1,879 1,879 2,159 2,159",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Property Transfer Tax 1,879 1,879 2,159 2,159",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Property Transfer Tax 2,159 2,159 2,224 2,290"
+            "quote": "Property Transfer Tax 2,159 2,159 2,224 2,290",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Property Transfer Tax 2,159 2,159 2,224 2,290"
+            "quote": "Property Transfer Tax 2,159 2,159 2,224 2,290",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Property Transfer Tax 1,879 1,879 2,159 2,159"
+        "quote": "Property Transfer Tax 1,879 1,879 2,159 2,159",
+        "column": "2026/27 Adopted"
       },
       {
         "name": "Paramedic Tax",
@@ -401,22 +555,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Paramedic Tax 1,209 1,212 1,223 1,228 1,224 1,231"
+            "quote": "Paramedic Tax 1,209 1,212 1,223 1,228 1,224 1,231",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Paramedic Tax 1,213 1,213 1,224 1,231",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Paramedic Tax 1,213 1,213 1,224 1,231",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Paramedic Tax 1,213 1,213 1,224 1,231",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Paramedic Tax 1,213 1,213 1,224 1,231",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Paramedic Tax 1,224 1,231 1,239 1,246"
+            "quote": "Paramedic Tax 1,224 1,231 1,239 1,246",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Paramedic Tax 1,224 1,231 1,239 1,246"
+            "quote": "Paramedic Tax 1,224 1,231 1,239 1,246",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Paramedic Tax 1,213 1,213 1,224 1,231"
+        "quote": "Paramedic Tax 1,213 1,213 1,224 1,231",
+        "column": "2026/27 Adopted"
       },
       {
         "name": "Franchise Fees",
@@ -433,22 +615,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Franchise Fees 11,213 11,813 12,595 13,426 13,413 13,967"
+            "quote": "Franchise Fees 11,213 11,813 12,595 13,426 13,413 13,967",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Franchise Fees 14,182 14,282 13,413 13,967",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Franchise Fees 14,182 14,282 13,413 13,967",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Franchise Fees 14,182 14,282 13,413 13,967",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Franchise Fees 14,182 14,282 13,413 13,967",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Franchise Fees 13,413 13,967 14,557 15,685"
+            "quote": "Franchise Fees 13,413 13,967 14,557 15,685",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Franchise Fees 13,413 13,967 14,557 15,685"
+            "quote": "Franchise Fees 13,413 13,967 14,557 15,685",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Franchise Fees 14,182 14,282 13,413 13,967"
+        "quote": "Franchise Fees 14,182 14,282 13,413 13,967",
+        "column": "2026/27 Adopted"
       },
       {
         "name": "Charges for Services",
@@ -465,22 +675,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Charges for Services 6,840 7,098 7,260 8,133 7,327 7,703"
+            "quote": "Charges for Services 6,840 7,098 7,260 8,133 7,327 7,703",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Charges for Services 8,150 7,298 7,327 7,703",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Charges for Services 8,150 7,298 7,327 7,703",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Charges for Services 8,150 7,298 7,327 7,703",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Charges for Services 8,150 7,298 7,327 7,703",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Charges for Services 7,327 7,703 7,809 7,918"
+            "quote": "Charges for Services 7,327 7,703 7,809 7,918",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Charges for Services 7,327 7,703 7,809 7,918"
+            "quote": "Charges for Services 7,327 7,703 7,809 7,918",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Charges for Services 8,150 7,298 7,327 7,703"
+        "quote": "Charges for Services 8,150 7,298 7,327 7,703",
+        "column": "2026/27 Adopted"
       },
       {
         "name": "Fines",
@@ -497,22 +735,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Fines 2,966 2,883 3,002 3,762 3,468 3,468"
+            "quote": "Fines 2,966 2,883 3,002 3,762 3,468 3,468",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Fines 3,608 3,608 3,468 3,468",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Fines 3,608 3,608 3,468 3,468",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Fines 3,608 3,608 3,468 3,468",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Fines 3,608 3,608 3,468 3,468",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Fines 3,468 3,468 3,468 3,468"
+            "quote": "Fines 3,468 3,468 3,468 3,468",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Fines 3,468 3,468 3,468 3,468"
+            "quote": "Fines 3,468 3,468 3,468 3,468",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Fines 3,608 3,608 3,468 3,468"
+        "quote": "Fines 3,608 3,608 3,468 3,468",
+        "column": "2026/27 Adopted"
       },
       {
         "name": "Use of Money and Property",
@@ -529,22 +795,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Use of Money and Property 1,202 3,346 4,622 5,278 3,923 3,676"
+            "quote": "Use of Money and Property 1,202 3,346 4,622 5,278 3,923 3,676",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Use of Money and Property 3,942 3,617 3,923 3,676",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Use of Money and Property 3,942 3,617 3,923 3,676",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Use of Money and Property 3,942 3,617 3,923 3,676",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Use of Money and Property 3,942 3,617 3,923 3,676",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Use of Money and Property 3,923 3,676 3,676 3,676"
+            "quote": "Use of Money and Property 3,923 3,676 3,676 3,676",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Use of Money and Property 3,923 3,676 3,676 3,676"
+            "quote": "Use of Money and Property 3,923 3,676 3,676 3,676",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Use of Money and Property 3,942 3,617 3,923 3,676"
+        "quote": "Use of Money and Property 3,942 3,617 3,923 3,676",
+        "column": "2026/27 Adopted"
       },
       {
         "name": "Intergovernmental",
@@ -561,22 +855,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Intergovernmental 22,593 430 2,098 653 727 641"
+            "quote": "Intergovernmental 22,593 430 2,098 653 727 641",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Intergovernmental 605 605 727 641",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Intergovernmental 605 605 727 641",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Intergovernmental 605 605 727 641",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Intergovernmental 605 605 727 641",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Intergovernmental 727 641 702 772"
+            "quote": "Intergovernmental 727 641 702 772",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Intergovernmental 727 641 702 772"
+            "quote": "Intergovernmental 727 641 702 772",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Intergovernmental 605 605 727 641"
+        "quote": "Intergovernmental 605 605 727 641",
+        "column": "2026/27 Adopted"
       },
       {
         "name": "Other Revenues",
@@ -593,22 +915,50 @@
           "actual-2025": {
             "source": "S1",
             "page": 95,
-            "quote": "Other Revenues 76 111 52 73 70 69"
+            "quote": "Other Revenues 76 111 52 73 70 69",
+            "column": "2024/25 Actual"
+          },
+          "adopted-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Other Revenues 74 74 70 69",
+            "column": "2025/26 Adopted"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Other Revenues 74 74 70 69",
+            "column": "2025/26 Revised"
+          },
+          "estimate-2026": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Other Revenues 74 74 70 69",
+            "column": "2025/26 Est Actual"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 72,
+            "quote": "Other Revenues 74 74 70 69",
+            "column": "2026/27 Adopted"
           },
           "projected-2028": {
             "source": "S1",
             "page": 93,
-            "quote": "Other Revenues 70 69 69 69"
+            "quote": "Other Revenues 70 69 69 69",
+            "column": "2027/28 Projected"
           },
           "projected-2029": {
             "source": "S1",
             "page": 93,
-            "quote": "Other Revenues 70 69 69 69"
+            "quote": "Other Revenues 70 69 69 69",
+            "column": "2028/29 Projected"
           }
         },
         "source": "S1",
         "page": 72,
-        "quote": "Other Revenues 74 74 70 69"
+        "quote": "Other Revenues 74 74 70 69",
+        "column": "2026/27 Adopted"
       }
     ],
     "total": {
@@ -626,22 +976,50 @@
         "actual-2025": {
           "source": "S1",
           "page": 95,
-          "quote": "Total Revenues 273,894 291,057 243,634 257,090 275,934 284,686"
+          "quote": "Total Revenues 273,894 291,057 243,634 257,090 275,934 284,686",
+          "column": "2024/25 Actual"
+        },
+        "adopted-2026": {
+          "source": "S1",
+          "page": 72,
+          "quote": "Total Revenues 271,511 274,911 275,934 284,686",
+          "column": "2025/26 Adopted"
+        },
+        "revised-2026": {
+          "source": "S1",
+          "page": 72,
+          "quote": "Total Revenues 271,511 274,911 275,934 284,686",
+          "column": "2025/26 Revised"
+        },
+        "estimate-2026": {
+          "source": "S1",
+          "page": 72,
+          "quote": "Total Revenues 271,511 274,911 275,934 284,686",
+          "column": "2025/26 Est Actual"
+        },
+        "adopted-2027": {
+          "source": "S1",
+          "page": 72,
+          "quote": "Total Revenues 271,511 274,911 275,934 284,686",
+          "column": "2026/27 Adopted"
         },
         "projected-2028": {
           "source": "S1",
           "page": 93,
-          "quote": "Total Revenues 275,934 284,686 294,806 306,595"
+          "quote": "Total Revenues 275,934 284,686 294,806 306,595",
+          "column": "2027/28 Projected"
         },
         "projected-2029": {
           "source": "S1",
           "page": 93,
-          "quote": "Total Revenues 275,934 284,686 294,806 306,595"
+          "quote": "Total Revenues 275,934 284,686 294,806 306,595",
+          "column": "2028/29 Projected"
         }
       },
       "source": "S1",
       "page": 72,
-      "quote": "Total Revenues 271,511 274,911 275,934 284,686"
+      "quote": "Total Revenues 271,511 274,911 275,934 284,686",
+      "column": "2026/27 Adopted"
     }
   },
   "staffing": {
@@ -654,110 +1032,126 @@
         "fte": 174,
         "source": "S1",
         "page": 40,
-        "quote": "Fire 162.00 172.00 172.00 172.00 174.00 174.00"
+        "quote": "Fire 162.00 172.00 172.00 172.00 174.00 174.00",
+        "column": "2026/27"
       },
       {
         "name": "Police",
         "fte": 320,
         "source": "S1",
         "page": 40,
-        "quote": "Police 318.50 322.50 325.00 328.00 320.00 320.00"
+        "quote": "Police 318.50 322.50 325.00 328.00 320.00 320.00",
+        "column": "2026/27"
       },
       {
         "name": "Community Development",
         "fte": 88.2,
         "source": "S1",
         "page": 40,
-        "quote": "Community Development 83.55 87.55 103.03 88.20 88.20 88.20"
+        "quote": "Community Development 83.55 87.55 103.03 88.20 88.20 88.20",
+        "column": "2026/27"
       },
       {
         "name": "Community Services",
         "fte": 46.39,
         "source": "S1",
         "page": 40,
-        "quote": "Community Services 98.41 101.16 87.93 46.39 46.39 46.39"
+        "quote": "Community Services 98.41 101.16 87.93 46.39 46.39 46.39",
+        "column": "2026/27"
       },
       {
         "name": "Economic Development",
         "fte": 4,
         "source": "S1",
         "page": 40,
-        "quote": "Economic Development 4.00 4.00 5.00 4.00 4.00 4.00"
+        "quote": "Economic Development 4.00 4.00 5.00 4.00 4.00 4.00",
+        "column": "2026/27"
       },
       {
         "name": "Human Services",
         "fte": 79.95,
         "source": "S1",
         "page": 40,
-        "quote": "Human Services 75.15 78.40 82.40 83.15 82.75 79.95"
+        "quote": "Human Services 75.15 78.40 82.40 83.15 82.75 79.95",
+        "column": "2026/27"
       },
       {
         "name": "Maintenance Operations",
         "fte": 111,
         "source": "S1",
         "page": 40,
-        "quote": "Maintenance Operations - - - 112.00 111.00 111.00"
+        "quote": "Maintenance Operations - - - 112.00 111.00 111.00",
+        "column": "2026/27"
       },
       {
         "name": "Public Works",
         "fte": 67.7,
         "source": "S1",
         "page": 40,
-        "quote": "Public Works 135.80 135.95 142.95 67.70 67.70 67.70"
+        "quote": "Public Works 135.80 135.95 142.95 67.70 67.70 67.70",
+        "column": "2026/27"
       },
       {
         "name": "City Council",
         "fte": 1,
         "source": "S1",
         "page": 40,
-        "quote": "City Council - - - - - 1.00"
+        "quote": "City Council - - - - - 1.00",
+        "column": "2026/27"
       },
       {
         "name": "City Manager’s Office",
         "fte": 13,
         "source": "S1",
         "page": 40,
-        "quote": "City Manager’s Office 10.75 11.75 11.75 13.00 13.00 13.00"
+        "quote": "City Manager’s Office 10.75 11.75 11.75 13.00 13.00 13.00",
+        "column": "2026/27"
       },
       {
         "name": "City Attorney",
         "fte": 10,
         "source": "S1",
         "page": 40,
-        "quote": "City Attorney 9.92 9.92 9.92 10.00 10.00 10.00"
+        "quote": "City Attorney 9.92 9.92 9.92 10.00 10.00 10.00",
+        "column": "2026/27"
       },
       {
         "name": "City Clerk",
         "fte": 4,
         "source": "S1",
         "page": 40,
-        "quote": "City Clerk 4.25 4.25 4.25 4.00 4.00 4.00"
+        "quote": "City Clerk 4.25 4.25 4.25 4.00 4.00 4.00",
+        "column": "2026/27"
       },
       {
         "name": "Finance",
         "fte": 28,
         "source": "S1",
         "page": 40,
-        "quote": "Finance 24.24 26.24 28.24 28.00 28.00 28.00"
+        "quote": "Finance 24.24 26.24 28.24 28.00 28.00 28.00",
+        "column": "2026/27"
       },
       {
         "name": "Human Resources",
         "fte": 19,
         "source": "S1",
         "page": 40,
-        "quote": "Human Resources 16.00 18.00 19.00 19.00 19.00 19.00"
+        "quote": "Human Resources 16.00 18.00 19.00 19.00 19.00 19.00",
+        "column": "2026/27"
       },
       {
         "name": "Information Technology Services",
         "fte": 28,
         "source": "S1",
         "page": 40,
-        "quote": "Information Technology Services 27.00 27.00 27.00 28.00 28.00 28.00"
+        "quote": "Information Technology Services 27.00 27.00 27.00 28.00 28.00 28.00",
+        "column": "2026/27"
       }
     ],
     "source": "S1",
     "page": 40,
-    "quote": "CITYWIDE TOTAL 969.57 998.72 1,018.47 1,003.44 996.04 994.24"
+    "quote": "CITYWIDE TOTAL 969.57 998.72 1,018.47 1,003.44 996.04 994.24",
+    "column": "2026/27"
   },
   "size": {
     "allFunds": {
@@ -765,14 +1159,16 @@
       "note": "total uses, including transfers between funds",
       "source": "S1",
       "page": 38,
-      "quote": "Total Uses 289,089 62,958 55,118 19,956 427,121"
+      "quote": "Total Uses 289,089 62,958 55,118 19,956 427,121",
+      "column": "Total"
     },
     "generalFund": {
       "amount": 289089000,
       "note": "total uses, including transfers out",
       "source": "S1",
       "page": 72,
-      "quote": "Total Uses 277,806 281,821 281,821 289,089"
+      "quote": "Total Uses 277,806 281,821 281,821 289,089",
+      "column": "2026/27 Adopted"
     }
   },
   "glossary": [
@@ -798,6 +1194,13 @@
       "quote": "The budget for a fund is balanced when total budgeted resources, including revenues, transfers in from other funds, and unallocated fund balance from previous years, meet or exceed total budgeted use of resources, including expenditures and transfers out to other funds."
     },
     {
+      "term": "Budget Uncertainty Reserve",
+      "definition": "The Budget Uncertainty Reserve is intended to offset revenue shortfalls resulting from future economic downturns and unanticipated cost increases (including increases in fuel and utility prices and increases to CalPERS pension contribution requirements resulting from changes in actuarial assumptions, poor investment performance, or updated demographic data).",
+      "source": "S1",
+      "page": 79,
+      "quote": "The Budget Uncertainty Reserve is intended to offset revenue shortfalls resulting from future economic downturns and unanticipated cost increases (including increases in fuel and utility prices and increases to CalPERS pension contribution requirements resulting from changes in actuarial assumptions, poor investment performance, or updated demographic data)."
+    },
+    {
       "term": "California Public Employees’ Retirement System (CalPERS)",
       "definition": "The retirement system, administered by the State of California, to which all regular City employees belong.",
       "source": "S1",
@@ -810,6 +1213,20 @@
       "source": "S1",
       "page": 278,
       "quote": "The five-year financial plan for improving assets and integrating debt service and capital assets maintenance, adopted in a separate budget document and updated every two years."
+    },
+    {
+      "term": "Citywide Savings",
+      "definition": "A line in the General Fund summary that lowers total spending by an amount the City expects to go unspent, “to reflect the City’s historical experience of under-spending total allocated resources, primarily due to salary savings from vacant positions.”",
+      "source": "S1",
+      "page": 73,
+      "quote": "to reflect the City’s historical experience of under-spending total allocated resources, primarily due to salary savings from vacant positions."
+    },
+    {
+      "term": "Contingency Reserve",
+      "definition": "The General Fund Contingency Reserve is intended to mitigate the effects of unanticipated situations such as natural disasters and severe unforeseen events, as well as serving as backup liquidity to the Risk Management Fund if this need were to arise.",
+      "source": "S1",
+      "page": 79,
+      "quote": "The General Fund Contingency Reserve is intended to mitigate the effects of unanticipated situations such as natural disasters and severe unforeseen events, as well as serving as backup liquidity to the Risk Management Fund if this need were to arise."
     },
     {
       "term": "Cost Center",
@@ -963,10 +1380,25 @@
       "value": 19900000,
       "format": "money"
     },
+    "directCostShare": {
+      "source": "S1",
+      "page": 77,
+      "quote": "allocating 87% of the budget to direct costs for public safety and maintenance",
+      "value": 0.87,
+      "format": "percent"
+    },
+    "personnelNotRestored": {
+      "source": "S1",
+      "page": 71,
+      "quote": "the $3.1 million of ongoing personnel, supplies, and services reductions that were needed to rebalance the FY 2025/26 budget after labor negotiations concluded",
+      "value": 3100000,
+      "format": "money"
+    },
     "beginningBalance": {
       "source": "S1",
       "page": 72,
       "quote": "Beginning Unreserved Fund Balance $ - $ 1,045 $ 1,045 $ 1,668",
+      "column": "2026/27 Adopted",
       "value": 1668000,
       "format": "money"
     },
@@ -974,6 +1406,7 @@
       "source": "S1",
       "page": 72,
       "quote": "Total Revenues 271,511 274,911 275,934 284,686",
+      "column": "2026/27 Adopted",
       "value": 284686000,
       "format": "money"
     },
@@ -981,6 +1414,7 @@
       "source": "S1",
       "page": 72,
       "quote": "Transfers In 6,760 6,760 6,760 6,361",
+      "column": "2026/27 Adopted",
       "value": 6361000,
       "format": "money"
     },
@@ -988,6 +1422,7 @@
       "source": "S1",
       "page": 72,
       "quote": "Total Sources 278,271 282,716 283,739 292,715",
+      "column": "2026/27 Adopted",
       "value": 292715000,
       "format": "money"
     },
@@ -995,6 +1430,7 @@
       "source": "S1",
       "page": 72,
       "quote": "Total Expenditures 266,032 270,059 270,059 276,972",
+      "column": "2026/27 Adopted",
       "value": 276972000,
       "format": "money"
     },
@@ -1002,6 +1438,7 @@
       "source": "S1",
       "page": 72,
       "quote": "Transfers Out 11,774 11,762 11,762 12,117",
+      "column": "2026/27 Adopted",
       "value": 12117000,
       "format": "money"
     },
@@ -1009,6 +1446,7 @@
       "source": "S1",
       "page": 72,
       "quote": "Total Uses 277,806 281,821 281,821 289,089",
+      "column": "2026/27 Adopted",
       "value": 289089000,
       "format": "money"
     },
@@ -1016,6 +1454,7 @@
       "source": "S1",
       "page": 72,
       "quote": "Contingency Reserve 46,394 46,394 46,394 48,278",
+      "column": "2026/27 Adopted",
       "value": 48278000,
       "format": "money"
     },
@@ -1023,6 +1462,7 @@
       "source": "S1",
       "page": 72,
       "quote": "Budget Uncertainty Reserve 6,699 4,298 4,298 4,298",
+      "column": "2026/27 Adopted",
       "value": 4298000,
       "format": "money"
     },
@@ -1030,6 +1470,7 @@
       "source": "S1",
       "page": 72,
       "quote": "Reserved Fund Balance 53,093 50,692 50,692 52,576",
+      "column": "2026/27 Adopted",
       "value": 52576000,
       "format": "money"
     },
@@ -1037,6 +1478,7 @@
       "source": "S1",
       "page": 72,
       "quote": "Total Ending Fund Balance $ 53,308 $ 51,337 $ 52,360 $ 54,318",
+      "column": "2026/27 Adopted",
       "value": 54318000,
       "format": "money"
     },
@@ -1044,6 +1486,7 @@
       "source": "S1",
       "page": 95,
       "quote": "Budget Uncertainty Reserve 10,000 12,500 24,246 4,298 4,298 4,298",
+      "column": "2023/24 Actual",
       "value": 24246000,
       "format": "money"
     },
@@ -1051,7 +1494,72 @@
       "source": "S1",
       "page": 95,
       "quote": "Budget Uncertainty Reserve 10,000 12,500 24,246 4,298 4,298 4,298",
+      "column": "2024/25 Actual",
       "value": 4298000,
+      "format": "money"
+    },
+    "unreservedBalance": {
+      "source": "S1",
+      "page": 72,
+      "quote": "Unreserved Fund Balance 215 645 1,668 1,742",
+      "column": "2026/27 Adopted",
+      "value": 1742000,
+      "format": "money"
+    },
+    "contingencyIncrease": {
+      "source": "S1",
+      "page": 79,
+      "quote": "Contingency Reserve $ 46,394 $ 1,884 $ - $ 48,278",
+      "column": "FY 2026/27 Increase",
+      "value": 1884000,
+      "format": "money"
+    },
+    "forecastContingency2028": {
+      "source": "S1",
+      "page": 93,
+      "quote": "Contingency Reserve 46,394 48,278 49,387 50,939",
+      "column": "2027/28 Projected",
+      "value": 49387000,
+      "format": "money"
+    },
+    "forecastUncertainty2028": {
+      "source": "S1",
+      "page": 93,
+      "quote": "Budget Uncertainty Reserve 4,298 4,298 4,298 4,298",
+      "column": "2027/28 Projected",
+      "value": 4298000,
+      "format": "money"
+    },
+    "forecastUnreserved2028": {
+      "source": "S1",
+      "page": 93,
+      "quote": "Unreserved Fund Balance 1,668 1,742 6,071 12,450",
+      "column": "2027/28 Projected",
+      "value": 6071000,
+      "format": "money"
+    },
+    "forecastContingency2029": {
+      "source": "S1",
+      "page": 93,
+      "quote": "Contingency Reserve 46,394 48,278 49,387 50,939",
+      "column": "2028/29 Projected",
+      "value": 50939000,
+      "format": "money"
+    },
+    "forecastUncertainty2029": {
+      "source": "S1",
+      "page": 93,
+      "quote": "Budget Uncertainty Reserve 4,298 4,298 4,298 4,298",
+      "column": "2028/29 Projected",
+      "value": 4298000,
+      "format": "money"
+    },
+    "forecastUnreserved2029": {
+      "source": "S1",
+      "page": 93,
+      "quote": "Unreserved Fund Balance 1,668 1,742 6,071 12,450",
+      "column": "2028/29 Projected",
+      "value": 12450000,
       "format": "money"
     }
   },
@@ -1070,6 +1578,16 @@
       "source": "S3",
       "page": 10,
       "quote": "FY 2026/27 Proposed Budget balanced"
+    },
+    "noUncertaintyFunding": {
+      "source": "S1",
+      "page": 74,
+      "quote": "The adopted budget does not include funding to increase the General Fund Budget Uncertainty Reserve"
+    },
+    "forecastSalary": {
+      "source": "S1",
+      "page": 91,
+      "quote": "The placeholder salary adjustment of 2% included in the FY 2026/27 adopted budget is assumed to be part of a three-year agreement. Accordingly, additional 2% adjustments are included in the two forecast years."
     }
   },
   "capitalPlan": {
@@ -1091,10 +1609,43 @@
           "2029": 20319000,
           "2030": 21009000
         },
+        "cites": {
+          "2026": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Capital Maintenance $23.244 $19.569 $17.669 $20.319 $21.009 $101.810",
+            "column": "FY 2025/2026"
+          },
+          "2027": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Capital Maintenance $23.244 $19.569 $17.669 $20.319 $21.009 $101.810",
+            "column": "FY 2026/2027"
+          },
+          "2028": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Capital Maintenance $23.244 $19.569 $17.669 $20.319 $21.009 $101.810",
+            "column": "FY 2027/2028"
+          },
+          "2029": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Capital Maintenance $23.244 $19.569 $17.669 $20.319 $21.009 $101.810",
+            "column": "FY 2028/2029"
+          },
+          "2030": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Capital Maintenance $23.244 $19.569 $17.669 $20.319 $21.009 $101.810",
+            "column": "FY 2029/2030"
+          }
+        },
         "total": 101810000,
         "source": "S1",
         "page": 126,
-        "quote": "Capital Maintenance $23.244 $19.569 $17.669 $20.319 $21.009 $101.810"
+        "quote": "Capital Maintenance $23.244 $19.569 $17.669 $20.319 $21.009 $101.810",
+        "column": "Five Year Total"
       },
       {
         "name": "Transportation Improvements",
@@ -1105,10 +1656,43 @@
           "2029": 6680000,
           "2030": 6550000
         },
+        "cites": {
+          "2026": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Transportation Improvements $10.087 $6.690 $70.840 $6.680 $6.550 $100.847",
+            "column": "FY 2025/2026"
+          },
+          "2027": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Transportation Improvements $10.087 $6.690 $70.840 $6.680 $6.550 $100.847",
+            "column": "FY 2026/2027"
+          },
+          "2028": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Transportation Improvements $10.087 $6.690 $70.840 $6.680 $6.550 $100.847",
+            "column": "FY 2027/2028"
+          },
+          "2029": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Transportation Improvements $10.087 $6.690 $70.840 $6.680 $6.550 $100.847",
+            "column": "FY 2028/2029"
+          },
+          "2030": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Transportation Improvements $10.087 $6.690 $70.840 $6.680 $6.550 $100.847",
+            "column": "FY 2029/2030"
+          }
+        },
         "total": 100847000,
         "source": "S1",
         "page": 126,
-        "quote": "Transportation Improvements $10.087 $6.690 $70.840 $6.680 $6.550 $100.847"
+        "quote": "Transportation Improvements $10.087 $6.690 $70.840 $6.680 $6.550 $100.847",
+        "column": "Five Year Total"
       },
       {
         "name": "Parks & Recreation",
@@ -1119,10 +1703,43 @@
           "2029": 2388000,
           "2030": 2338000
         },
+        "cites": {
+          "2026": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Parks & Recreation $6.568 $2.758 $2.398 $2.388 $2.338 $16.449",
+            "column": "FY 2025/2026"
+          },
+          "2027": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Parks & Recreation $6.568 $2.758 $2.398 $2.388 $2.338 $16.449",
+            "column": "FY 2026/2027"
+          },
+          "2028": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Parks & Recreation $6.568 $2.758 $2.398 $2.388 $2.338 $16.449",
+            "column": "FY 2027/2028"
+          },
+          "2029": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Parks & Recreation $6.568 $2.758 $2.398 $2.388 $2.338 $16.449",
+            "column": "FY 2028/2029"
+          },
+          "2030": {
+            "source": "S1",
+            "page": 126,
+            "quote": "Parks & Recreation $6.568 $2.758 $2.398 $2.388 $2.338 $16.449",
+            "column": "FY 2029/2030"
+          }
+        },
         "total": 16449000,
         "source": "S1",
         "page": 126,
-        "quote": "Parks & Recreation $6.568 $2.758 $2.398 $2.388 $2.338 $16.449"
+        "quote": "Parks & Recreation $6.568 $2.758 $2.398 $2.388 $2.338 $16.449",
+        "column": "Five Year Total"
       },
       {
         "name": "General Government",
@@ -1133,10 +1750,43 @@
           "2029": 3304000,
           "2030": 3279000
         },
+        "cites": {
+          "2026": {
+            "source": "S1",
+            "page": 126,
+            "quote": "General Government $3.179 $3.329 $3.329 $3.304 $3.279 $16.420",
+            "column": "FY 2025/2026"
+          },
+          "2027": {
+            "source": "S1",
+            "page": 126,
+            "quote": "General Government $3.179 $3.329 $3.329 $3.304 $3.279 $16.420",
+            "column": "FY 2026/2027"
+          },
+          "2028": {
+            "source": "S1",
+            "page": 126,
+            "quote": "General Government $3.179 $3.329 $3.329 $3.304 $3.279 $16.420",
+            "column": "FY 2027/2028"
+          },
+          "2029": {
+            "source": "S1",
+            "page": 126,
+            "quote": "General Government $3.179 $3.329 $3.329 $3.304 $3.279 $16.420",
+            "column": "FY 2028/2029"
+          },
+          "2030": {
+            "source": "S1",
+            "page": 126,
+            "quote": "General Government $3.179 $3.329 $3.329 $3.304 $3.279 $16.420",
+            "column": "FY 2029/2030"
+          }
+        },
         "total": 16420000,
         "source": "S1",
         "page": 126,
-        "quote": "General Government $3.179 $3.329 $3.329 $3.304 $3.279 $16.420"
+        "quote": "General Government $3.179 $3.329 $3.329 $3.304 $3.279 $16.420",
+        "column": "Five Year Total"
       }
     ],
     "total": {
@@ -1147,10 +1797,43 @@
         "2029": 32691000,
         "2030": 33176000
       },
+      "cites": {
+        "2026": {
+          "source": "S1",
+          "page": 126,
+          "quote": "Total $43.077 $32.346 $94.236 $32.691 $33.176 $235.526",
+          "column": "FY 2025/2026"
+        },
+        "2027": {
+          "source": "S1",
+          "page": 126,
+          "quote": "Total $43.077 $32.346 $94.236 $32.691 $33.176 $235.526",
+          "column": "FY 2026/2027"
+        },
+        "2028": {
+          "source": "S1",
+          "page": 126,
+          "quote": "Total $43.077 $32.346 $94.236 $32.691 $33.176 $235.526",
+          "column": "FY 2027/2028"
+        },
+        "2029": {
+          "source": "S1",
+          "page": 126,
+          "quote": "Total $43.077 $32.346 $94.236 $32.691 $33.176 $235.526",
+          "column": "FY 2028/2029"
+        },
+        "2030": {
+          "source": "S1",
+          "page": 126,
+          "quote": "Total $43.077 $32.346 $94.236 $32.691 $33.176 $235.526",
+          "column": "FY 2029/2030"
+        }
+      },
       "total": 235526000,
       "source": "S1",
       "page": 126,
-      "quote": "Total $43.077 $32.346 $94.236 $32.691 $33.176 $235.526"
+      "quote": "Total $43.077 $32.346 $94.236 $32.691 $33.176 $235.526",
+      "column": "Five Year Total"
     }
   },
   "pension": {
@@ -1159,20 +1842,23 @@
       "amount": 477258000,
       "source": "S1",
       "page": 45,
-      "quote": "Unfunded Accrued Liability (UAL) $ 162,419 $ 314,839 $ 477,258"
+      "quote": "Unfunded Accrued Liability (UAL) $ 162,419 $ 314,839 $ 477,258",
+      "column": "Combined"
     },
     "fundedRatio": {
       "rate": 0.704,
       "source": "S1",
       "page": 45,
-      "quote": "Funded Ratio 76.2% 66.0% 70.4%"
+      "quote": "Funded Ratio 76.2% 66.0% 70.4%",
+      "column": "Combined"
     },
     "contribution": {
       "amount": 65234000,
       "year": 2027,
       "source": "S1",
       "page": 45,
-      "quote": "Total Employer Contribution $ 22,586 $ 42,648 $ 65,234"
+      "quote": "Total Employer Contribution $ 22,586 $ 42,648 $ 65,234",
+      "column": "Combined"
     }
   }
 }
