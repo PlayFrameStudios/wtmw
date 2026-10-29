@@ -4,7 +4,8 @@
  * uses, what is left after them, what the budget assumes, and the City's forecast. Sources and
  * uses are two bars on one scale, the Gap page's grammar; what is left closes the uses bar, so a
  * balanced budget reads as two bars of one length. No red (money short) and no gold (one-time money).
- * Every figure is a receipt; the page shows no difference it computed.
+ * Every figure is a receipt; the page shows no difference it computed. The slot (the reserve
+ * cards) sits after sources and uses, before the reserve's history that refers to it.
  */
 import SourceChip from './SourceChip.astro';
 import Sourced from './Sourced.astro';
@@ -78,6 +79,8 @@ const pct = (v: number) => `${(v * 100).toLocaleString('en-US', { maximumFractio
     }
   </div>
 </section>
+
+<slot />
 
 <section class="bs" aria-labelledby="bs-reserve-history">
   <h2 id="bs-reserve-history">The Budget Uncertainty Reserve</h2>
@@ -284,6 +287,14 @@ const pct = (v: number) => `${(v * 100).toLocaleString('en-US', { maximumFractio
   .bs-table thead th:first-child {
     text-align: left;
     white-space: normal;
+  }
+  @media (max-width: 30rem) {
+    .bs-table :is(th, td) {
+      padding-inline: 0.25rem;
+    }
+    .bs-table th[scope='row'] {
+      padding-inline-start: 0;
+    }
   }
   .bs-basis {
     display: block;

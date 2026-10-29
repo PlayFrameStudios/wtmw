@@ -95,7 +95,8 @@ describe('Fremont (built)', () => {
     expect(t).toContain('The City describes its budget as allocating 87% of the budget to direct costs for public safety and maintenance');
     expect(figure('', /^Share of the budget for direct costs/).page).toBe(77);
     expect(t).toMatch(/not to restore \$3\.2M of ongoing maintenance support or \$3\.1M of ongoing personnel/);
-    expect(t).toMatch(/used \$19\.9M of its Budget Uncertainty Reserve to cover a one-time revenue shortfall\. It holds \$4\.3M now/);
+    // The $19.9M sits right under the reserve list, next to the $4.3M it left.
+    expect(t).toMatch(/Budget Uncertainty Reserve \$4\.3M In FY 2024\/25 the City used \$19\.9M of its Budget Uncertainty Reserve to cover a one-time revenue shortfall\. This budget adds nothing to it/);
     expect(t).toMatch(/It sets out \$235\.5M over five years, \$32\.3M of it in FY 2026\/27\. The General Fund puts in \$3\.8M a year/);
     expect(figure('', /five-year total$/).column).toBe('Five Year Total');
     expect(figure('', /Capital Improvement Program.*, FY 2026\/27$/).column).toBe('FY 2026/2027');
@@ -126,7 +127,7 @@ describe('Fremont (built)', () => {
     expect(widths('Sources')).toBeCloseTo(100, 1);
     expect(widths('Uses')).toBeCloseTo(100, 1);
     // No red, no gold: neither money short nor one-time money.
-    const sheet = h.slice(h.indexOf('id="bs-flow"'), h.indexOf('class="reserves"'));
+    const sheet = h.slice(h.indexOf('id="bs-flow"'), h.indexOf('</main>'));
     expect(sheet.length).toBeGreaterThan(1000);
     expect(sheet).not.toMatch(/--red|--gold/);
     expect(t).toContain('assumes the placeholder salary adjustment again in each forecast year');

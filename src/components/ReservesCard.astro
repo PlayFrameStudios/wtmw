@@ -58,8 +58,7 @@ const { city, reserves, n, balance } = Astro.props;
     balance && (
       <p class="reserves-card-body">
         In FY 2024/25 the City used <Sourced city={city} figure={balance.uncertainty.draw}>{shortMoney(balance.uncertainty.draw.value)}</Sourced> of its Budget Uncertainty
-        Reserve to cover a one-time revenue shortfall. It holds <Sourced city={city} figure={balance.uncertainty.now}>{shortMoney(balance.uncertainty.now.value)}</Sourced> now,
-        and this budget adds nothing to it.
+        Reserve to cover a one-time revenue shortfall. This budget adds nothing to it.
         <SourceChip city={city} source={balance.uncertainty.noNewFunding.source} at={balance.uncertainty.noNewFunding} />
       </p>
     )

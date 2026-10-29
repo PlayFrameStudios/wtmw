@@ -37,8 +37,15 @@ const balance = balanceOf(budgetFor(city)!, (y) => fy(city.budget.labels, y));
         {city.name} adopts {city.budget.cadence === 'annual' ? 'a budget each year' : 'a two-year budget'}. This page covers {years.join(' and ')}.
       </p>
     </section>
-    {balance && <BalanceSheet city={city} balance={balance} />}
-    <Reserves city={city} reserves={reserves} />
+    {
+      balance ? (
+        <BalanceSheet city={city} balance={balance}>
+          <Reserves city={city} reserves={reserves} />
+        </BalanceSheet>
+      ) : (
+        <Reserves city={city} reserves={reserves} />
+      )
+    }
   </div>
 </Base>
 
