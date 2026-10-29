@@ -87,6 +87,7 @@ describe('Fremont: the build', () => {
     expect(budget.facts!.citywideSavings.value).toBe(19_700_000);
     expect(budget.facts!.contingencyPolicy.value).toBe(0.167);
     expect(budget.facts!.population.value).toBe(233_974);
+    expect(budget.facts!.cipTransfer.value).toBe(3_775_000);
   });
 
   it('has no deficit plan, so the deficit-plan pages and views never run for it', () => {

@@ -170,6 +170,11 @@
       "page": 79,
       "quote": "The General Fund Contingency Reserve is funded each year at 16.7% of budgeted expenditures and transfers out, the minimum level recommended by the Government Finance Officers Association of the United States and Canada."
     },
+    "cipTransfer": {
+      "source": "S1",
+      "page": 120,
+      "quote": "The adopted CIP includes a $3.775 million annual transfer"
+    },
     "salesTaxRecovery": {
       "source": "S2",
       "page": 4,

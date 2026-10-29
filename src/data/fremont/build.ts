@@ -272,6 +272,8 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
     salaryPlaceholder: factFrom('salaryPlaceholder', quote('salaryPlaceholder'), 'percent'),
     citywideSavings: factFrom('citywideSavings', quote('citywideSavings'), 'money'),
     contingencyPolicy: factFrom('contingencyPolicy', quote('contingencyPolicy'), 'percent'),
+    // The General Fund's yearly transfer to the capital plan for maintenance.
+    cipTransfer: factFrom('cipTransfer', quote('cipTransfer'), 'money'),
     salesTaxRecovery: factFrom('salesTaxRecovery', quote('salesTaxRecovery'), 'money'),
     uncertaintyReserveDraw: factFrom('uncertaintyReserveDraw', quote('uncertaintyReserveDraw'), 'money'),
   };

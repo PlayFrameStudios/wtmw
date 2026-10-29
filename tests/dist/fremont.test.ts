@@ -74,7 +74,7 @@ describe('Fremont (built)', () => {
 
   it('the sources list names printed pages', () => {
     const t = text(html('sources/'));
-    expect(t).toMatch(/pp\. 27, 32, 34, 39, 65, 66, 67, 73, 87, 89, 120,/);
+    expect(t).toMatch(/pp\. 27, 32, 34, 39, 65, 66, 67, 73, 87, 89, 114, 120,/);
     expect(t).not.toMatch(/pp\. 33, 38/);
   });
 });

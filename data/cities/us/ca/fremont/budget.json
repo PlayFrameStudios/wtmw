@@ -939,6 +939,13 @@
       "value": 0.167,
       "format": "percent"
     },
+    "cipTransfer": {
+      "source": "S1",
+      "page": 120,
+      "quote": "The adopted CIP includes a $3.775 million annual transfer",
+      "value": 3775000,
+      "format": "money"
+    },
     "salesTaxRecovery": {
       "source": "S2",
       "page": 4,
