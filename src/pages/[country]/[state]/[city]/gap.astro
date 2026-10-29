@@ -14,7 +14,7 @@ import { cityStaticPaths, type City } from '../../../../lib/cities';
 import { shortMoney } from '../../../../lib/format';
 import { gapPage } from '../../../../lib/gap';
 
-export const getStaticPaths = cityStaticPaths;
+export const getStaticPaths = cityStaticPaths('gap');
 
 const { city } = Astro.props as { city: City };
 const budget = budgetFor(city)!;

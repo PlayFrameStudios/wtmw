@@ -33,7 +33,7 @@ function label(cityPath: string, pagePath: string): string {
   return CITY_PAGES.find((p) => p.slug === slug)?.label ?? slug;
 }
 
-export function buildUsage(dist: string) {
+export function buildUsage(dist: string, featured = featuredPath()) {
   const written: string[] = [];
   for (const budgetFile of findBudgets(dist)) {
     const cityPath = '/' + relative(dist, join(budgetFile, '../..')).split(sep).join('/') + '/';
@@ -41,8 +41,9 @@ export function buildUsage(dist: string) {
     const usage: Record<string, { path: string; label: string }[]> = Object.fromEntries(
       budget.sources.map((s: { id: string }) => [s.id, []]),
     );
-    // The city's own pages, plus the landing page, which shows the first city's figures.
-    const pages = [...htmlFiles(join(dist, cityPath)), ...(existsSync(join(dist, 'index.html')) ? [join(dist, 'index.html')] : [])];
+    // The city's own pages, plus the landing page for the featured city, whose figures it shows.
+    const landing = cityPath === featured && existsSync(join(dist, 'index.html')) ? [join(dist, 'index.html')] : [];
+    const pages = [...htmlFiles(join(dist, cityPath)), ...landing];
     for (const file of pages) {
       const pagePath = '/' + relative(dist, file).split(sep).join('/').replace(/index\.html$/, '');
       const ids = new Set([...readFileSync(file, 'utf8').matchAll(CHIP)].flatMap((m) => m[1].split(' ')));
@@ -77,7 +78,19 @@ export function fillPlaceholders(file: string, usage: Record<string, { path: str
   writeFileSync(file, filled);
 }
 
-/** dist/{country}/{state}/{city}/data/budget.json for every city with data. */
+/** The site path of the city.json that says "featured": true (the landing page's city). */
+function featuredPath(): string | undefined {
+  const root = fileURLToPath(new URL('../../data/cities/', import.meta.url));
+  for (const country of readdirSync(root))
+    for (const state of readdirSync(join(root, country)))
+      for (const city of readdirSync(join(root, country, state))) {
+        const file = join(root, country, state, city, 'city.json');
+        if (existsSync(file) && JSON.parse(readFileSync(file, 'utf8')).featured === true) return `/${country}/${state}/${city}/`;
+      }
+  return undefined;
+}
+
+/** dist/{country}/{state}/{city}/data/budget.json for every city with data (and test fixtures, under dist/test/cities/). */
 function findBudgets(dist: string): string[] {
   const walk = (dir: string): string[] =>
     readdirSync(dir, { withFileTypes: true }).flatMap((e) => {

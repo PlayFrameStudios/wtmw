@@ -44,7 +44,7 @@ export function groupRevenue(defs: RevenueGroupDef[], revenue: CityBudget['reven
 }
 
 export function revenueGroupsFor(city: City, budget: CityBudget): RevenueGroup[] {
-  const file = files[`/data/cities${city.path}revenue-groups.json`];
+  const file = files[`${city.dataDir}revenue-groups.json`];
   if (!file) throw new Error(`${city.path} has no revenue-groups.json`);
   return groupRevenue(file.groups, budget.revenue, `${city.path}revenue-groups.json`);
 }

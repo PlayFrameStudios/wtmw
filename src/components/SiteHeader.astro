@@ -1,6 +1,6 @@
 ---
 import Logo from './Logo.astro';
-import { CITY_PAGES, cities, type City } from '../lib/cities';
+import { cities, featuredCity, pagesFor, type City } from '../lib/cities';
 import { budgetFor } from '../lib/budget';
 import { SITE } from '../lib/site';
 
@@ -15,13 +15,15 @@ const here = Astro.url.pathname.replace(/\/?$/, '/');
 const links = city
   ? [
       { href: city.path, label: 'Overview' },
-      ...CITY_PAGES.filter((p) => p.nav).map((p) => ({ href: `${city.path}${p.slug}/`, label: p.label })),
+      ...pagesFor(city)
+        .filter((p) => p.nav)
+        .map((p) => ({ href: `${city.path}${p.slug}/`, label: p.label })),
     ]
   : sections;
 const sourceCount = city ? budgetFor(city)?.sources.length : undefined;
 const sourcesHref = city ? `${city.path}sources/` : undefined;
 const cityLabel = city ? `${city.name}, ${city.stateCode}` : undefined;
-const explore = cities[0];
+const explore = featuredCity;
 ---
 
 <header class="site-header">

@@ -1,18 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
-import { readdirSync } from 'node:fs';
-import { join } from 'node:path';
-import { CITY_PAGES } from '../../src/lib/city-pages';
+import { berkeley, cityRoutes, fixture } from './cities';
 
-// The registry, read from disk: Playwright doesn't run through Vite, so no import.meta.glob.
-const dataDir = join(import.meta.dirname, '../../data/cities');
-const cities = readdirSync(dataDir).flatMap((country) =>
-  readdirSync(join(dataDir, country)).flatMap((state) =>
-    readdirSync(join(dataDir, country, state)).map((city) => ({ path: `/${country}/${state}/${city}/` })),
-  ),
-);
-
-const ROUTES = ['/', ...cities.flatMap((c) => [c.path, ...CITY_PAGES.map((p) => `${c.path}${p.slug}/`)]), '/us/ca/nowhere/'];
-const berkeley = cities[0];
+const ROUTES = ['/', ...cityRoutes, '/us/ca/nowhere/'];
 
 /**
  * Elements whose right edge passes the layout viewport, plus the document's own overflow.
@@ -166,7 +155,8 @@ for (const width of [1200, 1280, 1440, 1920]) {
   test.describe(`at ${width}px`, () => {
     test.use({ viewport: { width, height: 900 } });
 
-    for (const route of [berkeley.path, `${berkeley.path}departments/`, '/']) {
+    // Berkeley's 7-link nav (with The Gap and Ballot) and the fixture's 6-link one (with Balance & Reserves, #42).
+    for (const route of [berkeley.path, `${berkeley.path}departments/`, '/', fixture.path, `${fixture.path}reserves/`]) {
       test(`${route}: nav items don't overlap and stay on screen`, async ({ page }) => {
         await page.goto(route);
         await page.evaluate(() => document.fonts.ready);

@@ -1,0 +1,31 @@
+{
+  "name": "Fixtureville",
+  "state": "Test State",
+  "stateCode": "TS",
+  "country": "Test Country",
+  "countryCode": "TC",
+  "government": "City of Fixtureville",
+  "fixture": {
+    "data": "us/ca/berkeley",
+    "about": "A test city (#42): a city in balance, with no ballot measure, that budgets one year at a time. It borrows Berkeley's budget data so the pages that need it have something to show; its settings and reserves are its own."
+  },
+  "budget": {
+    "cadence": "annual",
+    "years": [2027],
+    "labels": { "long": "FY {start}/{yy}", "short": "FY{ss}/{yy}", "spoken": "fiscal year {start}/{yy}" }
+  },
+  "fiscalPosition": {
+    "variant": "reserves",
+    "reason": {
+      "text": "The City closed its structural deficit with ongoing reductions.",
+      "cites": [
+        {
+          "source": "S1",
+          "page": 9,
+          "quote": "The City closed the FY 27 and FY 28 structural deficits with more than 10 percent in ongoing reductions."
+        }
+      ]
+    }
+  },
+  "ballot": false
+}

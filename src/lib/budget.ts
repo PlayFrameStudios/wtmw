@@ -9,5 +9,5 @@ const files = import.meta.glob<CityBudget>('/data/cities/*/*/*/budget.json', { e
 
 /** The city's budget data, or undefined if it has none yet. */
 export function budgetFor(city: City): CityBudget | undefined {
-  return files[`/data/cities${city.path}budget.json`];
+  return files[`${city.dataDir}budget.json`];
 }

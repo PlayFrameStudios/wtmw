@@ -5,6 +5,7 @@
  */
 import type { CityBudget, DepartmentReduction } from '../data/types.ts';
 import type { Families } from './families.ts';
+import { dataDirOf } from './cities.ts';
 import type { Figure } from './receipts.ts';
 import { per100, type Share, type WaffleItem } from './waffle.ts';
 
@@ -14,7 +15,7 @@ const displayFiles = import.meta.glob<{ shortNames: Record<string, string>; full
 });
 
 function names(cityPath: string, b: CityBudget, key: 'shortNames' | 'fullNames'): Record<string, string> {
-  const names = displayFiles[`/data/cities${cityPath}departments.json`]?.[key] ?? {};
+  const names = displayFiles[`${dataDirOf(cityPath)}departments.json`]?.[key] ?? {};
   const ids = new Set(b.departmentReductions[0].departments.map((d) => d.id));
   for (const id of Object.keys(names)) if (!ids.has(id)) throw new Error(`${cityPath}departments.json: "${id}" isn't a department`);
   return names;

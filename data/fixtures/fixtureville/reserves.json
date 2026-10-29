@@ -1,0 +1,11 @@
+{
+  "year": 2027,
+  "reserves": [
+    {
+      "key": "operating",
+      "name": "Operating Reserve",
+      "purpose": "Money the Council set aside that it can draw on to balance a budget year.",
+      "amount": { "source": "S1", "page": 7, "quote": "Operating Reserve (2025 AAO#1) $4,177,541" }
+    }
+  ]
+}

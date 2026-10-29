@@ -15,7 +15,7 @@ import { familiesFor } from '../../../../lib/families';
 import { shortMoney } from '../../../../lib/format';
 import { sourcesById } from '../../../../lib/receipts';
 
-export const getStaticPaths = cityStaticPaths;
+export const getStaticPaths = cityStaticPaths();
 
 const { city } = Astro.props as { city: City };
 const budget = budgetFor(city)!;

@@ -1,29 +1,36 @@
 ---
 /**
  * The landing page (L1/L2 in #1's mockups). Every number on it is computed
- * from the first city's budget.json via headlines(); tests/dist checks each
- * one against an independent calculation.
+ * from the featured city's budget.json via headlines(); tests/dist checks each
+ * one against an independent calculation. The Cities section lists every city
+ * we cover, so a second city can be found from here (#42).
  */
 import MiniWaffle from '../components/MiniWaffle.astro';
 import SourceChip from '../components/SourceChip.astro';
 import Sourced from '../components/Sourced.astro';
 import Base from '../layouts/Base.astro';
 import { budgetFor } from '../lib/budget';
-import { CITY_PAGES, cities } from '../lib/cities';
+import { cities, featuredCity, hasPage } from '../lib/cities';
+import { fy } from '../lib/city-settings';
 import { familiesFor } from '../lib/families';
 import { shortMoney } from '../lib/format';
 import { headlines } from '../lib/headlines';
 import { formatValue, sourcesById } from '../lib/receipts';
 import { SITE } from '../lib/site';
 
-const city = cities[0];
+const city = featuredCity;
 const budget = budgetFor(city)!;
 const families = familiesFor(city, budget);
 const h = headlines(budget, families);
 const s1 = sourcesById(budget).get(h.gap.ref.source)!;
 const pageHref = (slug: string) => `${city.path}${slug}/`;
 // The sales-tax question opens the Ballot page; a city without one falls back to The Gap, which also compares both outcomes.
-const ballot = CITY_PAGES.some((p) => (p.slug as string) === 'ballot') ? { slug: 'ballot', label: 'Ballot' } : { slug: 'gap', label: 'The Gap' };
+const ballot = hasPage(city, 'ballot') ? { slug: 'ballot', label: 'Ballot' } : { slug: 'gap', label: 'The Gap' };
+// Each covered city's budget, in its own year style: "Two-year budget, FY2027 and FY2028", "Budget for FY 2026/27".
+const budgetSpan = (c: (typeof cities)[number]) => {
+  const years = c.budget.years.map((y) => fy(c.budget.labels, y));
+  return c.budget.cadence === 'annual' ? `Budget for ${years[0]}` : `Two-year budget, ${years.join(' and ')}`;
+};
 
 const questions = [
   {
@@ -207,6 +214,19 @@ const requestTemplate = `${SITE.repo}/issues/new`;
         <p class="hint">Opens a prefilled request on GitHub.</p>
       </form>
     </div>
+    <h3 id="covered" class="covered-heading">Cities we cover</h3>
+    <ul class="covered" aria-labelledby="covered">
+      {
+        cities.map((c) => (
+          <li>
+            <a href={c.path}>
+              {c.name}, {c.stateCode}
+            </a>
+            <span class="covered-budget">{budgetSpan(c)}</span>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 
   <section id="promise" class="wrap section">
@@ -581,6 +601,29 @@ const requestTemplate = `${SITE.repo}/issues/new`;
     color: var(--bay);
     font-weight: 700;
     font-size: 0.875rem;
+  }
+  .covered-heading {
+    margin: 2rem 0 0.5rem;
+    font-size: 1.125rem;
+  }
+  .covered {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .covered li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    padding-block: 0.625rem;
+    border-top: 1px solid var(--rule);
+  }
+  .covered a {
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .covered-budget {
+    color: var(--muted);
   }
   .request {
     padding: 1.75rem;

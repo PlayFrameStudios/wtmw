@@ -12,7 +12,7 @@ import { capitalGroupsFor, capitalPage, type Block } from '../../../../lib/capit
 import { cityStaticPaths, type City } from '../../../../lib/cities';
 import { shortMoney } from '../../../../lib/format';
 
-export const getStaticPaths = cityStaticPaths;
+export const getStaticPaths = cityStaticPaths();
 
 const { city } = Astro.props as { city: City };
 const budget = budgetFor(city)!;

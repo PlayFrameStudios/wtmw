@@ -1,0 +1,79 @@
+---
+/**
+ * The reserves module (#42): each reserve the City keeps, what it's for, and how much is
+ * in it, each amount its own receipt. Built for the Balance & Reserves page, and meant to
+ * sit on the Gap page later too. Neutral colors only: red means money short, gold one-time money.
+ */
+import Sourced from './Sourced.astro';
+import type { City } from '../lib/cities';
+import { fy } from '../lib/city-settings';
+import { shortMoney } from '../lib/format';
+import type { CityReserves } from '../lib/reserves';
+
+interface Props {
+  city: City;
+  reserves: CityReserves;
+  /** The heading level the module sits under. */
+  level?: 2 | 3;
+}
+
+const { city, reserves, level = 2 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+const Item = `h${level + 1}` as 'h3' | 'h4';
+---
+
+<section class="reserves" aria-labelledby="reserves-heading">
+  <Heading id="reserves-heading">Reserves, {fy(city.budget.labels, reserves.year)}</Heading>
+  <ul class="reserve-cards" role="list">
+    {
+      reserves.reserves.map((r) => (
+        <li class="reserve" data-reserve={r.key}>
+          <Item>{r.name}</Item>
+          <p class="amount">
+            <Sourced city={city} figure={r.figure}>
+              {shortMoney(r.figure.value)}
+            </Sourced>
+          </p>
+          <p class="purpose">{r.purpose}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .reserves h2,
+  .reserves h3 {
+    margin: 0 0 1rem;
+  }
+  .reserve-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .reserve {
+    padding: 1.25rem 1.5rem;
+    border-radius: 0.875rem;
+    background: var(--card);
+    box-shadow: 0 1px 2px rgb(22 25 29 / 0.06), 0 8px 24px rgb(22 25 29 / 0.06);
+  }
+  .reserve :is(h3, h4) {
+    margin: 0;
+    font-size: 1.125rem;
+  }
+  .amount {
+    margin: 0.5rem 0 0;
+    color: var(--bay);
+    font-weight: 800;
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+  .purpose {
+    margin: 0.5rem 0 0;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+</style>

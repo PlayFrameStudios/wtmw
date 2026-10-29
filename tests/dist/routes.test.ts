@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { CITY_PAGES, cities } from '../../src/lib/cities';
+import { cities, pagesFor } from '../../src/lib/cities';
 
 // Runs against the output of `npm run build`. Cloudflare serves dist/ as-is,
 // so a file here is a 200 and a missing one falls through to 404.html.
@@ -18,7 +18,7 @@ describe('built site', () => {
     for (const c of cities) expect(html).toContain(`href="${c.path}"`);
   });
 
-  it.each(cities.flatMap((c) => ['', ...CITY_PAGES.map((p) => `${p.slug}/`)].map((sub) => c.path + sub)))(
+  it.each(cities.flatMap((c) => ['', ...pagesFor(c).map((p) => `${p.slug}/`)].map((sub) => c.path + sub)))(
     'renders %s with the independence line',
     (path) => {
       const html = readFileSync(page(path), 'utf8');

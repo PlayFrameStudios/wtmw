@@ -1,16 +1,10 @@
 import { expect, test } from '@playwright/test';
-import { readdirSync } from 'node:fs';
-import { join } from 'node:path';
-import { CITY_PAGES } from '../../src/lib/city-pages';
 import { openAt } from '../../src/lib/open-at';
 import type { Receipt } from '../../src/lib/receipts';
+import { cityRoutes } from './cities';
 
 // #30: every receipt on every page, opened for real: the drawer's PDF links carry the quote's page.
-const dataDir = join(import.meta.dirname, '../../data/cities');
-const cityPaths = readdirSync(dataDir).flatMap((country) =>
-  readdirSync(join(dataDir, country)).flatMap((state) => readdirSync(join(dataDir, country, state)).map((city) => `/${country}/${state}/${city}/`)),
-);
-const ROUTES = ['/', ...cityPaths.flatMap((c) => [c, ...CITY_PAGES.map((p) => `${c}${p.slug}/`)])];
+const ROUTES = ['/', ...cityRoutes];
 test.use({ viewport: { width: 1440, height: 900 } });
 
 for (const route of ROUTES) {

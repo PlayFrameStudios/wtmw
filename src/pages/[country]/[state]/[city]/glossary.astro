@@ -3,7 +3,7 @@ import Base from '../../../../layouts/Base.astro';
 import { budgetFor } from '../../../../lib/budget';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
 
-export const getStaticPaths = cityStaticPaths;
+export const getStaticPaths = cityStaticPaths();
 
 const { city } = Astro.props as { city: City };
 const glossary = budgetFor(city)?.glossary ?? [];
