@@ -4,6 +4,7 @@
  * the City's own documents; the rest tie each TOTAL row to its line items.
  */
 import type { CrossCheck, Ref, SourceId, WorkbookBudget } from '../types.ts';
+import { REVENUE } from './extract.ts';
 
 export const PINNED = {
   fy2027DepartmentCount: 16,
@@ -56,18 +57,18 @@ export function validateBerkeley(budget: WorkbookBudget, checks: CrossCheck[] = 
 
   // Revenue
   const rev = budget.revenue;
-  expectEqual('FY26 revenue TOTAL row', rev.total.fy2026Adopted, PINNED.fy2026RevenueTotal);
-  expectEqual('FY26 adopted revenue lines vs TOTAL row', sum(rev.lines, (l) => l.fy2026Adopted), rev.total.fy2026Adopted, 2);
+  expectEqual('FY26 revenue TOTAL row', rev.total.values[REVENUE.adopted], PINNED.fy2026RevenueTotal);
+  expectEqual('FY26 adopted revenue lines vs TOTAL row', sum(rev.lines, (l) => l.values[REVENUE.adopted]), rev.total.values[REVENUE.adopted], 2);
   expectEqual(
     'FY26 mid-year actual lines vs TOTAL row',
-    sum(rev.lines, (l) => l.fy2026MidYearActual),
-    rev.total.fy2026MidYearActual,
+    sum(rev.lines, (l) => l.values[REVENUE.midYear]),
+    rev.total.values[REVENUE.midYear],
     2,
   );
   expectEqual(
     'FY25 mid-year actual lines vs TOTAL row',
-    sum(rev.lines, (l) => l.fy2025MidYearActual),
-    rev.total.fy2025MidYearActual,
+    sum(rev.lines, (l) => l.values[REVENUE.priorMidYear]),
+    rev.total.values[REVENUE.priorMidYear],
     2,
   );
 
@@ -95,7 +96,7 @@ export function validateBerkeley(budget: WorkbookBudget, checks: CrossCheck[] = 
   expectEqual(
     'GF cost composition total vs FY26 revenue total',
     budget.personnelAndPension.compositionTotal.amount,
-    rev.total.fy2026Adopted,
+    rev.total.values[REVENUE.adopted],
   );
 
   // Cited facts parse to sensible values.
@@ -138,8 +139,8 @@ export function validateBerkeley(budget: WorkbookBudget, checks: CrossCheck[] = 
 /** Every record that carries a source, for checks that must cover all of them. */
 export function allRefs(b: WorkbookBudget): Ref[] {
   return [
-    ...b.revenue.lines,
-    b.revenue.total,
+    ...(b.revenue.lines as Ref[]),
+    b.revenue.total as Ref,
     ...b.deficitBridge.steps,
     ...b.departmentReductions.flatMap((y) => [...y.departments, y.total]),
     ...b.fte.scenarios,

@@ -1,0 +1,91 @@
+{
+  "note": "Fremont's budget data comes from City documents alone; there is no workbook. Every figure is read from a table row or a sentence quoted from its PDF page (source/excerpts/{source}.json, extracted with pdfjs), and the build parses each number from its quote and ties every table to its own totals. Pages are PDF pages; each source's pageOffset turns them into the printed page numbers receipts cite. fremont.gov refuses automated requests, so the excerpts were extracted from copies downloaded in a browser (Oct 29, 2026); the mid-year report and the proposed-budget presentation are byte-identical to their Internet Archive captures.",
+  "notes": {
+    "coverage": "FY 2026/27",
+    "basis": "Budgetary basis",
+    "caveat": "Figures are from the City of Fremont's adopted budget and its budget reports. Years before FY 2026/27 are shown for context and were not adopted with this budget, and years after it are the City's forecast. Not for investment-decision use."
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "publisher": "City of Fremont",
+      "title": "FY 2026/27 Adopted Operating Budget",
+      "date": "2026-06-09",
+      "url": "https://www.fremont.gov/home/showpublisheddocument/21162",
+      "format": "PDF",
+      "pageOffset": 6,
+      "type": "city",
+      "usedFor": "General Fund summary, revenue, forecast, positions, pension, capital plan"
+    },
+    {
+      "id": "S2",
+      "publisher": "City of Fremont",
+      "title": "FY 2025/26 Mid-Year Budget Report",
+      "date": "2026-03-03",
+      "url": "https://www.fremont.gov/home/showpublisheddocument/20068/639100281365700000",
+      "format": "PDF",
+      "archive": { "url": "https://web.archive.org/web/20260615142047/https://www.fremont.gov/home/showpublisheddocument/20068/639100281365700000", "date": "2026-06-15" },
+      "type": "city",
+      "usedFor": "FY 2024/25 Budget Uncertainty Reserve draw; sales-tax recovery"
+    },
+    {
+      "id": "S3",
+      "publisher": "City of Fremont",
+      "title": "FY 2026/27 Proposed Budget",
+      "committee": "City Council presentation",
+      "date": "2026-05-12",
+      "url": "https://www.fremont.gov/home/showpublisheddocument/20494/639142770931900000",
+      "format": "PDF",
+      "archive": { "url": "https://web.archive.org/web/20260615140631/https://www.fremont.gov/home/showpublisheddocument/20494/639142770931900000", "date": "2026-06-15" },
+      "type": "city",
+      "usedFor": "The proposed budget's balance; sales-tax recovery"
+    }
+  ],
+  "tables": {
+    "generalFund": { "source": "S1", "page": 72, "title": "General Fund Adopted Budget FY 2026/27", "unit": 1000, "columns": ["adopted-2026", "revised-2026", "estimate-2026", "adopted-2027"] },
+    "forecast": { "source": "S1", "page": 93, "title": "General Fund Adopted Budget and Forecast Through FY 2028/29", "unit": 1000, "columns": ["estimate-2026", "adopted-2027", "projected-2028", "projected-2029"] },
+    "history": {
+      "source": "S1",
+      "page": 95,
+      "title": "General Fund Historical and Adopted Budget FY 2026/27",
+      "unit": 1000,
+      "columns": ["actual-2022", "actual-2023", "actual-2024", "actual-2025", "estimate-2026", "adopted-2027"]
+    },
+    "allFunds": { "source": "S1", "page": 38, "title": "Summary of All Funds", "unit": 1000, "columns": ["general", "cost-center", "special-revenue", "capital", "total"] },
+    "positions": { "source": "S1", "page": 40, "title": "Citywide Position Changes FY 2021/22 to FY 2026/27", "unit": 1, "columns": ["2022", "2023", "2024", "2025", "2026", "2027"] },
+    "pension": { "source": "S1", "page": 45, "title": "Pension Obligations - FY 2026/27", "unit": 1000, "columns": ["miscellaneous", "safety", "combined"] },
+    "capitalPlan": { "source": "S1", "page": 126, "title": "CIP FY 2025/26 - 2029/30 Expenditures by Program Category (Millions of Dollars)", "unit": 1000000, "columns": ["2026", "2027", "2028", "2029", "2030", "total"] }
+  },
+  "quotes": {
+    "population": { "source": "S1", "page": 33, "quote": "Population: 233,974" },
+    "pensionValuation": { "source": "S1", "page": 45, "quote": "Valuation Date: 6/30/2024" },
+    "maintenanceNotRestored": {
+      "source": "S1",
+      "page": 71,
+      "quote": "it does not provide capacity to restore the $3.2 million of ongoing maintenance support that was eliminated to balance the FY 2025/26 adopted budget"
+    },
+    "salaryPlaceholder": { "source": "S1", "page": 73, "quote": "the FY 2026/27 adopted budget includes a placeholder salary adjustment of 2.0%." },
+    "citywideSavings": {
+      "source": "S1",
+      "page": 73,
+      "quote": "Total expenditures in the FY 2026/27 adopted budget include a savings assumption of $19.7 million (approximately 6.7% of total budgeted expenditures in FY 2026/27)"
+    },
+    "contingencyPolicy": {
+      "source": "S1",
+      "page": 79,
+      "quote": "The General Fund Contingency Reserve is funded each year at 16.7% of budgeted expenditures and transfers out, the minimum level recommended by the Government Finance Officers Association of the United States and Canada."
+    },
+    "salesTaxRecovery": {
+      "source": "S2",
+      "page": 4,
+      "related": ["S3"],
+      "quote": "Sales tax in FY 2024/25 reflects the impact of the State’s recovery of FY 2022/23 overpayments – a reduction of approximately $11.9 million."
+    },
+    "uncertaintyReserveDraw": {
+      "source": "S2",
+      "page": 5,
+      "quote": "Addition to reserves in FY 2024/25 shows $19.9 million of the Budget Uncertainty Reserve applied to address the one-time revenue shortfall due to the State’s sales tax recovery"
+    },
+    "proposedBalanced": { "source": "S3", "page": 10, "quote": "FY 2026/27 Proposed Budget balanced" }
+  }
+}

@@ -317,15 +317,359 @@
       "number": 27
     }
   ],
+  "generalFund": [
+    {
+      "year": 2027,
+      "basis": "General Fund department baseline before proposed cuts",
+      "note": "planning figure",
+      "lines": [
+        {
+          "id": "city-attorney",
+          "name": "City Attorney",
+          "kind": "department",
+          "amount": 7696001,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 5
+        },
+        {
+          "id": "city-auditor",
+          "name": "City Auditor",
+          "kind": "department",
+          "amount": 3929199,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 6
+        },
+        {
+          "id": "odpa",
+          "name": "Office of Dir. of Police Accountability (ODPA)",
+          "kind": "department",
+          "amount": 1289953,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 7
+        },
+        {
+          "id": "mayor-council",
+          "name": "Mayor & Council",
+          "kind": "department",
+          "amount": 6899331,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 8
+        },
+        {
+          "id": "city-clerk",
+          "name": "City Clerk",
+          "kind": "department",
+          "amount": 3952847,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 9
+        },
+        {
+          "id": "cmo",
+          "name": "City Manager's Office (CMO)",
+          "kind": "department",
+          "amount": 18713660,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 10
+        },
+        {
+          "id": "finance",
+          "name": "Finance",
+          "kind": "department",
+          "amount": 9887235,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 11
+        },
+        {
+          "id": "fire",
+          "name": "Fire",
+          "kind": "department",
+          "amount": 55650689,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 12
+        },
+        {
+          "id": "hhcs",
+          "name": "Health, Housing & Community Svcs (HHCS)",
+          "kind": "department",
+          "amount": 37548665,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 13
+        },
+        {
+          "id": "human-resources",
+          "name": "Human Resources",
+          "kind": "department",
+          "amount": 5212918,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 14
+        },
+        {
+          "id": "information-technology",
+          "name": "Information Technology",
+          "kind": "department",
+          "amount": 1150454,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 15
+        },
+        {
+          "id": "prw",
+          "name": "Parks, Recreation & Waterfront (PRW)",
+          "kind": "department",
+          "amount": 13233201,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 16
+        },
+        {
+          "id": "planning-development",
+          "name": "Planning & Development",
+          "kind": "department",
+          "amount": 3666161,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 17
+        },
+        {
+          "id": "police",
+          "name": "Police",
+          "kind": "department",
+          "amount": 106198574,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 18
+        },
+        {
+          "id": "public-works",
+          "name": "Public Works",
+          "kind": "department",
+          "amount": 8135147,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 19
+        },
+        {
+          "id": "it-cost-allocation-plan",
+          "name": "IT Cost Allocation Plan",
+          "kind": "department",
+          "amount": 600000,
+          "source": "S1",
+          "table": "Dept Reductions FY27",
+          "row": 20
+        }
+      ],
+      "total": {
+        "amount": 283764035,
+        "source": "S1",
+        "table": "Dept Reductions FY27",
+        "row": 21
+      }
+    },
+    {
+      "year": 2028,
+      "basis": "General Fund department baseline before proposed cuts",
+      "note": "planning figure",
+      "lines": [
+        {
+          "id": "city-attorney",
+          "name": "City Attorney",
+          "kind": "department",
+          "amount": 7696001,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 5
+        },
+        {
+          "id": "city-auditor",
+          "name": "City Auditor",
+          "kind": "department",
+          "amount": 3929199,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 6
+        },
+        {
+          "id": "odpa",
+          "name": "Office of Dir. of Police Accountability (ODPA)",
+          "kind": "department",
+          "amount": 1289953,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 7
+        },
+        {
+          "id": "mayor-council",
+          "name": "Mayor & Council",
+          "kind": "department",
+          "amount": 6899331,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 8
+        },
+        {
+          "id": "city-clerk",
+          "name": "City Clerk",
+          "kind": "department",
+          "amount": 3998036,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 9
+        },
+        {
+          "id": "cmo",
+          "name": "City Manager's Office (CMO)",
+          "kind": "department",
+          "amount": 19041413,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 10
+        },
+        {
+          "id": "finance",
+          "name": "Finance",
+          "kind": "department",
+          "amount": 10178435,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 11
+        },
+        {
+          "id": "fire",
+          "name": "Fire",
+          "kind": "department",
+          "amount": 57206818,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 12
+        },
+        {
+          "id": "hhcs",
+          "name": "Health, Housing & Community Svcs (HHCS)",
+          "kind": "department",
+          "amount": 38021381,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 13
+        },
+        {
+          "id": "human-resources",
+          "name": "Human Resources",
+          "kind": "department",
+          "amount": 5387455,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 14
+        },
+        {
+          "id": "information-technology",
+          "name": "Information Technology",
+          "kind": "department",
+          "amount": 1150454,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 15
+        },
+        {
+          "id": "prw",
+          "name": "Parks, Recreation & Waterfront (PRW)",
+          "kind": "department",
+          "amount": 13382163,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 16
+        },
+        {
+          "id": "planning-development",
+          "name": "Planning & Development",
+          "kind": "department",
+          "amount": 3763360,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 17
+        },
+        {
+          "id": "police",
+          "name": "Police",
+          "kind": "department",
+          "amount": 107356946,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 18
+        },
+        {
+          "id": "public-works",
+          "name": "Public Works",
+          "kind": "department",
+          "amount": 8302692,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 19
+        },
+        {
+          "id": "it-cost-allocation-plan",
+          "name": "IT Cost Allocation Plan",
+          "kind": "department",
+          "amount": 600000,
+          "source": "S1",
+          "table": "Dept Reductions FY28",
+          "row": 20
+        }
+      ],
+      "total": {
+        "amount": 288203637,
+        "source": "S1",
+        "table": "Dept Reductions FY28",
+        "row": 21
+      }
+    }
+  ],
+  "staffing": {
+    "year": 2027,
+    "fte": 1559.54,
+    "basis": "baseline, all funds",
+    "source": "S1",
+    "table": "FTE & Positions",
+    "row": 5
+  },
   "revenue": {
     "title": "General Fund Revenue — FY2026 Adopted vs Mid-Year Actuals (and FY2025 comparison)",
     "note": "Note: Mid-year = first half of fiscal year (Jul–Dec). 'Adopted' is full-year budget; %Received compares half-year actual to full-year budget.",
+    "columns": [
+      {
+        "key": "adopted-2026",
+        "year": 2026,
+        "basis": "adopted"
+      },
+      {
+        "key": "mid-year-actual-2026",
+        "year": 2026,
+        "basis": "mid-year-actual"
+      },
+      {
+        "key": "mid-year-actual-2025",
+        "year": 2025,
+        "basis": "mid-year-actual"
+      }
+    ],
+    "primary": "adopted-2026",
     "lines": [
       {
         "name": "Secured Property Tax",
-        "fy2026Adopted": 95236939,
-        "fy2026MidYearActual": 47402611,
-        "fy2025MidYearActual": 45385988,
+        "values": {
+          "adopted-2026": 95236939,
+          "mid-year-actual-2026": 47402611,
+          "mid-year-actual-2025": 45385988
+        },
         "pctOfAdoptedReceived": 0.49773345823304965,
         "changeVsFy2025": 2016623,
         "changeVsFy2025Pct": 0.04443272227543003,
@@ -335,9 +679,11 @@
       },
       {
         "name": "Supplemental Taxes",
-        "fy2026Adopted": 3400000,
-        "fy2026MidYearActual": 684808,
-        "fy2025MidYearActual": 727555,
+        "values": {
+          "adopted-2026": 3400000,
+          "mid-year-actual-2026": 684808,
+          "mid-year-actual-2025": 727555
+        },
         "pctOfAdoptedReceived": 0.20141411764705883,
         "changeVsFy2025": -42747,
         "changeVsFy2025Pct": -0.05875432097916996,
@@ -347,9 +693,11 @@
       },
       {
         "name": "Unsecured Property Taxes",
-        "fy2026Adopted": 4973066,
-        "fy2026MidYearActual": 4439145,
-        "fy2025MidYearActual": 4165858,
+        "values": {
+          "adopted-2026": 4973066,
+          "mid-year-actual-2026": 4439145,
+          "mid-year-actual-2025": 4165858
+        },
         "pctOfAdoptedReceived": 0.892637459466655,
         "changeVsFy2025": 273287,
         "changeVsFy2025Pct": 0.06560161196084936,
@@ -359,9 +707,11 @@
       },
       {
         "name": "Property Transfer Tax",
-        "fy2026Adopted": 22000000,
-        "fy2026MidYearActual": 14079634,
-        "fy2025MidYearActual": 11918015,
+        "values": {
+          "adopted-2026": 22000000,
+          "mid-year-actual-2026": 14079634,
+          "mid-year-actual-2025": 11918015
+        },
         "pctOfAdoptedReceived": 0.6399833636363637,
         "changeVsFy2025": 2161619,
         "changeVsFy2025Pct": 0.18137407949226445,
@@ -371,9 +721,11 @@
       },
       {
         "name": "Property Transfer Tax — Measure P",
-        "fy2026Adopted": 9100000,
-        "fy2026MidYearActual": 6586501,
-        "fy2025MidYearActual": 4833858,
+        "values": {
+          "adopted-2026": 9100000,
+          "mid-year-actual-2026": 6586501,
+          "mid-year-actual-2025": 4833858
+        },
         "pctOfAdoptedReceived": 0.7237913186813186,
         "changeVsFy2025": 1752643,
         "changeVsFy2025Pct": 0.3625764348063183,
@@ -383,9 +735,11 @@
       },
       {
         "name": "Sales Taxes",
-        "fy2026Adopted": 19106713,
-        "fy2026MidYearActual": 9623130,
-        "fy2025MidYearActual": 9364937,
+        "values": {
+          "adopted-2026": 19106713,
+          "mid-year-actual-2026": 9623130,
+          "mid-year-actual-2025": 9364937
+        },
         "pctOfAdoptedReceived": 0.5036517793510584,
         "changeVsFy2025": 258193,
         "changeVsFy2025Pct": 0.027570180130416254,
@@ -395,9 +749,11 @@
       },
       {
         "name": "Soda Taxes",
-        "fy2026Adopted": 1147387,
-        "fy2026MidYearActual": 405897,
-        "fy2025MidYearActual": 512817,
+        "values": {
+          "adopted-2026": 1147387,
+          "mid-year-actual-2026": 405897,
+          "mid-year-actual-2025": 512817
+        },
         "pctOfAdoptedReceived": 0.35375771208842355,
         "changeVsFy2025": -106920,
         "changeVsFy2025Pct": -0.20849542819368314,
@@ -407,9 +763,11 @@
       },
       {
         "name": "Utility Users Taxes",
-        "fy2026Adopted": 19396728,
-        "fy2026MidYearActual": 8351808,
-        "fy2025MidYearActual": 9047804,
+        "values": {
+          "adopted-2026": 19396728,
+          "mid-year-actual-2026": 8351808,
+          "mid-year-actual-2025": 9047804
+        },
         "pctOfAdoptedReceived": 0.4305781882387586,
         "changeVsFy2025": -695996,
         "changeVsFy2025Pct": -0.07692430118954831,
@@ -419,9 +777,11 @@
       },
       {
         "name": "Transient Occupancy Taxes (net)",
-        "fy2026Adopted": 6500000,
-        "fy2026MidYearActual": 4679395,
-        "fy2025MidYearActual": 3583976,
+        "values": {
+          "adopted-2026": 6500000,
+          "mid-year-actual-2026": 4679395,
+          "mid-year-actual-2025": 3583976
+        },
         "pctOfAdoptedReceived": 0.719906923076923,
         "changeVsFy2025": 1095419,
         "changeVsFy2025Pct": 0.3056435087734963,
@@ -431,9 +791,11 @@
       },
       {
         "name": "Short-term Rentals",
-        "fy2026Adopted": 1400000,
-        "fy2026MidYearActual": 641433,
-        "fy2025MidYearActual": 661730,
+        "values": {
+          "adopted-2026": 1400000,
+          "mid-year-actual-2026": 641433,
+          "mid-year-actual-2025": 661730
+        },
         "pctOfAdoptedReceived": 0.4581664285714286,
         "changeVsFy2025": -20297,
         "changeVsFy2025Pct": -0.03067263083130582,
@@ -443,9 +805,11 @@
       },
       {
         "name": "Business License Tax",
-        "fy2026Adopted": 24480000,
-        "fy2026MidYearActual": 2336893,
-        "fy2025MidYearActual": 1338858,
+        "values": {
+          "adopted-2026": 24480000,
+          "mid-year-actual-2026": 2336893,
+          "mid-year-actual-2025": 1338858
+        },
         "pctOfAdoptedReceived": 0.09546131535947712,
         "changeVsFy2025": 998035,
         "changeVsFy2025Pct": 0.7454375295961185,
@@ -455,9 +819,11 @@
       },
       {
         "name": "Recreational Cannabis",
-        "fy2026Adopted": 18000,
-        "fy2026MidYearActual": 0,
-        "fy2025MidYearActual": 19017,
+        "values": {
+          "adopted-2026": 18000,
+          "mid-year-actual-2026": 0,
+          "mid-year-actual-2025": 19017
+        },
         "pctOfAdoptedReceived": 0,
         "changeVsFy2025": -19017,
         "changeVsFy2025Pct": -1,
@@ -467,9 +833,11 @@
       },
       {
         "name": "U1 Revenues",
-        "fy2026Adopted": 6500000,
-        "fy2026MidYearActual": 298004,
-        "fy2025MidYearActual": 128163,
+        "values": {
+          "adopted-2026": 6500000,
+          "mid-year-actual-2026": 298004,
+          "mid-year-actual-2025": 128163
+        },
         "pctOfAdoptedReceived": 0.04584676923076923,
         "changeVsFy2025": 169841,
         "changeVsFy2025Pct": 1.3251952591621607,
@@ -479,9 +847,11 @@
       },
       {
         "name": "Residential Vacancy Tax (new FY26)",
-        "fy2026Adopted": 3500000,
-        "fy2026MidYearActual": 363780,
-        "fy2025MidYearActual": 0,
+        "values": {
+          "adopted-2026": 3500000,
+          "mid-year-actual-2026": 363780,
+          "mid-year-actual-2025": 0
+        },
         "pctOfAdoptedReceived": 0.10393714285714285,
         "changeVsFy2025": 363780,
         "changeVsFy2025Pct": null,
@@ -491,9 +861,11 @@
       },
       {
         "name": "Other Taxes (incl. Redemptions)",
-        "fy2026Adopted": 5453059,
-        "fy2026MidYearActual": 3852627,
-        "fy2025MidYearActual": 1987429,
+        "values": {
+          "adopted-2026": 5453059,
+          "mid-year-actual-2026": 3852627,
+          "mid-year-actual-2025": 1987429
+        },
         "pctOfAdoptedReceived": 0.7065074850648049,
         "changeVsFy2025": 1865198,
         "changeVsFy2025Pct": 0.938497928731039,
@@ -503,9 +875,11 @@
       },
       {
         "name": "Vehicle In-Lieu Taxes (VLF)",
-        "fy2026Adopted": 20055853,
-        "fy2026MidYearActual": 9904792,
-        "fy2025MidYearActual": 9500999,
+        "values": {
+          "adopted-2026": 20055853,
+          "mid-year-actual-2026": 9904792,
+          "mid-year-actual-2025": 9500999
+        },
         "pctOfAdoptedReceived": 0.49386042069614294,
         "changeVsFy2025": 403793,
         "changeVsFy2025Pct": 0.04250005709925872,
@@ -515,9 +889,11 @@
       },
       {
         "name": "Parking Fines — Regular",
-        "fy2026Adopted": 5900000,
-        "fy2026MidYearActual": 3666656,
-        "fy2025MidYearActual": 2932701,
+        "values": {
+          "adopted-2026": 5900000,
+          "mid-year-actual-2026": 3666656,
+          "mid-year-actual-2025": 2932701
+        },
         "pctOfAdoptedReceived": 0.6214671186440678,
         "changeVsFy2025": 733955,
         "changeVsFy2025Pct": 0.2502658811791587,
@@ -527,9 +903,11 @@
       },
       {
         "name": "Moving Violations",
-        "fy2026Adopted": 132600,
-        "fy2026MidYearActual": 77236,
-        "fy2025MidYearActual": 73119,
+        "values": {
+          "adopted-2026": 132600,
+          "mid-year-actual-2026": 77236,
+          "mid-year-actual-2025": 73119
+        },
         "pctOfAdoptedReceived": 0.582473604826546,
         "changeVsFy2025": 4117,
         "changeVsFy2025Pct": 0.05630547463723519,
@@ -539,9 +917,11 @@
       },
       {
         "name": "Ambulance Fees",
-        "fy2026Adopted": 8900000,
-        "fy2026MidYearActual": 4593148,
-        "fy2025MidYearActual": 3768540,
+        "values": {
+          "adopted-2026": 8900000,
+          "mid-year-actual-2026": 4593148,
+          "mid-year-actual-2025": 3768540
+        },
         "pctOfAdoptedReceived": 0.5160840449438202,
         "changeVsFy2025": 824608,
         "changeVsFy2025Pct": 0.21881365197132047,
@@ -551,9 +931,11 @@
       },
       {
         "name": "Interest Income",
-        "fy2026Adopted": 14000000,
-        "fy2026MidYearActual": 6849335,
-        "fy2025MidYearActual": 7735188,
+        "values": {
+          "adopted-2026": 14000000,
+          "mid-year-actual-2026": 6849335,
+          "mid-year-actual-2025": 7735188
+        },
         "pctOfAdoptedReceived": 0.4892382142857143,
         "changeVsFy2025": -885853,
         "changeVsFy2025Pct": -0.1145224912439103,
@@ -563,9 +945,11 @@
       },
       {
         "name": "Franchise Fees",
-        "fy2026Adopted": 1822528,
-        "fy2026MidYearActual": 246401,
-        "fy2025MidYearActual": 268424,
+        "values": {
+          "adopted-2026": 1822528,
+          "mid-year-actual-2026": 246401,
+          "mid-year-actual-2025": 268424
+        },
         "pctOfAdoptedReceived": 0.13519737419672015,
         "changeVsFy2025": -22023,
         "changeVsFy2025Pct": -0.0820455696957053,
@@ -575,9 +959,11 @@
       },
       {
         "name": "Other Revenue",
-        "fy2026Adopted": 8000000,
-        "fy2026MidYearActual": 4619244,
-        "fy2025MidYearActual": 4308571,
+        "values": {
+          "adopted-2026": 8000000,
+          "mid-year-actual-2026": 4619244,
+          "mid-year-actual-2025": 4308571
+        },
         "pctOfAdoptedReceived": 0.5774055,
         "changeVsFy2025": 310673,
         "changeVsFy2025Pct": 0.07210580955959645,
@@ -587,9 +973,11 @@
       },
       {
         "name": "IDC Reimbursement",
-        "fy2026Adopted": 7070256,
-        "fy2026MidYearActual": 3045997,
-        "fy2025MidYearActual": 3200593,
+        "values": {
+          "adopted-2026": 7070256,
+          "mid-year-actual-2026": 3045997,
+          "mid-year-actual-2025": 3200593
+        },
         "pctOfAdoptedReceived": 0.43081848804343154,
         "changeVsFy2025": -154596,
         "changeVsFy2025Pct": -0.048302298980220225,
@@ -599,9 +987,11 @@
       },
       {
         "name": "Transfers",
-        "fy2026Adopted": 23842130,
-        "fy2026MidYearActual": 18763010,
-        "fy2025MidYearActual": 2090961,
+        "values": {
+          "adopted-2026": 23842130,
+          "mid-year-actual-2026": 18763010,
+          "mid-year-actual-2025": 2090961
+        },
         "pctOfAdoptedReceived": 0.7869686978470464,
         "changeVsFy2025": 16672049,
         "changeVsFy2025Pct": 7.973390704082955,
@@ -612,9 +1002,11 @@
     ],
     "total": {
       "name": "TOTAL General Fund Revenue & Transfers",
-      "fy2026Adopted": 311935259,
-      "fy2026MidYearActual": 155511485,
-      "fy2025MidYearActual": 127555101,
+      "values": {
+        "adopted-2026": 311935259,
+        "mid-year-actual-2026": 155511485,
+        "mid-year-actual-2025": 127555101
+      },
       "pctOfAdoptedReceived": 0.49853769496445416,
       "changeVsFy2025": 27956384,
       "changeVsFy2025Pct": 0.21917103887519168,
@@ -1984,6 +2376,21 @@
       "source": "S6",
       "table": "Capital Program FY27-28",
       "row": 33
+    }
+  },
+  "size": {
+    "allFunds": {
+      "source": "S20",
+      "page": 1,
+      "quote": "The total proposed citywide expenditure for all funds in FY27 is $916.8 million (gross appropriations)",
+      "amount": 916819369,
+      "note": "gross appropriations"
+    },
+    "generalFund": {
+      "source": "S20",
+      "page": 1,
+      "quote": "In FY27, the General Fund (Fund 011) expenditures are estimated at $313.8 million",
+      "amount": 313849211
     }
   },
   "documentFacts": {

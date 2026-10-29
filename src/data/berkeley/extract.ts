@@ -17,6 +17,7 @@ import type {
   BridgeStep,
   CapitalLine,
   CityBudget,
+  GapBudget,
   CostComponent,
   CrossCheck,
   DepartmentReductions,
@@ -134,6 +135,9 @@ export function departmentId(name: string): string {
 
 const ratio = (num: number, den: number) => (den === 0 ? null : num / den);
 
+/** The GF Revenue FY26 tab's columns, by key in budget.json's revenue table. */
+export const REVENUE = { adopted: 'adopted-2026', midYear: 'mid-year-actual-2026', priorMidYear: 'mid-year-actual-2025' } as const;
+
 /** Rows from `start` until column A starts with `stop`; returns [dataRows, stopRow]. */
 function rowsUntil(tab: Tab, start: number, stop: string): [number[], number] {
   const rows: number[] = [];
@@ -146,7 +150,7 @@ function rowsUntil(tab: Tab, start: number, stop: string): [number[], number] {
   throw new Error(`${tab.name}: no "${stop}" row found below row ${start}`);
 }
 
-export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']) {
+export async function extractBerkeley(wb: Workbook, meta: GapBudget['workbook']) {
   const checks: CrossCheck[] = [];
   /** Record a formula cell the workbook computed, beside our own value for it. */
   const check = (tab: Tab, address: string, computed: number | null) => {
@@ -185,11 +189,9 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
       const adopted = read(`B${r}`);
       const actual = read(`C${r}`);
       const prior = read(`E${r}`);
-      const lineValue: RevenueLine = {
+      const lineValue = {
         name: tab.text(`A${r}`),
-        fy2026Adopted: adopted,
-        fy2026MidYearActual: actual,
-        fy2025MidYearActual: prior,
+        values: { [REVENUE.adopted]: adopted, [REVENUE.midYear]: actual, [REVENUE.priorMidYear]: prior },
         pctOfAdoptedReceived: ratio(actual, adopted),
         changeVsFy2025: actual - prior,
         changeVsFy2025Pct: ratio(actual - prior, prior),
@@ -206,6 +208,12 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
     return {
       title: tab.text('A1'),
       note: tab.text(`A${noteRow}`),
+      columns: [
+        { key: REVENUE.adopted, year: 2026, basis: 'adopted' },
+        { key: REVENUE.midYear, year: 2026, basis: 'mid-year-actual' },
+        { key: REVENUE.priorMidYear, year: 2025, basis: 'mid-year-actual' },
+      ],
+      primary: REVENUE.adopted,
       lines: rows.map((r) => line(r, tab.input)),
       total: line(totalRow, tab.value),
     };
@@ -549,11 +557,24 @@ export async function extractBerkeley(wb: Workbook, meta: CityBudget['workbook']
     } satisfies CityBudget['citedFacts'];
   })();
 
+  // What every city has: each year's department baselines, and the baseline staff count.
+  const generalFund = departmentReductions.map((t) => ({
+    year: t.year,
+    basis: 'General Fund department baseline before proposed cuts',
+    note: 'planning figure',
+    lines: t.departments.map((d) => ({ id: d.id, name: d.name, kind: 'department' as const, amount: d.baseline, source: d.source, table: d.table, row: d.row })),
+    total: { amount: t.total.baseline, source: t.total.source, table: t.total.table, row: t.total.row },
+  }));
+  const baseline = fte.scenarios.find((s) => s.key === 'without-sales-tax')!;
+  const staffing = { year: baseline.year, fte: baseline.baselineFte, basis: 'baseline, all funds', source: baseline.source, table: baseline.table, row: baseline.row };
+
   const budget: WorkbookBudget = {
     schemaVersion: SCHEMA_VERSION,
     workbook: meta,
     notes,
     sources,
+    generalFund,
+    staffing,
     revenue,
     deficitBridge,
     departmentReductions,

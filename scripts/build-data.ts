@@ -1,5 +1,5 @@
 /**
- * Builds data/cities/{city}/budget.json from each city's workbook, and fails
+ * Builds data/cities/{city}/budget.json from each city's workbook or documents, and fails
  * if any tie-out check breaks.
  *
  *   npm run data          write budget.json
@@ -29,10 +29,10 @@ for (const city of Object.keys(PIPELINES)) {
     const committed = await readFile(out, 'utf8').catch(() => '');
     if (committed !== json) {
       failed = true;
-      console.error(`✘ ${city}: budget.json is out of date with its workbook. Run \`npm run data\` and commit the result.`);
+      console.error(`✘ ${city}: budget.json is out of date with its workbook or documents. Run \`npm run data\` and commit the result.`);
       continue;
     }
-    console.log(`✓ ${city}: budget.json matches the workbook and passes all checks`);
+    console.log(`✓ ${city}: budget.json matches its sources and passes all checks`);
   } else {
     await writeFile(out, json);
     console.log(`✓ ${city}: wrote budget.json (${budget.sources.length} sources, all checks pass)`);

@@ -1,0 +1,17 @@
+{
+  "year": 2027,
+  "reserves": [
+    {
+      "key": "contingency",
+      "name": "Contingency Reserve",
+      "purpose": "For emergencies such as natural disasters and severe unforeseen events. The City funds it each year at 16.7% of General Fund spending and transfers out, the minimum the Government Finance Officers Association recommends.",
+      "amount": { "source": "S1", "page": 79, "quote": "Contingency Reserve $ 46,394 $ 1,884 $ - $ 48,278", "figure": 4, "unit": 1000 }
+    },
+    {
+      "key": "budget-uncertainty",
+      "name": "Budget Uncertainty Reserve",
+      "purpose": "To cover revenue shortfalls in an economic downturn and unexpected cost increases, such as higher pension contributions. The City drew $19.9 million from it in FY 2024/25, when the State recovered sales tax it had overpaid.",
+      "amount": { "source": "S1", "page": 79, "quote": "Budget Uncertainty Reserve 4,298 - - 4,298", "figure": 4, "unit": 1000 }
+    }
+  ]
+}

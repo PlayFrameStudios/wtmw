@@ -4,7 +4,7 @@
  * number is parsed from the quote, never typed in: the same rule the workbook's
  * sentence-stated facts follow (citedFacts).
  */
-import type { ByYear, CityBudget, DocCapitalLine, DocCapitalPart, DocRef, DocumentFacts, Source, SourceId, StepNote, WorkbookBudget } from './types.ts';
+import type { ByYear, DocCapitalLine, GapBudget, DocCapitalPart, DocRef, DocumentFacts, Source, SourceId, StepNote, WorkbookBudget } from './types.ts';
 
 export interface DocumentsFile {
   sources: Omit<Source, 'number' | 'row'>[];
@@ -155,7 +155,7 @@ function checkedNotes(notes: Record<string, StepNote>, field: string, known: Set
   );
 }
 
-export function applyDocuments(budget: WorkbookBudget, file: DocumentsFile, excerpts: Excerpts): { budget: CityBudget; errors: string[] } {
+export function applyDocuments(budget: WorkbookBudget, file: DocumentsFile, excerpts: Excerpts): { budget: GapBudget; errors: string[] } {
   const errors: string[] = [];
   const first = budget.sources.length + 1;
   const added: Source[] = file.sources.map((s, i) => ({ ...s, number: first + i }));
@@ -236,7 +236,7 @@ export function applyDocuments(budget: WorkbookBudget, file: DocumentsFile, exce
   } catch (e) {
     errors.push((e as Error).message);
   }
-  if (!documentFacts) return { budget: { ...budget, sources: [...budget.sources, ...added] } as CityBudget, errors };
+  if (!documentFacts) return { budget: { ...budget, sources: [...budget.sources, ...added] } as GapBudget, errors };
 
   // Cross-checks against the workbook: two documents, one estimate; the restated gap is the workbook's, rounded.
   const f = documentFacts;
@@ -256,5 +256,9 @@ export function applyDocuments(budget: WorkbookBudget, file: DocumentsFile, exce
     if (Math.abs(wb - f.adoptionGap.years[y]) > 5_000) errors.push(`adoption staff report restates the FY${y} gap as ${f.adoptionGap.years[y]}, but the workbook says ${wb}`);
   }
   if (!Number.isFinite(f.bondAudit.everyYears)) errors.push('documents.json bondAudit: unrecognized number of years');
-  return { budget: { ...budget, sources: [...budget.sources, ...added], documentFacts }, errors };
+  // The budget's size, for every city's overview: the adoption report's all-funds and General Fund spending.
+  const { amount: allFunds, ...allFundsRef } = f.allFunds;
+  const { amount: generalFund, ...generalFundRef } = f.generalFund;
+  const size = { allFunds: { ...allFundsRef, amount: allFunds, note: 'gross appropriations' }, generalFund: { ...generalFundRef, amount: generalFund } };
+  return { budget: { ...budget, sources: [...budget.sources, ...added], size, documentFacts }, errors };
 }

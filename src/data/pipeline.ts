@@ -1,6 +1,7 @@
 /**
- * One entry per city that has budget data: where its workbook lives and how
- * to turn it into budget.json. `npm run data` runs every entry.
+ * One entry per city that has budget data and how to turn it into budget.json:
+ * from a workbook (Berkeley) or from City documents alone (Fremont).
+ * `npm run data` runs every entry.
  */
 import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
@@ -8,10 +9,15 @@ import { join } from 'node:path';
 import { extractBerkeley } from './berkeley/extract.ts';
 import { validateBerkeley } from './berkeley/validate.ts';
 import { applyDocuments, checkQuotesIn, type DocumentsFile, type Excerpts } from './documents.ts';
-import type { CityBudget } from './types.ts';
+import { buildFremont, type FremontDocuments } from './fremont/build.ts';
+import type { CityBudget, GapBudget } from './types.ts';
 import { openWorkbook } from './workbook.ts';
 
-export const PIPELINES: Record<string, { workbook: string; build: (path: string, meta: CityBudget['workbook'], cityDir: string) => Promise<Result> }> = {
+type Pipeline =
+  | { workbook: string; build: (path: string, meta: GapBudget['workbook'], cityDir: string) => Promise<Result> }
+  | { workbook?: undefined; build: (cityDir: string) => Promise<Result> };
+
+export const PIPELINES: Record<string, Pipeline> = {
   'us/ca/berkeley': {
     workbook: 'source/Berkeley_Budget_FY25-FY28.xlsx',
     build: async (path, meta, cityDir) => {
@@ -23,6 +29,12 @@ export const PIPELINES: Record<string, { workbook: string; build: (path: string,
       const known = new Set<string>(merged.budget.sources.map((s) => s.id));
       const quotes = checkQuotesIn(ballot, docs.excerpts, known, 'ballot.json');
       return { budget: merged.budget, errors: [...errors, ...merged.errors, ...quotes] };
+    },
+  },
+  'us/ca/fremont': {
+    build: async (cityDir) => {
+      const docs = await readDocuments(cityDir);
+      return buildFremont(docs.file as unknown as FremontDocuments, docs.excerpts);
     },
   },
 };
@@ -44,10 +56,11 @@ export interface Result {
   errors: string[];
 }
 
-/** Runs one city's pipeline against `workbookPath` (defaults to the committed workbook). */
+/** Runs one city's pipeline; a workbook city's runs against `workbookPath` (defaults to the committed workbook). */
 export async function buildCity(root: string, city: string, workbookPath?: string): Promise<Result> {
   const pipeline = PIPELINES[city];
   if (!pipeline) throw new Error(`no data pipeline for ${city}`);
+  if (pipeline.workbook === undefined) return pipeline.build(join(root, 'data/cities', city));
   const path = workbookPath ?? join(root, 'data/cities', city, pipeline.workbook);
   const sha256 = createHash('sha256').update(await readFile(path)).digest('hex');
   return pipeline.build(path, { file: pipeline.workbook, sha256 }, join(root, 'data/cities', city));
