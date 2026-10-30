@@ -22,9 +22,11 @@ import { departmentItems } from '../../../../lib/departments';
 import { familiesFor } from '../../../../lib/families';
 import { shortMoney } from '../../../../lib/format';
 import { cityOverview, gapOverview } from '../../../../lib/overview';
+import { balanceOf } from '../../../../lib/balance';
 import { formatValue, type Figure } from '../../../../lib/receipts';
 import { reservesFor } from '../../../../lib/reserves';
 import { revenueGroupsFor } from '../../../../lib/revenue-groups';
+import { perHundred } from '../../../../lib/waffle';
 
 export const getStaticPaths = cityStaticPaths();
 
@@ -43,6 +45,14 @@ const gp = plan && gapOverview(plan);
 // Card 2's "Why?" (#38): the City's own reasons, cost side and revenue side together, in its order, not ranked.
 const why = plan ? [plan.documentFacts.notes.costDrivers, plan.documentFacts.notes.payAndBenefits] : [];
 const reserves = gapCity ? undefined : reservesFor(city)!;
+// A balanced budget's own facts (#44): the City's framing, what is tight, and its capital plan in figures.
+const balance = gapCity ? undefined : balanceOf(budget, (y) => label(y));
+const plan5 = budget.capitalPlan;
+const capital = plan5 && {
+  total: { value: plan5.total.total, label: `${plan5.title}, five-year total`, ref: plan5.total, tone: 'neutral' } satisfies Figure,
+  year: { value: plan5.total.years[year], label: `${plan5.title}, ${label(year)}`, ref: plan5.total.cites?.[year] ?? plan5.total, tone: 'neutral' } satisfies Figure,
+  transfer: budget.facts?.cipTransfer && ({ value: budget.facts.cipTransfer.value, label: 'General Fund transfer to the capital plan each year, for capital maintenance', ref: budget.facts.cipTransfer, tone: 'neutral' } satisfies Figure),
+};
 const reserveTotal: Figure | undefined = reserves && {
   value: reserves.reserves.reduce((a, r) => a + r.figure.value, 0),
   label: `${reserves.reserves.length === 1 ? reserves.reserves[0].name : 'Reserves'}, ${label(reserves.year)}`,
@@ -94,6 +104,14 @@ const numberWords: Record<number, string> = { 10: 'ten' };
           <Sourced city={city} figure={o.baseline}>{shortMoney(o.baseline.value)}</Sourced> of it {gapCity ? 'planned for departments, before cuts' : 'budgeted for departments, before citywide costs and savings'}.
         </p>
       </StepInfo>
+      {
+        balance && (
+          <p class="lede">
+            The City describes its budget as allocating <Sourced city={city} figure={balance.directCostShare}>{pct(balance.directCostShare.value)}</Sourced> of the budget to direct
+            costs for public safety and maintenance. That share is of the City's own total, not of the squares here.
+          </p>
+        )
+      }
       <!-- Phones: the tour sits above the waffle, which fills a screen (#24). Wide screens show the copy in .hero-more. -->
       <p class="ctas ctas--narrow">
         <a class="btn btn--ink" href="#three-things">Start the 3-minute tour <span aria-hidden="true">→</span></a>
@@ -124,7 +142,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
                 ))}
               </span>
               <span class="fam">{f.family.name}</span>
-              <span class="dollars num">${f.dollars}</span>
+              <span class="dollars num">{perHundred(f.dollars, f.exact)}</span>
             </li>
           ))
         }
@@ -262,7 +280,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
             <a class="more" href={`${city.path}gap/`}>See the gap step by step <span aria-hidden="true">→</span></a>
           </li>
         ) : (
-          <ReservesCard city={city} reserves={reserves!} n={2} />
+          <ReservesCard city={city} reserves={reserves!} n={2} balance={balance} />
         )
       }
 
@@ -281,7 +299,24 @@ const numberWords: Record<number, string> = { 10: 'ten' };
           <li class="card">
             <p class="n n--bay">3</p>
             <h2>Streets, buildings and parks have their own budget.</h2>
-            <p class="body">The capital program is planned separately from day-to-day spending.</p>
+            <p class="body">
+              The capital program is planned separately from day-to-day spending.
+              {
+                capital && (
+                  <>
+                    {' '}
+                    It sets out <Sourced city={city} figure={capital.total}>{shortMoney(capital.total.value)}</Sourced> over five years,{' '}
+                    <Sourced city={city} figure={capital.year}>{shortMoney(capital.year.value)}</Sourced> of it in {label(year)}.
+                    {capital.transfer && (
+                      <>
+                        {' '}
+                        The General Fund puts in <Sourced city={city} figure={capital.transfer}>{shortMoney(capital.transfer.value)}</Sourced> a year for capital maintenance.
+                      </>
+                    )}
+                  </>
+                )
+              }
+            </p>
             {has('capital') && <a class="more" href={`${city.path}capital/`}>See the capital program <span aria-hidden="true">→</span></a>}
           </li>
         )
@@ -439,6 +474,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
   .dollars {
     margin-inline-start: auto;
     color: var(--muted);
+    white-space: nowrap;
   }
   @media (min-width: 64rem) {
     .hero {

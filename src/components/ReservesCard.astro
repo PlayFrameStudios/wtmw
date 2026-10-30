@@ -3,10 +3,12 @@
  * The overview's card 2 for a city in balance (#42): the cited reason it is shown as in
  * balance, and its reserves, each its own receipt. Its styles are inline, so they ship only
  * where the card renders: a bundled <style> would land on every city's overview, Berkeley's
- * included. #44 writes Fremont's copy.
+ * included. With a city's balance facts (#44), it also says what the budget can't yet do, in the
+ * City's terms, and what the Budget Uncertainty Reserve covered last.
  */
 import SourceChip from './SourceChip.astro';
 import Sourced from './Sourced.astro';
+import type { Balance } from '../lib/balance';
 import type { City } from '../lib/cities';
 import { shortMoney } from '../lib/format';
 import type { CityReserves } from '../lib/reserves';
@@ -16,9 +18,10 @@ interface Props {
   reserves: CityReserves;
   /** The card's number on the overview. */
   n: number;
+  balance?: Balance;
 }
 
-const { city, reserves, n } = Astro.props;
+const { city, reserves, n, balance } = Astro.props;
 ---
 
 <li class="reserves-card">
@@ -28,6 +31,17 @@ const { city, reserves, n } = Astro.props;
     {city.fiscalPosition.reason.text}
     <SourceChip city={city} source={city.fiscalPosition.reason.cites[0].source} at={city.fiscalPosition.reason.cites[0]} also={city.fiscalPosition.reason.cites.slice(1)} />
   </p>
+  {
+    balance && (
+      <p class="reserves-card-body">
+        The City says projected revenue growth is enough to keep staffing and services at their current levels, but not to restore{' '}
+        <Sourced city={city} figure={balance.notRestored.maintenance}>{shortMoney(balance.notRestored.maintenance.value)}</Sourced> of ongoing maintenance support or{' '}
+        <Sourced city={city} figure={balance.notRestored.personnel}>{shortMoney(balance.notRestored.personnel.value)}</Sourced> of ongoing personnel, supplies and services
+        reductions made in FY 2025/26. Its spending total also counts on <Sourced city={city} figure={balance.savings}>{shortMoney(balance.savings.value)}</Sourced> of
+        Citywide Savings, money it expects to go unspent, mostly from vacant positions.
+      </p>
+    )
+  }
   <ul class="reserves-card-list" role="list">
     {
       reserves.reserves.map((r) => (
@@ -40,6 +54,15 @@ const { city, reserves, n } = Astro.props;
       ))
     }
   </ul>
+  {
+    balance && (
+      <p class="reserves-card-body">
+        In FY 2024/25 the City used <Sourced city={city} figure={balance.uncertainty.draw}>{shortMoney(balance.uncertainty.draw.value)}</Sourced> of its Budget Uncertainty
+        Reserve to cover a one-time revenue shortfall. This budget adds nothing to it.
+        <SourceChip city={city} source={balance.uncertainty.noNewFunding.source} at={balance.uncertainty.noNewFunding} />
+      </p>
+    )
+  }
   <a class="reserves-card-more" href={`${city.path}reserves/`}>See balance &amp; reserves <span aria-hidden="true">→</span></a>
 </li>
 

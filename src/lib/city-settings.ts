@@ -131,7 +131,7 @@ export interface ReservesFile {
 export interface Reserve {
   key: string;
   name: string;
-  /** What the reserve is for, in plain language. */
+  /** What the reserve is for, in plain language, with no figures. */
   purpose: string;
   /** Parsed from the quote, never typed in. */
   value: number;
@@ -149,6 +149,8 @@ export function parseReserves(file: string, raw: unknown): { year: number; reser
     for (const k of ['key', 'name', 'purpose'] as const) {
       if (typeof r[k] !== 'string' || !(r[k] as string).trim()) throw new Error(`${where}: missing "${k}"`);
     }
+    // A purpose is plain language: a figure typed into it would have no receipt (#44). Cite figures in the page copy.
+    if (/\d/.test(r.purpose as string)) throw new Error(`${where}: "purpose" has a figure in it, which would have no receipt; say what the reserve is for, without numbers`);
     if (seen.has(r.key as string)) throw new Error(`${where}: duplicate key "${r.key}"`);
     seen.add(r.key as string);
     const { figure, unit, ...ref } = docRef(r.amount, `${where}.amount`) as DocRef & { figure?: unknown; unit?: unknown };

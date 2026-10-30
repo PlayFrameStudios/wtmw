@@ -3,11 +3,15 @@
  * Balance & Reserves (#42): the fiscal-position page for a city in balance, in the slot
  * The Gap takes for a city with a deficit. Which one a city gets is an editorial choice
  * in its city.json, with the cited reason this page opens with. The page is built around
- * the reserves module; #44 adds Fremont's sources-and-uses and forecast.
+ * the reserves module; with a city's balance facts (#44), its sources and uses, what the budget
+ * assumes and the City's forecast.
  */
+import BalanceSheet from '../../../../components/BalanceSheet.astro';
 import Reserves from '../../../../components/Reserves.astro';
 import SourceChip from '../../../../components/SourceChip.astro';
 import Base from '../../../../layouts/Base.astro';
+import { balanceOf } from '../../../../lib/balance';
+import { budgetFor } from '../../../../lib/budget';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
 import { fy } from '../../../../lib/city-settings';
 import { reservesFor } from '../../../../lib/reserves';
@@ -18,6 +22,7 @@ const { city } = Astro.props as { city: City };
 const reserves = reservesFor(city)!;
 const reason = city.fiscalPosition.reason;
 const years = city.budget.years.map((y) => fy(city.budget.labels, y));
+const balance = balanceOf(budgetFor(city)!, (y) => fy(city.budget.labels, y));
 ---
 
 <Base title={`Balance & reserves · ${city.name}`} city={city} description={`Where ${city.name}'s budget stands, and what it keeps in reserve. Every number links to the public document it came from.`}>
@@ -32,7 +37,15 @@ const years = city.budget.years.map((y) => fy(city.budget.labels, y));
         {city.name} adopts {city.budget.cadence === 'annual' ? 'a budget each year' : 'a two-year budget'}. This page covers {years.join(' and ')}.
       </p>
     </section>
-    <Reserves city={city} reserves={reserves} />
+    {
+      balance ? (
+        <BalanceSheet city={city} balance={balance}>
+          <Reserves city={city} reserves={reserves} />
+        </BalanceSheet>
+      ) : (
+        <Reserves city={city} reserves={reserves} />
+      )
+    }
   </div>
 </Base>
 

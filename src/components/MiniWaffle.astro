@@ -6,7 +6,7 @@
  */
 import type { Families } from '../lib/families';
 import type { Share } from '../lib/waffle';
-import { squares } from '../lib/waffle';
+import { perHundred, squares } from '../lib/waffle';
 
 interface Props {
   shares: Share<{ id: string; name: string }>[];
@@ -16,11 +16,11 @@ interface Props {
 
 const { shares, families, cityName } = Astro.props;
 const cells = squares(shares);
-const familyDollars = families.list.map((f) => ({
-  family: f,
-  dollars: shares.filter((s) => families.of(s.item.id).id === f.id).reduce((a, s) => a + s.squares, 0),
-}));
-const label = `${cityName}'s FY2027 department baseline, per $100: ${familyDollars.map((f) => `${f.family.name} $${f.dollars}`).join(', ')}.`;
+const familyDollars = families.list.map((f) => {
+  const members = shares.filter((s) => families.of(s.item.id).id === f.id);
+  return { family: f, dollars: members.reduce((a, s) => a + s.squares, 0), exact: members.reduce((a, s) => a + s.exact, 0) };
+});
+const label = `${cityName}'s FY2027 department baseline, per $100: ${familyDollars.map((f) => `${f.family.name} ${perHundred(f.dollars, f.exact)}`).join(', ')}.`;
 ---
 
 <div class="mini-waffle">

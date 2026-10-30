@@ -46,3 +46,8 @@ export interface WaffleItem {
 export function squares<T>(shares: Share<T>[]): T[] {
   return shares.flatMap((s) => Array<T>(s.squares).fill(s.item));
 }
+
+/** Whole dollars of every $100, as the chart shows them (#44): an item too small for a square is "less than $1", not "$0", which reads as unfunded. */
+export function perHundred(squares: number, exact: number): string {
+  return squares === 0 && exact > 0 ? 'less than $1' : `$${squares}`;
+}

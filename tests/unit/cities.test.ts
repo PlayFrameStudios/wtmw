@@ -7,8 +7,8 @@ const berkeley = JSON.parse(readFileSync(join(import.meta.dirname, '../../data/c
 const exists = () => true;
 
 describe('city registry', () => {
-  it('loads Berkeley from data/cities', () => {
-    expect(cities.map((c) => c.path)).toEqual(['/us/ca/berkeley/']);
+  it('loads Berkeley and Fremont from data/cities', () => {
+    expect(cities.map((c) => c.path)).toEqual(['/us/ca/berkeley/', '/us/ca/fremont/']);
     expect(cities[0].slug).toEqual({ country: 'us', state: 'ca', city: 'berkeley' });
   });
 

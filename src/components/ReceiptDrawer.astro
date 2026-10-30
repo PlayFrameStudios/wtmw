@@ -127,6 +127,8 @@ const data = {
         // A document with front matter cites its printed page, and says which PDF page that is.
         r.page ? row('Page', primary.pageOffset ? `p. ${folio(primary, r.page)} (page ${r.page} of the PDF)` : `p. ${r.page} of the PDF`) : null,
         r.quote ? row('It says', h('q', { class: 'quote' }, r.quote)) : null,
+        // A table row's quote is the whole line, so name the column the figure is in.
+        r.column ? row('Column', r.column) : null,
         // More of the same document behind the same statement (#29): its page and what it says there.
         ...(r.also ?? [])
           .filter((c) => c.source === primary.id)

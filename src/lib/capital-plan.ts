@@ -9,7 +9,7 @@ export function capitalPlanPage(plan: CapitalPlan, yearLabel: (year: number) => 
   const span = `${yearLabel(plan.years[0])}–${yearLabel(plan.years[plan.years.length - 1]).replace(/^FY ?/, '')}`;
   const row = (l: CapitalPlan['lines'][number] | (CapitalPlan['total'] & { name: string })) => ({
     name: l.name,
-    years: plan.years.map((y) => ({ year: y, figure: { value: l.years[y], label: `${l.name}, ${yearLabel(y)}: capital plan`, ref: l, tone: 'neutral' } satisfies Figure })),
+    years: plan.years.map((y) => ({ year: y, figure: { value: l.years[y], label: `${l.name}, ${yearLabel(y)}: capital plan`, ref: l.cites?.[y] ?? l, tone: 'neutral' } satisfies Figure })),
     total: { value: l.total, label: `${l.name}: capital plan, ${span}`, ref: l, tone: 'neutral' } satisfies Figure,
     share: l.total / plan.total.total,
   });

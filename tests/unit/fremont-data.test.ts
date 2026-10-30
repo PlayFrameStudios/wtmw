@@ -10,10 +10,11 @@ import { csvTables } from '../../src/data/csv';
 import { buildCity, readDocuments } from '../../src/data/pipeline';
 import { readTable, splitRow } from '../../src/data/tables';
 import { hasGapPlan, type CityBudget } from '../../src/data/types';
-import { allCities, buildRegistry, cities } from '../../src/lib/cities';
+import { allCities, buildRegistry, cities, published } from '../../src/lib/cities';
 import { parseReserves } from '../../src/lib/city-settings';
 import { departmentBudgets } from '../../src/lib/department-budgets';
 import { familiesFor } from '../../src/lib/families';
+import { shortMoney } from '../../src/lib/format';
 import { folio, openAt } from '../../src/lib/open-at';
 import { csvHref } from '../../src/lib/receipts';
 import { reservesFor } from '../../src/lib/reserves';
@@ -88,6 +89,10 @@ describe('Fremont: the build', () => {
     expect(budget.facts!.contingencyPolicy.value).toBe(0.167);
     expect(budget.facts!.population.value).toBe(233_974);
     expect(budget.facts!.cipTransfer.value).toBe(3_775_000);
+    expect(budget.facts!.directCostShare.value).toBe(0.87);
+    expect(budget.facts!.personnelNotRestored.value).toBe(3_100_000);
+    expect(budget.facts!.contingencyIncrease).toMatchObject({ value: 1_884_000, page: 79, column: 'FY 2026/27 Increase' });
+    expect(budget.facts!.forecastUnreserved2029).toMatchObject({ value: 12_450_000, page: 93, column: '2028/29 Projected' });
   });
 
   it('has no deficit plan, so the deficit-plan pages and views never run for it', () => {
@@ -133,6 +138,11 @@ describe('Fremont: each check, broken', () => {
     expect(buildFremont({ ...file, quotes }, changed).errors.join('\n')).toMatch(/citywide savings: the sentence says \$19800000, the table -19700000/);
   });
 
+  it('a glossary definition from the text that leaves out its quote', () => {
+    const glossary = file.glossary.map((g) => (g.term === 'Citywide Savings' ? { ...g, definition: 'Savings the City expects, mostly from vacant positions.' } : g));
+    expect(buildFremont({ ...file, glossary }, excerpts).errors.join('\n')).toMatch(/glossary "Citywide Savings": the definition must hold its quote/);
+  });
+
   it('a glossary definition that is not on its page', () => {
     expect(() => buildFremont(file, edited('S1', 279, 'not \nlegally restricted', 'not \nrestricted'))).toThrow(/glossary "General Fund"/);
   });
@@ -153,6 +163,13 @@ describe('table rows', () => {
     expect(splitRow('Total $43.077 $32.346').cells).toEqual([43.077, 32.346]);
   });
 
+  it('rounds headline money half up, as the City prints it: $12,450,000 is $12.5M', () => {
+    expect(shortMoney(12_450_000)).toBe('$12.5M'); // (12.45).toFixed(1) is "12.4"
+    expect(shortMoney(12_449_999)).toBe('$12.4M');
+    expect(shortMoney(-29_249_339)).toBe('−$29.2M');
+    expect(shortMoney(1_742_000, 2)).toBe('$1.74M');
+  });
+
   it('scales to dollars without float noise', () => {
     const t = readTable(file.tables.capitalPlan, excerpts);
     expect(t.row('Total').values['2026']).toBe(43_077_000);
@@ -166,9 +183,9 @@ describe('table rows', () => {
 });
 
 describe('Fremont: the site', () => {
-  it('is a draft: it gets pages but is on no list of cities', () => {
-    expect(fremont.draft).toBe(true);
-    expect(cities.map((c) => c.path)).not.toContain('/us/ca/fremont/');
+  it('is published (#44), and the draft flag it left still keeps a city off every list', () => {
+    expect(fremont.draft).toBe(false);
+    expect(cities.map((c) => c.path)).toContain('/us/ca/fremont/');
     const meta = { name: 'X', state: 'S', stateCode: 'CA', country: 'C', countryCode: 'US', government: 'G' };
     const settings = {
       budget: { cadence: 'annual', years: [2027], labels: { long: 'FY{end}', short: 'FY{yy}', spoken: 'fiscal year {end}' } },
@@ -176,6 +193,12 @@ describe('Fremont: the site', () => {
       ballot: false,
     };
     expect(() => buildRegistry({ '/data/cities/us/ca/x/city.json': { ...meta, ...settings, draft: true, featured: true } }, () => true)).toThrow(/a draft city can't be the featured city/);
+    const registry = buildRegistry(
+      { '/data/cities/us/ca/x/city.json': { ...meta, ...settings, draft: true }, '/data/cities/us/ca/y/city.json': { ...meta, ...settings, name: 'Y', featured: true } },
+      () => true,
+    );
+    expect(registry).toHaveLength(2);
+    expect(published(registry).map((c) => c.path)).toEqual(['/us/ca/y/']);
   });
 
   it('reads its reserves from the table row, in thousands', () => {
@@ -188,6 +211,10 @@ describe('Fremont: the site', () => {
     expect(() => parseReserves('r.json', reserve({ ...row, figure: 5, unit: 1000 }))).toThrow(/the row has 4 figures, so there is no figure 5/);
     expect(() => parseReserves('r.json', reserve({ ...row, figure: 4 }))).toThrow(/"unit" must say/);
     expect(() => parseReserves('r.json', reserve(row))).toThrow(/exactly one dollar figure/);
+    // A purpose is plain language: a figure in it would have no receipt (#44).
+    const withPurpose = (purpose: string) => ({ year: 2027, reserves: [{ key: 'k', name: 'n', purpose, amount: { ...row, figure: 4, unit: 1000 } }] });
+    expect(() => parseReserves('r.json', withPurpose('The City drew $19.9 million from it in FY 2024/25.'))).toThrow(/"purpose" has a figure in it/);
+    expect(parseReserves('r.json', withPurpose('For emergencies.')).reserves[0].value).toBe(48_278_000);
   });
 
   it('cites printed pages and opens PDF pages', () => {

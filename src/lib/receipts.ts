@@ -70,6 +70,8 @@ export interface Receipt {
   /** PDF page and the sentence the figure is read from, for figures from City documents. */
   page?: number;
   quote?: string;
+  /** For a figure read from a table row, the printed heading of its column: the quote is the whole row. */
+  column?: string;
   /** Download for the table this figure came from. */
   csv?: string;
   /** One sign per line, then the amount without one: "+ Operating Reserve $4,177,541", "− Proposed Sales & Use Tax $9,443,000". */
@@ -150,7 +152,8 @@ export function figureReceipt(budget: CityBudget, city: City, figure: Figure, pa
   }
   const value = formatValue(figure.value, figure.format);
   const ref = figure.ref;
-  const where = 'quote' in ref ? (ref.page ? `p. ${folio(views.get(ref.source)!, ref.page)}` : 'web page') : `${ref.table}, row ${ref.row}`;
+  const where =
+    'quote' in ref ? `${ref.page ? `p. ${folio(views.get(ref.source)!, ref.page)}` : 'web page'}${ref.column ? `, column “${ref.column}”` : ''}` : `${ref.table}, row ${ref.row}`;
   const citation = [
     `${figure.label}: ${value}.`,
     ...ids.map((id, i) => `${i === 0 ? 'Source' : 'Also'}: ${views.get(id)!.citation}${i === 0 ? ` (${where})` : ''}.`),
@@ -162,7 +165,7 @@ export function figureReceipt(budget: CityBudget, city: City, figure: Figure, pa
     tone: figure.tone ?? (figure.value < 0 ? 'short' : 'neutral'),
     label: figure.label,
     sources: ids,
-    ...('quote' in ref ? { page: ref.page, quote: ref.quote } : { table: ref.table, row: ref.row }),
+    ...('quote' in ref ? { page: ref.page, quote: ref.quote, ...(ref.column && { column: ref.column }) } : { table: ref.table, row: ref.row }),
     csv: csvHref(budget, city, figure.ref),
     parts: figure.parts?.map((p) => ({
       sign: p.value < 0 ? MINUS : '+',

@@ -12,7 +12,7 @@
  * "Show as a table" is the text alternative.
  */
 import type { WaffleItem } from '../lib/waffle';
-import { squares } from '../lib/waffle';
+import { perHundred, squares } from '../lib/waffle';
 
 interface Props {
   /** Biggest first; their squares total exactly 100. */
@@ -29,7 +29,7 @@ const total = items.reduce((a, it) => a + it.squares, 0);
 if (total !== 100) throw new Error(`Waffle "${label}": squares total ${total}, not 100`);
 const cells = squares(items.map((item) => ({ item, squares: item.squares, exact: item.exact })));
 // The chart has 100 squares, so it speaks in whole dollars: an item's squares (#33). The table keeps cents.
-const whole = (it: WaffleItem) => `$${it.squares}`;
+const whole = (it: WaffleItem) => perHundred(it.squares, it.exact);
 ---
 
 <div class="waffle" data-waffle>

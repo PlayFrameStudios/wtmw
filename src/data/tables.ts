@@ -17,13 +17,18 @@ export interface TableSpec {
   unit: number;
   /** One key per printed column, left to right ("adopted-2027"). */
   columns: string[];
+  /** Each column's heading as printed ("2026/27 Adopted"), checked on the page: a receipt names the column its figure is in. */
+  headings: string[];
 }
 
 export interface TableRow {
   label: string;
   /** Each column's figure, in dollars (or as printed when unit is 1): "-" reads as 0, "(19,700)" as negative. */
   values: Record<string, number>;
+  /** The whole line, for a figure read from more than one of its cells. */
   ref: DocRef;
+  /** The receipt for one cell: the line, and the heading of the column the figure is in. */
+  at(column: string): DocRef;
 }
 
 /** "-" and "$" are fillers; "(1,234)" is negative; "70.4%" is a rate (0.704). Returns null for a token that isn't a cell. */
@@ -62,13 +67,21 @@ export function readTable(spec: TableSpec, excerpts: Excerpts) {
   const text = excerpts[spec.source]?.[String(spec.page)];
   if (text === undefined) throw new Error(`${where}: no excerpt for ${spec.source} page ${spec.page}`);
   if (!normalize(text).includes(normalize(spec.title))) throw new Error(`${where}: the title isn't on the page`);
+  if (spec.headings.length !== spec.columns.length) throw new Error(`${where}: ${spec.columns.length} columns but ${spec.headings.length} headings`);
+  for (const h of spec.headings) if (!normalize(text).includes(normalize(h))) throw new Error(`${where}: the column heading "${h}" isn't on the page`);
+  const heading = Object.fromEntries(spec.columns.map((c, i) => [c, spec.headings[i]]));
   const lines = text.split('\n').map((l) => ({ quote: normalize(l), ...splitRow(l) })).filter((l) => l.label && l.cells.length);
 
   const toRow = (l: (typeof lines)[number], columns = spec.columns): TableRow => {
     if (l.cells.length !== columns.length) throw new Error(`${where}: "${l.quote}" has ${l.cells.length} figures, expected ${columns.length}`);
     // Percentages are rates as printed; money is scaled to dollars (rounded: "$23.244" million is $23,244,000).
     const values = Object.fromEntries(columns.map((c, i) => [c, Math.round((l.percent[i] ? l.cells[i] : l.cells[i] * spec.unit) * 1e6) / 1e6]));
-    return { label: l.label, values, ref: { source: spec.source, page: spec.page, quote: l.quote } };
+    const ref: DocRef = { source: spec.source, page: spec.page, quote: l.quote };
+    const at = (column: string): DocRef => {
+      if (!(column in values)) throw new Error(`${where}: "${l.label}" has no "${column}" column`);
+      return { ...ref, column: heading[column] };
+    };
+    return { label: l.label, values, ref, at };
   };
   return {
     where,
