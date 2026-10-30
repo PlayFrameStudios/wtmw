@@ -51,8 +51,9 @@ describe('landing page numbers trace to the data', () => {
 
   it('every one of those figures opens its receipt', () => {
     const figures = [...html.matchAll(/<button type="button" class="sourced[^"]*"[^>]*data-receipt[^>]*>([^<]*)</g)].map((m) => m[1].trim());
-    // The floating receipt card's gap, the mapped baseline, then the four answers: Police and Fire per $100, the gap, positions, cuts.
-    expect(figures).toEqual(['−$29,249,339', '$283.8M', '$57', '$29.2M', '105', '$29.3M']);
+    // The sample cards' receipts, one per city (#49): Berkeley's gap, Fremont's Contingency Reserve. Then the mapped
+    // baseline, then the four answers: Police and Fire per $100, the gap, positions, cuts.
+    expect(figures).toEqual(['−$29,249,339', '$48,278,000', '$283.8M', '$57', '$29.2M', '105', '$29.3M']);
   });
 });
 

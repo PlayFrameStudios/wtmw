@@ -17,7 +17,13 @@ const text = (path: string) =>
 
 const EYEBROW = /<(\w+) class="(?:[^"]* )?(?:eyebrow|kicker)[ "][^>]*>([\s\S]*?)<\/\1>/g;
 // The homepage keeps these for now, case by case (Jeremy on #28); "Free · Independent · Every number sourced" is gone.
-const HOMEPAGE_KEEPS = ['Berkeley, CA · FY2027', 'Source receipt', 'How it works', 'Built for the questions people actually ask', 'Cities'];
+// The hero's sample card, once per city behind tabs (#49): its city line and "Source receipt".
+const HOMEPAGE_KEEPS = [
+  ...['Berkeley, CA · FY2027', 'Fremont, CA · FY 2026/27'].flatMap((city) => [city, 'Source receipt']),
+  'How it works',
+  'Built for the questions people actually ask',
+  'Cities',
+];
 
 describe('no eyebrows (#32)', () => {
   it('no element on any page but the homepage has class eyebrow or kicker', () => {
@@ -27,7 +33,7 @@ describe('no eyebrows (#32)', () => {
     expect(hits).toEqual([]);
   });
 
-  it('the homepage has exactly the five eyebrows it keeps, and none in the source drawer', () => {
+  it('the homepage has exactly the eyebrows it keeps, and none in the source drawer', () => {
     const h = read('/');
     const kept = [...h.matchAll(EYEBROW)].map((m) => m[2].replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim());
     expect(kept).toEqual(HOMEPAGE_KEEPS);
