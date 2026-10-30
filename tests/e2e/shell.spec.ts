@@ -50,7 +50,8 @@ async function overlaps(page: Page, scope: string, selectors: string) {
 }
 
 // Disclosures (a waffle's "Show as a table", a methods note) can hold wide content: opening one must
-// widen its own box, never the page. iOS zooms the whole page out when it does (#22).
+// widen its own box, never the page. iOS zooms the whole page out when it does (#22). The Revenue
+// page's list-or-table toggle (#48) is switched to its table for the same reason.
 for (const width of [320, 375]) {
   test.describe(`at ${width}px, every <details> open`, () => {
     test.use({ viewport: { width, height: 800 } });
@@ -62,6 +63,10 @@ for (const width of [320, 375]) {
         // Open nested ones too; the site menu has its own test above and covers the page by design.
         const opened = await page.evaluate(() => {
           let n = 0;
+          for (const b of document.querySelectorAll<HTMLButtonElement>('[data-lot-toggle][aria-expanded="false"]')) {
+            b.click();
+            n++;
+          }
           for (let more = true; more; ) {
             more = false;
             for (const d of document.querySelectorAll<HTMLDetailsElement>('details:not([open])')) {
