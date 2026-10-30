@@ -66,8 +66,10 @@ const { id, items, table } = Astro.props;
   }
   .lot-toggle {
     display: block;
-    margin: 0 0 0.75rem auto;
-    padding: 0.25rem 0;
+    height: 1.75rem;
+    margin: 0 0 0.5rem auto;
+    padding: 0;
+    line-height: 1.75rem;
     border: 0;
     background: none;
     color: var(--bay);
@@ -78,6 +80,13 @@ const { id, items, table } = Astro.props;
   }
   .lot-toggle[hidden] {
     display: none;
+  }
+  /* Beside the grid (the views stack below 48rem): the list or table starts level with the grid's
+     top, and the toggle sits just above that line (#48, Jeremy's review). Only while the toggle shows. */
+  @media (min-width: 48rem) {
+    .lot:has(> .lot-toggle:not([hidden])) {
+      margin-top: -2.25rem;
+    }
   }
   .lot-table {
     font-size: 0.875rem;

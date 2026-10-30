@@ -43,14 +43,24 @@ for (const p of PAGES) {
       await expect(table).toHaveAttribute('hidden', '');
     });
 
-    test('the table takes the column beside the grid, with the button at its top', async ({ page }) => {
+    test('list and table start level with the grid, the button just above that line', async ({ page }) => {
       await page.goto(p.path);
-      const { button, table } = parts(page);
+      const { button, list, table } = parts(page);
+      const grid = (await page.locator('.waffle .grid').boundingBox())!;
+      const lede = (await page.locator('.lede, .ro-lede').boundingBox())!;
+      const check = async (view: typeof list) => {
+        const [btn, v] = [(await button.boundingBox())!, (await view.locator(':scope > *').first().boundingBox())!];
+        expect(v.x).toBeGreaterThan(grid.x + grid.width);
+        expect(Math.abs(v.y - grid.y)).toBeLessThan(1);
+        // Jeremy's review: above the grid's top line, in the right column, clear of the lede.
+        expect(btn.y + btn.height).toBeLessThanOrEqual(grid.y);
+        expect(grid.y - (btn.y + btn.height)).toBeLessThan(16);
+        expect(btn.y).toBeGreaterThanOrEqual(lede.y + lede.height);
+        expect(btn.x + btn.width).toBeCloseTo(v.x + v.width, 0);
+      };
+      await check(list);
       await button.click();
-      const [grid, btn, tbl] = await Promise.all([page.locator('.waffle .grid').boundingBox(), button.boundingBox(), table.boundingBox()]);
-      expect(tbl!.x).toBeGreaterThan(grid!.x + grid!.width);
-      expect(btn!.y).toBeLessThan(tbl!.y);
-      expect(btn!.y).toBeLessThan(grid!.y + grid!.height / 4);
+      await check(table);
       // Nothing under the grid: the waffle's own "Show as a table" is gone on this page.
       await expect(page.locator('.waffle .as-table')).toHaveCount(0);
     });

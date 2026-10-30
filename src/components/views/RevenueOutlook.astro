@@ -179,6 +179,12 @@ const recoveryFigure: Figure | undefined = recovery && {
       grid-template-columns: minmax(0, 1fr);
     }
   }
+  /* Room for the list's toggle, which sits above the grid's top line beside it (#48). */
+  @media (min-width: 48rem) {
+    .ro-waffle {
+      padding-top: 1.5rem;
+    }
+  }
   .ro-groups {
     margin: 0;
     padding: 0;
