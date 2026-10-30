@@ -1,0 +1,88 @@
+---
+/**
+ * The column beside a $100 waffle on the Revenue page (#48): the page's list of groups, or the
+ * waffle's table in its place. "Show as a table" sits at the top of the column and swaps one for
+ * the other, then reads "Show as a list". Every page load starts on the list.
+ *
+ * Without the script the button stays hidden and both show, list then table, so the table, the
+ * waffle's text alternative, is always reachable.
+ */
+import WaffleTable from './WaffleTable.astro';
+import type { WaffleItem } from '../lib/waffle';
+
+interface Props {
+  /** Unique on the page: the ids the button controls. */
+  id: string;
+  items: WaffleItem[];
+  table: { caption: string; name: string; value: string };
+}
+
+const { id, items, table } = Astro.props;
+---
+
+<div class="lot" data-list-or-table>
+  <button type="button" class="lot-toggle" aria-controls={`${id}-table`} aria-expanded="false" data-lot-toggle hidden>Show as a table</button>
+  <div id={`${id}-list`} data-lot-list>
+    <slot />
+  </div>
+  <div id={`${id}-table`} class="lot-table" data-lot-table>
+    <WaffleTable items={items} table={table} />
+  </div>
+</div>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-list-or-table]')) {
+    const button = root.querySelector<HTMLButtonElement>('[data-lot-toggle]')!;
+    const list = root.querySelector<HTMLElement>('[data-lot-list]')!;
+    const table = root.querySelector<HTMLElement>('[data-lot-table]')!;
+    let asTable = false;
+    const show = (next: boolean) => {
+      asTable = next;
+      list.hidden = asTable;
+      table.hidden = !asTable;
+      button.setAttribute('aria-expanded', String(asTable));
+      button.textContent = asTable ? 'Show as a list' : 'Show as a table';
+    };
+    show(false);
+    button.hidden = false;
+    // The button stays in place, so focus stays on it after a swap.
+    button.addEventListener('click', () => show(!asTable));
+    // A link into the list (the chart's "Line items →") brings the list back before the browser scrolls to it.
+    document.addEventListener(
+      'click',
+      (e) => {
+        const a = (e.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
+        const target = a && a.hash.length > 1 ? document.getElementById(decodeURIComponent(a.hash.slice(1))) : null;
+        if (asTable && target && list.contains(target)) show(false);
+      },
+      true,
+    );
+  }
+</script>
+
+<style>
+  .lot {
+    min-width: 0;
+  }
+  .lot-toggle {
+    display: block;
+    margin: 0 0 0.75rem auto;
+    padding: 0.25rem 0;
+    border: 0;
+    background: none;
+    color: var(--bay);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .lot-toggle[hidden] {
+    display: none;
+  }
+  .lot-table {
+    font-size: 0.875rem;
+  }
+  .lot-table :global(table) {
+    margin-top: 0;
+  }
+</style>

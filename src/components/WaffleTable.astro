@@ -1,0 +1,65 @@
+---
+/**
+ * The $100 waffle's text alternative: each item's value, its exact share of every $100, and its
+ * squares. The overview's waffle shows it under "Show as a table"; the Revenue page swaps it in
+ * for the list beside the grid (#48, ListOrTable.astro).
+ */
+import type { WaffleItem } from '../lib/waffle';
+
+interface Props {
+  items: WaffleItem[];
+  table: { caption: string; name: string; value: string };
+}
+
+const { items, table } = Astro.props;
+---
+
+<div class="table-scroll">
+  <table>
+    <caption class="visually-hidden">{table.caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{table.name}</th>
+        <th scope="col">{table.value}</th>
+        <th scope="col">Of every $100</th>
+        <th scope="col">Squares</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        items.map((it) => (
+          <tr>
+            <th scope="row">{it.name}</th>
+            <td>${it.value.toLocaleString('en-US')}</td>
+            <td>${it.exact.toFixed(2)}</td>
+            <td>{it.squares}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .table-scroll {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    margin-top: 0.75rem;
+    border-collapse: collapse;
+  }
+  th,
+  td {
+    padding: 0.375rem 0.5rem;
+    border-bottom: 1px solid var(--rule);
+    text-align: right;
+    white-space: nowrap;
+  }
+  th[scope='row'],
+  thead th:first-child {
+    text-align: left;
+    font-weight: 600;
+    white-space: normal;
+  }
+</style>

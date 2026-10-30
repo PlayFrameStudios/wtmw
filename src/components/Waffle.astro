@@ -9,10 +9,11 @@
  * details (#33: the figures live there, with their receipts).
  * Click, Enter or tap pins it; on a phone the pinned tooltip is a bottom sheet.
  * The grid is one Tab stop; arrow keys move square by square.
- * "Show as a table" is the text alternative.
+ * "Show as a table" is the text alternative (WaffleTable.astro), unless the page shows it elsewhere.
  */
 import type { WaffleItem } from '../lib/waffle';
 import { perHundred, squares } from '../lib/waffle';
+import WaffleTable from './WaffleTable.astro';
 
 interface Props {
   /** Biggest first; their squares total exactly 100. */
@@ -22,9 +23,11 @@ interface Props {
   /** What one item is, for the caption: "department", "source". */
   noun: string;
   table: { caption: string; name: string; value: string };
+  /** False when the page shows the table elsewhere, as the Revenue page does beside the grid (#48). */
+  tableBelow?: boolean;
 }
 
-const { items, label, noun, table } = Astro.props;
+const { items, label, noun, table, tableBelow = true } = Astro.props;
 const total = items.reduce((a, it) => a + it.squares, 0);
 if (total !== 100) throw new Error(`Waffle "${label}": squares total ${total}, not 100`);
 const cells = squares(items.map((item) => ({ item, squares: item.squares, exact: item.exact })));
@@ -75,34 +78,14 @@ const whole = (it: WaffleItem) => perHundred(it.squares, it.exact);
     <span class="caption--touch">Tap a square to see the {noun}.</span><span class="caption--hover">Hover or click a square to see the {noun}.</span>
   </p>
 
-  <details class="as-table">
-    <summary>Show as a table</summary>
-    <div class="table-scroll">
-      <table>
-        <caption class="visually-hidden">{table.caption}</caption>
-        <thead>
-          <tr>
-            <th scope="col">{table.name}</th>
-            <th scope="col">{table.value}</th>
-            <th scope="col">Of every $100</th>
-            <th scope="col">Squares</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            items.map((it) => (
-              <tr>
-                <th scope="row">{it.name}</th>
-                <td>${it.value.toLocaleString('en-US')}</td>
-                <td>${it.exact.toFixed(2)}</td>
-                <td>{it.squares}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
-  </details>
+  {
+    tableBelow && (
+      <details class="as-table">
+        <summary>Show as a table</summary>
+        <WaffleTable items={items} table={table} />
+      </details>
+    )
+  }
 </div>
 
 <script>
@@ -357,26 +340,5 @@ const whole = (it: WaffleItem) => perHundred(it.squares, it.exact);
     color: var(--bay);
     font-weight: 700;
     cursor: pointer;
-  }
-  .table-scroll {
-    overflow-x: auto;
-  }
-  table {
-    width: 100%;
-    margin-top: 0.75rem;
-    border-collapse: collapse;
-  }
-  th,
-  td {
-    padding: 0.375rem 0.5rem;
-    border-bottom: 1px solid var(--rule);
-    text-align: right;
-    white-space: nowrap;
-  }
-  th[scope='row'],
-  thead th:first-child {
-    text-align: left;
-    font-weight: 600;
-    white-space: normal;
   }
 </style>
