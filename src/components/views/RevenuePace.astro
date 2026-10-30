@@ -7,6 +7,7 @@
  */
 import Sourced from '../Sourced.astro';
 import Term from '../Term.astro';
+import ListOrTable from '../ListOrTable.astro';
 import Waffle from '../Waffle.astro';
 import Base from '../../layouts/Base.astro';
 import { REVENUE } from '../../data/berkeley/columns';
@@ -32,6 +33,7 @@ const sortRules = SORTS.map((s) =>
   ].join('\n'),
 ).join('\n');
 const t = r.insights;
+const chartTable = { caption: 'FY2026 General Fund revenue by group, per $100', name: 'Revenue source', value: 'FY2026 budget' };
 ---
 
 <Base title={`Revenue · ${city.name}`} city={city} description={`Where ${city.name}'s ${shortMoney(r.total.value)} in General Fund revenue comes from, line by line, and how much had arrived by mid-year.`}>
@@ -52,37 +54,41 @@ const t = r.insights;
           items={r.chart.map((c) => c.item)}
           label={`${city.name}'s FY2026 General Fund revenue`}
           noun="revenue source"
-          table={{ caption: 'FY2026 General Fund revenue by group, per $100', name: 'Revenue source', value: 'FY2026 budget' }}
+          table={chartTable}
+          tableBelow={false}
         />
-        <ol class="groups" role="list">
-          {
-            r.chart.map(({ item, group, figure }) => (
-              <li id={`rev-${item.id}`}>
-                <details data-group={item.id}>
-                  <summary>
-                    <span class="sw" style={`background:${item.color}`} aria-hidden="true" />
-                    <span class="g-name">{item.name}</span>
-                    <span class="g-per num">${item.squares}</span>
-                  </summary>
-                  <div class="g-body">
-                    <p>
-                      <Sourced city={city} figure={figure}>{shortMoney(group.adopted)}</Sourced> budgeted for FY2026{group.lines.length > 1 ? ', from:' : '.'}
-                    </p>
-                    {group.lines.length > 1 && (
-                      <ul role="list">
-                        {group.lines.map((l) => (
-                          <li>
-                            <span>{l.name}</span> <span class="num">{shortMoney(l.values[REVENUE.adopted])}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </details>
-              </li>
-            ))
-          }
-        </ol>
+        <!-- #48: "Show as a table" swaps this list for the waffle's table, in this column. -->
+        <ListOrTable id="revenue-groups" items={r.chart.map((c) => c.item)} table={chartTable}>
+          <ol class="groups" role="list">
+            {
+              r.chart.map(({ item, group, figure }) => (
+                <li id={`rev-${item.id}`}>
+                  <details data-group={item.id}>
+                    <summary>
+                      <span class="sw" style={`background:${item.color}`} aria-hidden="true" />
+                      <span class="g-name">{item.name}</span>
+                      <span class="g-per num">${item.squares}</span>
+                    </summary>
+                    <div class="g-body">
+                      <p>
+                        <Sourced city={city} figure={figure}>{shortMoney(group.adopted)}</Sourced> budgeted for FY2026{group.lines.length > 1 ? ', from:' : '.'}
+                      </p>
+                      {group.lines.length > 1 && (
+                        <ul role="list">
+                          {group.lines.map((l) => (
+                            <li>
+                              <span>{l.name}</span> <span class="num">{shortMoney(l.values[REVENUE.adopted])}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </details>
+                </li>
+              ))
+            }
+          </ol>
+        </ListOrTable>
       </div>
       <p class="hint">Grouped from {r.lineCount} line items in the city's mid-year report. Every line is listed below.</p>
     </section>
@@ -203,6 +209,12 @@ const t = r.insights;
   @media (max-width: 47.99rem) {
     .chart-wrap {
       grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  /* Room for the list's toggle, which sits above the grid's top line beside it (#48). */
+  @media (min-width: 48rem) {
+    .chart-wrap {
+      padding-top: 1rem;
     }
   }
   .groups {
