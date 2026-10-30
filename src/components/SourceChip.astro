@@ -13,10 +13,12 @@ import { receiptTarget, sourceList, type ReceiptTarget } from '../lib/receipt-ta
 type Props = { city: City } & ReceiptTarget;
 
 const { city, ...target } = Astro.props;
+// Off the city's own pages (the landing page shows several cities, #49), the drawer is told whose sources these are.
+const foreign = Astro.url.pathname.startsWith(city.path) ? undefined : city.path;
 const { receipt, names } = receiptTarget(city, target as ReceiptTarget, new URL(Astro.url.pathname, Astro.site));
 ---
 
-<span class="chips" data-receipt={JSON.stringify(receipt)}
+<span class="chips" data-receipt={JSON.stringify(receipt)} data-receipt-city={foreign}
   ><button type="button" class="cite" data-source-chip={receipt.sources.join(' ')} aria-haspopup="dialog" aria-label={`Source: ${sourceList(names)}`}
     ><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"
       ><circle cx="8" cy="8" r="6.75" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path

@@ -14,6 +14,8 @@ import { receiptTarget, sourceList, type ReceiptTarget } from '../lib/receipt-ta
 type Props = { city: City; class?: string } & ReceiptTarget;
 
 const { city, class: className, ...target } = Astro.props;
+// Off the city's own pages (the landing page shows several cities, #49), the drawer is told whose sources these are.
+const foreign = Astro.url.pathname.startsWith(city.path) ? undefined : city.path;
 const { receipt, names } = receiptTarget(city, target as ReceiptTarget, new URL(Astro.url.pathname, Astro.site));
 const html = await Astro.slots.render('default');
 const text = html
@@ -29,6 +31,7 @@ if (!text) throw new Error('Sourced: needs the figure as its content');
   type="button"
   class:list={['sourced', className]}
   data-receipt={JSON.stringify(receipt)}
+  data-receipt-city={foreign}
   data-source-chip={receipt.sources.join(' ')}
   aria-haspopup="dialog"
   aria-label={`${text}, source: ${sourceList(names)}`}><Fragment set:html={html} /></button
