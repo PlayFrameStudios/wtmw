@@ -4,6 +4,10 @@
  * from the featured city's budget.json via headlines(); tests/dist checks each
  * one against an independent calculation. The Cities section lists every city
  * we cover, so a second city can be found from here (#42).
+ *
+ * The hero gives every covered city equal billing (#49): a button each, and a sample card per
+ * city behind tabs, alphabetical, all from the registry. A city with a gap shows its gap on the
+ * card's receipt; a balanced city shows its Contingency Reserve, in neutral ink (red means short).
  */
 import MiniWaffle from '../components/MiniWaffle.astro';
 import SourceChip from '../components/SourceChip.astro';
@@ -16,14 +20,17 @@ import { fy } from '../lib/city-settings';
 import { familiesFor } from '../lib/families';
 import { shortMoney } from '../lib/format';
 import { headlines } from '../lib/headlines';
-import { formatValue, sourcesById } from '../lib/receipts';
+import { openAt } from '../lib/open-at';
+import { cityOverview } from '../lib/overview';
+import { formatValue, sourcesById, type Figure } from '../lib/receipts';
+import { reservesFor } from '../lib/reserves';
+import { revenueGroupsFor } from '../lib/revenue-groups';
 import { SITE } from '../lib/site';
 
 const city = featuredCity;
 const budget = gapPlan(budgetFor(city)!, 'The landing page');
 const families = familiesFor(city, budget);
 const h = headlines(budget, families);
-const s1 = sourcesById(budget).get(h.gap.ref.source)!;
 const pageHref = (slug: string) => `${city.path}${slug}/`;
 // The sales-tax question opens the Ballot page; a city without one falls back to The Gap, which also compares both outcomes.
 const ballot = hasPage(city, 'ballot') ? { slug: 'ballot', label: 'Ballot' } : { slug: 'gap', label: 'The Gap' };
@@ -70,11 +77,45 @@ const questions = [
   },
 ];
 const requestTemplate = `${SITE.repo}/issues/new`;
+
+// The hero's sample card, one per covered city (#49).
+const byName = [...cities].sort((a, b) => a.name.localeCompare(b.name));
+const samples = byName.map((c) => {
+  const b = budgetFor(c)!;
+  const fam = familiesFor(c, b);
+  const label = (y: number) => fy(c.budget.labels, y);
+  const year = c.budget.years[0];
+  const o = cityOverview(b, fam, revenueGroupsFor(c, b), label);
+  const gap = c.fiscalPosition.variant === 'gap';
+  const contingency = b.facts?.contingencyReserve;
+  const receipt: Figure = gap
+    ? headlines(gapPlan(b, 'The landing page'), fam).gap
+    : contingency
+      ? { value: contingency.value, label: `Contingency Reserve, ${label(year)}`, ref: contingency, tone: 'neutral' }
+      : reservesFor(c)!.reserves[0].figure;
+  const caption = gap ? `${label(year)} General Fund gap` : `${label(year)} ${contingency ? 'Contingency Reserve' : reservesFor(c)!.reserves[0].name}`;
+  const source = sourcesById(b).get(receipt.ref.source)!;
+  return {
+    city: c,
+    key: c.path.split('/').filter(Boolean).join('-'),
+    year: label(year),
+    noun: o.uses.noun,
+    shares: o.shares,
+    families: fam,
+    receipt,
+    caption,
+    tone: gap ? 'short' : 'neutral',
+    source,
+    // A PDF figure opens at its page; a workbook figure (Berkeley's gap) opens the document as before.
+    open: openAt(source, 'page' in receipt.ref ? receipt.ref.page : undefined).href,
+  };
+});
 ---
 
 <Base
   title={SITE.name}
   dataCity={city}
+  receiptCities={byName}
   description={`Your city's budget, finally readable. Explore ${city.name}'s budget in minutes: where every $100 goes, why there's a gap, and who's being asked to cut. Every number links to the public document it came from.`}
   sections={[
     { href: '#how', label: 'How it works' },
@@ -91,28 +132,67 @@ const requestTemplate = `${SITE.repo}/issues/new`;
         document it came from.
       </p>
       <p class="ctas">
-        <a class="btn btn--bay" href={city.path}>Explore {city.name}'s budget <span aria-hidden="true">→</span></a>
+        {
+          byName.map((c) => (
+            <a class="btn btn--bay" href={c.path} data-explore>
+              Explore {c.name} <span aria-hidden="true">→</span>
+            </a>
+          ))
+        }
         <a class="btn btn--ghost" href="#request">Request your city</a>
       </p>
-      <p class="path">{SITE.domain} / {city.slug.country} / {city.slug.state} / {city.slug.city}</p>
+      <!-- Follows the sample card's tab. -->
+      {
+        samples.map((x, i) => (
+          <p class="path" data-sample-path={x.key} hidden={i > 0}>
+            {SITE.domain} / {x.city.slug.country} / {x.city.slug.state} / {x.city.slug.city}
+          </p>
+        ))
+      }
     </div>
 
-    <div class="hero-visual">
-      <div class="card city-card">
-        <p class="eyebrow">{city.name}, {city.stateCode} · FY2027</p>
-        <!-- The whole card opens the city's overview, where the chart can be tapped (#28). -->
-        <h2 class="card-title"><a class="card-link" href={city.path}>Where every $100 goes</a></h2>
-        <MiniWaffle shares={h.shares} families={families} cityName={city.name} />
+    <div class="hero-visual" data-samples>
+      <!-- Shown by the script below; without it the first city's card stands alone. -->
+      <div class="sample-tabs" role="tablist" aria-label="Sample city" hidden>
+        {
+          samples.map((x, i) => (
+            <button type="button" role="tab" id={`sample-tab-${x.key}`} aria-controls={`sample-${x.key}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-sample-tab={x.key}>
+              {x.city.name}
+            </button>
+          ))
+        }
       </div>
-      <div class="card receipt-card">
-        <p class="eyebrow">Source receipt</p>
-        <p class="receipt-figure"><Sourced city={city} figure={h.gap}>{formatValue(h.gap.value)}</Sourced></p>
-        <p class="receipt-label">FY2027 General Fund gap</p>
-        <hr />
-        <p class="receipt-doc">{s1.title}</p>
-        <p class="receipt-meta">{s1.publisher} · {s1.date}</p>
-        <a class="btn btn--bay btn--small" href={s1.url} target="_blank" rel="noopener">Open the PDF <span aria-hidden="true">↗</span></a>
-      </div>
+      {
+        samples.map((x, i) => (
+          <div class="sample" id={`sample-${x.key}`} role="tabpanel" aria-labelledby={`sample-tab-${x.key}`} hidden={i > 0} data-sample={x.key}>
+            <div class="card city-card">
+              <p class="eyebrow">
+                {x.city.name}, {x.city.stateCode} · {x.year}
+              </p>
+              <!-- The whole card opens the city's overview, where the chart can be tapped (#28). -->
+              <h2 class="card-title">
+                <a class="card-link" href={x.city.path}>Where every $100 goes</a>
+              </h2>
+              <MiniWaffle shares={x.shares} families={x.families} cityName={x.city.name} what={`${x.year} ${x.noun}`} />
+            </div>
+            <div class="card receipt-card">
+              <p class="eyebrow">Source receipt</p>
+              <p class:list={['receipt-figure', `receipt-figure--${x.tone}`]}>
+                <Sourced city={x.city} figure={x.receipt}>{formatValue(x.receipt.value)}</Sourced>
+              </p>
+              <p class="receipt-label">{x.caption}</p>
+              <hr />
+              <p class="receipt-doc">{x.source.title}</p>
+              <p class="receipt-meta">
+                {x.source.publisher} · {x.source.date}
+              </p>
+              <a class="btn btn--bay btn--small" href={x.open} target="_blank" rel="noopener">
+                Open the PDF <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        ))
+      }
     </div>
   </section>
 
@@ -251,6 +331,38 @@ const requestTemplate = `${SITE.repo}/issues/new`;
   </section>
 </Base>
 
+<script>
+  // The sample card's city tabs (#49): arrow keys, Home and End move between them; the URL line follows.
+  const root = document.querySelector<HTMLElement>('[data-samples]');
+  const tablist = root?.querySelector<HTMLElement>('[role="tablist"]');
+  if (root && tablist) {
+    const tabs = [...tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const select = (tab: HTMLButtonElement, focus: boolean) => {
+      for (const t of tabs) {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')!)!.hidden = !on;
+      }
+      for (const p of document.querySelectorAll<HTMLElement>('[data-sample-path]')) p.hidden = p.dataset.samplePath !== tab.dataset.sampleTab;
+      if (focus) tab.focus();
+    };
+    tablist.addEventListener('click', (e) => {
+      const tab = (e.target as Element).closest<HTMLButtonElement>('[role="tab"]');
+      if (tab) select(tab, false);
+    });
+    tablist.addEventListener('keydown', (e) => {
+      const i = tabs.indexOf(document.activeElement as HTMLButtonElement);
+      if (i < 0) return;
+      const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+      if (next === undefined) return;
+      e.preventDefault();
+      select(tabs[(next + tabs.length) % tabs.length], true);
+    });
+    tablist.hidden = tabs.length < 2;
+  }
+</script>
+
 <style>
   .eyebrow {
     margin: 0 0 0.75rem;
@@ -330,6 +442,44 @@ const requestTemplate = `${SITE.repo}/issues/new`;
     font-size: 0.8125rem;
     font-weight: 700;
   }
+  .sample-tabs {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+    padding: 0.25rem;
+    border-radius: var(--radius-pill);
+    background: #efeadf;
+    width: fit-content;
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+  .sample-tabs[hidden] {
+    display: none;
+  }
+  .sample-tabs button {
+    min-height: 2.25rem;
+    padding: 0 1rem;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .sample-tabs button[aria-selected='true'] {
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgb(22 25 29 / 0.12);
+  }
+  .sample-tabs button:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 1px;
+  }
+  .sample {
+    position: relative;
+  }
   .hero-visual {
     position: relative;
     justify-self: center;
@@ -380,10 +530,13 @@ const requestTemplate = `${SITE.repo}/issues/new`;
   }
   .receipt-figure {
     margin: 0;
-    color: var(--red);
+    color: var(--ink);
     font-weight: 800;
     font-size: 1.625rem;
     font-variant-numeric: tabular-nums;
+  }
+  .receipt-figure--short {
+    color: var(--red);
   }
   .receipt-label {
     margin: 0.125rem 0 0;

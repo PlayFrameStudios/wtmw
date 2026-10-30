@@ -1,7 +1,7 @@
 ---
 /**
- * A static $100 waffle for a city's FY2027 department baseline: one square
- * per dollar, columns filled top to bottom, biggest department first.
+ * A static $100 waffle for a city's department budgets: one square per
+ * dollar, columns filled top to bottom, biggest department first.
  * (The interactive version is the overview page's.)
  */
 import type { Families } from '../lib/families';
@@ -12,15 +12,17 @@ interface Props {
   shares: Share<{ id: string; name: string }>[];
   families: Families;
   cityName: string;
+  /** What the squares are, in the city's own words: "FY2027 department baseline". */
+  what: string;
 }
 
-const { shares, families, cityName } = Astro.props;
+const { shares, families, cityName, what } = Astro.props;
 const cells = squares(shares);
 const familyDollars = families.list.map((f) => {
   const members = shares.filter((s) => families.of(s.item.id).id === f.id);
   return { family: f, dollars: members.reduce((a, s) => a + s.squares, 0), exact: members.reduce((a, s) => a + s.exact, 0) };
 });
-const label = `${cityName}'s FY2027 department baseline, per $100: ${familyDollars.map((f) => `${f.family.name} ${perHundred(f.dollars, f.exact)}`).join(', ')}.`;
+const label = `${cityName}'s ${what}, per $100: ${familyDollars.map((f) => `${f.family.name} ${perHundred(f.dollars, f.exact)}`).join(', ')}.`;
 ---
 
 <div class="mini-waffle">

@@ -9,10 +9,11 @@ import type { CitySettings } from '../../src/lib/city-settings';
 
 const data = join(import.meta.dirname, '../../data');
 const dirs = (p: string) => readdirSync(p, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name);
-const settings = (file: string) => JSON.parse(readFileSync(file, 'utf8')) as CitySettings;
+const settings = (file: string) => JSON.parse(readFileSync(file, 'utf8')) as CitySettings & { name: string; draft?: boolean };
 const city = (path: string, file: string, fixture: boolean) => {
-  const pages = pagesFor(settings(file));
-  return { path, fixture, routes: [path, ...pages.map((p) => `${path}${p.slug}/`)], navLabels: pages.filter((p) => p.nav).map((p) => p.label) };
+  const s = settings(file);
+  const pages = pagesFor(s);
+  return { path, name: s.name, fixture, draft: !!s.draft, routes: [path, ...pages.map((p) => `${path}${p.slug}/`)], navLabels: pages.filter((p) => p.nav).map((p) => p.label) };
 };
 
 export const cities = [
@@ -26,6 +27,8 @@ export const cities = [
 
 /** Every city page, fixtures included. */
 export const cityRoutes = cities.flatMap((c) => c.routes);
+/** The cities the landing page lists, as it orders them: published (not fixtures, not drafts), alphabetical (#49). */
+export const listed = cities.filter((c) => !c.fixture && !c.draft).sort((a, b) => a.name.localeCompare(b.name));
 export const berkeley = cities.find((c) => c.path === '/us/ca/berkeley/')!;
 /** A city in balance, with no ballot, budgeting each year: the 6-link nav. */
 export const fixture = cities.find((c) => c.fixture)!;

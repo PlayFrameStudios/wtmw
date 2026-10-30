@@ -4,6 +4,9 @@
  * A right-hand drawer from 768px, a bottom sheet below. Esc or the close
  * button closes it and focus returns to the chip; Tab stays inside while
  * it's open. ?source=S1 opens that source's receipt on load.
+ *
+ * A page can show other cities' figures (the landing page's sample cards, #49): their
+ * triggers carry data-receipt-city, and the drawer renders them with that city's sources.
  */
 import { budgetFor } from '../lib/budget';
 import type { City } from '../lib/cities';
@@ -11,20 +14,26 @@ import { sourceReceipt, sourcesById } from '../lib/receipts';
 
 interface Props {
   city: City;
+  /** Other cities whose figures the page shows. */
+  others?: City[];
 }
 
-const { city } = Astro.props;
-const budget = budgetFor(city)!;
+const { city, others = [] } = Astro.props;
 const pageUrl = new URL(Astro.url.pathname, Astro.site);
-const views = [...sourcesById(budget).values()];
-const data = {
-  sources: Object.fromEntries(views.map((v) => [v.id, v])),
-  // Deep links (?source=S1) open a whole-document receipt.
-  sourceReceipts: Object.fromEntries(views.map((v) => [v.id, sourceReceipt(budget, v.id, pageUrl)])),
-  basis: budget.notes.basis,
-  caveat: budget.notes.caveat,
-  usage: `${city.path}data/source-usage.json`,
+const cityData = (c: City) => {
+  const budget = budgetFor(c)!;
+  const views = [...sourcesById(budget).values()];
+  return {
+    sources: Object.fromEntries(views.map((v) => [v.id, v])),
+    // Deep links (?source=S1) open a whole-document receipt.
+    sourceReceipts: Object.fromEntries(views.map((v) => [v.id, sourceReceipt(budget, v.id, pageUrl)])),
+    basis: budget.notes.basis,
+    caveat: budget.notes.caveat,
+    usage: `${c.path}data/source-usage.json`,
+  };
 };
+const extra = others.filter((c) => c.path !== city.path);
+const data = { ...cityData(city), ...(extra.length > 0 && { others: Object.fromEntries(extra.map((c) => [c.path, cityData(c)])) }) };
 ---
 
 <dialog class="receipt" aria-labelledby="receipt-heading" data-receipt-dialog>
@@ -46,12 +55,16 @@ const data = {
   import { folio, openAt } from '../lib/open-at';
   import type { Receipt, SourceView } from '../lib/receipts';
 
-  interface Data {
+  interface CityData {
     sources: Record<string, SourceView>;
     sourceReceipts: Record<string, Receipt>;
     basis: string;
     caveat: string;
     usage: string;
+  }
+  interface Data extends CityData {
+    /** Other cities' data, by city path. */
+    others?: Record<string, CityData>;
   }
   type Usage = Record<string, { path: string; label: string }[]>;
 
@@ -59,7 +72,7 @@ const data = {
   const content = dialog.querySelector<HTMLElement>('[data-content]')!;
   const data: Data = JSON.parse(document.getElementById('receipt-data')!.textContent!);
   let opener: HTMLElement | null = null;
-  let usage: Promise<Usage | null> | undefined;
+  const usage = new Map<string, Promise<Usage | null>>();
 
   // Tiny DOM builder: text only, never innerHTML.
   function h(tag: string, attrs: Record<string, string> = {}, ...kids: (Node | string | null | undefined | false)[]) {
@@ -83,7 +96,7 @@ const data = {
     );
   }
 
-  function render(r: Receipt) {
+  function render(r: Receipt, data: CityData) {
     const [primary, ...others] = r.sources.map((id) => data.sources[id]);
     const usedOn = h('dd', {}, '…');
     const copyStatus = h('span', { class: 'copy-status', role: 'status' });
@@ -178,10 +191,14 @@ const data = {
     content.replaceChildren(...sections.filter((n): n is Node => !!n));
 
     // "Used on": pages where this source's chips appear, computed after the build.
-    usage ??= fetch(data.usage)
-      .then((res) => (res.ok ? res.json() : null))
-      .catch(() => null);
-    usage.then((u) => {
+    if (!usage.has(data.usage))
+      usage.set(
+        data.usage,
+        fetch(data.usage)
+          .then((res) => (res.ok ? res.json() : null))
+          .catch(() => null),
+      );
+    usage.get(data.usage)!.then((u) => {
       const pages = u?.[primary.id] ?? [];
       if (!pages.length) return usedOn.parentElement?.remove();
       usedOn.replaceChildren(
@@ -190,9 +207,9 @@ const data = {
     });
   }
 
-  function open(r: Receipt, from: HTMLElement | null) {
+  function open(r: Receipt, from: HTMLElement | null, d: CityData = data) {
     opener = from;
-    render(r);
+    render(r, d);
     dialog.showModal();
     dialog.querySelector<HTMLElement>('[data-close]')!.focus();
   }
@@ -221,8 +238,10 @@ const data = {
   document.addEventListener('click', (e) => {
     const chip = (e.target as Element).closest<HTMLElement>('[data-source-chip]');
     if (!chip) return;
-    const receipt: Receipt = JSON.parse(chip.closest<HTMLElement>('[data-receipt]')!.dataset.receipt!);
-    open(receipt, chip);
+    const holder = chip.closest<HTMLElement>('[data-receipt]')!;
+    const receipt: Receipt = JSON.parse(holder.dataset.receipt!);
+    const other = holder.dataset.receiptCity;
+    open(receipt, chip, (other && data.others?.[other]) || data);
   });
 
   const deepLink = new URLSearchParams(location.search).get('source')?.toUpperCase();

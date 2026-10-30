@@ -1,6 +1,6 @@
 ---
 import Logo from './Logo.astro';
-import { cities, featuredCity, pagesFor, type City } from '../lib/cities';
+import { cities, pagesFor, type City } from '../lib/cities';
 import { budgetFor } from '../lib/budget';
 import { SITE } from '../lib/site';
 
@@ -23,7 +23,8 @@ const links = city
 const sourceCount = city ? budgetFor(city)?.sources.length : undefined;
 const sourcesHref = city ? `${city.path}sources/` : undefined;
 const cityLabel = city ? `${city.name}, ${city.stateCode}` : undefined;
-const explore = featuredCity;
+// Off a city's pages the CTA can't name every city, so it goes to the landing page's list (#49).
+const choose = cities.length > 0 ? { href: '/#covered', label: 'Choose a city' } : undefined;
 ---
 
 <header class="site-header">
@@ -75,7 +76,7 @@ const explore = featuredCity;
         </a>
       )
     }
-    {!city && explore && <a class:list={['cta', { 'cta--after-links': links.length }]} href={explore.path}>Explore {explore.name} →</a>}
+    {!city && choose && <a class:list={['cta', { 'cta--after-links': links.length }]} href={choose.href}>{choose.label} →</a>}
   </nav>
 
   <!-- Below 1024px -->
@@ -102,9 +103,9 @@ const explore = featuredCity;
               </li>
             ))
           }
-          {!city && explore && (
+          {!city && choose && (
             <li>
-              <a href={explore.path}>Explore {explore.name}</a>
+              <a href={choose.href}>{choose.label}</a>
             </li>
           )}
         </ul>

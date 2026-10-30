@@ -16,6 +16,8 @@ interface Props {
   city?: City;
   /** For pages outside a city (the landing page) that still show its figures and receipts. */
   dataCity?: City;
+  /** Other cities whose figures the page shows (the landing page's sample cards, #49): their receipts too. */
+  receiptCities?: City[];
   /** In-page section links for the header on non-city pages. */
   sections?: { href: string; label: string }[];
   /** Shown in search results and link previews. */
@@ -28,6 +30,7 @@ const {
   title,
   city,
   dataCity,
+  receiptCities,
   sections,
   description = 'City budgets, made readable. Every number links to the public document it came from.',
   noindex: noindexProp,
@@ -84,7 +87,7 @@ const figuresThrough = newest
       <slot />
     </main>
     <SiteFooter city={city} />
-    {receiptCity && budgetFor(receiptCity) && <ReceiptDrawer city={receiptCity} />}
+    {receiptCity && budgetFor(receiptCity) && <ReceiptDrawer city={receiptCity} others={receiptCities} />}
   </body>
 </html>
 
