@@ -1,0 +1,108 @@
+---
+/**
+ * "What this budget covers" (#51): five reader questions, answered from coverage.json, on the Sources page.
+ * Each paragraph ends in its receipt; figures are their own (Sourced); each other government names the
+ * document that says it serves the city.
+ */
+import type { City } from '../lib/cities';
+import type { CoverageBlockParagraph, coverageFor } from '../lib/coverage';
+import SourceChip from './SourceChip.astro';
+import Sourced from './Sourced.astro';
+
+interface Props {
+  city: City;
+  block: NonNullable<ReturnType<typeof coverageFor>>;
+}
+
+const { city, block } = Astro.props;
+const chip = (p: Pick<CoverageBlockParagraph, 'cites'>) => (p.cites.length ? { source: p.cites[0].source, at: p.cites[0], also: p.cites.slice(1) } : undefined);
+---
+
+<section id="what-this-covers" class="covers card" aria-labelledby="covers-title" data-coverage>
+  <h2 id="covers-title">What this budget covers</h2>
+  <div class="qa">
+    {
+      block.questions.map((q) => (
+        <article class="q" data-question={q.id} aria-labelledby={`covers-${q.id}`}>
+          <h3 id={`covers-${q.id}`}>{q.question}</h3>
+          {q.paragraphs.map((p) => {
+            const c = chip(p);
+            return (
+              <p>
+                {p.segments.map((s) =>
+                  s.kind === 'text' ? (
+                    s.text
+                  ) : s.kind === 'figure' ? (
+                    <Sourced city={city} figure={s.figure}>
+                      {s.text}
+                    </Sourced>
+                  ) : s.external ? (
+                    <a href={s.href} target="_blank" rel="noopener">
+                      {s.text}
+                    </a>
+                  ) : (
+                    <a href={s.href}>{s.text}</a>
+                  ),
+                )}
+                {c && <SourceChip city={city} source={c.source} at={c.at} also={c.also} />}
+              </p>
+            );
+          })}
+          {q.agencies.length > 0 && (
+            <ul class="agencies">
+              {q.agencies.map((a) => (
+                <li data-agency>
+                  <strong>{a.name}.</strong> {a.does}
+                  <SourceChip city={city} source={a.cites[0].source} at={a.cites[0]} also={a.cites.slice(1)} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .covers {
+    margin-block-end: 2.5rem;
+    background: var(--card);
+    border-radius: 0.875rem;
+    box-shadow:
+      0 1px 2px rgb(22 25 29 / 0.06),
+      0 8px 24px rgb(22 25 29 / 0.06);
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+  h2 {
+    margin: 0 0 1.25rem;
+    font-size: clamp(1.375rem, 3vw, 1.75rem);
+  }
+  .qa {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: 1.5rem 2.5rem;
+  }
+  .q {
+    min-width: 0;
+  }
+  h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.0625rem;
+  }
+  p,
+  li {
+    margin: 0 0 0.625rem;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+  .agencies {
+    margin: 0;
+    padding-inline-start: 1.125rem;
+  }
+  a {
+    color: inherit;
+    text-decoration-thickness: max(1px, 0.06em);
+    text-underline-offset: 0.18em;
+  }
+</style>

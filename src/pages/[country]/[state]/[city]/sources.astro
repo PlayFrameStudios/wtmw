@@ -7,6 +7,7 @@
  * chips, so the page doesn't count itself.
  */
 import { basename } from 'node:path';
+import Coverage from '../../../../components/Coverage.astro';
 import SourceChip from '../../../../components/SourceChip.astro';
 import Sourced from '../../../../components/Sourced.astro';
 import Base from '../../../../layouts/Base.astro';
@@ -18,13 +19,22 @@ import { shortMoney } from '../../../../lib/format';
 import { ballotFileFor } from '../../../../lib/ballot';
 import { folio } from '../../../../lib/open-at';
 import { pagesBySource, sourcesById } from '../../../../lib/receipts';
+import { coverageFor } from '../../../../lib/coverage';
+import { revenueGroupsFor } from '../../../../lib/revenue-groups';
 
 export const getStaticPaths = cityStaticPaths();
 
 const { city } = Astro.props as { city: City };
 const budget = budgetFor(city)!;
 const sources = [...sourcesById(budget).values()];
-const counts = { all: sources.length, city: sources.filter((s) => s.type === 'city').length, news: sources.filter((s) => s.type === 'news').length };
+const counts = {
+  all: sources.length,
+  city: sources.filter((s) => s.type === 'city').length,
+  news: sources.filter((s) => s.type === 'news').length,
+  other: sources.filter((s) => s.type === 'other').length,
+};
+// What the City's budget covers and what it doesn't (#51), near the top.
+const coverage = coverageFor(city, budget, revenueGroupsFor(city, budget));
 const raw = new Map(budget.sources.map((s) => [s.id, s]));
 // A deficit-plan city (Berkeley) has its known-gaps cards and its workbook; a city built from documents (#43), its own cards.
 const plan = hasGapPlan(budget) ? budget : undefined;
@@ -72,9 +82,11 @@ const humanize = (name: string) =>
       <h1>Every number has a receipt</h1>
       <p class="lede">
         Each figure on this site traces to one of these {counts.all} documents. City documents are primary; news reports are used for context and are
-        labeled as such.
+        labeled as such.{counts.other > 0 && ' Documents from other governments, such as the school district, explain what the City\'s budget doesn\'t cover. They are labeled too.'}
       </p>
     </section>
+
+    {coverage && <Coverage city={city} block={coverage} />}
 
     <div class="layout">
       <section class="list" aria-labelledby="list-title">
@@ -87,6 +99,8 @@ const humanize = (name: string) =>
           <label for="filter-city">City documents ({counts.city})</label>
           <input type="radio" name="filter" id="filter-news" class="visually-hidden" />
           <label for="filter-news">News reports ({counts.news})</label>
+          {counts.other > 0 && <input type="radio" name="filter" id="filter-other" class="visually-hidden" />}
+          {counts.other > 0 && <label for="filter-other">Other governments ({counts.other})</label>}
         </fieldset>
 
         <p class="list-head" aria-hidden="true"><span>#</span><span>Document</span><span>Used on</span></p>
@@ -96,6 +110,7 @@ const humanize = (name: string) =>
               <li class="src-row" id={s.id} data-type={s.type}>
                 <span class={`badge badge--${s.type}`}>{s.id}</span>
                 <span class="doc">
+                  {s.type === 'other' && <span class="kind">Another government's document, not the City's</span>}
                   <span class="title">{s.title}</span>
                   <span class="meta">{meta(s.id, s.date)}</span>
                 </span>
@@ -332,8 +347,9 @@ const humanize = (name: string) =>
     outline: 2px solid var(--bay);
     outline-offset: 2px;
   }
-  .sources-page:has(#filter-city:checked) .src-row[data-type='news'],
-  .sources-page:has(#filter-news:checked) .src-row[data-type='city'] {
+  .sources-page:has(#filter-city:checked) .src-row:not([data-type='city']),
+  .sources-page:has(#filter-news:checked) .src-row:not([data-type='news']),
+  .sources-page:has(#filter-other:checked) .src-row:not([data-type='other']) {
     display: none;
   }
 
@@ -389,6 +405,18 @@ const humanize = (name: string) =>
   .badge--news {
     background: var(--bay-light);
     color: var(--bay);
+  }
+  /* Another government's document: outlined, never the City's solid bay. */
+  .badge--other {
+    box-shadow: inset 0 0 0 1.5px var(--muted);
+    color: var(--ink);
+  }
+  .kind {
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
   .doc {
     display: flex;

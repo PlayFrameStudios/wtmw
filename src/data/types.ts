@@ -60,8 +60,8 @@ export interface Source {
   /** The date exactly as the workbook writes it ("Apr 16 2026"). */
   dateLabel?: string;
   url: string;
-  /** city = a document the City published (primary); news = reporting (context). */
-  type: 'city' | 'news';
+  /** city = a document the City published (primary); news = reporting (context); other = another government's document or an explainer (#51), never the City's books. */
+  type: 'city' | 'news' | 'other';
   usedFor: string;
   /** Row on the Sources & Links tab; absent for sources added from documents.json. */
   row?: number;
@@ -315,8 +315,11 @@ export interface PersonnelAndPension {
   unfundedLiabilities: UnfundedLiability[];
 }
 
-/** A defined term: from the workbook's Glossary tab (table, row), or quoted from a City document's glossary. */
-export type GlossaryEntry = { term: string; definition: string } & ({ table: string; row: number } | DocRef);
+/**
+ * A defined term: from the workbook's Glossary tab (table, row), or quoted from a City document's glossary, or (#51)
+ * defined in our words from another document, with `also` for more of what it rests on.
+ */
+export type GlossaryEntry = { term: string; definition: string } & ({ table: string; row: number } | (DocRef & { also?: DocRef[] }));
 
 /** A figure stated in a sentence of the workbook rather than a table cell. */
 export interface CitedFact extends Ref {
@@ -451,6 +454,42 @@ export interface CityBudget {
   statements?: Record<string, DocRef>;
   capitalPlan?: CapitalPlan;
   pension?: Pension;
+  /** What the City's budget covers and what it doesn't (#51), from coverage.json. */
+  coverage?: Coverage;
+}
+
+/**
+ * A paragraph of the "What this budget covers" block. `text` may name {allFunds}, {generalFund}, {propertyTax}
+ * and {year} (filled from this file, with their receipts) and link [words](glossary:Term) or [words](a source URL).
+ * Every other number in it is in one of its cites' quotes; a paragraph with no cites says why in `unsourced`.
+ */
+export interface CoverageParagraph {
+  text: string;
+  cites?: DocRef[];
+  unsourced?: string;
+}
+
+/** Another government that serves the city, with what it does and the documents that say it serves the city. */
+export interface CoverageAgency {
+  name: string;
+  does: string;
+  cites: DocRef[];
+}
+
+export const COVERAGE_QUESTIONS = ['everything', 'schools', 'else', 'property-tax', 'city-pays'] as const;
+
+export interface CoverageQuestion {
+  id: (typeof COVERAGE_QUESTIONS)[number];
+  question: string;
+  paragraphs: CoverageParagraph[];
+  agencies?: CoverageAgency[];
+}
+
+/** The five reader questions, in order: is this everything, where are the schools, what else isn't here, where does property tax go, does the City pay for schools. */
+export interface Coverage {
+  questions: CoverageQuestion[];
+  /** The overview's line under the property-tax card; the whole line links to the block. */
+  overview: CoverageParagraph;
 }
 
 /** A city with a deficit plan built from a workbook (Berkeley): every module the Gap and Ballot pages read. */

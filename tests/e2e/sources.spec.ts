@@ -5,17 +5,23 @@ const PAGE = '/us/ca/berkeley/sources/';
 test.describe('sources page', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
-  test('filters: all, city documents, news reports', async ({ page }) => {
+  test('filters: all, city documents, news reports, other governments', async ({ page }) => {
     await page.goto(PAGE);
     const rows = page.locator('.src-row');
-    await expect(rows.filter({ visible: true })).toHaveCount(27);
+    await expect(rows.filter({ visible: true })).toHaveCount(38);
     await page.locator('label[for="filter-city"]').click();
     await expect(rows.filter({ visible: true })).toHaveCount(17);
     await expect(page.locator('.src-row[data-type="news"]').first()).toBeHidden();
+    await expect(page.locator('.src-row[data-type="other"]').first()).toBeHidden();
     await page.locator('label[for="filter-news"]').click();
     await expect(rows.filter({ visible: true })).toHaveCount(10);
     await expect(page.locator('#S12')).toBeVisible();
     await expect(page.locator('#S24')).toBeVisible();
+    // #51: other governments' documents, never mixed in with the City's.
+    await page.locator('label[for="filter-other"]').click();
+    await expect(rows.filter({ visible: true })).toHaveCount(11);
+    await expect(page.locator('#S30')).toBeVisible();
+    await expect(page.locator('#S20')).toBeHidden();
   });
 
   test('#S12 scrolls to and highlights its row', async ({ page }) => {

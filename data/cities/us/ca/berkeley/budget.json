@@ -315,6 +315,107 @@
       "type": "city",
       "usedFor": "The sales-tax measure as voters will see it",
       "number": 27
+    },
+    {
+      "id": "S28",
+      "publisher": "Berkeley Unified School District",
+      "title": "School Board",
+      "url": "https://www.berkeleyschools.net/schoolboard/",
+      "type": "other",
+      "usedFor": "BUSD is governed by its own elected School Board, which adopts the district's budget",
+      "number": 28
+    },
+    {
+      "id": "S29",
+      "publisher": "Berkeley Unified School District",
+      "title": "Berkeley Unified Budget",
+      "url": "https://www.berkeleyschools.net/departments/business-services-division/berkeley-unified-budget/",
+      "type": "other",
+      "usedFor": "Where BUSD publishes its own budget",
+      "number": 29
+    },
+    {
+      "id": "S30",
+      "publisher": "Berkeley Unified School District",
+      "title": "2026-27 Adopted Budget Report and Multiyear Fiscal Projection",
+      "date": "2026-06-17",
+      "url": "https://www.berkeleyschools.net/wp-content/uploads/2026/06/Adopted-Budget-2026-27-061226.pdf",
+      "type": "other",
+      "usedFor": "BUSD's revenue sources and its three school parcel taxes",
+      "number": 30
+    },
+    {
+      "id": "S31",
+      "publisher": "Legislative Analyst's Office (California)",
+      "title": "The 1 Percent Tax: Where Does Your Money Go?",
+      "url": "https://lao.ca.gov/Media/Videos/2015/one-percent-tax-script.pdf",
+      "type": "other",
+      "usedFor": "How the county divides the basic 1% property tax",
+      "number": 31
+    },
+    {
+      "id": "S32",
+      "publisher": "Legislative Analyst's Office (California)",
+      "title": "Understanding California's Property Taxes",
+      "date": "2012-11-29",
+      "url": "https://lao.ca.gov/reports/2012/tax/property-tax-primer-112912.pdf",
+      "type": "other",
+      "usedFor": "Glossary: parcel tax, special district",
+      "number": 32
+    },
+    {
+      "id": "S33",
+      "publisher": "County of Alameda",
+      "title": "Cities in Alameda County",
+      "url": "https://acgov.org/about/cities.htm",
+      "type": "other",
+      "usedFor": "Berkeley is one of Alameda County's cities",
+      "number": 33
+    },
+    {
+      "id": "S34",
+      "publisher": "Peralta Community College District",
+      "title": "Peralta History",
+      "url": "https://peralta.edu/about/history",
+      "type": "other",
+      "usedFor": "Berkeley is in the Peralta district, which runs Berkeley City College",
+      "number": 34
+    },
+    {
+      "id": "S35",
+      "publisher": "Bay Area Rapid Transit (BART)",
+      "title": "Stations",
+      "url": "https://www.bart.gov/stations",
+      "type": "other",
+      "usedFor": "BART stations in Berkeley",
+      "number": 35
+    },
+    {
+      "id": "S36",
+      "publisher": "AC Transit",
+      "title": "Ridership, Buses, and Service",
+      "url": "https://www.actransit.org/ridership",
+      "type": "other",
+      "usedFor": "AC Transit's service area includes Berkeley",
+      "number": 36
+    },
+    {
+      "id": "S37",
+      "publisher": "East Bay Municipal Utility District (EBMUD)",
+      "title": "Service Area",
+      "url": "https://www.ebmud.com/about-us/who-we-are/service-area",
+      "type": "other",
+      "usedFor": "EBMUD's water service area includes Berkeley",
+      "number": 37
+    },
+    {
+      "id": "S38",
+      "publisher": "East Bay Regional Park District",
+      "title": "About East Bay Regional Park District",
+      "url": "https://www.ebparks.org/about",
+      "type": "other",
+      "usedFor": "Regional parks across Alameda and Contra Costa counties",
+      "number": 38
     }
   ],
   "generalFund": [
@@ -2330,6 +2431,39 @@
       "definition": "One-time money assigned to a department to soften its cut in FY27 while awaiting the Nov 2026 sales-tax vote. Mainly Police, Fire, and PRW.",
       "table": "Glossary",
       "row": 40
+    },
+    {
+      "term": "Parcel tax",
+      "definition": "A tax set at a fixed amount for each parcel of property (or for each room or square foot). A local government needs two-thirds of voters to approve one.",
+      "source": "S32",
+      "page": 14,
+      "quote": "With the approval of two-thirds of voters, local governments may impose a tax on all parcels in their jurisdiction (or a subset of parcels in their jurisdiction). Local governments typically set parcel taxes at fixed amounts per parcel (or fixed amounts per room or per square foot of the parcel)."
+    },
+    {
+      "term": "School district",
+      "definition": "A separate local government that runs public schools. Berkeley Unified School District is governed by its own elected School Board, which adopts the district's budget.",
+      "source": "S28",
+      "quote": "The Berkeley Unified School District Board of Education, also called the School Board, is comprised of five elected directors",
+      "also": [
+        {
+          "source": "S28",
+          "quote": "adopting policies, curriculum, and the District’s budget"
+        }
+      ]
+    },
+    {
+      "term": "Special district",
+      "definition": "A local government set up to provide a particular service in its area, such as fire protection, water, or parks and recreation. Special districts get a share of the 1% property tax, along with counties, cities and schools.",
+      "source": "S32",
+      "page": 18,
+      "quote": "property tax revenue from the 1 percent rate is distributed to counties, cities, K-12 schools, community college districts, and special districts",
+      "also": [
+        {
+          "source": "S32",
+          "page": 18,
+          "quote": "Special Districts Fire protection 348 County service area 316 Cemetery 241 Community services 201 Maintenance 136 Highway lighting 117 County water 100 Recreation and park 85"
+        }
+      ]
     }
   ],
   "citedFacts": {
@@ -3020,6 +3154,219 @@
       "letter": "U",
       "title": "General Obligation Bond Measure for Public Infrastructure and Facilities",
       "vote": "2/3 vote"
+    }
+  },
+  "coverage": {
+    "questions": [
+      {
+        "id": "everything",
+        "question": "Is this everything the City of Berkeley spends?",
+        "paragraphs": [
+          {
+            "text": "Yes, for the City government. These pages show the City of Berkeley's own budget: {allFunds} across all its funds in {year}. Of that, {generalFund} is the [General Fund](glossary:General Fund (GF)), the City's main account for day-to-day services."
+          }
+        ]
+      },
+      {
+        "id": "schools",
+        "question": "Where are the schools?",
+        "paragraphs": [
+          {
+            "text": "Public schools in Berkeley are run by Berkeley Unified School District (BUSD), a separate government. Its School Board has five elected directors and adopts the district's own budget.",
+            "cites": [
+              {
+                "source": "S28",
+                "quote": "The Berkeley Unified School District Board of Education, also called the School Board, is comprised of five elected directors"
+              },
+              {
+                "source": "S28",
+                "quote": "adopting policies, curriculum, and the District’s budget"
+              }
+            ]
+          },
+          {
+            "text": "So school spending isn't in the City's numbers. [BUSD publishes its budget on its own site](https://www.berkeleyschools.net/departments/business-services-division/berkeley-unified-budget/).",
+            "cites": [
+              {
+                "source": "S29",
+                "quote": "Each year before June 30 the School Board is required by law to pass a balanced budget."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "else",
+        "question": "What else isn't here?",
+        "paragraphs": [
+          {
+            "text": "Other governments serve Berkeley too. Each has its own budget, separate from the City's, so none of their spending is on these pages.",
+            "unsourced": "What these pages show; each government below has its own receipt."
+          }
+        ],
+        "agencies": [
+          {
+            "name": "Alameda County",
+            "does": "The county government.",
+            "cites": [
+              {
+                "source": "S33",
+                "quote": "The incorporated cities are Alameda, Albany, Berkeley, Dublin, Emeryville, Fremont, Hayward, Livermore, Newark, Oakland, Piedmont, Pleasanton, San Leandro, and Union City."
+              }
+            ]
+          },
+          {
+            "name": "Peralta Community College District",
+            "does": "Community colleges, including Berkeley City College.",
+            "cites": [
+              {
+                "source": "S34",
+                "quote": "Residents of cities of Alameda, Albany, Berkeley, Emeryville, and Piedmont vote to join with Oakland to establish separate junior college district."
+              },
+              {
+                "source": "S34",
+                "quote": "Berkeley City College was founded in April 1974 as the fourth of the Peralta Community College District’s community colleges"
+              }
+            ]
+          },
+          {
+            "name": "BART",
+            "does": "Regional trains, with stations including Downtown Berkeley and North Berkeley.",
+            "cites": [
+              {
+                "source": "S35",
+                "quote": "Downtown Berkeley"
+              },
+              {
+                "source": "S35",
+                "quote": "North Berkeley"
+              }
+            ]
+          },
+          {
+            "name": "AC Transit",
+            "does": "Buses.",
+            "cites": [
+              {
+                "source": "S36",
+                "quote": "Alameda & Contra Costa counties: Alameda, Albany, Berkeley, El Cerrito, Emeryville, Fremont, Hayward, Newark, Oakland, Piedmont, Richmond, San Leandro, and San Pablo."
+              }
+            ]
+          },
+          {
+            "name": "East Bay Municipal Utility District (EBMUD)",
+            "does": "Water.",
+            "cites": [
+              {
+                "source": "S37",
+                "quote": "The service area extends from Crockett on the north, southward to San Lorenzo (encompassing the major cities of Oakland and Berkeley)"
+              }
+            ]
+          },
+          {
+            "name": "East Bay Regional Park District",
+            "does": "Regional parks across Alameda and Contra Costa counties.",
+            "cites": [
+              {
+                "source": "S38",
+                "quote": "The East Bay Regional Park District is a system of beautiful parklands in Alameda and Contra Costa counties"
+              },
+              {
+                "source": "S33",
+                "quote": "The incorporated cities are Alameda, Albany, Berkeley, Dublin, Emeryville, Fremont, Hayward, Livermore, Newark, Oakland, Piedmont, Pleasanton, San Leandro, and Union City."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "property-tax",
+        "question": "Where does my property tax go?",
+        "paragraphs": [
+          {
+            "text": "The basic 1% property tax is pooled by the county and divided under state law among the county, cities, schools and [special districts](glossary:Special district).",
+            "cites": [
+              {
+                "source": "S31",
+                "page": 1,
+                "quote": "Your county auditor pools your 1 percent rate tax payment, as well as payments from other property owners in your county, into a single countywide pot."
+              },
+              {
+                "source": "S31",
+                "page": 1,
+                "quote": "State law directs how your county auditor distributes the revenue in the countywide pot."
+              },
+              {
+                "source": "S31",
+                "page": 1,
+                "quote": "your county auditor sets aside this $1,000 for your city, county, schools, and special districts."
+              }
+            ]
+          },
+          {
+            "text": "On top of that, voters approve extra taxes for particular governments, and that money goes to them, not the City. BUSD's three school [parcel taxes](glossary:Parcel tax) bring in $68.8M in 2026-27.",
+            "cites": [
+              {
+                "source": "S30",
+                "page": 16,
+                "quote": "The second largest funding source comes from local parcel tax Measures, which provide a total of $68.8 million"
+              },
+              {
+                "source": "S30",
+                "page": 15,
+                "quote": "For the 2026-27 fiscal year, the Berkeley Unified School District's (BUSD) combined General Fund is projected to receive $248.2 million in revenue."
+              },
+              {
+                "source": "S30",
+                "page": 24,
+                "quote": "There are three parcel tax Measures"
+              }
+            ]
+          },
+          {
+            "text": "The {propertyTax} in property tax on these pages is only the City's share."
+          }
+        ]
+      },
+      {
+        "id": "city-pays",
+        "question": "Does the City pay for the schools?",
+        "paragraphs": [
+          {
+            "text": "BUSD's budget names where its money comes from: state school funding (LCFF), Berkeley's school parcel taxes, restricted federal, state and local revenues, and other state money. The City of Berkeley isn't on that list.",
+            "cites": [
+              {
+                "source": "S30",
+                "page": 16,
+                "quote": "The primary source of funding is State revenue from the Local Control Funding Formula (LCFF)"
+              },
+              {
+                "source": "S30",
+                "page": 16,
+                "quote": "The second largest funding source comes from local parcel tax Measures"
+              },
+              {
+                "source": "S30",
+                "page": 16,
+                "quote": "is projected from Restricted Federal, State, and Local revenues, which must be spent on specific programs"
+              },
+              {
+                "source": "S30",
+                "page": 16,
+                "quote": "Finally, Other Unrestricted State program revenue totals $4.5 million"
+              }
+            ]
+          },
+          {
+            "text": "We haven't checked every line of the City's full budget, so small City grants to school programs can't be ruled out.",
+            "unsourced": "A limit of our own review, not a claim about a document."
+          }
+        ]
+      }
+    ],
+    "overview": {
+      "text": "Your property tax bill pays several governments, including the City, the school district and the county. This page shows only the City's part.",
+      "unsourced": "Sums up the block's 'Where does my property tax go?' answer, which it links to and which carries the receipts."
     }
   }
 }

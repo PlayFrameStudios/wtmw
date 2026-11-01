@@ -14,13 +14,23 @@ const pages = (dir: string): string[] =>
   readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? pages(join(dir, e.name)) : e.name.endsWith('.html') ? [join(dir, e.name)] : []));
 
 describe('sources page', () => {
-  const rows = [...html.matchAll(/<li class="src-row" id="(S\d+)" data-type="(city|news)"/g)].map((m) => ({ id: m[1], type: m[2] }));
+  const rows = [...html.matchAll(/<li class="src-row" id="(S\d+)" data-type="(city|news|other)"/g)].map((m) => ({ id: m[1], type: m[2] }));
 
-  it('lists all 27 sources: 17 city documents, 10 news reports', () => {
+  it('lists all 38 sources: 17 city documents, 10 news reports, 11 from other governments (#51)', () => {
     expect(rows.map((r) => r.id)).toEqual(b.sources.map((s) => s.id));
     expect(rows.filter((r) => r.type === 'city')).toHaveLength(17);
+    expect(rows.filter((r) => r.type === 'other')).toHaveLength(11);
     expect(text).toContain('City documents (17)');
     expect(text).toContain('News reports (10)');
+    expect(text).toContain('Other governments (11)');
+  });
+
+  it("labels other governments' documents as not the City's (#51)", () => {
+    const row = (id: string) => strip(html.match(new RegExp(`<li class="src-row" id="${id}"[\\s\\S]*?</li>`))![0]);
+    expect(row('S30')).toMatch(/^S30 Another government's document, not the City's 2026-27 Adopted Budget Report/);
+    expect(row('S30')).toContain('Berkeley Unified School District');
+    expect(row('S20')).not.toContain('Another government');
+    expect(html).toMatch(/<span class="badge badge--other"[^>]*>S30<\/span>/);
   });
 
   it('the documents added after the workbook list the pages the site cites', () => {
