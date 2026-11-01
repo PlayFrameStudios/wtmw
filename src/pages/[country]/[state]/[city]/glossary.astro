@@ -3,12 +3,12 @@ import SourceChip from '../../../../components/SourceChip.astro';
 import Base from '../../../../layouts/Base.astro';
 import { budgetFor } from '../../../../lib/budget';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
+import { glossaryAnchor as anchor } from '../../../../lib/glossary';
 
 export const getStaticPaths = cityStaticPaths();
 
 const { city } = Astro.props as { city: City };
 const glossary = budgetFor(city)?.glossary ?? [];
-const anchor = (term: string) => term.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 ---
 
 <Base title={`Glossary · ${city.name}`} city={city}>
@@ -22,7 +22,7 @@ const anchor = (term: string) => term.toLowerCase().replace(/[^a-z0-9]+/g, '-').
             <dt>{g.term}</dt>
             <dd>
               {g.definition}
-              {'quote' in g && <SourceChip city={city} source={g.source} at={{ page: g.page, quote: g.quote }} />}
+              {'quote' in g && <SourceChip city={city} source={g.source} at={{ page: g.page, quote: g.quote }} also={g.also} />}
             </dd>
           </div>
         ))

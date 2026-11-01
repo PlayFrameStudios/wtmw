@@ -39,7 +39,7 @@ export interface SourceView {
   id: SourceId;
   number: number;
   type: Source['type'];
-  /** "Primary source" for City documents, "Reporting" for news. */
+  /** "Primary source" for City documents, "Reporting" for news, "Another government" for anyone else's (#51). */
   badge: string;
   publisher: string;
   title: string;
@@ -111,7 +111,7 @@ export function sourceView(s: Source): SourceView {
     id: s.id,
     number: s.number,
     type: s.type,
-    badge: s.type === 'city' ? 'Primary source' : 'Reporting',
+    badge: s.type === 'city' ? 'Primary source' : s.type === 'news' ? 'Reporting' : 'Another government',
     publisher: s.publisher,
     title: s.title,
     committee,

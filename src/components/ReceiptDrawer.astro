@@ -180,12 +180,12 @@ const data = { ...cityData(city), ...(extra.length > 0 && { others: Object.fromE
           h('a', { href: primary.archive.url, target: '_blank', rel: 'noopener' }, `the Internet Archive\u2019s copy (${primary.archive.date})`),
           ' is the same document.',
         ),
-      h('p', { class: 'caveat' }, data.caveat),
-      ...(['city', 'news'] as const).map((type) => {
+      // Another government's document (#51) isn't the City's budget, so the City's caveat doesn't describe it.
+      h('p', { class: 'caveat' }, primary.type === 'other' ? `This document is from ${primary.publisher}, not the City. Its figures are not part of the City's budget.` : data.caveat),
+      ...(['city', 'other', 'news'] as const).map((type) => {
         const list = others.filter((s) => s.type === type);
-        return list.length
-          ? h('div', { class: 'also' }, h('p', { class: 'also-title' }, type === 'city' ? 'Also from' : 'Also reported in'), h('ul', {}, ...list.map((s) => sourceLine(s, r.also?.filter((c) => c.source === s.id)))))
-          : null;
+        const title = { city: 'Also from', other: 'Also from other governments', news: 'Also reported in' }[type];
+        return list.length ? h('div', { class: 'also' }, h('p', { class: 'also-title' }, title), h('ul', {}, ...list.map((s) => sourceLine(s, r.also?.filter((c) => c.source === s.id))))) : null;
       }),
     ];
     content.replaceChildren(...sections.filter((n): n is Node => !!n));
@@ -362,6 +362,11 @@ const data = { ...cityData(city), ...(extra.length > 0 && { others: Object.fromE
   /* Neutral on purpose: gold is reserved for one-time money. */
   .receipt :global(.badge--news) {
     background: var(--rule);
+    color: var(--ink);
+  }
+  /* Another government's document (#51): outlined, so it never reads as the City's own. */
+  .receipt :global(.badge--other) {
+    box-shadow: inset 0 0 0 1.5px var(--muted);
     color: var(--ink);
   }
   .receipt :global(.badge--publisher) {

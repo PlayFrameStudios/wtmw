@@ -1,0 +1,210 @@
+{
+  "note": "What the City's budget covers, and what it doesn't (#51): the Sources page's 'What this budget covers' block and the overview's property-tax line. Sources added here are other governments' documents and explainers, never the City's own books; they continue the documents' numbering. The City's own adopted budget (S1) is cited where it says the thing itself. Every quote must appear on its page of source/excerpts/{source}.json (page 1 for a web page). Text can name {allFunds}, {generalFund}, {propertyTax} and {year}, which the pages fill from budget.json with their receipts, and link [words](glossary:Term) or [words](a source's URL). Any other number in a paragraph must appear in one of its cites' quotes. A paragraph with no cites says why in 'unsourced'. FUSD's budget page links its 2026-27 budget report as a Google Drive file; the report's cover reads 'Proposed Budget', and its certification page gives the June 24, 2026 adoption date.",
+  "sources": [
+    {
+      "id": "S4",
+      "publisher": "Fremont Unified School District",
+      "title": "Budget",
+      "url": "https://fremontunified.org/about/business-services/budget/",
+      "type": "other",
+      "usedFor": "Where FUSD publishes its own budget"
+    },
+    {
+      "id": "S5",
+      "publisher": "Fremont Unified School District",
+      "title": "2026-27 Adopted Budget: Budget Report",
+      "date": "2026-06-24",
+      "url": "https://drive.google.com/file/d/1sYt-fALFRCRYV6bW7qJciuSg-5sCOLRt/view?usp=sharing",
+      "format": "PDF",
+      "pageOffset": 4,
+      "type": "other",
+      "usedFor": "FUSD's elected board, adoption date and General Fund revenue sources"
+    },
+    {
+      "id": "S6",
+      "publisher": "Legislative Analyst's Office (California)",
+      "title": "The 1 Percent Tax: Where Does Your Money Go?",
+      "url": "https://lao.ca.gov/Media/Videos/2015/one-percent-tax-script.pdf",
+      "type": "other",
+      "usedFor": "How the county divides the basic 1% property tax"
+    },
+    {
+      "id": "S7",
+      "publisher": "Legislative Analyst's Office (California)",
+      "title": "Understanding California's Property Taxes",
+      "date": "2012-11-29",
+      "url": "https://lao.ca.gov/reports/2012/tax/property-tax-primer-112912.pdf",
+      "type": "other",
+      "usedFor": "Glossary: parcel tax, special district"
+    },
+    {
+      "id": "S8",
+      "publisher": "County of Alameda",
+      "title": "Cities in Alameda County",
+      "url": "https://acgov.org/about/cities.htm",
+      "type": "other",
+      "usedFor": "Fremont is one of Alameda County's cities"
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Parcel Tax",
+      "definition": "A tax set at a fixed amount for each parcel of property (or for each room or square foot). A local government needs two-thirds of voters to approve one.",
+      "source": "S7",
+      "page": 14,
+      "quote": "With the approval of two-thirds of voters, local governments may impose a tax on all parcels in their jurisdiction (or a subset of parcels in their jurisdiction). Local governments typically set parcel taxes at fixed amounts per parcel (or fixed amounts per room or per square foot of the parcel)."
+    },
+    {
+      "term": "School District",
+      "definition": "A separate local government that runs public schools. Fremont Unified School District is governed by a five-member Board of Education, each member elected to a four-year term.",
+      "source": "S5",
+      "page": 5,
+      "quote": "The District is governed by a five-member Board of Education. Each member is elected to a four-year term."
+    },
+    {
+      "term": "Special District",
+      "definition": "A local government set up to provide a particular service in its area, such as fire protection, water, or parks and recreation. Special districts get a share of the 1% property tax, along with counties, cities and schools.",
+      "source": "S7",
+      "page": 18,
+      "quote": "property tax revenue from the 1 percent rate is distributed to counties, cities, K-12 schools, community college districts, and special districts",
+      "also": [{ "source": "S7", "page": 18, "quote": "Special Districts Fire protection 348 County service area 316 Cemetery 241 Community services 201 Maintenance 136 Highway lighting 117 County water 100 Recreation and park 85" }]
+    }
+  ],
+  "overview": {
+    "text": "Your property tax bill pays several governments, including the City, the school district and the county. This page shows only the City's part.",
+    "unsourced": "Sums up the block's 'Where does my property tax go?' answer, which it links to and which carries the receipts.",
+    "link": "What the City's budget covers"
+  },
+  "questions": [
+    {
+      "id": "everything",
+      "question": "Is this everything the City of Fremont spends?",
+      "paragraphs": [
+        {
+          "text": "Yes, for the City government. These pages show the City of Fremont's own budget: {allFunds} across all its funds in {year}. Of that, {generalFund} is the [General Fund](glossary:General Fund), the City's main account for day-to-day services."
+        }
+      ]
+    },
+    {
+      "id": "schools",
+      "question": "Where are the schools?",
+      "paragraphs": [
+        {
+          "text": "Public schools in Fremont are run by Fremont Unified School District (FUSD), a separate government. It is governed by a five-member Board of Education, each member elected to a four-year term.",
+          "cites": [
+            { "source": "S5", "page": 5, "quote": "provides educational services to the residents of the incorporated areas of the City of Fremont" },
+            { "source": "S5", "page": 5, "quote": "The District is governed by a five-member Board of Education. Each member is elected to a four-year term." }
+          ]
+        },
+        {
+          "text": "FUSD adopts its own budget, most recently on June 24, 2026, so school spending isn't in the City's numbers. [FUSD publishes its budget on its own site](https://fremontunified.org/about/business-services/budget/).",
+          "cites": [
+            { "source": "S5", "page": 17, "quote": "Adoption Date: June 24, 2026" },
+            { "source": "S4", "quote": "2026-27 Adopted Budget, Presented June 10, 2026" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "else",
+      "question": "What else isn't here?",
+      "paragraphs": [
+        {
+          "text": "The City's own budget lists other governments that serve Fremont. Each has its own budget, separate from the City's, so none of their spending is on these pages.",
+          "cites": [{ "source": "S1", "page": 35, "quote": "Services by Other Governmental Units" }]
+        }
+      ],
+      "agencies": [
+        {
+          "name": "Alameda County",
+          "does": "The county government.",
+          "cites": [
+            { "source": "S8", "quote": "The incorporated cities are Alameda, Albany, Berkeley, Dublin, Emeryville, Fremont, Hayward, Livermore, Newark, Oakland, Piedmont, Pleasanton, San Leandro, and Union City." },
+            { "source": "S5", "page": 5, "quote": "Fremont is located within Alameda County." }
+          ]
+        },
+        {
+          "name": "Fremont-Newark Community College District",
+          "does": "Ohlone College, with campuses in Fremont and Newark.",
+          "cites": [
+            { "source": "S1", "page": 35, "quote": "Education: Fremont Unified School District and Fremont-Newark Community College District" },
+            { "source": "S1", "page": 34, "quote": "Ohlone College enrolls over 15,000 students per year at three campuses: Fremont, Newark, and online." }
+          ]
+        },
+        {
+          "name": "BART and AC Transit",
+          "does": "Regional trains and buses. The ACE and Amtrak Capitol Corridor trains also serve Fremont.",
+          "cites": [{ "source": "S1", "page": 35, "quote": "Public Transportation: Bay Area Rapid Transit District, Alameda-Contra Costa Transit District, ACE Train, and Amtrak Capitol Corridor Train" }]
+        },
+        {
+          "name": "Alameda County Water District",
+          "does": "Water.",
+          "cites": [{ "source": "S1", "page": 35, "quote": "Water: Alameda County Water District" }]
+        },
+        {
+          "name": "Union Sanitary District",
+          "does": "Sewer.",
+          "cites": [{ "source": "S1", "page": 35, "quote": "Sewer: Union Sanitary District" }]
+        },
+        {
+          "name": "Alameda County Flood Control and Water Conservation District",
+          "does": "Flood control.",
+          "cites": [{ "source": "S1", "page": 35, "quote": "Flood: Alameda County Flood Control and Water Conservation District" }]
+        },
+        {
+          "name": "East Bay Regional Park District",
+          "does": "Regional parks.",
+          "cites": [{ "source": "S1", "page": 35, "quote": "Parks : East Bay Regional Park District" }]
+        }
+      ]
+    },
+    {
+      "id": "property-tax",
+      "question": "Where does my property tax go?",
+      "paragraphs": [
+        {
+          "text": "The basic 1% property tax is pooled by the county and divided under state law among the county, cities, schools and [special districts](glossary:Special District).",
+          "cites": [
+            { "source": "S6", "page": 1, "quote": "Your county auditor pools your 1 percent rate tax payment, as well as payments from other property owners in your county, into a single countywide pot." },
+            { "source": "S6", "page": 1, "quote": "State law directs how your county auditor distributes the revenue in the countywide pot." },
+            { "source": "S6", "page": 1, "quote": "your county auditor sets aside this $1,000 for your city, county, schools, and special districts." }
+          ]
+        },
+        {
+          "text": "The City says it receives about 15 cents of every dollar of property tax paid, and that Alameda County and the schools, including FUSD, receive most of it.",
+          "cites": [{ "source": "S1", "page": 81, "quote": "The City of Fremont receives approximately 15 cents of every dollar of property tax paid. Alameda County and the schools, including Fremont Unified School District, receive most of the revenue from property taxes assessed on property located in the City" }]
+        },
+        {
+          "text": "The {propertyTax} in property tax on these pages is only the City's share."
+        }
+      ]
+    },
+    {
+      "id": "city-pays",
+      "question": "Does the City pay for the schools?",
+      "paragraphs": [
+        {
+          "text": "FUSD's budget groups its General Fund money by kind: the state's school funding formula (LCFF), federal revenue, other state revenue and other local revenue. The state formula is by far the largest.",
+          "cites": [
+            { "source": "S5", "page": 22, "quote": "1) LCFF Sources 8010-8099 399,548,875.00 3,090,236.00 402,639,111.00 410,731,574.00 3,095,856.00 413,827,430.00 2.8%" },
+            { "source": "S5", "page": 22, "quote": "2) Federal Revenue 8100-8299" },
+            { "source": "S5", "page": 22, "quote": "3) Other State Revenue 8300-8599" },
+            { "source": "S5", "page": 22, "quote": "4) Other Local Revenue 8600-8799" },
+            { "source": "S5", "page": 22, "quote": "5) TOTAL, REVENUES 420,334,973.00 101,870,038.00 522,205,011.00 429,549,369.00 88,981,027.00 518,530,396.00 -0.7%" }
+          ]
+        },
+        {
+          "text": "The City's own budget describes joint work with the district, such as a recycling coordinator funding agreement and police School Resource Officers who partner with FUSD.",
+          "cites": [
+            { "source": "S1", "page": 143, "quote": "as part of the City’s recycling coordinator funding agreement with FUSD" },
+            { "source": "S1", "page": 192, "quote": "The School Resource Officer (SRO) Unit will continue to partner with the Fremont Unified School District to deliver professional public safety and services." }
+          ]
+        },
+        {
+          "text": "We haven't checked every line of the City's full budget, so small City grants or contracts with the district can't be ruled out.",
+          "unsourced": "A limit of our own review, not a claim about a document."
+        }
+      ]
+    }
+  ]
+}

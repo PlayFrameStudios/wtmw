@@ -22,6 +22,7 @@ import { departmentItems } from '../../../../lib/departments';
 import { familiesFor } from '../../../../lib/families';
 import { shortMoney } from '../../../../lib/format';
 import { cityOverview, gapOverview } from '../../../../lib/overview';
+import { coverageFor } from '../../../../lib/coverage';
 import { balanceOf } from '../../../../lib/balance';
 import { formatValue, type Figure } from '../../../../lib/receipts';
 import { reservesFor } from '../../../../lib/reserves';
@@ -39,6 +40,8 @@ const gapCity = city.fiscalPosition.variant === 'gap';
 const year = city.budget.years[0];
 const label = (y: number, form: 'long' | 'short' | 'spoken' = 'long') => fy(city.budget.labels, y, form);
 const o = cityOverview(budget, families, revenueGroupsFor(city, budget), (y) => label(y));
+// #51: the property tax bill pays several governments; this card shows the City's part.
+const covers = coverageFor(city, budget, revenueGroupsFor(city, budget))?.overview;
 // A city with a gap has a deficit plan: the bridge, cost growth and the ballot (#43).
 const plan = gapCity ? gapPlan(budget, "The overview's gap card") : undefined;
 const gp = plan && gapOverview(plan);
@@ -219,6 +222,13 @@ const numberWords: Record<number, string> = { 10: 'ten' };
           <span class="bay">{o.revenue.property.name} {pct(o.revenue.property.share)}</span>
           <span><Sourced city={city} figure={o.revenue.total}>{shortMoney(o.revenue.total.value)}</Sourced> total, {label(o.revenue.year, 'short')}</span>
         </p>
+        {
+          covers && (
+            <p class="covers-line" data-covers-line>
+              {covers.segments.map((s) => s.text)} <a href={covers.href}>{covers.link}</a>
+            </p>
+          )
+        }
         {has('revenue') && <a class="more" href={`${city.path}revenue/`}>See where every $100 comes from <span aria-hidden="true">→</span></a>}
       </li>
 
@@ -628,6 +638,16 @@ const numberWords: Record<number, string> = { 10: 'ten' };
   }
   .wf-label.one-time {
     color: #8a5f0b;
+  }
+  .covers-line {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .covers-line a {
+    color: var(--bay);
+    font-weight: 700;
   }
   .more {
     margin-top: auto;

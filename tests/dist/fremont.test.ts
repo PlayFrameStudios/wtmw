@@ -52,8 +52,9 @@ describe('Fremont (built)', () => {
     }
   });
 
-  it('every figure cites a page of a Fremont document, and that page holds its quote', () => {
-    const pages = { S1: excerpt('S1'), S2: excerpt('S2'), S3: excerpt('S3') } as Record<string, Record<string, string>>;
+  it('every figure cites a page of a document, and that page holds its quote', () => {
+    // The City's documents, and since #51 the other governments' ones the "What this budget covers" block cites.
+    const pages = Object.fromEntries(b.sources.map((s) => [s.id, excerpt(s.id)])) as Record<string, Record<string, string>>;
     const norm = (s: string) => s.replace(/\s+/g, ' ').trim();
     let n = 0;
     for (const p of PAGES) {
@@ -77,7 +78,9 @@ describe('Fremont (built)', () => {
 
   it('the sources list names printed pages', () => {
     const t = text(html('sources/'));
-    expect(t).toMatch(/pp\. 27, 32, 34, 39, 65, 66, 67, 68, 71, 73, 85, 87, 89, 114, 120,/);
+    expect(t).toMatch(/pp\. 27, 28, 29, 32, 34, 39, 65, 66, 67, 68, 71, 73, 75, 85, 87, 89, 114, 120, 137, 186,/);
+    // FUSD's budget report has four pages before its printed page 1 (#51).
+    expect(t).toMatch(/Fremont Unified School District · June 24, 2026 · .* · pp\. 1, 13, 18/);
     expect(t).not.toMatch(/pp\. 33, 38/);
   });
 
