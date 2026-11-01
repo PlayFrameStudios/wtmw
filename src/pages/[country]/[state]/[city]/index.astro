@@ -225,7 +225,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
         {
           covers && (
             <p class="covers-line" data-covers-line>
-              {covers.segments.map((s) => s.text)} <a href={covers.href}>{covers.link}</a>
+              <a href={covers.href}>{covers.segments.map((s) => s.text)}</a>
             </p>
           )
         }
@@ -646,8 +646,10 @@ const numberWords: Record<number, string> = { 10: 'ten' };
     line-height: 1.5;
   }
   .covers-line a {
-    color: var(--bay);
-    font-weight: 700;
+    color: inherit;
+    text-decoration-color: var(--bay);
+    text-decoration-thickness: max(1px, 0.06em);
+    text-underline-offset: 0.18em;
   }
   .more {
     margin-top: auto;

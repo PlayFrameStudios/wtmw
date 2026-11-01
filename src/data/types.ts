@@ -488,8 +488,8 @@ export interface CoverageQuestion {
 /** The five reader questions, in order: is this everything, where are the schools, what else isn't here, where does property tax go, does the City pay for schools. */
 export interface Coverage {
   questions: CoverageQuestion[];
-  /** The overview's line under the property-tax card, and the words of its link to the block. */
-  overview: CoverageParagraph & { link: string };
+  /** The overview's line under the property-tax card; the whole line links to the block. */
+  overview: CoverageParagraph;
 }
 
 /** A city with a deficit plan built from a workbook (Berkeley): every module the Gap and Ballot pages read. */

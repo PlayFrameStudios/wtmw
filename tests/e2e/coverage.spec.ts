@@ -132,7 +132,8 @@ for (const c of CITIES) {
       await expect(line).toContainText("Your property tax bill pays several governments, including the City, the school district and the county. This page shows only the City's part.");
       // Inside the property-tax card.
       await expect(page.locator('.things > li').first().locator('[data-covers-line]')).toHaveCount(1);
-      await line.getByRole('link', { name: "What the City's budget covers" }).click();
+      // The whole line is the link (#51: "one plain line, linked to the block").
+      await line.getByRole('link', { name: /^Your property tax bill pays several governments/ }).click();
       await expect(page).toHaveURL(new RegExp(`${path}sources/#what-this-covers$`));
       await expect(block(page)).toBeInViewport();
     });

@@ -75,7 +75,7 @@ export function applyCoverage(budget: CityBudget, file: CoverageFile, excerpts: 
     }
   }
 
-  if (!file.overview?.link?.trim()) errors.push('coverage.json overview: needs the words of its link to the block');
+  if (!file.overview?.text?.trim()) errors.push('coverage.json overview: needs its line');
   else checkParagraph(file.overview, 'coverage.json overview');
 
   function checkParagraph(p: CoverageParagraph, where: string) {

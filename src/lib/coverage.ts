@@ -77,6 +77,6 @@ export function coverageFor(city: City, budget: CityBudget, revenueGroups: Reven
       paragraphs: q.paragraphs.map(paragraph),
       agencies: q.agencies ?? [],
     })),
-    overview: { ...paragraph(coverage.overview), link: coverage.overview.link, href: coverageHref(city) },
+    overview: { ...paragraph(coverage.overview), href: coverageHref(city) },
   };
 }
