@@ -137,15 +137,36 @@ describe('the block, as the pages get it', () => {
     const links = block(berkeley, built.berkeley).questions.flatMap((q) => q.paragraphs.flatMap((p) => p.segments.filter((s) => s.kind === 'link')));
     expect(links.map((l) => [l.text, l.href, l.external])).toEqual([
       ['General Fund', '/us/ca/berkeley/glossary/#general-fund-gf', false],
-      ['BUSD publishes its budget on its own site', 'https://www.berkeleyschools.net/departments/business-services-division/berkeley-unified-budget/', true],
+      // #52: the schools answer goes to the BUSD page now that there is one.
+      ['See BUSD\'s budget, explained', '/us/ca/berkeley/schools/', false],
       ['special districts', '/us/ca/berkeley/glossary/#special-district', false],
       ['parcel taxes', '/us/ca/berkeley/glossary/#parcel-tax', false],
     ]);
   });
 
-  it("gives the overview its line and the block's address", () => {
-    const o = block(fremont, built.fremont).overview;
-    expect(words(o.segments)).toBe("Your property tax bill pays several governments, including the City, the school district and the county. This page shows only the City's part.");
-    expect(o.href).toBe('/us/ca/fremont/sources/#what-this-covers');
+  it("gives the overview its line, linked to the block and, where the city has the page, to the school district's budget (#52)", () => {
+    const line = "Your property tax bill pays several governments, including the City, the school district and the county. This page shows only the City's part.";
+    const links = (o: { segments: { kind: string; text: string; href?: string }[] }) => o.segments.filter((s) => s.kind === 'link').map((s) => [s.text, s.href]);
+    const f = block(fremont, built.fremont).overview;
+    expect(words(f.segments)).toBe(line);
+    expect(f.href).toBe('/us/ca/fremont/sources/#what-this-covers');
+    expect(links(f)).toEqual([["This page shows only the City's part.", '/us/ca/fremont/sources/#what-this-covers']]);
+    const b = block(berkeley, built.berkeley).overview;
+    expect(words(b.segments)).toBe(line);
+    expect(links(b)).toEqual([
+      ['the school district', '/us/ca/berkeley/schools/'],
+      ["This page shows only the City's part.", '/us/ca/berkeley/sources/#what-this-covers'],
+    ]);
+    // Fixtureville borrows Berkeley's data but has no schools page: the words stay, the link goes.
+    const fixture = allCities.find((c) => c.fixture)!;
+    const fx = block(fixture, built.berkeley).overview;
+    expect(words(fx.segments)).toBe(line);
+    expect(links(fx)).toEqual([["This page shows only the City's part.", `${fixture.path}sources/#what-this-covers`]]);
+  });
+
+  it('a "page:" link must name one of the city\'s pages', () => {
+    expect(errors((f) => (f.overview.text = f.overview.text.replace('(page:sources#what-this-covers)', '(page:schools)')))).toEqual([
+      `coverage.json overview: "This page shows only the City's part." links to page:schools, which isn't one of this city's pages`,
+    ]);
   });
 });

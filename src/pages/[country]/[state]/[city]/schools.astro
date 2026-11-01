@@ -1,0 +1,433 @@
+---
+/**
+ * The school district's budget (#52): another government's, explained the way the City pages explain
+ * the City's, and never mistaken for it. How big, where the money comes from (a $100 waffle), where it
+ * goes, whether it balances in the district's own words, and the parcel taxes residents pay it directly.
+ * Every figure from schoolsFor() in src/lib/schools.ts; not in the nav, linked from the City pages.
+ */
+import CitedText from '../../../../components/CitedText.astro';
+import ListOrTable from '../../../../components/ListOrTable.astro';
+import SourceChip from '../../../../components/SourceChip.astro';
+import Sourced from '../../../../components/Sourced.astro';
+import Waffle from '../../../../components/Waffle.astro';
+import Base from '../../../../layouts/Base.astro';
+import { budgetFor } from '../../../../lib/budget';
+import { cityStaticPaths, type City } from '../../../../lib/cities';
+import { coverageHref } from '../../../../lib/coverage';
+import { schoolsFor } from '../../../../lib/schools';
+import { perHundred } from '../../../../lib/waffle';
+
+export const getStaticPaths = cityStaticPaths('schools');
+
+const { city } = Astro.props as { city: City };
+const s = schoolsFor(city, budgetFor(city)!)!;
+const table = { caption: `${s.short} ${s.fiscalYear} General Fund revenue, per $100`, name: 'Source', value: s.fiscalYear };
+const pct = (share: number) => `${(share * 100).toFixed(1)}%`;
+---
+
+<Base
+  title={`${s.district} · ${city.name}`}
+  city={city}
+  description={`The budget of ${s.district}, a separate government from the City of ${city.name}: how big it is, where its money comes from, where it goes and whether it balances. Every number links to BUSD's own documents.`}
+>
+  <div class="sc wrap">
+    <section class="sc-intro">
+      <p class="sc-kicker">Another government's budget</p>
+      <h1>{s.district}'s budget</h1>
+      <p class="sc-banner" role="note" data-schools-banner>
+        <CitedText city={city} p={s.banner} />
+      </p>
+    </section>
+
+    <section class="sc-section" aria-labelledby="sc-size">
+      <h2 id="sc-size">How big is it?</h2>
+      <p class="sc-lede" data-schools-size>
+        {s.short} expects <Sourced city={city} figure={s.revenue.total}>{s.revenue.totalText}</Sourced> of General Fund revenue in {s.fiscalYear}, and plans to spend <Sourced
+          city={city}
+          figure={s.spending.total}>{s.spending.totalText}</Sourced
+        >.
+      </p>
+      <p class="sc-note"><CitedText city={city} p={s.year} /></p>
+    </section>
+
+    <section class="sc-section" aria-labelledby="sc-revenue">
+      <h2 id="sc-revenue">Where the money comes from</h2>
+      <p class="sc-note">Each square is $1 of every $100 of {s.short}'s General Fund revenue.</p>
+      <div class="sc-waffle">
+        <Waffle items={s.revenue.waffle} label={`${s.short}'s ${s.fiscalYear} General Fund revenue`} noun="source" table={table} tableBelow={false} />
+        <ListOrTable id="schools-revenue" items={s.revenue.waffle} table={table}>
+          <ol class="sc-groups" role="list">
+            {
+              s.revenue.waffle.map((item) => (
+                <li>
+                  <a href={item.href}>
+                    <span class="sc-sw" style={`background:${item.color}`} aria-hidden="true" />
+                    <span class="sc-g-name">{item.name}</span>
+                    <span class="sc-g-per num">{perHundred(item.squares, item.exact)}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </ListOrTable>
+      </div>
+      <dl class="sc-parts" data-schools-revenue>
+        {
+          s.revenue.parts.map((p) => (
+            <div id={`rev-${p.id}`} data-part={p.id}>
+              <dt>
+                <span class="sc-sw" style={`background:${p.color}`} aria-hidden="true" />
+                {p.name}
+              </dt>
+              <dd class="sc-amount num">
+                <Sourced city={city} figure={p.figure}>
+                  {p.text}
+                </Sourced>
+              </dd>
+              {p.about && (
+                <dd class="sc-about">
+                  <CitedText city={city} p={p.about} />
+                </dd>
+              )}
+            </div>
+          ))
+        }
+      </dl>
+      {
+        s.revenue.notes.map((n) => (
+          <p class="sc-note" data-schools-note>
+            <CitedText city={city} p={n} />
+          </p>
+        ))
+      }
+    </section>
+
+    <section class="sc-section" aria-labelledby="sc-spending">
+      <h2 id="sc-spending">Where it goes</h2>
+      <p class="sc-note">{s.short}'s General Fund spending in {s.fiscalYear}, by what it buys. Shares are of the total, from these dollars.</p>
+      <div class="sc-scroll">
+        <table class="sc-table" data-schools-spending>
+          <thead>
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col" class="num">{s.fiscalYear}</th>
+              <th scope="col" class="num">Share</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              s.spending.rows.map((r) => (
+                <tr data-row={r.id}>
+                  <th scope="row">
+                    {r.name}
+                    {r.about && (
+                      <span class="sc-about">
+                        <CitedText city={city} p={r.about} />
+                      </span>
+                    )}
+                  </th>
+                  <td class="num">
+                    <Sourced city={city} figure={r.figure}>
+                      {r.text}
+                    </Sourced>
+                  </td>
+                  <td class="num">{r.share === undefined ? '—' : pct(r.share)}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      {
+        s.spending.notes.map((n) => (
+          <p class="sc-note" data-schools-note>
+            <CitedText city={city} p={n} />
+          </p>
+        ))
+      }
+    </section>
+
+    <section class="sc-section" aria-labelledby="sc-balance" data-schools-balance>
+      <h2 id="sc-balance">Is it balanced?</h2>
+      {
+        s.balance.paragraphs.map((p) => (
+          <p class="sc-body">
+            <CitedText city={city} p={p} />
+          </p>
+        ))
+      }
+      {
+        s.balance.quotes.map((q) => (
+          <blockquote class="sc-quote">
+            <p>
+              “{q.quote}” <SourceChip city={city} source={q.source} at={q} />
+            </p>
+          </blockquote>
+        ))
+      }
+    </section>
+
+    <section id="parcel-taxes" class="sc-section" aria-labelledby="sc-parcel">
+      <h2 id="sc-parcel">What Berkeley taxpayers pay {s.short} directly</h2>
+      <ul class="sc-taxes" role="list">
+        {
+          s.parcelTaxes.map((t) => (
+            <li class="sc-tax" data-parcel-tax={t.id}>
+              <h3>{t.name}</h3>
+              <p class="sc-measure">
+                <CitedText city={city} p={t.measure} />
+              </p>
+              <p class="sc-tax-amount num">
+                <Sourced city={city} figure={t.figure}>
+                  {t.text}
+                </Sourced>{' '}
+                in {s.fiscalYear}
+              </p>
+              <p class="sc-pays">
+                <CitedText city={city} p={t.pays} />
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="sc-section" aria-labelledby="sc-more">
+      <h2 id="sc-more">Read {s.short}'s own budget</h2>
+      <ul class="sc-links" data-schools-links>
+        {
+          s.links.map((src) => (
+            <li>
+              <a href={src.url} target="_blank" rel="noopener">
+                {src.title}
+              </a>{' '}
+              <span class="sc-pub">{src.publisher}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="sc-note">
+        <a href={coverageHref(city)}>What the City of {city.name}'s budget covers, and what it doesn't</a>
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .sc {
+    padding-block: 2.5rem 3rem;
+  }
+  .sc-kicker {
+    margin: 0 0 0.5rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .sc-intro h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    line-height: 1.1;
+  }
+  .sc-banner {
+    max-width: 48rem;
+    margin: 1.5rem 0 0;
+    padding: 1rem 1.25rem;
+    border-left: 0.375rem solid var(--bay);
+    border-radius: 0.5rem;
+    background: var(--bay-light);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.55;
+  }
+  .sc-section {
+    padding-block: 2rem 0;
+  }
+  .sc-section h2 {
+    margin: 0 0 0.75rem;
+  }
+  .sc-lede {
+    max-width: 48rem;
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+  .sc-note,
+  .sc-body {
+    max-width: 48rem;
+    margin: 0.75rem 0 0;
+    line-height: 1.6;
+  }
+  .sc-note {
+    color: var(--muted);
+  }
+  .sc-waffle {
+    display: grid;
+    grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+    gap: 1.5rem 2.5rem;
+    align-items: start;
+    margin-top: 1rem;
+  }
+  @media (max-width: 47.99rem) {
+    .sc-waffle {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (min-width: 48rem) {
+    .sc-waffle {
+      padding-top: 1.5rem;
+    }
+  }
+  .sc-groups {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+  .sc-groups a {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    color: inherit;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .sc-groups a:hover .sc-g-name {
+    text-decoration: underline;
+  }
+  .sc-g-per {
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .sc-sw {
+    display: inline-block;
+    width: 0.875rem;
+    height: 0.875rem;
+    margin-inline-end: 0.5rem;
+    border-radius: 2px;
+    vertical-align: -0.0625rem;
+  }
+  .sc-groups .sc-sw {
+    margin: 0;
+  }
+  .sc-parts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: 1rem 2rem;
+    margin: 2rem 0 0;
+  }
+  .sc-parts > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.25rem 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--rule);
+  }
+  .sc-parts > div:target {
+    background: var(--bay-light);
+  }
+  .sc-parts dt {
+    font-weight: 700;
+  }
+  .sc-parts dd {
+    margin: 0;
+  }
+  .sc-parts .sc-about {
+    grid-column: 1 / -1;
+  }
+  .sc-about {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+  th .sc-about {
+    display: block;
+    margin-top: 0.125rem;
+    font-weight: 400;
+  }
+  .sc-scroll {
+    position: relative;
+    overflow-x: auto;
+    margin-top: 1rem;
+  }
+  .sc-table {
+    width: 100%;
+    max-width: 48rem;
+    border-collapse: collapse;
+  }
+  .sc-table th,
+  .sc-table td {
+    padding: 0.625rem 0.75rem 0.625rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+    vertical-align: top;
+  }
+  .sc-table thead th {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  .sc-table .num {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .sc-quote {
+    max-width: 48rem;
+    margin: 1rem 0 0;
+    padding-left: 1rem;
+    border-left: 3px solid var(--rule);
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.6;
+  }
+  .sc-quote p {
+    margin: 0;
+  }
+  .sc-taxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: 1.25rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sc-tax {
+    padding: 1.25rem;
+    border-radius: 0.875rem;
+    background: var(--card);
+    box-shadow:
+      0 1px 2px rgb(22 25 29 / 0.06),
+      0 8px 24px rgb(22 25 29 / 0.06);
+  }
+  .sc-tax h3 {
+    margin: 0;
+    font-size: 1.0625rem;
+  }
+  .sc-tax p {
+    margin: 0.5rem 0 0;
+    line-height: 1.55;
+  }
+  .sc-measure,
+  .sc-pays {
+    color: var(--muted);
+  }
+  .sc-tax-amount {
+    font-size: 1.375rem;
+    font-weight: 700;
+  }
+  .sc-links {
+    margin: 0;
+    padding-left: 1.125rem;
+    line-height: 1.8;
+  }
+  .sc-pub {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  .sc a {
+    overflow-wrap: anywhere;
+  }
+</style>

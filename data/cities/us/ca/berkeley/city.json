@@ -24,5 +24,6 @@
       ]
     }
   },
-  "ballot": true
+  "ballot": true,
+  "schools": true
 }

@@ -456,6 +456,8 @@ export interface CityBudget {
   pension?: Pension;
   /** What the City's budget covers and what it doesn't (#51), from coverage.json. */
   coverage?: Coverage;
+  /** The school district's budget (#52), from schools.json: another government's, on a page of its own. */
+  schools?: Schools;
 }
 
 /**
@@ -512,4 +514,61 @@ export interface CrossCheck {
   what: string;
   computed: number | null;
   cached: number;
+}
+
+/**
+ * A figure in the school district's book (#52), read from its quote, never typed: the quote's one dollar
+ * amount ("$248.2 million"), or the `figure`th of several, or for a table row (`row`) its `figure`th cell.
+ */
+export type SchoolsAmount = DocRef & { value: number; figure?: number; row?: boolean };
+
+export interface SchoolsPart {
+  id: string;
+  name: string;
+  /** Its squares in the $100 chart (revenue parts). */
+  color?: string;
+  amount: SchoolsAmount;
+  /** What it is, in plain words with its own cites. */
+  about?: CoverageParagraph;
+}
+
+export interface SchoolsParcelTax {
+  id: string;
+  name: string;
+  /** Which measure it is now, and what it replaced. */
+  measure: CoverageParagraph;
+  amount: SchoolsAmount;
+  pays: CoverageParagraph;
+}
+
+/** The school district's General Fund budget (#52). Every part reconciles to its total, or the build fails. */
+export interface Schools {
+  district: string;
+  short: string;
+  /** The district's budget year, as it writes it: "2026-27". */
+  fiscalYear: string;
+  banner: CoverageParagraph;
+  /** Its fiscal year, against the City's. */
+  year: CoverageParagraph;
+  revenue: {
+    /** The narrative's total, which its parts add up to. */
+    total: SchoolsAmount;
+    /** The State budget form's exact total, which the narrative's rounds. */
+    exact: SchoolsAmount;
+    /** The State form's parcel-tax line, which differs from the narrative's parcel-tax figure. */
+    parcelForm: SchoolsAmount;
+    parts: SchoolsPart[];
+    notes: CoverageParagraph[];
+  };
+  spending: {
+    total: SchoolsAmount;
+    /** The State form's rows add up to its total exactly. */
+    exact: SchoolsAmount;
+    rows: SchoolsPart[];
+    notes: CoverageParagraph[];
+  };
+  balance: { paragraphs: CoverageParagraph[]; quotes: DocRef[] };
+  parcelTaxes: SchoolsParcelTax[];
+  /** The district's own pages to read next: its budget page and the book. */
+  links: SourceId[];
 }

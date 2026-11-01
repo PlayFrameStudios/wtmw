@@ -3185,7 +3185,7 @@
             ]
           },
           {
-            "text": "So school spending isn't in the City's numbers. [BUSD publishes its budget on its own site](https://www.berkeleyschools.net/departments/business-services-division/berkeley-unified-budget/).",
+            "text": "So school spending isn't in the City's numbers. [See BUSD's budget, explained](page:schools).",
             "cites": [
               {
                 "source": "S29",
@@ -3365,8 +3365,543 @@
       }
     ],
     "overview": {
-      "text": "Your property tax bill pays several governments, including the City, the school district and the county. This page shows only the City's part.",
+      "text": "Your property tax bill pays several governments, including the City, [the school district](page:schools) and the county. [This page shows only the City's part.](page:sources#what-this-covers)",
       "unsourced": "Sums up the block's 'Where does my property tax go?' answer, which it links to and which carries the receipts."
     }
+  },
+  "schools": {
+    "district": "Berkeley Unified School District",
+    "short": "BUSD",
+    "fiscalYear": "2026-27",
+    "banner": {
+      "text": "Berkeley Unified School District is a separate government with its own elected school board. These numbers come from BUSD's budget, not the City's.",
+      "cites": [
+        {
+          "source": "S28",
+          "quote": "The Berkeley Unified School District Board of Education, also called the School Board, is comprised of five elected directors"
+        },
+        {
+          "source": "S29",
+          "quote": "Each year before June 30 the School Board is required by law to pass a balanced budget."
+        }
+      ]
+    },
+    "year": {
+      "text": "BUSD's year runs July 1 to June 30, like the City's [fiscal year](glossary:Fiscal Year (FY)), so its 2026-27 budget lines up with the City's {year}.",
+      "cites": [
+        {
+          "source": "S30",
+          "page": 7,
+          "quote": "Local Educational Agencies (LEAs) are required to adopt a budget prior to July 1 of each year in order to authorize the expenditure of funds."
+        },
+        {
+          "source": "S30",
+          "page": 24,
+          "quote": "The projected ending fund balances for the Measures as of June 30, 2027"
+        },
+        {
+          "source": "S30",
+          "page": 15,
+          "quote": "For the 2026-27 fiscal year, the Berkeley Unified School District's (BUSD) combined General Fund is projected to receive $248.2 million in revenue."
+        }
+      ]
+    },
+    "revenue": {
+      "total": {
+        "source": "S30",
+        "page": 15,
+        "quote": "For the 2026-27 fiscal year, the Berkeley Unified School District's (BUSD) combined General Fund is projected to receive $248.2 million in revenue.",
+        "value": 248200000
+      },
+      "exact": {
+        "source": "S30",
+        "page": 101,
+        "quote": "5) TOTAL, REVENUES 194,665,507.88 44,272,659.00 238,938,166.88 198,578,428.00 49,626,706.00 248,205,134.00",
+        "row": true,
+        "figure": 6,
+        "column": "2026-27 Budget, Total Fund",
+        "value": 248205134
+      },
+      "parcelForm": {
+        "source": "S30",
+        "page": 106,
+        "quote": "Parcel Taxes 8621 69,859,283.00 0.00 69,859,283.00 68,632,427.00 0.00 68,632,427.00",
+        "row": true,
+        "figure": 7,
+        "column": "2026-27 Budget, Total Fund",
+        "value": 68632427
+      },
+      "parts": [
+        {
+          "id": "lcff",
+          "color": "#0e6b6f",
+          "name": "State school funding (LCFF)",
+          "amount": {
+            "source": "S30",
+            "page": 16,
+            "quote": "The primary source of funding is State revenue from the Local Control Funding Formula (LCFF), contributing $122.9 million with $116.1 base funding and $6.8 million as supplemental funding.",
+            "figure": 1,
+            "value": 122900000
+          },
+          "about": {
+            "text": "The State's Local Control Funding Formula: $116.1 million of base funding, and $6.8 million of supplemental funding set by how many students are English learners, foster youth or eligible for free and reduced-price meals.",
+            "cites": [
+              {
+                "source": "S30",
+                "page": 16,
+                "quote": "The primary source of funding is State revenue from the Local Control Funding Formula (LCFF), contributing $122.9 million with $116.1 base funding and $6.8 million as supplemental funding."
+              },
+              {
+                "source": "S30",
+                "page": 16,
+                "quote": "The District is projected to receive $6.8 million in Supplemental Funding, which is determined by the percentage of pupils eligible for free and reduced-price meals, English Language Learner students, and Foster Youth."
+              }
+            ]
+          }
+        },
+        {
+          "id": "parcel-taxes",
+          "color": "#3e9a8f",
+          "name": "Berkeley's school parcel taxes",
+          "amount": {
+            "source": "S30",
+            "page": 16,
+            "quote": "The second largest funding source comes from local parcel tax Measures, which provide a total of $68.8 million, or almost 30% of the total revenue.",
+            "value": 68800000
+          },
+          "about": {
+            "text": "Three taxes Berkeley voters approved for the schools. BUSD says they support small class sizes, enrichment programs, educator salaries, and facilities safety and maintenance. [Each tax, below](page:schools#parcel-taxes).",
+            "cites": [
+              {
+                "source": "S30",
+                "page": 16,
+                "quote": "BUSD is grateful for this vital funding from Berkeley taxpayers, which supports small class sizes, enrichment programs, educator salaries, and facilities safety and maintenance."
+              }
+            ]
+          }
+        },
+        {
+          "id": "restricted",
+          "color": "#23395b",
+          "name": "Restricted federal, state and local money",
+          "amount": {
+            "source": "S30",
+            "page": 16,
+            "quote": "Additionally, $49.7 million (20.0%) is projected from Restricted Federal, State, and Local revenues, which must be spent on specific programs.",
+            "value": 49700000
+          },
+          "about": {
+            "text": "Money that must be spent on specific programs.",
+            "cites": [
+              {
+                "source": "S30",
+                "page": 16,
+                "quote": "Additionally, $49.7 million (20.0%) is projected from Restricted Federal, State, and Local revenues, which must be spent on specific programs."
+              }
+            ]
+          }
+        },
+        {
+          "id": "other-state",
+          "color": "#3f5e96",
+          "name": "Other state money",
+          "amount": {
+            "source": "S30",
+            "page": 16,
+            "quote": "Finally, Other Unrestricted State program revenue totals $4.5 million, representing 1.9% of the budget.",
+            "value": 4500000
+          },
+          "about": {
+            "text": "Unrestricted money from State programs outside the funding formula.",
+            "cites": [
+              {
+                "source": "S30",
+                "page": 16,
+                "quote": "Finally, Other Unrestricted State program revenue totals $4.5 million, representing 1.9% of the budget."
+              }
+            ]
+          }
+        },
+        {
+          "id": "other-local",
+          "color": "#8a6c45",
+          "name": "Rentals and other local money",
+          "amount": {
+            "source": "S30",
+            "page": 19,
+            "quote": "Unrestricted local revenues total $2.3 million and include $0.4 million in leases and rental revenue and $1.9 million in other local revenue.",
+            "figure": 1,
+            "value": 2300000
+          },
+          "about": {
+            "text": "Unrestricted local money: $0.4 million from leases and rentals, and $1.9 million of other local revenue.",
+            "cites": [
+              {
+                "source": "S30",
+                "page": 19,
+                "quote": "Unrestricted local revenues total $2.3 million and include $0.4 million in leases and rental revenue and $1.9 million in other local revenue."
+              }
+            ]
+          }
+        }
+      ],
+      "notes": [
+        {
+          "text": "These five add up to BUSD's total. Its State budget form gives the total to the dollar: {revenueExact}."
+        },
+        {
+          "text": "One difference between BUSD's own figures: the State form's parcel-tax line records {parcelForm}, while the narrative says the parcel taxes provide $68.8 million, the three taxes below added together. This page uses the narrative's figures, which are the ones that add up to the total.",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 16,
+              "quote": "The second largest funding source comes from local parcel tax Measures, which provide a total of $68.8 million, or almost 30% of the total revenue."
+            }
+          ]
+        }
+      ]
+    },
+    "spending": {
+      "total": {
+        "source": "S30",
+        "page": 19,
+        "quote": "Combined General Fund expenditures for 2026-27 is projected to be $249.5 million",
+        "value": 249500000
+      },
+      "exact": {
+        "source": "S30",
+        "page": 101,
+        "quote": "9) TOTAL, EXPENDITURES 151,521,962.00 95,246,303.00 246,768,265.00 158,184,879.00 91,302,934.00 249,487,813.00",
+        "row": true,
+        "figure": 6,
+        "column": "2026-27 Budget, Total Fund",
+        "value": 249487813
+      },
+      "rows": [
+        {
+          "id": "certificated",
+          "name": "Certificated salaries",
+          "amount": {
+            "source": "S30",
+            "page": 101,
+            "quote": "1) Certificated Salaries 1000-1999 73,829,435.00 18,382,683.00 92,212,118.00 81,017,211.00 19,831,182.00 100,848,393.00",
+            "row": true,
+            "figure": 6,
+            "column": "2026-27 Budget, Total Fund",
+            "value": 100848393
+          },
+          "about": {
+            "text": "Teachers, pupil support staff, and supervisors and administrators.",
+            "cites": [
+              {
+                "source": "S30",
+                "page": 107,
+                "quote": "Certificated Teachers' Salaries"
+              },
+              {
+                "source": "S30",
+                "page": 107,
+                "quote": "Certificated Pupil Support Salaries"
+              },
+              {
+                "source": "S30",
+                "page": 107,
+                "quote": "Certificated Supervisors' and Administrators' Salaries"
+              }
+            ]
+          }
+        },
+        {
+          "id": "classified",
+          "name": "Classified salaries",
+          "amount": {
+            "source": "S30",
+            "page": 101,
+            "quote": "2) Classified Salaries 2000-2999 24,448,913.00 16,855,548.00 41,304,461.00 25,463,460.00 19,933,245.00 45,396,705.00",
+            "row": true,
+            "figure": 6,
+            "column": "2026-27 Budget, Total Fund",
+            "value": 45396705
+          },
+          "about": {
+            "text": "Instructional and support staff, supervisors and administrators, and clerical, technical and office staff.",
+            "cites": [
+              {
+                "source": "S30",
+                "page": 107,
+                "quote": "Classified Instructional Salaries"
+              },
+              {
+                "source": "S30",
+                "page": 107,
+                "quote": "Classified Support Salaries"
+              },
+              {
+                "source": "S30",
+                "page": 107,
+                "quote": "Clerical, Technical and Office Salaries"
+              }
+            ]
+          }
+        },
+        {
+          "id": "benefits",
+          "name": "Employee benefits",
+          "amount": {
+            "source": "S30",
+            "page": 101,
+            "quote": "3) Employee Benefits 3000-3999 35,863,642.00 23,431,079.00 59,294,721.00 39,377,378.00 25,724,783.00 65,102,161.00",
+            "row": true,
+            "figure": 6,
+            "column": "2026-27 Budget, Total Fund",
+            "value": 65102161
+          },
+          "about": {
+            "text": "Including the two state pension systems, for teachers (STRS) and other staff (PERS).",
+            "cites": [
+              {
+                "source": "S30",
+                "page": 107,
+                "quote": "STRS 3101-3102"
+              },
+              {
+                "source": "S30",
+                "page": 107,
+                "quote": "PERS 3201-3202"
+              }
+            ]
+          }
+        },
+        {
+          "id": "services",
+          "name": "Services and other operating costs",
+          "amount": {
+            "source": "S30",
+            "page": 101,
+            "quote": "5) Services and Other Operating Expenditures 5000-5999 15,041,038.00 28,090,398.00 43,131,436.00 9,617,996.00 21,864,143.00 31,482,139.00",
+            "row": true,
+            "figure": 6,
+            "column": "2026-27 Budget, Total Fund",
+            "value": 31482139
+          }
+        },
+        {
+          "id": "supplies",
+          "name": "Books and supplies",
+          "amount": {
+            "source": "S30",
+            "page": 101,
+            "quote": "4) Books and Supplies 4000-4999 5,361,413.00 5,653,593.00 11,015,006.00 4,466,265.00 2,664,155.00 7,130,420.00",
+            "row": true,
+            "figure": 6,
+            "column": "2026-27 Budget, Total Fund",
+            "value": 7130420
+          }
+        },
+        {
+          "id": "capital",
+          "name": "Capital outlay",
+          "amount": {
+            "source": "S30",
+            "page": 101,
+            "quote": "6) Capital Outlay 6000-6999 67,928.00 727,373.00 795,301.00 52,819.00 118,916.00 171,735.00",
+            "row": true,
+            "figure": 6,
+            "column": "2026-27 Budget, Total Fund",
+            "value": 171735
+          }
+        },
+        {
+          "id": "indirect",
+          "name": "Indirect costs paid by other funds",
+          "amount": {
+            "source": "S30",
+            "page": 101,
+            "quote": "8) Other Outgo - Transfers of Indirect Costs 7300-7399 (3,090,407.00) 2,105,629.00 (984,778.00) (1,810,250.00) 1,166,510.00 (643,740.00)",
+            "row": true,
+            "figure": 6,
+            "column": "2026-27 Budget, Total Fund",
+            "value": -643740
+          },
+          "about": {
+            "text": "A credit, not a cost: other district funds, such as Adult Education, the Cafeteria and Child Development, pay the General Fund for the support services it gives them.",
+            "cites": [
+              {
+                "source": "S30",
+                "page": 22,
+                "quote": "Other Funds including the Adult Education, Cafeteria and Child Development Funds are projected to pay $0.6 million in indirect costs to the Unrestricted General Fund for support services."
+              }
+            ]
+          }
+        }
+      ],
+      "notes": [
+        {
+          "text": "These add up to BUSD's total spending on its State budget form: {spendingExact}."
+        },
+        {
+          "text": "Not counted above: the General Fund is also transferring $0.55 million to BUSD's Self Insurance Fund, to meet required reserves for property and liability insurance.",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 21,
+              "quote": "The General Fund is transferring $0.55 million to the Self Insurance Fund to meet required reserves for Property and Liability Insurance."
+            }
+          ]
+        }
+      ]
+    },
+    "balance": {
+      "paragraphs": [
+        {
+          "text": "BUSD plans to spend $249.5 million from its General Fund in 2026-27 and to take in $248.2 million.",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 19,
+              "quote": "Combined General Fund expenditures for 2026-27 is projected to be $249.5 million"
+            },
+            {
+              "source": "S30",
+              "page": 15,
+              "quote": "For the 2026-27 fiscal year, the Berkeley Unified School District's (BUSD) combined General Fund is projected to receive $248.2 million in revenue."
+            }
+          ]
+        },
+        {
+          "text": "In the part of its General Fund that isn't set aside for specific programs, BUSD projects deficit spending, spending more than it takes in, of $2.3 million in 2026-27, $0.4 million in 2027-28 and $0.2 million in 2028-29.",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 12,
+              "quote": "The Multi-Year projections for the Unrestricted General Fund reflect the following balances for each year. 2026-27 2027-28 2028-29 Deficit Spending $2.3 million $0.4 Million $.2 million"
+            }
+          ]
+        },
+        {
+          "text": "BUSD says it has met the State's required 3% reserve for economic uncertainty. It projects its assigned and unassigned reserves at 3.4%, 3.3% and 3.2% over the three years.",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 23,
+              "quote": "The District has fully met the 3% State required reserve for economic uncertainty."
+            },
+            {
+              "source": "S30",
+              "page": 12,
+              "quote": "The district’s assigned and unassigned reserve levels are projected at 3.4%, 3.3%, and 3.2%"
+            }
+          ]
+        }
+      ],
+      "quotes": [
+        {
+          "source": "S30",
+          "page": 12,
+          "quote": "To secure a positive certification and uphold a positive fund balance, the District is required to implement $7.0 million in budget balancing adjustments for the 2027-28 fiscal year and an additional $0.5 million for 2028-29, as detailed in the following section."
+        },
+        {
+          "source": "S30",
+          "page": 12,
+          "quote": "The Multi-Year Projections in the 2026-27 Budget submission identify the need for up to $7.5 million in budget adjustments, which are either reductions in General Fund expenditures and/or increases in General Fund revenues for years 2027-28 and 2028-29."
+        }
+      ]
+    },
+    "parcelTaxes": [
+      {
+        "id": "bsep",
+        "name": "Berkeley Schools Excellence Program (BSEP)",
+        "measure": {
+          "text": "Measure H of 2024, which replaced Measure E1 in 2025-26.",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 24,
+              "quote": "Berkeley Schools Excellence Program (BSEP) Measure H, passed by the voters in 2024 replacing Measure E1 in FY 2025-26 (Fund 04)"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S30",
+          "page": 19,
+          "quote": "Parcel tax revenues from BSEP, Measure H, are projected to total $46.8 million.",
+          "value": 46800000
+        },
+        "pays": {
+          "text": "66% for high-quality instruction, 27% for what BUSD calls essentials for excellence, and 7% for effective student support.",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 19,
+              "quote": "Of the BSEP revenue, 66% is designated for High Quality Instruction, 27% is designated for Essentials for Excellence and 7% is designated for Effective Student Support."
+            }
+          ]
+        }
+      },
+      {
+        "id": "berra",
+        "name": "Berkeley Public Schools Educator Recruitment and Retention Act (BERRA)",
+        "measure": {
+          "text": "Measure E of 2020.",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 24,
+              "quote": "The Berkeley Public Schools Educator Recruitment and Retention Act of 2020 (BERRA) Measure E passed by the voters in March 2020."
+            }
+          ]
+        },
+        "amount": {
+          "source": "S30",
+          "page": 19,
+          "quote": "Parcel tax revenues from BERRA, Measure E, are projected to total $12.6 million.",
+          "value": 12600000
+        },
+        "pays": {
+          "text": "95% for educator pay, and 5% for programs to recruit, keep and develop educators.",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 19,
+              "quote": "Of the BERRA revenue, 5% is designated for Educator Recruitment, Retention and Development Programs, 95% is designated for Educator Compensation."
+            }
+          ]
+        }
+      },
+      {
+        "id": "maintenance",
+        "name": "Facilities Safety and Maintenance Act",
+        "measure": {
+          "text": "Measure H of 2020, which replaced Measure H of 2010.",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 24,
+              "quote": "Facilities Safety and Maintenance Act of 2020, Measure H, passed by the voters in March, 2020 replacing Measure H of 2010 (Fund 02)"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S30",
+          "page": 19,
+          "quote": "Parcel tax revenues from Maintenance, Measure H, are projected to total $9.4 million.",
+          "value": 9400000
+        },
+        "pays": {
+          "text": "School building maintenance and security.",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 19,
+              "quote": "These funds are used for school building maintenance and security."
+            }
+          ]
+        }
+      }
+    ],
+    "links": [
+      "S29",
+      "S30"
+    ]
   }
 }

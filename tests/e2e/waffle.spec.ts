@@ -120,7 +120,14 @@ test.describe('the overview, cut to the essentials (#33)', () => {
       return line.getBoundingClientRect().height + parseFloat(getComputedStyle(line.parentElement!).rowGap);
     });
     expect(covers).toBeLessThanOrEqual(80);
-    expect((await page.evaluate(() => document.documentElement.scrollHeight)) - covers).toBeLessThanOrEqual(Math.floor(4463 * 0.7));
+    // #52 review added the schools aside below the stats (~215px at 390px). Same treatment: measured, capped, raised on #52.
+    const aside = await page.evaluate(() => {
+      const el = document.querySelector('[data-schools-aside]');
+      if (!el) return 0;
+      return el.getBoundingClientRect().height + parseFloat(getComputedStyle(el).marginTop);
+    });
+    expect(aside).toBeLessThanOrEqual(240);
+    expect((await page.evaluate(() => document.documentElement.scrollHeight)) - covers - aside).toBeLessThanOrEqual(Math.floor(4463 * 0.7));
     const tour = page.getByRole('link', { name: 'Start the 3-minute tour' }).filter({ visible: true });
     expect((await tour.boundingBox())!.y).toBeLessThan((await page.locator('.hero-waffle').boundingBox())!.y);
   });
