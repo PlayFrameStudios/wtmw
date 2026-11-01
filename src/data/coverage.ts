@@ -3,8 +3,10 @@
  * Its sources are other governments' documents and explainers, numbered after the City's own,
  * typed 'other' so no page can present them as the City's books. Every quote is checked against
  * its page excerpt, every number in the copy must be in a quote it cites (or come from a token the
- * pages fill from budget.json), and every link must go to a glossary term or a registered source.
+ * pages fill from budget.json), and every link must go to a glossary term, one of the city's pages or
+ * a registered source. The same paragraph checks serve the schools page (#52): paragraphChecks().
  */
+import { CITY_PAGES } from '../lib/city-pages.ts';
 import { checkQuote, normalize, type Excerpts } from './documents.ts';
 import { COVERAGE_QUESTIONS, type CityBudget, type Coverage, type CoverageParagraph, type DocRef, type GlossaryEntry, type Source } from './types.ts';
 
@@ -18,14 +20,68 @@ export interface CoverageFile {
 /** The figures a paragraph can name; the pages fill them from budget.json, each with its receipt. */
 export const COVERAGE_TOKENS = ['allFunds', 'generalFund', 'propertyTax', 'year'] as const;
 const TOKEN = /\{(\w+)\}/g;
-/** [words](target): a glossary term ("glossary:General Fund (GF)", so one level of parentheses) or a source's URL. */
+/**
+ * [words](target): a glossary term ("glossary:General Fund (GF)", so one level of parentheses), one of
+ * the city's pages ("page:schools", "page:sources#what-this-covers") or a source's URL.
+ */
 export const LINK = /\[([^\]]+)\]\(((?:[^()]|\([^()]*\))+)\)/g;
 const NUMBER = /\d[\d,.]*\d|\d/g;
 
-/** "$68.8 million" and "$68.8M" share "68.8"; trailing punctuation isn't part of a number. */
-const numbersIn = (s: string) => [...s.matchAll(NUMBER)].map((m) => m[0].replace(/[.,]+$/, ''));
+/** The pages every city has; the schools page (#52) only where the city has its data. */
+export const ALWAYS_PAGES: readonly string[] = CITY_PAGES.map((p) => p.slug).filter((s) => s !== 'schools');
 
-export function applyCoverage(budget: CityBudget, file: CoverageFile, excerpts: Excerpts, publisher: string): { budget: CityBudget; errors: string[] } {
+/** "$68.8 million" and "$68.8M" share "68.8", and "$.2 million" is "0.2"; trailing punctuation isn't part of a number. */
+const numbersIn = (s: string) => [...s.replace(/(?<!\d)\.(\d)/g, '0.$1').matchAll(NUMBER)].map((m) => m[0].replace(/[.,]+$/, ''));
+
+/** What a paragraph's links and tokens may point at, and where its errors go. */
+export interface ParagraphContext {
+  known: Map<string, Source>;
+  excerpts: Excerpts;
+  glossaryTerms: Set<string>;
+  /** Page slugs a "page:" link may name. */
+  pages: readonly string[];
+  tokens: readonly string[];
+  errors: string[];
+}
+
+/** The checks every cited paragraph passes: its quotes, its numbers, its links and its tokens. */
+export function paragraphChecks(ctx: ParagraphContext) {
+  const { known, excerpts, glossaryTerms, pages, tokens: allowed, errors } = ctx;
+  const urls = new Set([...known.values()].map((s) => s.url));
+  const cite = (ref: DocRef, where: string) => {
+    if (!known.has(ref.source)) return errors.push(`${where}: unknown source ${ref.source}`);
+    try {
+      checkQuote(ref, excerpts, where);
+    } catch (e) {
+      errors.push((e as Error).message);
+    }
+  };
+  const paragraph = (p: CoverageParagraph, where: string) => {
+    const tokens = [...p.text.matchAll(TOKEN)].map((m) => m[1]);
+    for (const t of tokens) if (!allowed.includes(t)) errors.push(`${where}: unknown {${t}}`);
+    for (const [, words, target] of p.text.matchAll(LINK)) {
+      if (target.startsWith('glossary:')) {
+        if (!glossaryTerms.has(target.slice('glossary:'.length))) errors.push(`${where}: "${words}" links to ${target}, which isn't in the glossary`);
+      } else if (target.startsWith('page:')) {
+        const slug = target.slice('page:'.length).split('#')[0];
+        if (!pages.includes(slug)) errors.push(`${where}: "${words}" links to ${target}, which isn't one of this city's pages`);
+      } else if (!urls.has(target)) errors.push(`${where}: "${words}" links to ${target}, which isn't a source's URL`);
+    }
+    const cites = p.cites ?? [];
+    cites.forEach((c) => cite(c, where));
+    if (!cites.length && !tokens.length && !p.unsourced?.trim()) errors.push(`${where}: no cites, no figures and no "unsourced" reason`);
+    checkNumbers(p.text.replace(TOKEN, '').replace(LINK, '$1'), cites, where, errors);
+  };
+  return { cite, paragraph };
+}
+
+export function applyCoverage(
+  budget: CityBudget,
+  file: CoverageFile,
+  excerpts: Excerpts,
+  publisher: string,
+  pages: readonly string[] = ALWAYS_PAGES,
+): { budget: CityBudget; errors: string[] } {
   const errors: string[] = [];
   const first = budget.sources.length + 1;
   const added: Source[] = file.sources.map((s, i) => ({ ...s, number: first + i }));
@@ -36,16 +92,8 @@ export function applyCoverage(budget: CityBudget, file: CoverageFile, excerpts: 
   });
   const sources = [...budget.sources, ...added];
   const known = new Map(sources.map((s) => [s.id, s]));
-  const urls = new Set(sources.map((s) => s.url));
-
-  const cite = (ref: DocRef, where: string) => {
-    if (!known.has(ref.source)) return errors.push(`${where}: unknown source ${ref.source}`);
-    try {
-      checkQuote(ref, excerpts, where);
-    } catch (e) {
-      errors.push((e as Error).message);
-    }
-  };
+  const glossaryTerms = new Set<string>();
+  const { cite, paragraph: checkParagraph } = paragraphChecks({ known, excerpts, glossaryTerms, pages, tokens: COVERAGE_TOKENS, errors });
 
   const glossary: GlossaryEntry[] = [...(budget.glossary ?? [])];
   const terms = new Set(glossary.map((g) => g.term.toLowerCase()));
@@ -60,7 +108,7 @@ export function applyCoverage(budget: CityBudget, file: CoverageFile, excerpts: 
   // A glossary that was alphabetical (Fremont's, as the City prints it) stays alphabetical.
   const sorted = (budget.glossary ?? []).every((g, i, a) => i === 0 || a[i - 1].term.localeCompare(g.term) <= 0);
   if (sorted) glossary.sort((a, b) => a.term.localeCompare(b.term));
-  const glossaryTerms = new Set(glossary.map((g) => g.term));
+  for (const g of glossary) glossaryTerms.add(g.term);
 
   const ids = file.questions.map((q) => q.id);
   if (ids.join() !== COVERAGE_QUESTIONS.join()) errors.push(`coverage.json: questions must be ${COVERAGE_QUESTIONS.join(', ')}, in that order; got ${ids.join(', ')}`);
@@ -77,20 +125,6 @@ export function applyCoverage(budget: CityBudget, file: CoverageFile, excerpts: 
 
   if (!file.overview?.text?.trim()) errors.push('coverage.json overview: needs its line');
   else checkParagraph(file.overview, 'coverage.json overview');
-
-  function checkParagraph(p: CoverageParagraph, where: string) {
-    const tokens = [...p.text.matchAll(TOKEN)].map((m) => m[1]);
-    for (const t of tokens) if (!(COVERAGE_TOKENS as readonly string[]).includes(t)) errors.push(`${where}: unknown {${t}}`);
-    for (const [, words, target] of p.text.matchAll(LINK)) {
-      if (target.startsWith('glossary:')) {
-        if (!glossaryTerms.has(target.slice('glossary:'.length))) errors.push(`${where}: "${words}" links to ${target}, which isn't in the glossary`);
-      } else if (!urls.has(target)) errors.push(`${where}: "${words}" links to ${target}, which isn't a source's URL`);
-    }
-    const cites = p.cites ?? [];
-    cites.forEach((c) => cite(c, where));
-    if (!cites.length && !tokens.length && !p.unsourced?.trim()) errors.push(`${where}: no cites, no figures and no "unsourced" reason`);
-    checkNumbers(p.text.replace(TOKEN, '').replace(LINK, '$1'), cites, where, errors);
-  }
 
   return { budget: { ...budget, sources, glossary, coverage: { questions: file.questions, overview: file.overview } }, errors };
 }

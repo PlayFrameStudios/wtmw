@@ -8,9 +8,10 @@ import { access, readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { extractBerkeley } from './berkeley/extract.ts';
 import { validateBerkeley } from './berkeley/validate.ts';
-import { applyCoverage, type CoverageFile } from './coverage.ts';
+import { ALWAYS_PAGES, applyCoverage, type CoverageFile } from './coverage.ts';
 import { applyDocuments, checkQuotesIn, type DocumentsFile, type Excerpts } from './documents.ts';
 import { buildFremont, type FremontDocuments } from './fremont/build.ts';
+import { applySchools, type SchoolsFile } from './schools.ts';
 import type { CityBudget, GapBudget } from './types.ts';
 import { openWorkbook } from './workbook.ts';
 
@@ -68,15 +69,25 @@ export async function buildCity(root: string, city: string, workbookPath?: strin
   return withCoverage(await pipeline.build(path, { file: pipeline.workbook, sha256 }, cityDir), cityDir);
 }
 
-/** What the budget covers and what it doesn't (#51), when the city has a coverage.json: its sources follow the City's own. */
+const present = (path: string) => access(path).then(() => true, () => false);
+
+/**
+ * What the budget covers and what it doesn't (#51), when the city has a coverage.json: its sources follow
+ * the City's own. Then the school district's budget (#52), when there is a schools.json, which cites them.
+ */
 async function withCoverage(result: Result, cityDir: string): Promise<Result> {
   const path = join(cityDir, 'coverage.json');
-  if (!(await access(path).then(() => true, () => false))) return result;
+  if (!(await present(path))) return result;
   const file = JSON.parse(await readFile(path, 'utf8')) as CoverageFile;
   const { excerpts } = await readDocuments(cityDir);
   const publisher = result.budget.sources.find((s) => s.type === 'city')?.publisher ?? '';
-  const covered = applyCoverage(result.budget, file, excerpts, publisher);
-  return { budget: covered.budget, errors: [...result.errors, ...covered.errors] };
+  const schoolsPath = join(cityDir, 'schools.json');
+  const hasSchools = await present(schoolsPath);
+  const pages = hasSchools ? [...ALWAYS_PAGES, 'schools'] : ALWAYS_PAGES;
+  const covered = applyCoverage(result.budget, file, excerpts, publisher, pages);
+  if (!hasSchools) return { budget: covered.budget, errors: [...result.errors, ...covered.errors] };
+  const schools = applySchools(covered.budget, JSON.parse(await readFile(schoolsPath, 'utf8')) as SchoolsFile, excerpts, pages);
+  return { budget: schools.budget, errors: [...result.errors, ...covered.errors, ...schools.errors] };
 }
 
 /** budget.json exactly as committed: stable key order, trailing newline. */
