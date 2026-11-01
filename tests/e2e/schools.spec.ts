@@ -130,3 +130,54 @@ test.describe('BUSD budget page', () => {
     await expect(page.locator('footer').getByRole('link', { name: 'School district budget' })).toHaveCount(0);
   });
 });
+
+// #52 review: the page needs a way in where a reader looks first, without competing with the hero's two actions.
+test.describe("the overview's schools aside", () => {
+  const aside = (page: Page) => page.locator('[data-schools-aside]');
+
+  test('on Berkeley: the question, the total from schools.json with its receipt, and a link to the page', async ({ page }) => {
+    await page.goto('/us/ca/berkeley/');
+    await expect(aside(page).getByRole('heading', { level: 2 })).toHaveText("Wondering how Berkeley's schools are funded?");
+    await expect(aside(page).locator('p')).toHaveText(`Berkeley Unified is a separate government with its own ${shortMoney(s.revenue.total.value, 0)} budget.`);
+    await expect(aside(page).locator('p')).toContainText('$248M');
+    await aside(page).locator('button.sourced').click();
+    await expect(dialog(page)).toContainText('combined General Fund is projected to receive $248.2 million in revenue');
+    await page.keyboard.press('Escape');
+    await aside(page).getByRole('link', { name: 'Explore the BUSD budget' }).click();
+    await expect(page).toHaveURL(new RegExp(`${PAGE}$`));
+  });
+
+  test('desktop: in the left column, under the hero buttons, outlined rather than filled', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/us/ca/berkeley/');
+    const a = (await aside(page).boundingBox())!;
+    const ctas = (await page.locator('.ctas--wide').boundingBox())!;
+    const waffle = (await page.locator('.hero-waffle').boundingBox())!;
+    expect(a.y).toBeGreaterThan(ctas.y + ctas.height);
+    expect(a.x + a.width).toBeLessThan(waffle.x);
+    const link = aside(page).getByRole('link', { name: 'Explore the BUSD budget' });
+    const style = await link.evaluate((el) => {
+      const c = getComputedStyle(el);
+      return { bg: c.backgroundColor, font: parseFloat(c.fontSize) };
+    });
+    const tour = await page.locator('.ctas--wide .btn--ink').evaluate((el) => ({ bg: getComputedStyle(el).backgroundColor, font: parseFloat(getComputedStyle(el).fontSize) }));
+    expect(style.bg).toBe('rgba(0, 0, 0, 0)');
+    expect(style.font).toBeLessThan(tour.font);
+  });
+
+  test('phones: after the waffle and its legend, so the chart stays the hero', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/us/ca/berkeley/');
+    const legend = (await page.locator('.hero-waffle .legend').boundingBox())!;
+    expect((await aside(page).boundingBox())!.y).toBeGreaterThan(legend.y + legend.height);
+  });
+
+  test('absent on cities without a schools page', async ({ page }) => {
+    for (const other of ['/us/ca/fremont/', '/test/cities/fixtureville/']) {
+      await page.goto(other);
+      await expect(page.locator('.hero h1')).toBeVisible();
+      await expect(aside(page)).toHaveCount(0);
+      await expect(page.locator('a[href$="/schools/"]')).toHaveCount(0);
+    }
+  });
+});
