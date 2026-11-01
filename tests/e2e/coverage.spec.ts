@@ -19,7 +19,9 @@ const CITIES = [
     name: 'Berkeley',
     district: 'Berkeley Unified School District (BUSD)',
     board: 'Its School Board has five elected directors',
-    districtSite: 'https://www.berkeleyschools.net/departments/business-services-division/berkeley-unified-budget/',
+    // #52: Berkeley's answer goes to the BUSD page on this site.
+    districtLink: { href: '/us/ca/berkeley/schools/', external: false },
+    schoolsPage: true,
     agencies: ['Alameda County', 'Peralta Community College District', 'BART', 'AC Transit', 'East Bay Municipal Utility District (EBMUD)', 'East Bay Regional Park District'],
     propertyExtra: "BUSD's three school parcel taxes bring in $68.8M in 2026-27.",
     cityPays: "The City of Berkeley isn't on that list.",
@@ -32,7 +34,8 @@ const CITIES = [
     name: 'Fremont',
     district: 'Fremont Unified School District (FUSD)',
     board: 'It is governed by a five-member Board of Education, each member elected to a four-year term.',
-    districtSite: 'https://fremontunified.org/about/business-services/budget/',
+    districtLink: { href: 'https://fremontunified.org/about/business-services/budget/', external: true },
+    schoolsPage: false,
     agencies: [
       'Alameda County',
       'Fremont-Newark Community College District',
@@ -85,8 +88,10 @@ for (const c of CITIES) {
       await expect(a).toContainText(c.district);
       await expect(a).toContainText(c.board);
       await expect(a).toContainText("school spending isn't in the City's numbers.");
-      const site = a.locator(`a[href="${c.districtSite}"]`);
-      await expect(site).toHaveAttribute('target', '_blank');
+      const site = a.locator(`a[href="${c.districtLink.href}"]`);
+      await expect(site).toHaveCount(1);
+      if (c.districtLink.external) await expect(site).toHaveAttribute('target', '_blank');
+      else await expect(site).not.toHaveAttribute('target');
       await expect(a.locator('button.cite')).toHaveCount(2);
     });
 
@@ -132,8 +137,11 @@ for (const c of CITIES) {
       await expect(line).toContainText("Your property tax bill pays several governments, including the City, the school district and the county. This page shows only the City's part.");
       // Inside the property-tax card.
       await expect(page.locator('.things > li').first().locator('[data-covers-line]')).toHaveCount(1);
-      // The whole line is the link (#51: "one plain line, linked to the block").
-      await line.getByRole('link', { name: /^Your property tax bill pays several governments/ }).click();
+      // "the school district" goes to its budget where the city has that page (#52).
+      const district = line.getByRole('link', { name: 'the school district' });
+      if (c.schoolsPage) await expect(district).toHaveAttribute('href', `${path}schools/`);
+      else await expect(district).toHaveCount(0);
+      await line.getByRole('link', { name: "This page shows only the City's part." }).click();
       await expect(page).toHaveURL(new RegExp(`${path}sources/#what-this-covers$`));
       await expect(block(page)).toBeInViewport();
     });
