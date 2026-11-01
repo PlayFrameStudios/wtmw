@@ -225,7 +225,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
         {
           covers && (
             <p class="covers-line" data-covers-line>
-              <a href={covers.href}>{covers.segments.map((s) => s.text)}</a>
+              {covers.segments.map((s) => (s.kind === 'link' ? <a href={s.href}>{s.text}</a> : s.text))}
             </p>
           )
         }

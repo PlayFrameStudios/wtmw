@@ -17,6 +17,7 @@ type PartSpec = Omit<SchoolsPart, 'amount'> & { amount: AmountSpec };
 export interface SchoolsFile {
   district: string;
   short: string;
+  fiscalYear: string;
   banner: CoverageParagraph;
   year: CoverageParagraph;
   revenue: { total: AmountSpec; exact: AmountSpec; parcelForm: AmountSpec; parts: PartSpec[]; notes: CoverageParagraph[] };
@@ -84,6 +85,7 @@ export function applySchools(
 
   para(file.banner, 'banner');
   para(file.year, 'year');
+  for (const p of file.revenue.parts) if (!/^#[0-9a-f]{6}$/i.test(p.color ?? '')) errors.push(where(`revenue ${p.id}: needs a "color" for its squares, like "#0e6b6f"`));
   const revenue = {
     total: amount(file.revenue.total, 'revenue total'),
     exact: amount(file.revenue.exact, 'revenue exact'),
@@ -111,6 +113,8 @@ export function applySchools(
   });
   for (const id of file.links) if (!known.has(id)) errors.push(where(`links: unknown source ${id}`));
 
+  if (!normalize(file.revenue.total.quote).includes(file.fiscalYear)) errors.push(`schools.json fiscalYear: "${file.fiscalYear}" isn't the year the revenue total's quote names`);
+
   // Reconciliation: rounded book figures are compared in the book's own rounding.
   const sum = (xs: { amount: SchoolsAmount }[]) => xs.reduce((a, x) => a + x.amount.value, 0);
   const tenths = (n: number) => Math.round(n / 1e5);
@@ -131,6 +135,6 @@ export function applySchools(
     errors.push(`schools.json parcel taxes: add up to ${money(sum(parcelTaxes))}, not the revenue part ${money(parcel.amount.value)}`);
   }
 
-  const schools: Schools = { district: file.district, short: file.short, banner: file.banner, year: file.year, revenue, spending, balance: file.balance, parcelTaxes, links: file.links };
+  const schools: Schools = { district: file.district, short: file.short, fiscalYear: file.fiscalYear, banner: file.banner, year: file.year, revenue, spending, balance: file.balance, parcelTaxes, links: file.links };
   return { budget: { ...budget, schools }, errors };
 }

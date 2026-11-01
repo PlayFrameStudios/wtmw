@@ -3185,7 +3185,7 @@
             ]
           },
           {
-            "text": "So school spending isn't in the City's numbers. [BUSD publishes its budget on its own site](https://www.berkeleyschools.net/departments/business-services-division/berkeley-unified-budget/).",
+            "text": "So school spending isn't in the City's numbers. [See BUSD's budget, explained](page:schools).",
             "cites": [
               {
                 "source": "S29",
@@ -3365,13 +3365,14 @@
       }
     ],
     "overview": {
-      "text": "Your property tax bill pays several governments, including the City, the school district and the county. This page shows only the City's part.",
+      "text": "Your property tax bill pays several governments, including the City, [the school district](page:schools) and the county. [This page shows only the City's part.](page:sources#what-this-covers)",
       "unsourced": "Sums up the block's 'Where does my property tax go?' answer, which it links to and which carries the receipts."
     }
   },
   "schools": {
     "district": "Berkeley Unified School District",
     "short": "BUSD",
+    "fiscalYear": "2026-27",
     "banner": {
       "text": "Berkeley Unified School District is a separate government with its own elected school board. These numbers come from BUSD's budget, not the City's.",
       "cites": [
@@ -3433,6 +3434,7 @@
       "parts": [
         {
           "id": "lcff",
+          "color": "#0e6b6f",
           "name": "State school funding (LCFF)",
           "amount": {
             "source": "S30",
@@ -3459,6 +3461,7 @@
         },
         {
           "id": "parcel-taxes",
+          "color": "#3e9a8f",
           "name": "Berkeley's school parcel taxes",
           "amount": {
             "source": "S30",
@@ -3479,6 +3482,7 @@
         },
         {
           "id": "restricted",
+          "color": "#23395b",
           "name": "Restricted federal, state and local money",
           "amount": {
             "source": "S30",
@@ -3499,6 +3503,7 @@
         },
         {
           "id": "other-state",
+          "color": "#3f5e96",
           "name": "Other state money",
           "amount": {
             "source": "S30",
@@ -3519,6 +3524,7 @@
         },
         {
           "id": "other-local",
+          "color": "#8a6c45",
           "name": "Rentals and other local money",
           "amount": {
             "source": "S30",

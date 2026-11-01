@@ -1,0 +1,36 @@
+---
+/**
+ * One cited paragraph's segments (#52): text, links (glossary, the city's pages, or a source, which opens
+ * in a new tab), and figures, each its own receipt; then the paragraph's chip, for its quotes.
+ */
+import type { City } from '../lib/cities';
+import type { SchoolsParagraph } from '../lib/schools';
+import SourceChip from './SourceChip.astro';
+import Sourced from './Sourced.astro';
+
+interface Props {
+  city: City;
+  p: SchoolsParagraph;
+}
+
+const { city, p } = Astro.props;
+const [first, ...also] = p.cites;
+---
+
+{
+  p.segments.map((s) =>
+    s.kind === 'text' ? (
+      s.text
+    ) : s.kind === 'figure' ? (
+      <Sourced city={city} figure={s.figure}>
+        {s.text}
+      </Sourced>
+    ) : s.external ? (
+      <a href={s.href} target="_blank" rel="noopener">
+        {s.text}
+      </a>
+    ) : (
+      <a href={s.href}>{s.text}</a>
+    ),
+  )
+}{first && <SourceChip city={city} source={first.source} at={first} also={also} />}

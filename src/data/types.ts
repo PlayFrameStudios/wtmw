@@ -525,6 +525,8 @@ export type SchoolsAmount = DocRef & { value: number; figure?: number; row?: boo
 export interface SchoolsPart {
   id: string;
   name: string;
+  /** Its squares in the $100 chart (revenue parts). */
+  color?: string;
   amount: SchoolsAmount;
   /** What it is, in plain words with its own cites. */
   about?: CoverageParagraph;
@@ -543,6 +545,8 @@ export interface SchoolsParcelTax {
 export interface Schools {
   district: string;
   short: string;
+  /** The district's budget year, as it writes it: "2026-27". */
+  fiscalYear: string;
   banner: CoverageParagraph;
   /** Its fiscal year, against the City's. */
   year: CoverageParagraph;

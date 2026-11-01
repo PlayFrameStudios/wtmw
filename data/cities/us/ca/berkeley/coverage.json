@@ -117,7 +117,7 @@
     }
   ],
   "overview": {
-    "text": "Your property tax bill pays several governments, including the City, the school district and the county. This page shows only the City's part.",
+    "text": "Your property tax bill pays several governments, including the City, [the school district](page:schools) and the county. [This page shows only the City's part.](page:sources#what-this-covers)",
     "unsourced": "Sums up the block's 'Where does my property tax go?' answer, which it links to and which carries the receipts."
   },
   "questions": [
@@ -142,7 +142,7 @@
           ]
         },
         {
-          "text": "So school spending isn't in the City's numbers. [BUSD publishes its budget on its own site](https://www.berkeleyschools.net/departments/business-services-division/berkeley-unified-budget/).",
+          "text": "So school spending isn't in the City's numbers. [See BUSD's budget, explained](page:schools).",
           "cites": [{ "source": "S29", "quote": "Each year before June 30 the School Board is required by law to pass a balanced budget." }]
         }
       ]
