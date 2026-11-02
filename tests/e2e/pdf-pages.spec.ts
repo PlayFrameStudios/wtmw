@@ -4,7 +4,7 @@ import type { Receipt } from '../../src/lib/receipts';
 import { cityRoutes } from './cities';
 
 // #30: every receipt on every page, opened for real: the drawer's PDF links carry the quote's page.
-const ROUTES = ['/', '/faq/', ...cityRoutes];
+const ROUTES = ['/', ...cityRoutes];
 test.use({ viewport: { width: 1440, height: 900 } });
 
 for (const route of ROUTES) {

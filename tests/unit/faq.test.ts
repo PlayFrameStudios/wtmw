@@ -27,8 +27,9 @@ beforeAll(async () => {
   expect(f.errors).toEqual([]);
   built = { berkeley: b.budget, fremont: f.budget };
   // Fremont before its faq.json: the built budget without the FAQ and the sources it added.
-  const { faq: _faq, ...rest } = f.budget;
-  base = { ...rest, sources: f.budget.sources.slice(0, f.budget.sources.length - file.sources.length) };
+  base = structuredClone(f.budget);
+  delete base.faq;
+  base.sources = base.sources.slice(0, base.sources.length - file.sources.length);
   excerpts = (await readDocuments(dir)).excerpts;
 });
 

@@ -83,11 +83,11 @@ describe('Berkeley workbook → budget.json', () => {
     expect(budget.deficitBridge.steps.at(-1)).toMatchObject({ source: 'S1', table: 'Deficit Bridge FY27-28', row: 13 });
   });
 
-  it('types S1–S10 as city documents and S11–S19 as news; documents.json adds S20–S23 and S25–S27 (city) and S24 (news); coverage.json adds S28–S38 (other governments)', () => {
-    expect(budget.sources.filter((s) => s.type === 'city').map((s) => s.number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 21, 22, 23, 25, 26, 27]);
+  it('types S1–S10 as city documents and S11–S19 as news; documents.json adds S20–S23 and S25–S27 (city) and S24 (news); coverage.json adds S28–S38 (other governments); faq.json adds S39 (city, #54)', () => {
+    expect(budget.sources.filter((s) => s.type === 'city').map((s) => s.number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 21, 22, 23, 25, 26, 27, 39]);
     expect(budget.sources.filter((s) => s.type === 'other').map((s) => s.number)).toEqual([28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38]);
     expect(budget.sources.filter((s) => s.row !== undefined)).toHaveLength(PINNED.sourceCount);
-    expect(budget.sources.map((s) => s.id)).toEqual(Array.from({ length: 38 }, (_, i) => `S${i + 1}`));
+    expect(budget.sources.map((s) => s.id)).toEqual(Array.from({ length: 39 }, (_, i) => `S${i + 1}`));
   });
 
   it('computes derived columns the workbook left uncomputed', () => {

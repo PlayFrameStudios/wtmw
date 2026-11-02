@@ -6,6 +6,7 @@
       "publisher": "Legislative Analyst's Office (California)",
       "title": "The 1 Percent Tax: Where Does Your Money Go?",
       "url": "https://lao.ca.gov/Media/Videos/2015/one-percent-tax-script.pdf",
+      "format": "PDF",
       "type": "other",
       "usedFor": "How the county divides the basic 1% property tax"
     },
@@ -15,6 +16,7 @@
       "title": "Understanding California's Property Taxes",
       "date": "2012-11-29",
       "url": "https://lao.ca.gov/reports/2012/tax/property-tax-primer-112912.pdf",
+      "format": "PDF",
       "type": "other",
       "usedFor": "Schools and special districts as local governments of their own; why cities' services differ"
     }

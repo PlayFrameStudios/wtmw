@@ -103,8 +103,9 @@ async function withCoverage(result: Result, cityDir: string, root: string): Prom
   const hasFaq = await present(faqPath);
   const pages = [...ALWAYS_PAGES, ...(hasSchools ? ['schools'] : []), ...(hasFaq ? ['faq'] : [])];
   const errors = [...result.errors];
-  let { budget, errors: e1 } = applyCoverage(result.budget, file, excerpts, publisher, pages);
-  errors.push(...e1);
+  const covered = applyCoverage(result.budget, file, excerpts, publisher, pages);
+  let budget = covered.budget;
+  errors.push(...covered.errors);
   if (hasSchools) {
     const schools = applySchools(budget, JSON.parse(await readFile(schoolsPath, 'utf8')) as SchoolsFile, excerpts, pages);
     budget = schools.budget;

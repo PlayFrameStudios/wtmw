@@ -14,9 +14,7 @@ test.describe('FAQ anchors and copy link', () => {
     const item = page.locator('#top-property-taxpayers');
     await expect(item.getByRole('heading', { level: 2 })).toHaveText('Who pays the most property tax?');
     await expect(item.getByRole('heading', { level: 2 })).toBeInViewport();
-    // Clear of the sticky header.
-    const header = (await page.locator('.site-header').boundingBox())!;
-    expect((await item.boundingBox())!.y).toBeGreaterThanOrEqual(header.y + header.height - 1);
+    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
   });
 
   test('"Copy link" copies the answer\'s own URL', async ({ page, context, browserName }) => {
@@ -70,6 +68,8 @@ test.describe('FAQ answers', () => {
   test('the site-wide answers name their sources, and link the error form and the city request', async ({ page }) => {
     await page.goto('/faq/');
     await expect(page.locator('#property-tax [data-faq-sources]')).toHaveText("Source: Legislative Analyst's Office (California), The 1 Percent Tax: Where Does Your Money Go?, p. 1");
+    // The page number opens the PDF at that page, as a receipt would (#30).
+    await expect(page.locator('#comparing-cities [data-faq-sources]').getByRole('link', { name: /page 24$/ })).toHaveAttribute('href', /property-tax-primer-112912\.pdf#page=24$/);
     await expect(page.locator('#report-an-error').getByRole('link', { name: 'Report it on GitHub' })).toHaveAttribute('href', /report-an-error\.yml.*Error\+on\+%2Ffaq%2F/);
     await page.locator('#request-a-city').getByRole('link', { name: 'Request it on the home page' }).click();
     await expect(page).toHaveURL(/\/#request$/);

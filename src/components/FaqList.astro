@@ -8,6 +8,7 @@
 import type { Source } from '../data/types';
 import type { City } from '../lib/cities';
 import type { FaqItem } from '../lib/faq';
+import { openAt } from '../lib/open-at';
 import CitedText from './CitedText.astro';
 
 interface Props {
@@ -79,7 +80,14 @@ const citesOf = (item: FaqItem) => {
                 <a href={c.source.url} target="_blank" rel="noopener">
                   {c.source.publisher}, <cite>{c.source.title}</cite>
                 </a>
-                {c.pages.length > 0 && `, p. ${c.pages.join(', ')}`}
+                {c.pages.map((n, j) => (
+                  <>
+                    {j === 0 ? ', p. ' : ', '}
+                    <a href={openAt({ format: 'PDF', ...c.source }, n).href} target="_blank" rel="noopener" aria-label={`${c.source.title}, page ${n}`}>
+                      {n}
+                    </a>
+                  </>
+                ))}
               </>
             ))}
           </p>
@@ -138,8 +146,6 @@ const citesOf = (item: FaqItem) => {
   .faq-item {
     padding-block: 1.5rem;
     border-top: 1px solid var(--rule);
-    /* Below the sticky header when a link opens at this answer. */
-    scroll-margin-top: 5rem;
   }
   .faq-item:target {
     background: linear-gradient(var(--bay-light), var(--bay-light)) left / 3px 100% no-repeat;
