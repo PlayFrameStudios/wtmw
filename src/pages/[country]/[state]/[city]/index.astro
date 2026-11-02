@@ -18,7 +18,7 @@ import { gapPlan } from '../../../../data/types';
 import { budgetFor } from '../../../../lib/budget';
 import { cityStaticPaths, hasPage, type City } from '../../../../lib/cities';
 import { fy } from '../../../../lib/city-settings';
-import { departmentItems } from '../../../../lib/departments';
+import { departmentItems, generalFundNoun } from '../../../../lib/departments';
 import { familiesFor } from '../../../../lib/families';
 import { shortMoney } from '../../../../lib/format';
 import { cityOverview, gapOverview } from '../../../../lib/overview';
@@ -136,6 +136,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
         items={departmentItems(city.path, budget, o.shares, families)}
         label={`${city.name}'s ${label(year)} ${o.uses.noun}`}
         noun="department"
+        title={{ what: `${generalFundNoun(budget, o.uses.year)}, per $100`, year: label(o.uses.year) }}
         table={{ caption: `${label(year)} General Fund ${o.uses.noun}, per $100`, name: 'Department', value: `${label(year)} ${o.uses.noun.replace(/^department /, '')}` }}
       />
       <ul class="legend">
@@ -498,6 +499,12 @@ const numberWords: Record<number, string> = { 10: 'ten' };
     width: 100%;
     max-width: 30rem;
     justify-self: center;
+  }
+  /* Phones: the chart's heading (#55) sits in part of the gap above it, so the hero keeps #33's height. */
+  @media (max-width: 63.99rem) {
+    .hero-waffle {
+      margin-top: -0.5rem;
+    }
   }
   .legend {
     display: grid;

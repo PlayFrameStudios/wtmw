@@ -12,7 +12,7 @@ import { gapPlan } from '../../data/types';
 import { budgetFor } from '../../lib/budget';
 import type { City } from '../../lib/cities';
 import { fy } from '../../lib/city-settings';
-import { departmentsPage, shortNames, SORTS, TAXES, type Year } from '../../lib/departments';
+import { departmentsPage, generalFundNoun, shortNames, SORTS, TAXES, type Year } from '../../lib/departments';
 import { familiesFor } from '../../lib/families';
 import { shortMoney } from '../../lib/format';
 import { sourcesById } from '../../lib/receipts';
@@ -83,6 +83,9 @@ const selectRules = p.rows
 
     <div class="layout">
       <div class="list">
+        <h2 class="list-title" data-list-title>
+          {YEARS.map((y) => <span class={`yr yr--${y}`}>{generalFundNoun(budget, yearOf(y))} · {yearLabel(y)}</span>)}
+        </h2>
         <p class="list-head" aria-hidden="true">
           <span>Department</span>
           <span>{YEARS.map((y) => <span class={`yr yr--${y}`}>{short(y)}</span>)} baseline</span>
@@ -420,6 +423,14 @@ const selectRules = p.rows
     font-size: 0.6875rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+  }
+  /* #55: a screenshot of the list alone still says what it counts and when. */
+  .list-title {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 0.9375rem;
+    line-height: 1.4;
   }
   .list-head > span:last-child {
     text-align: right;
