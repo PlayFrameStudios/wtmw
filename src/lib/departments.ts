@@ -10,6 +10,15 @@ import { dataDirOf } from './cities.ts';
 import type { Figure } from './receipts.ts';
 import { per100, type Share, type WaffleItem } from './waffle.ts';
 
+/**
+ * What a chart of a city's departments counts, in its heading (#55): "General Fund department budgets".
+ * Charts get screenshotted without the page around them, so the heading names the fund itself.
+ */
+export function generalFundNoun(b: CityBudget, year?: number): string {
+  const noun = (b.generalFund.find((t) => t.year === year) ?? b.generalFund[0]).noun;
+  return /general fund/i.test(noun) ? noun : `General Fund ${noun}`;
+}
+
 const displayFiles = import.meta.glob<{ shortNames: Record<string, string>; fullNames?: Record<string, string> }>('/data/cities/*/*/*/departments.json', {
   eager: true,
   import: 'default',

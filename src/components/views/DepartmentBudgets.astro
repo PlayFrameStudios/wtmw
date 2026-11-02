@@ -12,7 +12,7 @@ import { budgetFor } from '../../lib/budget';
 import type { City } from '../../lib/cities';
 import { fy } from '../../lib/city-settings';
 import { departmentBudgets } from '../../lib/department-budgets';
-import { fullNames } from '../../lib/departments';
+import { fullNames, generalFundNoun } from '../../lib/departments';
 import { familiesFor } from '../../lib/families';
 import { shortMoney } from '../../lib/format';
 
@@ -41,7 +41,7 @@ const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 
     </section>
 
     <section class="db-section" aria-labelledby="db-depts">
-      <h2 id="db-depts">By department, per $100</h2>
+      <h2 id="db-depts">{generalFundNoun(budget, p.year)}, per $100 · {y}</h2>
       <ol class="db-list" role="list">
         {
           p.rows.map((r) => (
