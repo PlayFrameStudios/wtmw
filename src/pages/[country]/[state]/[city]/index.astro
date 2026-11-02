@@ -350,15 +350,6 @@ const numberWords: Record<number, string> = { 10: 'ten' };
         )
       }
     </ol>
-    {
-      has('faq') && (
-        <p class="faq-line" data-faq-line>
-          <a href={`${city.path}faq/`}>
-            Questions people ask about this budget <span aria-hidden="true">→</span>
-          </a>
-        </p>
-      )
-    }
   </section>
 </Base>
 
@@ -702,19 +693,6 @@ const numberWords: Record<number, string> = { 10: 'ten' };
     text-decoration-color: var(--bay);
     text-decoration-thickness: max(1px, 0.06em);
     text-underline-offset: 0.18em;
-  }
-  /* #54: one quiet line under the cards, to the city's FAQ. */
-  .faq-line {
-    margin: 1.25rem 0 0;
-    font-weight: 700;
-    font-size: 0.9375rem;
-  }
-  .faq-line a {
-    color: var(--bay);
-    text-decoration: none;
-  }
-  .faq-line a:hover {
-    text-decoration: underline;
   }
   .more {
     margin-top: auto;

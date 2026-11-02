@@ -1,7 +1,8 @@
 /**
  * The FAQs as built (#54): the site-wide /faq/ and each city's, their FAQPage JSON-LD, every link in an
- * answer landing on a built page (and anchor), and the links in from the footer, the overview and the
- * landing page. A city without faq.json (the fixture) gets no FAQ and no link to one.
+ * answer landing on a built page (and anchor), and the links in from the footer and the landing page. The
+ * overview has no link: nothing fits in an existing line at 320px, and #33's height allows no new one.
+ * A city without faq.json (the fixture) gets no FAQ and no link to one.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -71,6 +72,19 @@ describe('the FAQ pages', () => {
     }
   });
 
+  it("per $100, an answer prints the Departments page's own figures; a family is the sum of its departments as printed", () => {
+    const text = (p: string) => decode(html(p).replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ');
+    const printed = (p: string, name: string) => Number(text(p).match(new RegExp(` ${name} (?:\\$[\\d.]+[MK] )?\\$(\\d+\\.\\d\\d) of every \\$100`))![1]);
+    for (const c of withFaq) {
+      const police = printed(`${c.path}departments/`, 'Police');
+      const fire = printed(`${c.path}departments/`, 'Fire');
+      const faq = text(`${c.path}faq/`);
+      expect(faq, c.path).toContain(`$${police.toFixed(2)} of every $100`);
+      expect(faq, c.path).toContain(`$${(police + fire).toFixed(2)} of every $100`);
+    }
+    expect(text('/us/ca/fremont/faq/')).toContain('Police is $129.1M of $286.0M : $45.14 of every $100. Police and Fire together are $72.60 of every $100.');
+  });
+
   it("a city's answers link the site-wide answer for the general part, instead of repeating it", () => {
     const fremont = html('/us/ca/fremont/faq/');
     expect(fremont).toMatch(/data-faq-see[\s\S]*?href="\/faq\/#general-fund"/);
@@ -95,15 +109,6 @@ describe('links in', () => {
     expect(footer('/')).not.toMatch(/href="\/us\/[^"]*\/faq\/"/);
     expect(footer(fixture.path)).not.toContain(`${fixture.path}faq/`);
     expect(footer(fixture.path)).toContain('href="/faq/"');
-  });
-
-  it("each city's overview has one quiet line to its FAQ; the fixture's has none", () => {
-    for (const c of withFaq) {
-      const line = html(c.path).match(/<p class="faq-line"[^>]*data-faq-line[\s\S]*?<\/p>/)![0];
-      expect(line).toContain(`href="${c.path}faq/"`);
-      expect(line).toContain('Questions people ask about this budget');
-    }
-    expect(html(fixture.path)).not.toContain('data-faq-line');
   });
 
   it('the landing page links the site-wide FAQ', () => {

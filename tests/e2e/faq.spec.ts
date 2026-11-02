@@ -1,7 +1,7 @@
 /**
  * The FAQs (#54): a link to one answer opens at that answer, "Copy link" copies it (or, where the clipboard
  * is refused, puts it in the address bar), figures open their receipts, and the pages are a click from the
- * overview, the footer and the landing page.
+ * footer and the landing page.
  */
 import { expect, test } from '@playwright/test';
 
@@ -77,14 +77,6 @@ test.describe('FAQ answers', () => {
 });
 
 test.describe('links in', () => {
-  test("the overview's quiet line goes to the city's FAQ", async ({ page }) => {
-    for (const city of ['/us/ca/berkeley/', '/us/ca/fremont/']) {
-      await page.goto(city);
-      await page.locator('[data-faq-line]').getByRole('link', { name: 'Questions people ask about this budget' }).click();
-      await expect(page).toHaveURL(new RegExp(`${city}faq/$`));
-    }
-  });
-
   test('the footer has the site-wide FAQ everywhere, and the city one on its pages', async ({ page }) => {
     await page.goto('/us/ca/berkeley/capital/');
     const footer = page.locator('footer nav');

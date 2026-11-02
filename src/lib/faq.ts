@@ -17,7 +17,6 @@ import { cityOverview } from './overview.ts';
 import type { Figure } from './receipts.ts';
 import { revenueGroupsFor } from './revenue-groups.ts';
 import { reportErrorUrl } from './site.ts';
-import { perHundred } from './waffle.ts';
 
 export const siteFaq = siteFaqFile as SiteFaqFile;
 
@@ -90,11 +89,12 @@ export function cityFaqItems(city: City, budget: CityBudget, pageUrl: URL): FaqI
       return { kind: 'figure', text: shortMoney(line.amount), figure };
     }
     if (kind === 'per100') {
+      // The Departments page's own figure, from the same shares: "$45.14 of every $100". A family is the sum
+      // of its departments as that page prints them, so Police $45.14 and Fire $27.46 make $72.60, not $72.59.
+      const cents = (x: number) => Math.round(x * 100);
       const dept = o.shares.find((s) => s.item.id === arg);
-      // As the chart reads: whole dollars of every $100 (#33).
-      if (dept) return { kind: 'text', text: `${perHundred(dept.squares, dept.exact)} of every $100` };
-      const fam = o.familyTotals.find((f) => f.family.id === arg)!;
-      return { kind: 'text', text: `${perHundred(fam.dollars, fam.exact)} of every $100` };
+      const members = dept ? [dept] : o.shares.filter((s) => families.of(s.item.id).id === arg);
+      return { kind: 'text', text: `$${(members.reduce((a, s) => a + cents(s.exact), 0) / 100).toFixed(2)} of every $100` };
     }
     if (kind === 'amount') {
       const a = faq.amounts![arg];
