@@ -1,0 +1,64 @@
+---
+/**
+ * The site-wide FAQ (#54): questions that apply to every city, answered once in general terms, from
+ * data/site/faq.json (checked by the data script: every quote on its page, every number in a quote).
+ * Each city's FAQ gives its own numbers and links here for the general part.
+ */
+import FaqList from '../components/FaqList.astro';
+import Base from '../layouts/Base.astro';
+import { cities, hasPage } from '../lib/cities';
+import { cityFaqHref, faqJsonLd, siteFaqItems } from '../lib/faq';
+
+const { items, sources } = siteFaqItems(new URL(Astro.url.pathname, Astro.site));
+const withFaq = cities.filter((c) => !c.fixture && !c.draft && hasPage(c, 'faq'));
+---
+
+<Base title="Questions people ask" description="Short answers to the questions people ask about city budgets and this site: what the General Fund is, why schools aren't in a city's budget, where property tax goes, and why cities' charts don't compare directly.">
+  <script type="application/ld+json" set:html={faqJsonLd(items)} />
+  <div class="faq-page wrap">
+    <header class="faq-intro">
+      <h1>Questions people ask</h1>
+      <p class="faq-lede">Short answers that apply to every city on this site. Each answer has its own link, so you can share just that one.</p>
+      {
+        withFaq.length > 0 && (
+          <p class="faq-cities" data-city-faqs>
+            For a city's own numbers:{' '}
+            {withFaq.map((c, i) => (
+              <>
+                {i > 0 && ' · '}
+                <a href={cityFaqHref(c)}>{c.name}'s questions</a>
+              </>
+            ))}
+          </p>
+        )
+      }
+    </header>
+    <FaqList items={items} sources={sources} />
+  </div>
+</Base>
+
+<style>
+  .faq-page {
+    max-width: 48rem;
+    padding-block: clamp(2rem, 5vw, 3.5rem);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.15;
+  }
+  .faq-lede {
+    max-width: 38rem;
+    margin: 0.75rem 0 0;
+    color: var(--muted);
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+  .faq-cities {
+    margin: 0.75rem 0 1.5rem;
+    font-weight: 700;
+  }
+  .faq-cities a {
+    color: var(--bay);
+  }
+</style>

@@ -1,0 +1,468 @@
+{
+  "note": "Questions people ask about Fremont's budget (#54), from the r/Fremont thread #53 quotes. Each answer starts with the direct answer, then the City's figures, and links the site-wide FAQ (see, faq:id) for the general part instead of repeating it. Sources here follow the City's and coverage.json's: the City's own documents are type 'city', anyone else's 'other'. Text can name {allFunds}, {generalFund}, {propertyTax}, {year}, {depts} (the chart's department total), {dept:id}, {per100:id} (a department's or family's share of every $100 of the chart), {fig:path} (a figure in budget.json; a label in 'labels' when it has none) and {amount:id} (a figure in 'amounts', checked against its quote in dollars, thousands or millions). Any other number must be in a quote the paragraph cites. The ACFR's fremont.gov URL refuses automated requests; its archive copy is the one quoted.",
+  "sources": [
+    {
+      "id": "S9",
+      "publisher": "City of Fremont",
+      "title": "Annual Comprehensive Financial Report, Fiscal Year Ended June 30, 2025",
+      "url": "https://www.fremont.gov/home/showpublisheddocument/19533",
+      "format": "PDF",
+      "pageOffset": 6,
+      "archive": {
+        "url": "https://web.archive.org/web/20260106104221id_/https://www.fremont.gov/home/showpublisheddocument/19533",
+        "date": "2026-01-06"
+      },
+      "type": "city",
+      "usedFor": "Principal property taxpayers"
+    },
+    {
+      "id": "S10",
+      "publisher": "California Department of Tax and Fee Administration",
+      "title": "California City and County Sales and Use Tax Rates",
+      "date": "2026-10-01",
+      "url": "https://www.cdtfa.ca.gov/taxes-and-fees/rates.aspx",
+      "type": "other",
+      "usedFor": "Fremont's sales tax rate"
+    },
+    {
+      "id": "S11",
+      "publisher": "California Department of Tax and Fee Administration",
+      "title": "Detailed Description of the Sales & Use Tax Rate",
+      "url": "https://www.cdtfa.ca.gov/taxes-and-fees/sut-rates-description.htm",
+      "type": "other",
+      "usedFor": "Where the statewide 7.25% goes"
+    },
+    {
+      "id": "S12",
+      "publisher": "California Department of Tax and Fee Administration",
+      "title": "District Taxes, Rates, and Effective Dates (CDTFA-823)",
+      "date": "2026-10-01",
+      "url": "https://www.cdtfa.ca.gov/formspubs/cdtfa823.pdf",
+      "format": "PDF",
+      "type": "other",
+      "usedFor": "Alameda County's district sales taxes"
+    },
+    {
+      "id": "S13",
+      "publisher": "Alameda County Library",
+      "title": "Who We Are",
+      "url": "https://aclibrary.org/who-we-are/",
+      "type": "other",
+      "usedFor": "Who runs Fremont's libraries"
+    }
+  ],
+  "amounts": {
+    "policeAllFunds": {
+      "source": "S1",
+      "page": 194,
+      "quote": "Totals $ 108,507,118 $ 105,124,466 $ 114,712,053 $ 127,766,090 $ 130,915,603",
+      "column": "FY 2026/27 Adopted",
+      "label": "Police Department, FY 2026/27 adopted, all funds",
+      "amount": 130915603
+    },
+    "policePatrol": {
+      "source": "S1",
+      "page": 190,
+      "quote": "Patrol Operations/Dispatch 59,697,526 58,313,340 60,851,269 68,155,145 69,282,975",
+      "column": "FY 2026/27 Adopted",
+      "label": "Police: Patrol Operations/Dispatch, FY 2026/27 adopted, all funds",
+      "amount": 69282975
+    },
+    "policeAdmin": {
+      "source": "S1",
+      "page": 190,
+      "quote": "Administration/Records $ 25,741,422 $ 23,471,195 $ 28,352,411 $ 29,119,770 $ 29,928,288",
+      "column": "FY 2026/27 Adopted",
+      "label": "Police: Administration/Records, FY 2026/27 adopted, all funds",
+      "amount": 29928288
+    },
+    "policeInvestigations": {
+      "source": "S1",
+      "page": 190,
+      "quote": "Investigations 13,195,615 13,171,012 12,826,781 15,661,314 16,618,143",
+      "column": "FY 2026/27 Adopted",
+      "label": "Police: Investigations, FY 2026/27 adopted, all funds",
+      "amount": 16618143
+    },
+    "maintStreets": {
+      "source": "S1",
+      "page": 182,
+      "quote": "Streets 3,446,104 4,502,375 5,634,644 5,843,666 6,302,454",
+      "column": "FY 2026/27 Adopted",
+      "label": "Maintenance Operations: Streets, FY 2026/27 adopted",
+      "amount": 6302454
+    },
+    "maintTotal": {
+      "source": "S1",
+      "page": 182,
+      "quote": "Totals $ 30,761,479 $ 32,597,189 $ 35,714,484 $ 37,504,559 $ 39,378,369",
+      "column": "FY 2026/27 Adopted",
+      "label": "Maintenance Operations, all service areas, FY 2026/27 adopted",
+      "amount": 39378369
+    },
+    "capitalTransportation": {
+      "source": "S1",
+      "page": 126,
+      "quote": "Transportation Improvements $10.087 $6.690 $70.840 $6.680 $6.550 $100.847",
+      "column": "FY 2026/2027",
+      "label": "Capital plan: Transportation Improvements, FY 2026/27",
+      "amount": 6690000
+    },
+    "gfDebtService": {
+      "source": "S1",
+      "page": 72,
+      "quote": "Debt Service 7,327 7,327 7,327 6,249",
+      "column": "2026/27 Adopted",
+      "label": "General Fund debt service, FY 2026/27 adopted",
+      "amount": 6249000
+    }
+  },
+  "labels": {
+    "pension.contribution": "Total employer pension contribution, all plans, FY 2026/27",
+    "pension.unfunded": "Unfunded pension liability, all plans, as of 6/30/2024"
+  },
+  "questions": [
+    {
+      "id": "police-share",
+      "question": "Is almost half of Fremont's budget going to police?",
+      "see": [
+        "general-fund"
+      ],
+      "paragraphs": [
+        {
+          "text": "Almost half of one part of it. On the chart of General Fund department budgets, Police is {dept:police} of {depts}: {per100:police}. Police and Fire together are {per100:safety}."
+        },
+        {
+          "text": "The City's whole budget, across all its funds, is {allFunds} in {year}. Counting every fund, the Police Department's budget is {amount:policeAllFunds}."
+        },
+        {
+          "text": "The chart shows spending, not income. Where the City's money comes from is on the [Revenue page](page:revenue).",
+          "unsourced": "A pointer to another page of this site."
+        }
+      ]
+    },
+    {
+      "id": "compared-to-other-cities",
+      "question": "Is that normal? How does it compare to other cities?",
+      "see": [
+        "comparing-cities"
+      ],
+      "paragraphs": [
+        {
+          "text": "This site covers two cities, so it can't say what's typical. Berkeley's chart is built the same way, and [Berkeley's answer](/us/ca/berkeley/faq/#police-share) gives its shares, but the two don't compare directly.",
+          "unsourced": "About what this site covers."
+        },
+        {
+          "text": "One reason: some services that a city runs elsewhere are run by other governments in Fremont, with budgets of their own. The City lists them: Alameda County Water District, Union Sanitary District for sewers, and East Bay Regional Park District, among others.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 35,
+              "quote": "Services by Other Governmental Units"
+            },
+            {
+              "source": "S1",
+              "page": 35,
+              "quote": "Parks : East Bay Regional Park District"
+            },
+            {
+              "source": "S1",
+              "page": 35,
+              "quote": "Sewer: Union Sanitary District"
+            },
+            {
+              "source": "S1",
+              "page": 35,
+              "quote": "Water: Alameda County Water District"
+            }
+          ]
+        },
+        {
+          "text": "Fremont's libraries are run by Alameda County Library, which the county's Board of Supervisors governs, so they aren't a City department. The City pays for extra library hours: $659,400 this year.",
+          "cites": [
+            {
+              "source": "S13",
+              "quote": "Alameda County Library in the San Francisco Bay Area provides library services from ten libraries in the cities of Albany, Dublin, Fremont, Newark and Union City and the unincorporated communities of Castro Valley and San Lorenzo."
+            },
+            {
+              "source": "S13",
+              "quote": "The County Library was established in 1910 and is governed by the Alameda County Board of Supervisors."
+            },
+            {
+              "source": "S1",
+              "page": 77,
+              "quote": "Fremont Library Additional Hours 659,400"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "schools",
+      "question": "Where are the schools?",
+      "see": [
+        "schools"
+      ],
+      "paragraphs": [
+        {
+          "text": "Fremont's public schools are run by Fremont Unified School District (FUSD), a separate government with its own budget, so school spending isn't in the City's numbers. [FUSD publishes its budget on its own site](https://fremontunified.org/about/business-services/budget/).",
+          "cites": [
+            {
+              "source": "S5",
+              "page": 5,
+              "quote": "provides educational services to the residents of the incorporated areas of the City of Fremont"
+            },
+            {
+              "source": "S4",
+              "quote": "2026-27 Adopted Budget, Presented June 10, 2026"
+            }
+          ]
+        },
+        {
+          "text": "[What the City's budget covers, and what it doesn't](page:sources#what-this-covers).",
+          "unsourced": "A pointer to another page of this site."
+        }
+      ]
+    },
+    {
+      "id": "roads",
+      "question": "How much goes to roads?",
+      "paragraphs": [
+        {
+          "text": "There's no single roads line. In the General Fund, Maintenance Operations ({dept:maintenance-operations}) looks after City streets, parks, buildings and vehicles. Its own page splits its {amount:maintTotal} by service area, and streets are {amount:maintStreets} of it.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 182,
+              "quote": "Maintenance Operations is a team dedicated to maintaining City streets, parks, buildings, and the City’s fleet of vehicles."
+            }
+          ]
+        },
+        {
+          "text": "Most street money is restricted: the state gas tax, including SB1, Alameda County's Measure BB transportation sales tax and a countywide vehicle registration fee can only be spent on transportation.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 118,
+              "quote": "Gas Tax Fund Group - Revenue in this fund group comes from the City’s share of State collected gasoline taxes, including the new Road Repair and Accountability Act of 2017 (SB1); County Transportation Tax - Alameda County Measure BB transportation sales taxes; and County- wide Vehicle Registration Fees."
+            },
+            {
+              "source": "S1",
+              "page": 113,
+              "quote": "can only be used for street maintenance, traffic improvement projects, and bicycle, pedestrian, and paratransit programs"
+            }
+          ]
+        },
+        {
+          "text": "The capital plan has {amount:capitalTransportation} for transportation improvements in {year}. The City cut the General Fund's yearly transfer for pavement maintenance by $2.225 million, starting in FY 2025/26. See the [Capital page](page:capital).",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 118,
+              "quote": "The annual reductions are from pavement maintenance ($2.225 million) and parks maintenance ($1 million)."
+            },
+            {
+              "source": "S1",
+              "page": 25,
+              "quote": "was eliminated beginning in FY 2025/26"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pensions",
+      "question": "How much goes to pensions and past obligations?",
+      "paragraphs": [
+        {
+          "text": "The City budgets {fig:pension.contribution} in employer pension contributions for {year}, across all its plans. That's spread across every department as part of salaries and benefits, so it isn't one line on the chart.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 45,
+              "quote": "Total Employer Contribution $ 22,586 $ 42,648 $ 65,234",
+              "column": "Combined"
+            },
+            {
+              "source": "S1",
+              "page": 45,
+              "quote": "The employer contributions to the pension plans are budgeted in each department as part of salaries and benefits."
+            }
+          ]
+        },
+        {
+          "text": "The plans' unfunded liability was {fig:pension.unfunded} as of 6/30/2024, when they were 70.4% funded.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 45,
+              "quote": "The unfunded pension liability as of 6/30/2024, which was the most recent report, is $477.3 million, about 70.4% funded overall."
+            }
+          ]
+        },
+        {
+          "text": "Paying off past borrowing, General Fund debt service, is {amount:gfDebtService} this year."
+        }
+      ]
+    },
+    {
+      "id": "sales-tax",
+      "question": "Why doesn't the City get more of the sales tax?",
+      "paragraphs": [
+        {
+          "text": "Fremont's sales tax rate is 10.250%. That's the statewide 7.25%, plus six Alameda County district taxes of 0.50% each.",
+          "cites": [
+            {
+              "source": "S10",
+              "quote": "Fremont 10.250% Alameda City"
+            },
+            {
+              "source": "S11",
+              "quote": "Components of the Statewide 7.25% Sales and Use Tax Rate"
+            },
+            {
+              "source": "S12",
+              "page": 1,
+              "quote": "Alameda County Alameda County Bay Area Rapid Transit District 0.50% 4/1/1970 NONE"
+            }
+          ]
+        },
+        {
+          "text": "Of the statewide rate, 1.00% goes to city or county operations, which is the local share, and 0.25% to county transportation funds. The rest goes to the state's General Fund and to state funds for local public safety, health and social services.",
+          "cites": [
+            {
+              "source": "S11",
+              "quote": "1.00% Goes to city or county operations"
+            },
+            {
+              "source": "S11",
+              "quote": "0.25% Goes to county transportation funds"
+            },
+            {
+              "source": "S11",
+              "quote": "0.50% State Goes to Local Public Safety Fund to support local criminal justice activities (1993)"
+            },
+            {
+              "source": "S11",
+              "quote": "0.50% State Goes to Local Revenue Fund to support local health and social services programs (1991 Realignment)"
+            }
+          ]
+        },
+        {
+          "text": "The six district taxes go to BART, Alameda County's essential health care services, its children's health and child care, the county's Transportation Commission (two taxes) and the county itself.",
+          "cites": [
+            {
+              "source": "S12",
+              "page": 1,
+              "quote": "Alameda County Essential Health Care Services Transactions and Use Tax 0.50%"
+            },
+            {
+              "source": "S12",
+              "page": 1,
+              "quote": "Alameda County Transportation Commission Transactions and Use Tax 0.50%"
+            },
+            {
+              "source": "S12",
+              "page": 1,
+              "quote": "Alameda County Children's Health and Child Care Transactions and Use Tax 0.50%"
+            },
+            {
+              "source": "S12",
+              "page": 1,
+              "quote": "Alameda County Transactions and Use Tax 0.50%"
+            },
+            {
+              "source": "S12",
+              "page": 1,
+              "quote": "Alameda County Transportation Commission 2022 0.50%"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "top-property-taxpayers",
+      "question": "Who pays the most property tax?",
+      "see": [
+        "property-tax"
+      ],
+      "paragraphs": [
+        {
+          "text": "The City's financial report lists the ten largest property owners by taxable assessed value. In 2025 the largest was Tesla Motors Inc, at 5.19% of the City's total; the top ten together were 10.49%.",
+          "cites": [
+            {
+              "source": "S9",
+              "page": 200,
+              "quote": "Principal Property Tax Payers Schedule 7"
+            },
+            {
+              "source": "S9",
+              "page": 200,
+              "quote": "Tesla Motors Inc 3,898,345 $ 1 5.19% 755,816 $ 1 1.85%"
+            },
+            {
+              "source": "S9",
+              "page": 200,
+              "quote": "Total 7,887,801 $ 10.49% 1,606,988 $ 3.95%"
+            },
+            {
+              "source": "S9",
+              "page": 200,
+              "quote": "2025 2016"
+            }
+          ]
+        },
+        {
+          "text": "That's the value of their property, not the tax they pay, and the City gets only part of the property tax: it says it receives about 15 cents of every dollar paid.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 81,
+              "quote": "The City of Fremont receives approximately 15 cents of every dollar of property tax paid."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "what-officers-do",
+      "question": "Does the budget show what officers actually do day to day?",
+      "paragraphs": [
+        {
+          "text": "No. The budget shows money and staff positions, not activity.",
+          "unsourced": "What a budget document contains."
+        },
+        {
+          "text": "It does split the Police Department's {amount:policeAllFunds} by service area: Patrol Operations/Dispatch is {amount:policePatrol}, Administration/Records {amount:policeAdmin} and Investigations {amount:policeInvestigations}. Smaller areas include detention and evidence storage, animal services, community engagement, a Mobile Evaluation Team and a SWAT team.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 190,
+              "quote": "Detention and Evidence Storage"
+            },
+            {
+              "source": "S1",
+              "page": 190,
+              "quote": "Animal Services"
+            },
+            {
+              "source": "S1",
+              "page": 190,
+              "quote": "Community Engagement/Public Affairs"
+            },
+            {
+              "source": "S1",
+              "page": 190,
+              "quote": "Mobile Evaluation Team"
+            },
+            {
+              "source": "S1",
+              "page": 190,
+              "quote": "SWAT Team"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

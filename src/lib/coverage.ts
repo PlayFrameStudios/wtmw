@@ -25,16 +25,25 @@ export const coverageHref = (city: City) => `${city.path}sources/#what-this-cove
 
 /**
  * A cited paragraph's text as segments: [words](target) links to a glossary term, one of the city's pages
- * (words alone when the city doesn't have that page) or a source; {token}s are what `tokens` fills them with.
+ * (words alone when the city doesn't have that page), a site-wide FAQ answer ("faq:id", #54), an answer on
+ * the same page ("#id"), a named site link ("site:report-error", resolved by `site`) or a source;
+ * {token}s are what `tokens` fills them with.
  */
-export function paragraphSegments(city: City, text: string, tokens: Record<string, Segment>): Segment[] {
-  const pieces = new RegExp(`${LINK.source}|\\{(${Object.keys(tokens).join('|')})\\}`, 'g');
+export function paragraphSegments(city: City | undefined, text: string, tokens: Record<string, Segment>, site?: (name: string) => { href: string; external: boolean }): Segment[] {
+  const names = Object.keys(tokens).map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const pieces = new RegExp(`${LINK.source}${names.length ? `|\\{(${names.join('|')})\\}` : ''}`, 'g');
   const out: Segment[] = [];
   let at = 0;
   for (const m of text.matchAll(pieces)) {
     if (m.index > at) out.push({ kind: 'text', text: text.slice(at, m.index) });
     const [, words, target, token] = m;
     if (token) out.push(tokens[token]);
+    else if (target.startsWith('faq:')) out.push({ kind: 'link', text: words, href: `/faq/#${target.slice('faq:'.length)}`, external: false });
+    else if (target.startsWith('#') || target.startsWith('/')) out.push({ kind: 'link', text: words, href: target, external: false });
+    else if (target.startsWith('site:')) {
+      if (!site) throw new Error(`paragraphSegments: ${target} needs the site's links`);
+      out.push({ kind: 'link', text: words, ...site(target.slice('site:'.length)) });
+    } else if (!city) out.push({ kind: 'link', text: words, href: target, external: true });
     else if (target.startsWith('glossary:')) out.push({ kind: 'link', text: words, href: glossaryHref(city, target.slice('glossary:'.length)), external: false });
     else if (target.startsWith('page:')) {
       const [slug, anchor] = target.slice('page:'.length).split('#');
@@ -95,5 +104,7 @@ export function coverageFor(city: City, budget: CityBudget, revenueGroups: Reven
       agencies: q.agencies ?? [],
     })),
     overview: { ...paragraph(coverage.overview), href: coverageHref(city) },
+    /** The figures its tokens name, for the FAQ's answers (#54). */
+    figures,
   };
 }

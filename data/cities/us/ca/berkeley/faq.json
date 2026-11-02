@@ -1,0 +1,175 @@
+{
+  "note": "Questions people ask about Berkeley's budget (#54): the Fremont thread's questions that apply here, answered from data already on the site. Same rules as Fremont's faq.json. The ACFR's berkeleyca.gov URL refuses automated requests; its archive copy is the one quoted.",
+  "sources": [
+    {
+      "id": "S39",
+      "publisher": "City of Berkeley",
+      "title": "Annual Comprehensive Financial Report for the Year Ended June 30, 2025",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-01/annual-comprehensive-financial-report-fy2025.pdf",
+      "format": "PDF",
+      "pageOffset": 36,
+      "archive": {
+        "url": "https://web.archive.org/web/20260930194622id_/https://berkeleyca.gov/sites/default/files/2026-01/annual-comprehensive-financial-report-fy2025.pdf",
+        "date": "2026-09-30"
+      },
+      "type": "city",
+      "usedFor": "Principal property taxpayers"
+    }
+  ],
+  "labels": {
+    "personnelAndPension.personnelSubtotal": "General Fund personnel costs, as the City cites them",
+    "personnelAndPension.compositionTotal": "Total General Fund",
+    "personnelAndPension.composition.0": "General Fund personnel: salaries",
+    "personnelAndPension.composition.1": "General Fund personnel: pension, health and other benefits",
+    "personnelAndPension.unfundedLiabilities.2": "Unfunded liabilities, as staff cited them in 2026",
+    "capitalProgram.lines.1.years.2027": "Capital program FY2027: General Fund, streets PCI improvement",
+    "capitalProgram.lines.0.years.2027": "Capital program FY2027: General Fund, streets",
+    "capitalProgram.lines.10.years.2027": "Capital program FY2027: Measure BB sales tax",
+    "capitalProgram.lines.12.years.2027": "Capital program FY2027: state transportation (gas) tax",
+    "capitalProgram.lines.11.years.2027": "Capital program FY2027: vehicle registration fee",
+    "capitalProgram.lines.17.years.2027": "Capital program FY2027: Measure FF (Safe Streets)",
+    "documentFacts.capitalNeed": "Unfunded capital and maintenance needs, current estimate"
+  },
+  "questions": [
+    {
+      "id": "police-share",
+      "question": "Is most of Berkeley's budget police?",
+      "see": [
+        "general-fund"
+      ],
+      "paragraphs": [
+        {
+          "text": "Public safety is the biggest part of the General Fund's departments, but not most of the whole budget. On the chart of the department baseline before proposed cuts, {depts}, public safety is {per100:safety}: Police is {dept:police} ({per100:police}) and Fire is {dept:fire} ({per100:fire})."
+        },
+        {
+          "text": "The City's whole budget, across all its funds, is {allFunds} in {year}."
+        },
+        {
+          "text": "[Who's being asked to cut, and by how much](page:departments).",
+          "unsourced": "A pointer to another page of this site."
+        }
+      ]
+    },
+    {
+      "id": "schools",
+      "question": "Where are the schools?",
+      "see": [
+        "schools"
+      ],
+      "paragraphs": [
+        {
+          "text": "Berkeley's public schools are run by Berkeley Unified School District (BUSD), a separate government with its own budget: $248.2 million of General Fund revenue in 2026-27. [See BUSD's budget, explained](page:schools).",
+          "cites": [
+            {
+              "source": "S30",
+              "page": 15,
+              "quote": "For the 2026-27 fiscal year, the Berkeley Unified School District's (BUSD) combined General Fund is projected to receive $248.2 million in revenue"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pensions",
+      "question": "How much goes to pensions?",
+      "paragraphs": [
+        {
+          "text": "Staff costs are most of the General Fund: the City cites {fig:personnelAndPension.personnelSubtotal} for personnel, of a {fig:personnelAndPension.compositionTotal} General Fund. That's {fig:personnelAndPension.composition.0} in salaries and {fig:personnelAndPension.composition.1} in pension, health and other benefits, which the City reports together."
+        },
+        {
+          "text": "For unfunded liabilities, staff have recently cited about {fig:personnelAndPension.unfundedLiabilities.2}. Estimates vary with how and when they're measured."
+        }
+      ]
+    },
+    {
+      "id": "roads",
+      "question": "How much goes to roads?",
+      "paragraphs": [
+        {
+          "text": "In {year}, the capital program pays for streets from the General Fund, {fig:capitalProgram.lines.1.years.2027} for street condition improvement and {fig:capitalProgram.lines.0.years.2027} for other street work, and from funds that can only go to transportation: Measure BB sales tax, {fig:capitalProgram.lines.10.years.2027}; the state gas tax, {fig:capitalProgram.lines.12.years.2027}; and the vehicle registration fee, {fig:capitalProgram.lines.11.years.2027}. Measure FF (Safe Streets) adds {fig:capitalProgram.lines.17.years.2027}."
+        },
+        {
+          "text": "The City estimates its unfunded capital and maintenance needs, streets included, at {fig:documentFacts.capitalNeed}. See the [Capital page](page:capital)."
+        }
+      ]
+    },
+    {
+      "id": "sales-tax-measure",
+      "question": "What would the sales tax measure change?",
+      "paragraphs": [
+        {
+          "text": "Measure V would add a general sales tax in Berkeley. The City estimates it would bring in $9 to $10 million a year, starting April 1, 2027, and as a general tax its money would go into the General Fund.",
+          "cites": [
+            {
+              "source": "S21",
+              "page": 3,
+              "quote": "CITY ATTORNEY’S IMPARTIAL ANALYSIS OF MEASURE V"
+            },
+            {
+              "source": "S21",
+              "page": 3,
+              "quote": "The City estimates the tax will generate $9 to $10 million annually."
+            },
+            {
+              "source": "S21",
+              "page": 3,
+              "quote": "the tax would go into effect beginning April 1, 2027, and last until ended by the voters"
+            },
+            {
+              "source": "S21",
+              "page": 3,
+              "quote": "This would be a general tax, meaning the revenue from the tax would be placed into the General Fund and could be spent on any valid municipal purpose."
+            }
+          ]
+        },
+        {
+          "text": "[See the budget with and without it](page:ballot).",
+          "unsourced": "A pointer to another page of this site."
+        }
+      ]
+    },
+    {
+      "id": "top-property-taxpayers",
+      "question": "Who pays the most property tax?",
+      "see": [
+        "property-tax"
+      ],
+      "paragraphs": [
+        {
+          "text": "The City's financial report lists the ten largest property owners by taxable assessed value. In 2025 the largest was Bayer Healthcare LLC, at 1.56% of the taxable value of all real property in the City; the top ten together were 5.79%.",
+          "cites": [
+            {
+              "source": "S39",
+              "page": 353,
+              "quote": "Principal Property Tax Payers Current Year and Ten Years Ago"
+            },
+            {
+              "source": "S39",
+              "page": 353,
+              "quote": "Bayer Healthcare Llc 279,182 2.04% 439,329 1.56%"
+            },
+            {
+              "source": "S39",
+              "page": 353,
+              "quote": "Total - Principal taxpayers $ 803,345 5.87% $ 1,632,045 5.79%"
+            },
+            {
+              "source": "S39",
+              "page": 353,
+              "quote": "FOR YEAR ENDED JUNE 30, 2025"
+          },
+          {
+            "source": "S39",
+            "page": 353,
+            "quote": "(1) Assessed value includes only real properties."
+            }
+          ]
+        },
+        {
+          "text": "That's the value of their property, not the tax they pay. The property tax is divided among several governments, and the City gets only part of it.",
+          "unsourced": "The general point is the site-wide answer this one links."
+        }
+      ]
+    }
+  ]
+}

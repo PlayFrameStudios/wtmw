@@ -19,7 +19,8 @@ export interface CoverageFile {
 
 /** The figures a paragraph can name; the pages fill them from budget.json, each with its receipt. */
 export const COVERAGE_TOKENS = ['allFunds', 'generalFund', 'propertyTax', 'year'] as const;
-const TOKEN = /\{(\w+)\}/g;
+/** {name}, or {name:argument} for the FAQ's figures ({dept:police}, {fig:pension.contribution}, #54). */
+export const TOKEN = /\{(\w+(?::[\w.-]+)?)\}/g;
 /**
  * [words](target): a glossary term ("glossary:General Fund (GF)", so one level of parentheses), one of
  * the city's pages ("page:schools", "page:sources#what-this-covers") or a source's URL.
@@ -27,8 +28,8 @@ const TOKEN = /\{(\w+)\}/g;
 export const LINK = /\[([^\]]+)\]\(((?:[^()]|\([^()]*\))+)\)/g;
 const NUMBER = /\d[\d,.]*\d|\d/g;
 
-/** The pages every city has; the schools page (#52) only where the city has its data. */
-export const ALWAYS_PAGES: readonly string[] = CITY_PAGES.map((p) => p.slug).filter((s) => s !== 'schools');
+/** The pages every city has; the schools page (#52) and the FAQ (#54) only where the city has their data. */
+export const ALWAYS_PAGES: readonly string[] = CITY_PAGES.map((p) => p.slug).filter((s) => s !== 'schools' && s !== 'faq');
 
 /** "$68.8 million" and "$68.8M" share "68.8", and "$.2 million" is "0.2"; trailing punctuation isn't part of a number. */
 const numbersIn = (s: string) => [...s.replace(/(?<!\d)\.(\d)/g, '0.$1').matchAll(NUMBER)].map((m) => m[0].replace(/[.,]+$/, ''));
@@ -42,11 +43,21 @@ export interface ParagraphContext {
   pages: readonly string[];
   tokens: readonly string[];
   errors: string[];
+  /** For a token outside `tokens`: why it isn't one, or undefined when it is (the FAQ's {dept:police}, #54). */
+  checkToken?: (token: string) => string | undefined;
+  /** Site-wide FAQ answers a "faq:id" link may name (#54). */
+  faqIds?: readonly string[];
+  /** Anchors on the same page a "#id" link may name (#54). */
+  anchors?: readonly string[];
+  /** Named site links a "site:name" link may use: "site:report-error" (#54). */
+  siteLinks?: readonly string[];
+  /** Whether a link may name a path on this site ("/us/ca/berkeley/faq/#police-share"); the built site's tests check it resolves (#54). */
+  sitePaths?: boolean;
 }
 
 /** The checks every cited paragraph passes: its quotes, its numbers, its links and its tokens. */
 export function paragraphChecks(ctx: ParagraphContext) {
-  const { known, excerpts, glossaryTerms, pages, tokens: allowed, errors } = ctx;
+  const { known, excerpts, glossaryTerms, pages, tokens: allowed, errors, checkToken, faqIds, anchors, siteLinks, sitePaths } = ctx;
   const urls = new Set([...known.values()].map((s) => s.url));
   const cite = (ref: DocRef, where: string) => {
     if (!known.has(ref.source)) return errors.push(`${where}: unknown source ${ref.source}`);
@@ -58,13 +69,28 @@ export function paragraphChecks(ctx: ParagraphContext) {
   };
   const paragraph = (p: CoverageParagraph, where: string) => {
     const tokens = [...p.text.matchAll(TOKEN)].map((m) => m[1]);
-    for (const t of tokens) if (!allowed.includes(t)) errors.push(`${where}: unknown {${t}}`);
+    for (const t of tokens) {
+      if (allowed.includes(t)) continue;
+      if (!checkToken) errors.push(`${where}: unknown {${t}}`);
+      else {
+        const why = checkToken(t);
+        if (why) errors.push(`${where}: unknown {${t}}: ${why}`);
+      }
+    }
     for (const [, words, target] of p.text.matchAll(LINK)) {
       if (target.startsWith('glossary:')) {
         if (!glossaryTerms.has(target.slice('glossary:'.length))) errors.push(`${where}: "${words}" links to ${target}, which isn't in the glossary`);
       } else if (target.startsWith('page:')) {
         const slug = target.slice('page:'.length).split('#')[0];
         if (!pages.includes(slug)) errors.push(`${where}: "${words}" links to ${target}, which isn't one of this city's pages`);
+      } else if (target.startsWith('faq:') && faqIds) {
+        if (!faqIds.includes(target.slice('faq:'.length))) errors.push(`${where}: "${words}" links to ${target}, which isn't a site-wide FAQ answer`);
+      } else if (target.startsWith('#') && anchors) {
+        if (!anchors.includes(target.slice(1))) errors.push(`${where}: "${words}" links to ${target}, which isn't on this page`);
+      } else if (target.startsWith('/') && sitePaths) {
+        if (!/^\/[a-z0-9/-]*\/(#[a-z0-9-]+)?$/.test(target)) errors.push(`${where}: "${words}" links to ${target}; a site path is lowercase and ends in "/" (then an optional #anchor)`);
+      } else if (target.startsWith('site:') && siteLinks) {
+        if (!siteLinks.includes(target.slice('site:'.length))) errors.push(`${where}: "${words}" links to ${target}, which isn't a named site link`);
       } else if (!urls.has(target)) errors.push(`${where}: "${words}" links to ${target}, which isn't a source's URL`);
     }
     const cites = p.cites ?? [];

@@ -23,5 +23,6 @@
       ]
     }
   },
-  "ballot": false
+  "ballot": false,
+  "faq": true
 }

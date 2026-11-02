@@ -1,0 +1,64 @@
+---
+/**
+ * A city's FAQ (#54): the questions people ask about this budget, answered with the city's own numbers
+ * from its faq.json (every figure a receipt, every number in a quote). The general part of each answer
+ * lives in the site-wide FAQ (/faq/), linked rather than repeated. Not in the nav.
+ */
+import FaqList from '../../../../components/FaqList.astro';
+import Base from '../../../../layouts/Base.astro';
+import { budgetFor } from '../../../../lib/budget';
+import { cityStaticPaths, type City } from '../../../../lib/cities';
+import { cityFaqItems, faqJsonLd, siteFaqHref } from '../../../../lib/faq';
+
+export const getStaticPaths = cityStaticPaths('faq');
+
+const { city } = Astro.props as { city: City };
+const items = cityFaqItems(city, budgetFor(city)!, new URL(Astro.url.pathname, Astro.site))!;
+---
+
+<Base
+  title={`Questions people ask · ${city.name}`}
+  city={city}
+  description={`Short, sourced answers to the questions people ask about ${city.name}'s budget. Every number links to the public document it came from.`}
+>
+  <script type="application/ld+json" set:html={faqJsonLd(items)} />
+  <div class="faq-page wrap">
+    <header class="faq-intro">
+      <h1>Questions people ask about {city.name}'s budget</h1>
+      <p class="faq-lede">
+        Short answers with {city.name}'s own numbers. Tap a figure to see where it came from. Each answer has its own link, so you can share just that one.
+      </p>
+      <p class="faq-general">
+        <a href={siteFaqHref()} data-site-faq-link>Questions about every city</a>, like what the General Fund is, are answered once for the whole site.
+      </p>
+    </header>
+    <FaqList items={items} city={city} />
+  </div>
+</Base>
+
+<style>
+  .faq-page {
+    max-width: 48rem;
+    padding-block: clamp(2rem, 5vw, 3.5rem);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.15;
+  }
+  .faq-lede {
+    max-width: 38rem;
+    margin: 0.75rem 0 0;
+    color: var(--muted);
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+  .faq-general {
+    margin: 0.75rem 0 1.5rem;
+    color: var(--muted);
+  }
+  .faq-general a {
+    color: var(--bay);
+    font-weight: 700;
+  }
+</style>
