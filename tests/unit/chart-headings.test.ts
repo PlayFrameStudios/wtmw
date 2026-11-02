@@ -37,7 +37,8 @@ describe('chart headings (#55)', () => {
 
   test('a budget.json without the noun fails, naming the field', () => {
     const b = read(join(root, 'us/ca/fremont'));
-    const missing = { ...b, generalFund: b.generalFund.map(({ noun: _n, ...t }) => t) } as unknown as CityBudget;
+    const missing = structuredClone(b);
+    for (const t of missing.generalFund) delete (t as Partial<typeof t>).noun;
     expect(() => generalFundNoun(missing)).toThrow(/has no "noun"/);
     const blank = { ...b, generalFund: b.generalFund.map((t) => ({ ...t, noun: '  ' })) };
     expect(() => generalFundNoun(blank)).toThrow(/has no "noun"/);
