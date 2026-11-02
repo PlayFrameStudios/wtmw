@@ -15,7 +15,11 @@ import { per100, type Share, type WaffleItem } from './waffle.ts';
  * Charts get screenshotted without the page around them, so the heading names the fund itself.
  */
 export function generalFundNoun(b: CityBudget, year?: number): string {
-  const noun = (b.generalFund.find((t) => t.year === year) ?? b.generalFund[0]).noun;
+  const table = year === undefined ? b.generalFund?.[0] : b.generalFund?.find((t) => t.year === year);
+  if (!table) throw new Error(`Chart heading: budget.json has no General Fund table${year === undefined ? '' : ` for ${year}`}`);
+  const noun = typeof table.noun === 'string' ? table.noun.trim() : '';
+  // A city without it would ship a chart that doesn't say what it counts, so the build stops instead.
+  if (!noun) throw new Error(`Chart heading: budget.json's General Fund table for ${table.year} has no "noun" (what its departments' amounts are, e.g. "department budgets")`);
   return /general fund/i.test(noun) ? noun : `General Fund ${noun}`;
 }
 
