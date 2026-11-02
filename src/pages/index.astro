@@ -121,6 +121,7 @@ const samples = byName.map((c) => {
     { href: '#how', label: 'How it works' },
     { href: '#cities', label: 'Cities' },
     { href: '#promise', label: 'Our promise' },
+    { href: '/faq/', label: 'FAQ' },
     { href: `${city.path}sources/#downloads`, label: 'Data' },
   ]}
 >
@@ -315,6 +316,7 @@ const samples = byName.map((c) => {
       <div>
         <h2>Our promise</h2>
         <p>We're independent and nonpartisan. We don't take positions on ballot measures. When we find a mistake, we fix it in public.</p>
+        <p class="promise-faq"><a href="/faq/" data-site-faq-link>Questions people ask</a> about city budgets and this site, answered in a line or two.</p>
       </div>
       <ul>
         {['Every figure links to a public document', 'Data and corrections published openly', 'Not affiliated with any government', 'No ads, no tracking for profit'].map((t) => (
@@ -839,6 +841,10 @@ const samples = byName.map((c) => {
     margin: 0.75rem 0 0;
     color: #d7e9e7;
     line-height: 1.6;
+  }
+  .promise-faq a {
+    color: #fff;
+    font-weight: 700;
   }
   .promise ul {
     display: grid;

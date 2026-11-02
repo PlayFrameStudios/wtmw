@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { berkeley, cityRoutes, fixture } from './cities';
 
-const ROUTES = ['/', ...cityRoutes, '/us/ca/nowhere/'];
+const ROUTES = ['/', '/faq/', ...cityRoutes, '/us/ca/nowhere/'];
 
 /**
  * Elements whose right edge passes the layout viewport, plus the document's own overflow.
@@ -206,7 +206,7 @@ test.describe('desktop shell', () => {
   test('shows the breadcrumb, the source count from the data, and the city switcher', async ({ page }) => {
     await page.goto(`${berkeley.path}gap/`);
     await expect(page.locator('.crumbs')).toHaveText(/wherethemoneywent\.com \/ us \/ ca \/ berkeley \/ gap/);
-    await expect(page.locator('nav.desktop .sources-pill')).toHaveText('38 sources');
+    await expect(page.locator('nav.desktop .sources-pill')).toHaveText('39 sources');
     await expect(page.locator('nav.desktop .sources-pill')).toHaveAttribute('href', `${berkeley.path}sources/`);
     await page.locator('.switcher summary').click();
     await expect(page.locator('.switcher .panel').getByRole('link', { name: 'Berkeley, CA' })).toBeVisible();

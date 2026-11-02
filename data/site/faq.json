@@ -1,0 +1,168 @@
+{
+  "note": "The site-wide FAQ (#54), at /faq/: questions that apply to every city, answered once in general terms. Each city's FAQ (data/cities/{city}/faq.json) gives its own numbers and links here (faq:id) for the general part. Sources here are never any one city's books: S1, S2, … are this file's own, with page excerpts in source/excerpts/. Every quote must be on its page; any number in an answer must be in a quote it cites; an answer with no cites says why in 'unsourced'. Links: [words](#id) to another answer here, [words](site:report-error) or (site:request-city), or a source's URL.",
+  "sources": [
+    {
+      "id": "S1",
+      "publisher": "Legislative Analyst's Office (California)",
+      "title": "The 1 Percent Tax: Where Does Your Money Go?",
+      "url": "https://lao.ca.gov/Media/Videos/2015/one-percent-tax-script.pdf",
+      "format": "PDF",
+      "type": "other",
+      "usedFor": "How the county divides the basic 1% property tax"
+    },
+    {
+      "id": "S2",
+      "publisher": "Legislative Analyst's Office (California)",
+      "title": "Understanding California's Property Taxes",
+      "date": "2012-11-29",
+      "url": "https://lao.ca.gov/reports/2012/tax/property-tax-primer-112912.pdf",
+      "format": "PDF",
+      "type": "other",
+      "usedFor": "Schools and special districts as local governments of their own; why cities' services differ"
+    }
+  ],
+  "questions": [
+    {
+      "id": "who-made-this",
+      "question": "Who made this? Is it run by a city?",
+      "paragraphs": [
+        {
+          "text": "No city runs it. Where the Money Went is an independent project by PlayFrame Studios. It isn't affiliated with, or endorsed by, any city government.",
+          "unsourced": "About this site itself."
+        },
+        {
+          "text": "The numbers are each city's own, as its published documents give them. See [where every number comes from](#where-numbers-come-from).",
+          "unsourced": "About this site itself."
+        }
+      ]
+    },
+    {
+      "id": "where-numbers-come-from",
+      "question": "Where does every number come from?",
+      "paragraphs": [
+        {
+          "text": "From public documents: mostly each city's own adopted budget and budget reports, and, where a question goes beyond the city, other governments' documents, such as a school district's budget.",
+          "unsourced": "How this site works."
+        },
+        {
+          "text": "Every figure is a link. Tap it to see the document, the page and the exact words the figure was read from. Each city's Sources page lists every document it uses, and the data can be downloaded there.",
+          "unsourced": "How this site works."
+        }
+      ]
+    },
+    {
+      "id": "general-fund",
+      "question": "What's the General Fund, and how is it different from the whole budget?",
+      "paragraphs": [
+        {
+          "text": "A city's whole budget covers every fund it runs. Many of those funds can only be spent on one thing, such as sewers, parking or a grant's program. The General Fund is the part the City Council can spend on anything.",
+          "unsourced": "Our explanation of a term; each city's glossary gives the city's own definition."
+        },
+        {
+          "text": "The charts of departments on this site count General Fund money. So a department's share of them is its share of the General Fund, not of everything the city spends.",
+          "unsourced": "How this site's charts are built."
+        },
+        {
+          "text": "They also show spending, not income: where the money goes, not where it comes from. Each city's Revenue page shows where it comes from.",
+          "unsourced": "How this site's charts are built."
+        }
+      ]
+    },
+    {
+      "id": "schools",
+      "question": "Why aren't schools in a city's budget?",
+      "paragraphs": [
+        {
+          "text": "Public schools are run by school districts. In California, school districts are local governments of their own, alongside cities, counties and special districts, so a district's budget is separate from the city's.",
+          "cites": [
+            {
+              "source": "S2",
+              "page": 7,
+              "quote": "For thousands of California local governments—K-12 schools, community colleges, cities, counties, and special districts—revenue from property tax bills represents the foundation of their budgets."
+            }
+          ]
+        },
+        {
+          "text": "Each city's FAQ names the district that serves it and links its budget.",
+          "unsourced": "A pointer to the city pages."
+        }
+      ]
+    },
+    {
+      "id": "property-tax",
+      "question": "Where does my property tax go?",
+      "paragraphs": [
+        {
+          "text": "The basic 1% property tax is pooled by your county and divided under state law among the county, cities, schools and special districts.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 1,
+              "quote": "Your county auditor pools your 1 percent rate tax payment, as well as payments from other property owners in your county, into a single countywide pot."
+            },
+            {
+              "source": "S1",
+              "page": 1,
+              "quote": "State law directs how your county auditor distributes the revenue in the countywide pot."
+            },
+            {
+              "source": "S1",
+              "page": 1,
+              "quote": "your county auditor sets aside this $1,000 for your city, county, schools, and special districts."
+            }
+          ]
+        },
+        {
+          "text": "How much each government gets generally depends on what it received in the mid-1970s, so shares differ from place to place. Your city gets only part of it; each city's FAQ gives what its own budget says about its share.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 1,
+              "quote": "The share of this $1,000 each local government receives generally depends on the tax revenue it received in the mid-1970s."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "comparing-cities",
+      "question": "Why can't I compare one city's “per $100” with another's?",
+      "paragraphs": [
+        {
+          "text": "Because cities don't all run the same services. Some provide services such as fire protection, parks and water themselves; others rely on special districts, governments with budgets of their own, for some or all of them.",
+          "cites": [
+            {
+              "source": "S2",
+              "page": 24,
+              "quote": "cities and counties that provided many government services, including fire protection, park and recreation programs, and water services, typically receive more property tax revenue than governments that relied on special districts to provide some or all of these services."
+            }
+          ]
+        },
+        {
+          "text": "So one city's chart isn't spread across the same set of services as another's, and a department's share in one city can't be read against the same department's share in another. Each city's FAQ notes services that another government provides there.",
+          "unsourced": "What follows from the cited point for this site's charts."
+        }
+      ]
+    },
+    {
+      "id": "report-an-error",
+      "question": "How do I report an error?",
+      "paragraphs": [
+        {
+          "text": "[Report it on GitHub](site:report-error). The form asks which page and what's wrong. Every figure links to the document it came from, so you can check it against that first.",
+          "unsourced": "How to reach us."
+        }
+      ]
+    },
+    {
+      "id": "request-a-city",
+      "question": "How do I ask for my city?",
+      "paragraphs": [
+        {
+          "text": "[Request it on the home page](site:request-city). We add cities in order of requests.",
+          "unsourced": "How to reach us."
+        }
+      ]
+    }
+  ]
+}

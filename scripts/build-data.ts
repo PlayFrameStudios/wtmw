@@ -9,7 +9,8 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { checkCities } from '../src/data/city-check.ts';
-import { PIPELINES, buildCity, serialize } from '../src/data/pipeline.ts';
+import { checkSiteFaq } from '../src/data/faq.ts';
+import { PIPELINES, buildCity, readSiteFaq, serialize } from '../src/data/pipeline.ts';
 
 const root = join(import.meta.dirname, '..');
 const check = process.argv.includes('--check');
@@ -37,6 +38,17 @@ for (const city of Object.keys(PIPELINES)) {
     await writeFile(out, json);
     console.log(`✓ ${city}: wrote budget.json (${budget.sources.length} sources, all checks pass)`);
   }
+}
+
+// The site-wide FAQ (#54): read by the /faq/ page as written, so it is checked here rather than built.
+const siteFaq = await readSiteFaq(root);
+const faqErrors = checkSiteFaq(siteFaq.file, siteFaq.excerpts);
+if (faqErrors.length) {
+  failed = true;
+  console.error(`✘ site FAQ: ${faqErrors.length} check(s) failed`);
+  for (const e of faqErrors) console.error(`  - ${e}`);
+} else {
+  console.log(`✓ site FAQ: ${siteFaq.file.questions.length} answers pass all checks`);
 }
 
 // Every city's settings (city.json), and the quotes behind its fiscal position and reserves (#42).

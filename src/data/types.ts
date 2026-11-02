@@ -458,6 +458,33 @@ export interface CityBudget {
   coverage?: Coverage;
   /** The school district's budget (#52), from schools.json: another government's, on a page of its own. */
   schools?: Schools;
+  /** Questions people ask about this budget (#54), from faq.json; the general part of each lives in the site-wide FAQ. */
+  faq?: CityFaq;
+}
+
+/**
+ * One question of a FAQ (#54), its id the anchor a reply links to. The first paragraph is the direct answer;
+ * `see` names site-wide answers (/faq/#id) that explain the general part, so a city page doesn't repeat them.
+ */
+export interface FaqQuestion {
+  id: string;
+  question: string;
+  paragraphs: CoverageParagraph[];
+  see?: string[];
+}
+
+/** A city's FAQ (#54). Figure tokens that name a budget.json path ({fig:pension.contribution}) take their receipt label from `labels`. */
+export interface CityFaq {
+  questions: FaqQuestion[];
+  labels?: Record<string, string>;
+  /** Figures read from a quote that budget.json doesn't otherwise hold, named for {amount:id} tokens. */
+  amounts?: Record<string, FaqAmount>;
+}
+
+/** An amount an answer shows ({amount:id}), read from its quote: in dollars, thousands or millions, as the table prints it. */
+export interface FaqAmount extends DocRef {
+  label: string;
+  amount: number;
 }
 
 /**

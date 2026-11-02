@@ -8,6 +8,7 @@
  *   "fiscalPosition": { "variant": "gap", "reason": { "text": "…", "cites": [{ "source": "S20", "page": 2, "quote": "…" }] } }
  *   "ballot":         true
  *   "schools":        true   (optional: the school district's budget page, #52)
+ *   "faq":            true   (optional: questions people ask about this budget, #54)
  *   "featured":       true
  */
 import { splitRow } from '../data/tables.ts';
@@ -40,6 +41,8 @@ export interface CitySettings {
   ballot: boolean;
   /** On when the city has its school district's budget (schools.json, #52). */
   schools: boolean;
+  /** On when the city has its FAQ (faq.json, #54). */
+  faq: boolean;
   /** The landing page's headline figures come from the featured city. */
   featured: boolean;
 }
@@ -50,6 +53,7 @@ export const PAGE_DATA = {
   reserves: 'reserves.json',
   ballot: 'ballot.json',
   schools: 'schools.json',
+  faq: 'faq.json',
 } as const;
 
 const TOKEN = /\{(start|end|ss|yy)\}/g;
@@ -107,18 +111,21 @@ export function parseSettings(file: string, raw: Record<string, unknown>, exists
 
   if (typeof raw.ballot !== 'boolean') throw new Error(`${file}: "ballot" must be true or false`);
   if (raw.schools !== undefined && typeof raw.schools !== 'boolean') throw new Error(`${file}: "schools" must be true or false`);
+  if (raw.faq !== undefined && typeof raw.faq !== 'boolean') throw new Error(`${file}: "faq" must be true or false`);
   if (raw.featured !== undefined && typeof raw.featured !== 'boolean') throw new Error(`${file}: "featured" must be true or false`);
 
   const variant = fp.variant as FiscalVariant;
   if (!exists(PAGE_DATA[variant])) throw new Error(`${file}: fiscalPosition.variant "${variant}" needs ${PAGE_DATA[variant]}, and there isn't one`);
   if (raw.ballot && !exists(PAGE_DATA.ballot)) throw new Error(`${file}: "ballot" is on, but there is no ${PAGE_DATA.ballot}`);
   if (raw.schools === true && !exists(PAGE_DATA.schools)) throw new Error(`${file}: "schools" is on, but there is no ${PAGE_DATA.schools}`);
+  if (raw.faq === true && !exists(PAGE_DATA.faq)) throw new Error(`${file}: "faq" is on, but there is no ${PAGE_DATA.faq}`);
 
   return {
     budget: { cadence: b.cadence, years: years as number[], labels: labels as unknown as YearLabels },
     fiscalPosition: { variant, reason: reason as unknown as StepNote },
     ballot: raw.ballot,
     schools: raw.schools === true,
+    faq: raw.faq === true,
     featured: raw.featured === true,
   };
 }

@@ -11,6 +11,7 @@ import { validateBerkeley } from './berkeley/validate.ts';
 import { ALWAYS_PAGES, applyCoverage, type CoverageFile } from './coverage.ts';
 import { applyDocuments, checkQuotesIn, type DocumentsFile, type Excerpts } from './documents.ts';
 import { buildFremont, type FremontDocuments } from './fremont/build.ts';
+import { applyFaq, type CityFaqFile, type SiteFaqFile } from './faq.ts';
 import { applySchools, type SchoolsFile } from './schools.ts';
 import type { CityBudget, GapBudget } from './types.ts';
 import { openWorkbook } from './workbook.ts';
@@ -63,10 +64,24 @@ export async function buildCity(root: string, city: string, workbookPath?: strin
   const pipeline = PIPELINES[city];
   if (!pipeline) throw new Error(`no data pipeline for ${city}`);
   const cityDir = join(root, 'data/cities', city);
-  if (pipeline.workbook === undefined) return withCoverage(await pipeline.build(cityDir), cityDir);
+  if (pipeline.workbook === undefined) return withCoverage(await pipeline.build(cityDir), cityDir, root);
   const path = workbookPath ?? join(root, 'data/cities', city, pipeline.workbook);
   const sha256 = createHash('sha256').update(await readFile(path)).digest('hex');
-  return withCoverage(await pipeline.build(path, { file: pipeline.workbook, sha256 }, cityDir), cityDir);
+  return withCoverage(await pipeline.build(path, { file: pipeline.workbook, sha256 }, cityDir), cityDir, root);
+}
+
+/** The site-wide FAQ (#54) and the page excerpts it quotes: data/site/faq.json, data/site/source/excerpts/. */
+export async function readSiteFaq(root: string): Promise<{ file: SiteFaqFile; excerpts: Excerpts }> {
+  const dir = join(root, 'data/site');
+  const file = JSON.parse(await readFile(join(dir, 'faq.json'), 'utf8')) as SiteFaqFile;
+  const excerpts: Excerpts = {};
+  const exDir = join(dir, 'source/excerpts');
+  if (await present(exDir)) {
+    for (const name of await readdir(exDir)) {
+      if (name.endsWith('.json')) excerpts[name.replace(/\.json$/, '') as keyof Excerpts] = JSON.parse(await readFile(join(exDir, name), 'utf8'));
+    }
+  }
+  return { file, excerpts };
 }
 
 const present = (path: string) => access(path).then(() => true, () => false);
@@ -74,20 +89,41 @@ const present = (path: string) => access(path).then(() => true, () => false);
 /**
  * What the budget covers and what it doesn't (#51), when the city has a coverage.json: its sources follow
  * the City's own. Then the school district's budget (#52), when there is a schools.json, which cites them.
+ * Then the city's FAQ (#54), when there is a faq.json: its sources follow those, and it links the site-wide FAQ.
  */
-async function withCoverage(result: Result, cityDir: string): Promise<Result> {
+async function withCoverage(result: Result, cityDir: string, root: string): Promise<Result> {
   const path = join(cityDir, 'coverage.json');
   if (!(await present(path))) return result;
   const file = JSON.parse(await readFile(path, 'utf8')) as CoverageFile;
   const { excerpts } = await readDocuments(cityDir);
   const publisher = result.budget.sources.find((s) => s.type === 'city')?.publisher ?? '';
   const schoolsPath = join(cityDir, 'schools.json');
+  const faqPath = join(cityDir, 'faq.json');
   const hasSchools = await present(schoolsPath);
-  const pages = hasSchools ? [...ALWAYS_PAGES, 'schools'] : ALWAYS_PAGES;
+  const hasFaq = await present(faqPath);
+  const pages = [...ALWAYS_PAGES, ...(hasSchools ? ['schools'] : []), ...(hasFaq ? ['faq'] : [])];
+  const errors = [...result.errors];
   const covered = applyCoverage(result.budget, file, excerpts, publisher, pages);
-  if (!hasSchools) return { budget: covered.budget, errors: [...result.errors, ...covered.errors] };
-  const schools = applySchools(covered.budget, JSON.parse(await readFile(schoolsPath, 'utf8')) as SchoolsFile, excerpts, pages);
-  return { budget: schools.budget, errors: [...result.errors, ...covered.errors, ...schools.errors] };
+  let budget = covered.budget;
+  errors.push(...covered.errors);
+  if (hasSchools) {
+    const schools = applySchools(budget, JSON.parse(await readFile(schoolsPath, 'utf8')) as SchoolsFile, excerpts, pages);
+    budget = schools.budget;
+    errors.push(...schools.errors);
+  }
+  if (hasFaq) {
+    const site = await readSiteFaq(root);
+    const families = (JSON.parse(await readFile(join(cityDir, 'families.json'), 'utf8')) as { families: { id: string }[] }).families.map((f) => f.id);
+    const faq = applyFaq(budget, JSON.parse(await readFile(faqPath, 'utf8')) as CityFaqFile, excerpts, {
+      publisher,
+      pages,
+      siteIds: site.file.questions.map((q) => q.id),
+      families,
+    });
+    budget = faq.budget;
+    errors.push(...faq.errors);
+  }
+  return { budget, errors };
 }
 
 /** budget.json exactly as committed: stable key order, trailing newline. */

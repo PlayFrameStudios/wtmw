@@ -10,6 +10,8 @@ interface Props {
 
 // Off a city's pages (e.g. the landing page) the data links go to the featured city.
 const city = Astro.props.city ?? featuredCity;
+// The city's own FAQ only on its pages (#54); the site-wide one everywhere.
+const cityFaq = Astro.props.city && hasPage(Astro.props.city, 'faq');
 const pageUrl = new URL(Astro.url.pathname, Astro.site);
 // The build year: the first deploy each January moves it on.
 const year = new Date().getFullYear();
@@ -17,6 +19,8 @@ const links = [
   { href: `${city.path}sources/`, label: 'Sources & methods' },
   ...(hasPage(city, 'schools') ? [{ href: `${city.path}schools/`, label: 'School district budget' }] : []),
   { href: `${city.path}glossary/`, label: 'Glossary' },
+  ...(cityFaq ? [{ href: `${city.path}faq/`, label: `${city.name} questions` }] : []),
+  { href: '/faq/', label: 'Questions people ask' },
   { href: `${city.path}sources/#downloads`, label: 'Download the data' },
   { href: SITE.repo, label: 'GitHub' },
 ];
@@ -126,8 +130,18 @@ const links = [
     .about p {
       padding-inline-start: 0;
     }
+    /* Two columns on phones, so the links that grew with #52 and #54 don't lengthen every page. */
+    nav {
+      width: 100%;
+    }
     ul {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.375rem 1.5rem;
       text-align: left;
+    }
+    li + li {
+      margin-top: 0;
     }
   }
 </style>
