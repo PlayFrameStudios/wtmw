@@ -45,6 +45,15 @@
       },
       "type": "city",
       "usedFor": "The proposed budget's balance; sales-tax recovery"
+    },
+    {
+      "id": "S14",
+      "publisher": "City of Fremont",
+      "title": "Paramedic Tax",
+      "committee": "Fire Department",
+      "url": "https://www.fremont.gov/government/departments/fire/about-us-mission-responsibilities-goals/paramedic-tax",
+      "type": "city",
+      "usedFor": "The paramedic special tax: what it pays for, its approval and its rate"
     }
   ],
   "tables": {
@@ -2296,6 +2305,81 @@
           "safety"
         ],
         "equals": "combined"
+      }
+    ]
+  },
+  "voterTaxes": {
+    "taxes": [
+      {
+        "id": "paramedic",
+        "name": "Paramedic Tax",
+        "group": "special",
+        "kind": {
+          "source": "S14",
+          "quote": "Property owners in Fremont receive property tax bills that include the City's paramedic special tax."
+        },
+        "purpose": {
+          "source": "S14",
+          "quote": "The paramedic special tax is a voter-approved tax used to fund the Fire Department paramedic program. It is used for training, equipment, and supplies."
+        },
+        "approved": {
+          "text": "June 3, 1997, by more than 80% of voters",
+          "cites": [
+            {
+              "source": "S14",
+              "quote": "The tax was approved on June 3, 1997 by more than 80% of Fremont's voters."
+            }
+          ]
+        },
+        "rate": {
+          "text": "$15.00 a year for a single-family home",
+          "cites": [
+            {
+              "source": "S14",
+              "quote": "The tax rate for a single family home is $15.00."
+            }
+          ]
+        },
+        "amount": {
+          "source": "S1",
+          "page": 95,
+          "quote": "Paramedic Tax 1,209 1,212 1,223 1,228 1,224 1,231",
+          "label": "Paramedic Tax",
+          "figure": 5,
+          "unit": 1000,
+          "as": "FY2026/27 adopted"
+        }
+      },
+      {
+        "id": "go-bonds",
+        "name": "General obligation bonds for public safety facilities",
+        "group": "bonds",
+        "kind": {
+          "source": "S1",
+          "page": 42,
+          "quote": "General obligation (GO) bonds are secured by the City’s obligation to annually levy ad valorem taxes on all taxable properties within the City in an amount necessary to pay debt service."
+        },
+        "purpose": {
+          "source": "S1",
+          "page": 42,
+          "quote": "Following voter approval in 2002, GO bonds were issued in 2003, 2005, and 2009 to build or improve City public safety facilities."
+        },
+        "approved": {
+          "text": "2002",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 42,
+              "quote": "Following voter approval in 2002"
+            }
+          ]
+        },
+        "rate": {
+          "unsourced": true
+        },
+        "amount": {
+          "unsourced": true
+        }
       }
     ]
   }

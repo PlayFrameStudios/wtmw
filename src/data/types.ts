@@ -559,6 +559,8 @@ export interface CityBudget {
   history?: History;
   /** What staff cost (#65): pay and benefits, pensions and retiree health, from documents.json's staffCosts rows. */
   staffCosts?: StaffCosts;
+  /** Money voters set aside (#66): each voter-approved City tax, general or special, from documents.json's voterTaxes. */
+  voterTaxes?: VoterTaxes;
 }
 
 /** A staff-cost column's word: the History words, and "baseline" for a forecast before any decisions (Berkeley's January deck). */
@@ -601,6 +603,31 @@ export interface StaffCosts {
   sections: StaffSection[];
   /** What the City doesn't publish, said plainly rather than estimated. */
   unpublished?: string[];
+}
+
+/** special: may pay only for its stated purpose; general: goes to the General Fund; bonds: voter-approved debt repaid by a tax. */
+export type VoterTaxGroup = 'special' | 'general' | 'bonds';
+
+/** A voter-approved City tax (#66). Each null is a cell no City document we use fills: the page says so rather than estimating. */
+export interface VoterTax {
+  id: string;
+  name: string;
+  group: VoterTaxGroup;
+  /** The source's own words that make it general, special or a bond. */
+  kind: DocRef;
+  purpose: DocRef | null;
+  /** When voters approved it, as a cited sentence. */
+  approved: StepNote | null;
+  rate: StepNote | null;
+  /** The FY2027 amount, parsed from its quote; `as` says what kind of figure it is ("FY2027 estimate"). */
+  amount: { value: number; as: string; cite: DocRef } | null;
+  notes: StepNote[];
+}
+
+export interface VoterTaxes {
+  taxes: VoterTax[];
+  /** Our sum of the special taxes' amounts, when there are two or more and all are the same kind of figure. */
+  specialSum?: { value: number; count: number; as: string; cites: DocRef[] };
 }
 
 /** What a printed column is, in the City's word: an actual result, an estimate, or an adopted or proposed budget. */

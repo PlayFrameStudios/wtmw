@@ -131,6 +131,139 @@
       "url": "https://berkeleyca.gov/sites/default/files/legislative-body-meeting-attachments/Item%2002%20BFPC-FY2728%20Budget%20Update_Final_01.22.26.pdf",
       "type": "city",
       "usedFor": "The General Fund pension bill: normal cost and unfunded-liability payment, FY2025–FY2028"
+    },
+    {
+      "id": "S45",
+      "publisher": "City of Berkeley",
+      "title": "Property Taxes: City of Berkeley property tax assessments and fees for tax year 2026-2027",
+      "committee": "Finance Department",
+      "url": "https://berkeleyca.gov/city-services/report-pay/property-taxes",
+      "type": "city",
+      "usedFor": "The City's voter-approved taxes on the property tax bill: what each pays for and its 2026-27 rate"
+    },
+    {
+      "id": "S46",
+      "publisher": "City of Berkeley",
+      "title": "FY 2027 Special Tax Rate: Library Relief Act of 2024 (Measure X) (Item 3)",
+      "committee": "City Council",
+      "date": "2026-06-16",
+      "dateLabel": "Jun 16 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-06/2026-06-16%20Item%2003%20FY%202027%20Special%20Tax%20Rate%20Fund%20the%20Provision.pdf",
+      "type": "city",
+      "usedFor": "Measure X library tax: FY2027 rate and estimated collections"
+    },
+    {
+      "id": "S47",
+      "publisher": "City of Berkeley",
+      "title": "FY 2027 Special Tax Rate: Library Services (Item 4)",
+      "committee": "City Council",
+      "date": "2026-06-16",
+      "dateLabel": "Jun 16 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-06/2026-06-16%20Item%2004%20FY%202027%20Special%20Tax%20Rate%20Fund%20the%20Provision.pdf",
+      "type": "city",
+      "usedFor": "Library services tax: FY2027 rate and estimated collections"
+    },
+    {
+      "id": "S48",
+      "publisher": "City of Berkeley",
+      "title": "FY 2027 Tax Rate: Emergency Services for the Severely Disabled (Item 8)",
+      "committee": "City Council",
+      "date": "2026-06-16",
+      "dateLabel": "Jun 16 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-06/2026-06-16%20Item%2008%20FY%202027%20Tax%20Rate%20Fund%20Emergency%20Services.pdf",
+      "type": "city",
+      "usedFor": "Severely disabled services tax: FY2027 estimated collections"
+    },
+    {
+      "id": "S49",
+      "publisher": "City of Berkeley",
+      "title": "FY 2027 Tax Rate: Fire Protection and Emergency Response and Preparedness (Measure GG) (Item 9)",
+      "committee": "City Council",
+      "date": "2026-06-16",
+      "dateLabel": "Jun 16 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-06/2026-06-16%20Item%2009%20FY%202027%20Tax%20Rate%20Fund%20Fire%20Protection.pdf",
+      "type": "city",
+      "usedFor": "Measure GG: FY2027 estimated collections"
+    },
+    {
+      "id": "S50",
+      "publisher": "City of Berkeley",
+      "title": "FY 2027 Tax Rate: Firefighting, Emergency Medical Response and Wildfire Prevention (Measure FF) (Item 10)",
+      "committee": "City Council",
+      "date": "2026-06-16",
+      "dateLabel": "Jun 16 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-06/2026-06-16%20Item%2010%20FY%202027%20Tax%20Rate%20Fund%20Firefighting.pdf",
+      "type": "city",
+      "usedFor": "Measure FF (2020): FY2027 projected revenue"
+    },
+    {
+      "id": "S51",
+      "publisher": "City of Berkeley",
+      "title": "FY 2027 Tax Rate: Emergency Medical Services (Item 11)",
+      "committee": "City Council",
+      "date": "2026-06-16",
+      "dateLabel": "Jun 16 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-06/2026-06-16%20Item%2011%20FY%202027%20Tax%20Rate%20Fund%20the%20Provision.pdf",
+      "type": "city",
+      "usedFor": "Paramedic tax: FY2027 estimated collections"
+    },
+    {
+      "id": "S52",
+      "publisher": "City of Berkeley",
+      "title": "FY 2027 Tax Rate: Maintenance of Parks, City Trees and Landscaping (Item 13)",
+      "committee": "City Council",
+      "date": "2026-06-16",
+      "dateLabel": "Jun 16 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-06/2026-06-16%20Item%2013%20FY%202027%20Tax%20Rate%20Fund%20the%20Maintenance%20of%20Parks.pdf",
+      "type": "city",
+      "usedFor": "Parks tax: FY2027 estimated collections"
+    },
+    {
+      "id": "S53",
+      "publisher": "City of Berkeley",
+      "title": "FY 2027 Tax Rate: SAFE STREETS Initiative (Measure FF) (Item 15)",
+      "committee": "City Council",
+      "date": "2026-06-16",
+      "dateLabel": "Jun 16 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-06/2026-06-16%20Item%2015%20FY%202027%20Tax%20Rate%20Fund%20Sustainable%20and%20Accountable.pdf",
+      "type": "city",
+      "usedFor": "Safe Streets tax (Measure FF, 2024): FY2027 rate and projected revenue"
+    },
+    {
+      "id": "S54",
+      "publisher": "City of Berkeley",
+      "title": "Measures P and W: Real Property Transfer Tax to Fund Homeless Services",
+      "committee": "City Manager's Office",
+      "url": "https://berkeleyca.gov/your-government/our-work/bond-revenue-measures/measure-p-w",
+      "type": "city",
+      "usedFor": "Measures P and W: ballot wording, year and approval"
+    },
+    {
+      "id": "S55",
+      "publisher": "City of Berkeley",
+      "title": "Measures F and Y: Parks Tax Increases",
+      "committee": "City Manager's Office",
+      "url": "https://berkeleyca.gov/your-government/our-work/bond-revenue-measures/measure-f",
+      "type": "city",
+      "usedFor": "Measures F and Y: ballot wording, year and approval"
+    },
+    {
+      "id": "S56",
+      "publisher": "City of Berkeley",
+      "title": "Measure FF: Emergency Response and Preparedness Parcel Tax",
+      "committee": "City Manager's Office",
+      "url": "https://berkeleyca.gov/your-government/our-work/bond-revenue-measures/measure-ff",
+      "type": "city",
+      "usedFor": "Measure FF (2020): ballot wording, year and approval"
+    },
+    {
+      "id": "S57",
+      "publisher": "City of Berkeley",
+      "title": "Measure FF: Sidewalk and Street Repairs Parcel Tax",
+      "committee": "City Manager's Office",
+      "url": "https://berkeleyca.gov/your-government/our-work/bond-revenue-measures/measure-ff-sidewalk-and-street-repairs-parcel",
+      "type": "city",
+      "usedFor": "Measure FF (2024): ballot wording, year and approval"
     }
   ],
   "quotes": {
@@ -1343,6 +1476,520 @@
           "business-2024"
         ],
         "equals": "total-2024"
+      }
+    ]
+  },
+  "voterTaxes": {
+    "taxes": [
+      {
+        "id": "street-lighting",
+        "name": "City Street Lighting",
+        "group": "special",
+        "kind": {
+          "source": "S45",
+          "quote": "The following list describes the special taxes and assessments for the City of Berkeley and the Berkeley Unified School District."
+        },
+        "purpose": {
+          "source": "S45",
+          "quote": "Funds the maintenance and/or servicing of existing and future public lighting facilities, including traffic signals and public lighting."
+        },
+        "approved": {
+          "unsourced": true
+        },
+        "rate": {
+          "text": "$0.01080 per sq ft (residential), $0.04320 (commercial), tax year 2026-2027",
+          "cites": [
+            {
+              "source": "S45",
+              "quote": "Residential: 0.01080 Commercial: 0.04320"
+            },
+            {
+              "source": "S45",
+              "quote": "CITY OF BERKELEY PROPERTY TAX ASSESSMENTS & FEES FOR TAX YEAR 2026-2027"
+            }
+          ]
+        },
+        "amount": {
+          "unsourced": true
+        }
+      },
+      {
+        "id": "parks",
+        "name": "Maintenance of City Parks, Trees & Landscaping",
+        "group": "special",
+        "kind": {
+          "source": "S52",
+          "page": 2,
+          "quote": "On May 6, 1997, the voters of the City of Berkeley approved a special tax solely to provide funding for the direct cost of acquisition and maintenance of improvements related to parks and landscaping in the City of Berkeley."
+        },
+        "purpose": {
+          "source": "S45",
+          "quote": "Funds maintenance of parks, city trees, and City landscaping."
+        },
+        "approved": {
+          "text": "May 1997; rate raised by Measure F (November 2014) and Measure Y (November 2024)",
+          "cites": [
+            {
+              "source": "S52",
+              "page": 2,
+              "quote": "On May 6, 1997, the voters of the City of Berkeley approved a special tax"
+            },
+            {
+              "source": "S55",
+              "quote": "Berkeley voters passed Measure F in November 2014 with 75% approval."
+            },
+            {
+              "source": "S55",
+              "quote": "Berkeley voters passed Measure Y in November 2024 with 75% approval."
+            }
+          ]
+        },
+        "rate": {
+          "text": "$0.27830 per sq ft (residential), $0.27830 (non-residential), tax year 2026-2027",
+          "cites": [
+            {
+              "source": "S45",
+              "quote": "Residential: 0.27830 Non-residential: 0.27830"
+            },
+            {
+              "source": "S45",
+              "quote": "CITY OF BERKELEY PROPERTY TAX ASSESSMENTS & FEES FOR TAX YEAR 2026-2027"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S52",
+          "page": 3,
+          "quote": "This Tax Rate will result in estimated total collections of $23,463,242.",
+          "label": "This Tax Rate will result in estimated total collections of",
+          "figure": 0,
+          "as": "FY2027 estimate"
+        }
+      },
+      {
+        "id": "library",
+        "name": "City Library Services",
+        "group": "special",
+        "kind": {
+          "source": "S47",
+          "page": 1,
+          "quote": "It is recommended that the City Council authorize the levy of a special tax of $0.3128 per square foot for dwelling units and of $0.4729 for all other property in the City of Berkeley."
+        },
+        "purpose": {
+          "source": "S45",
+          "quote": "Supports the usual and current expenses of operating the City of Berkeley Library Services."
+        },
+        "approved": {
+          "text": "The Library Relief Act of 1980; in November 2024, voters re-authorized spending it through FY 2028 (Measure AA)",
+          "cites": [
+            {
+              "source": "S47",
+              "page": 2,
+              "quote": "a citywide special tax (referred to as the Library Relief Act of 1980)"
+            },
+            {
+              "source": "S47",
+              "page": 2,
+              "quote": "On November 5, 2024, Berkeley voters approved Measure AA to re-authorize the City, for a period of four (4) years through FY 2028, to spend the Library Services tax as approved by the voters."
+            }
+          ]
+        },
+        "rate": {
+          "text": "$0.31280 per sq ft (residential), $0.47290 (non-residential), tax year 2026-2027",
+          "cites": [
+            {
+              "source": "S45",
+              "quote": "Residential: 0.31280 Non-residential: 0.47290"
+            },
+            {
+              "source": "S45",
+              "quote": "CITY OF BERKELEY PROPERTY TAX ASSESSMENTS & FEES FOR TAX YEAR 2026-2027"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S47",
+          "page": 3,
+          "quote": "This tax rate will result in estimated total collections of $29,463,772.",
+          "label": "This tax rate will result in estimated total collections of",
+          "figure": 0,
+          "as": "FY2027 estimate"
+        }
+      },
+      {
+        "id": "library-x",
+        "name": "Library Relief Act (Measure X of 2024)",
+        "group": "special",
+        "kind": {
+          "source": "S46",
+          "page": 1,
+          "quote": "It is recommended that the City Council authorize the levy of this special tax of $0.06297 per square foot for dwelling units and of $0.09446 for all other properties in the City of Berkeley."
+        },
+        "purpose": {
+          "source": "S45",
+          "quote": "To maintain Berkeley Public Library facilities and services, prioritizing neighborhood libraries, weekend and evening hours, diverse collections, and youth, educational and other programs."
+        },
+        "approved": {
+          "text": "November 2024, by over 78% of voters",
+          "cites": [
+            {
+              "source": "S46",
+              "page": 2,
+              "quote": "On November 5, 2024, over 78% of Berkeley voters approved Measure X to authorize an additional tax, the Library Relief Act of 2024."
+            }
+          ]
+        },
+        "rate": {
+          "text": "$0.06297 per sq ft (residential), $0.094460 (non-residential), tax year 2026-2027",
+          "cites": [
+            {
+              "source": "S45",
+              "quote": "Residential: 0.06297 Non-residential: 0.094460"
+            },
+            {
+              "source": "S45",
+              "quote": "CITY OF BERKELEY PROPERTY TAX ASSESSMENTS & FEES FOR TAX YEAR 2026-2027"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S46",
+          "page": 3,
+          "quote": "This tax rate will result in estimated total collections of $5,912,645.",
+          "label": "This tax rate will result in estimated total collections of",
+          "figure": 0,
+          "as": "FY2027 estimate"
+        }
+      },
+      {
+        "id": "paramedic",
+        "name": "Paramedic Supplemental Tax (Emergency Medical Services)",
+        "group": "special",
+        "kind": {
+          "source": "S51",
+          "page": 1,
+          "quote": "It is recommended that the City Council authorize the levy of a special tax of $0.0492 per square foot of all improvements in the City of Berkeley."
+        },
+        "purpose": {
+          "source": "S45",
+          "quote": "Provides funding to the Berkeley Fire Department for emergency paramedic and ambulance services; it is in addition to the County Service Area (CSA) Paramedic Assessment, which funds Countywide ambulance, paramedic, and trauma center care services."
+        },
+        "approved": {
+          "text": "May 1997",
+          "cites": [
+            {
+              "source": "S51",
+              "page": 2,
+              "quote": "On May 6, 1997, the voters authorized the City to replace the Emergency Medical Services Assessment District with an Emergency Medical Services Tax."
+            }
+          ]
+        },
+        "rate": {
+          "text": "$0.04920 per sq ft (residential), $0.04920 (non-residential), tax year 2026-2027",
+          "cites": [
+            {
+              "source": "S45",
+              "quote": "Residential: 0.04920 Non-residential: 0.04920"
+            },
+            {
+              "source": "S45",
+              "quote": "CITY OF BERKELEY PROPERTY TAX ASSESSMENTS & FEES FOR TAX YEAR 2026-2027"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S51",
+          "page": 3,
+          "quote": "This tax rate will result in estimated total collections of $4,149,151.",
+          "label": "This tax rate will result in estimated total collections of",
+          "figure": 0,
+          "as": "FY2027 estimate"
+        }
+      },
+      {
+        "id": "severely-disabled",
+        "name": "Emergency Services for the Severely Disabled (Measure E)",
+        "group": "special",
+        "kind": {
+          "source": "S48",
+          "page": 1,
+          "quote": "It is recommended that the City Council authorize the levy of a special tax of $0.02339 per square foot of all improvements in the City of Berkeley."
+        },
+        "purpose": {
+          "source": "S45",
+          "quote": "Funds paratransit programs for eligible seniors and disabled persons."
+        },
+        "approved": {
+          "text": "November 1998",
+          "cites": [
+            {
+              "source": "S48",
+              "page": 2,
+              "quote": "The Emergency Services for the Severely Disabled Tax (Measure E) was passed by the voters in November 1998."
+            }
+          ]
+        },
+        "rate": {
+          "text": "$0.02339 per sq ft (residential), $0.02339 (non-residential), tax year 2026-2027",
+          "cites": [
+            {
+              "source": "S45",
+              "quote": "Residential: 0.02339 Non-residential: 0.02339"
+            },
+            {
+              "source": "S45",
+              "quote": "CITY OF BERKELEY PROPERTY TAX ASSESSMENTS & FEES FOR TAX YEAR 2026-2027"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S48",
+          "page": 3,
+          "quote": "This tax rate will result in estimated total collections of $1,972,678.",
+          "label": "This tax rate will result in estimated total collections of",
+          "figure": 0,
+          "as": "FY2027 estimate"
+        }
+      },
+      {
+        "id": "gg",
+        "name": "Fire Protection and Emergency Response and Preparedness Tax (Measure GG of 2008)",
+        "group": "special",
+        "kind": {
+          "source": "S49",
+          "page": 2,
+          "quote": "In the November 2008 election, Berkeley voters approved Measure GG, which authorized the levying of a special tax."
+        },
+        "purpose": {
+          "source": "S45",
+          "quote": "The revenue from this tax is used to keep fire stations open, improve and expand paramedic services and medical service response, improve disaster preparedness in the community, and invest in a unified communication system that will allow Berkeley police and firefighters to better coordinate with other agencies."
+        },
+        "approved": {
+          "text": "November 2008",
+          "cites": [
+            {
+              "source": "S49",
+              "page": 2,
+              "quote": "In the November 2008 election, Berkeley voters approved Measure GG"
+            }
+          ]
+        },
+        "rate": {
+          "text": "$0.07026 per sq ft (residential), $0.10634 (non-residential), tax year 2026-2027",
+          "cites": [
+            {
+              "source": "S45",
+              "quote": "Residential: 0.07026 Non-residential: 0.10634"
+            },
+            {
+              "source": "S45",
+              "quote": "CITY OF BERKELEY PROPERTY TAX ASSESSMENTS & FEES FOR TAX YEAR 2026-2027"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S49",
+          "page": 4,
+          "quote": "This tax rate will result in estimated total collections of $6,621,319",
+          "label": "This tax rate will result in estimated total collections of",
+          "figure": 0,
+          "as": "FY2027 estimate"
+        }
+      },
+      {
+        "id": "ff-2020",
+        "name": "Fire, Emergency Services and Wildfire Prevention Tax (Measure FF of 2020)",
+        "group": "special",
+        "kind": {
+          "source": "S50",
+          "page": 1,
+          "quote": "Measure FF is a special parcel tax for firefighting, emergency medical response and wildfire prevention"
+        },
+        "purpose": {
+          "source": "S45",
+          "quote": "The revenue from this tax is used to fund firefighter and emergency medical response, upgrades to the 9-1-1 dispatch system, hazard mitigation, and wildfire prevention and preparedness activities."
+        },
+        "approved": {
+          "text": "November 2020, with 74.2% approval",
+          "cites": [
+            {
+              "source": "S56",
+              "quote": "Berkeley voters passed Measure FF in November 2020 with 74.2% approval."
+            }
+          ]
+        },
+        "rate": {
+          "text": "$0.13633 per sq ft (residential), $0.13633 (non-residential), tax year 2026-2027",
+          "cites": [
+            {
+              "source": "S45",
+              "quote": "Residential: 0.13633 Non-Residential: 0.13633"
+            },
+            {
+              "source": "S45",
+              "quote": "CITY OF BERKELEY PROPERTY TAX ASSESSMENTS & FEES FOR TAX YEAR 2026-2027"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S50",
+          "page": 3,
+          "quote": "This tax rate will result in estimated total collections of $11,483,638.",
+          "label": "This tax rate will result in estimated total collections of",
+          "figure": 0,
+          "as": "FY2027 estimate"
+        }
+      },
+      {
+        "id": "safe-streets",
+        "name": "SAFE STREETS Initiative (Measure FF of 2024)",
+        "group": "special",
+        "kind": {
+          "source": "S53",
+          "page": 2,
+          "quote": "Through Measure FF, as approved by voters in November 2024, the Council is authorized to impose and allocate a special tax as follows:"
+        },
+        "purpose": {
+          "source": "S45",
+          "quote": "The revenue from this tax will fund street, sidewalk, and pedestrian path repair, repaving, reconstruction, as well as safety improvements and environmental infrastructure."
+        },
+        "approved": {
+          "text": "November 2024, with 60% approval",
+          "cites": [
+            {
+              "source": "S57",
+              "quote": "Berkeley voters passed Measure FF in November 2024 with 60% approval."
+            }
+          ]
+        },
+        "rate": {
+          "text": "$0.17842 per sq ft (dwelling units), $0.26238 (other property), FY 2027",
+          "cites": [
+            {
+              "source": "S53",
+              "page": 1,
+              "quote": "The annual tax rate of $0.17842 per square foot of dwelling unit improvements and $0.26238 per square foot for industrial, commercial, and institutional improvements"
+            },
+            {
+              "source": "S53",
+              "page": 1,
+              "quote": "FY 2027 Tax Rate"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S53",
+          "page": 1,
+          "quote": "is projected to yield $16,651,651 in revenues.",
+          "label": "is projected to yield",
+          "figure": 0,
+          "as": "FY2027 estimate"
+        }
+      },
+      {
+        "id": "measure-p",
+        "name": "Property Transfer Tax (Measure P)",
+        "group": "general",
+        "kind": {
+          "source": "S54",
+          "quote": "Shall ordinance raising funds for general municipal purposes such as navigation centers, mental health support, rehousing and other services for the homeless, including homeless seniors and youth;"
+        },
+        "purpose": {
+          "source": "S54",
+          "quote": "Measures P and W fund homeless services through a property transfer tax on the top 1/3 most expensive properties."
+        },
+        "approved": {
+          "text": "November 2018, with 72% approval",
+          "cites": [
+            {
+              "source": "S54",
+              "quote": "Berkeley voters passed Measure P in November 2018 with 72% approval."
+            }
+          ]
+        },
+        "rate": {
+          "text": "Raised the transfer tax from 1.5% to 2.5% on sales and transfers over $1,500,000, for ten years",
+          "cites": [
+            {
+              "source": "S54",
+              "quote": "increasing the real property transfer tax for ten years from 1.5% to 2.5% for property sales and transfers over $1,500,000"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S42",
+          "page": 8,
+          "quote": "Property Transfer Tax - Measure P 9,100,000 $ 11,655,000 $ 12,237,750 $",
+          "label": "Property Transfer Tax - Measure P",
+          "figure": 1,
+          "as": "FY2027 proposed"
+        }
+      },
+      {
+        "id": "measure-u1",
+        "name": "Measure U1",
+        "group": "general",
+        "kind": {
+          "source": "S42",
+          "page": 8,
+          "quote": "GENERAL FUND REVENUE SUMMARY"
+        },
+        "purpose": {
+          "unsourced": true
+        },
+        "approved": {
+          "unsourced": true
+        },
+        "rate": {
+          "unsourced": true
+        },
+        "amount": {
+          "source": "S42",
+          "page": 8,
+          "quote": "Measure U1 6,500,000 $ 6,600,000 $ 6,600,000 $",
+          "label": "Measure U1",
+          "figure": 1,
+          "as": "FY2027 proposed"
+        }
+      },
+      {
+        "id": "measure-w",
+        "name": "Property Transfer Tax (Measure W)",
+        "group": "general",
+        "kind": {
+          "source": "S54",
+          "quote": "Shall the measure effective January 1, 2027, setting the existing general tax on transfers of real property"
+        },
+        "purpose": {
+          "source": "S54",
+          "quote": "Measures P and W fund homeless services through a property transfer tax on the top 1/3 most expensive properties."
+        },
+        "approved": {
+          "text": "November 2024, with 61% approval",
+          "cites": [
+            {
+              "source": "S54",
+              "quote": "Berkeley voters passed Measure W in November 2024 with 61% approval."
+            }
+          ]
+        },
+        "rate": {
+          "text": "From January 1, 2027: 2.5% on properties valued $1.6M or higher, 3% at $1.9M or higher, 3.5% at $3.0M or higher",
+          "cites": [
+            {
+              "source": "S54",
+              "quote": "effective January 1, 2027, setting the existing general tax on transfers of real property at 2.5% of a property's value for properties valued $1.6M or higher, and increasing the rate from 2.5% to 3% for properties valued $1.9M or higher and from 3% to 3.5% for properties valued $3.0M or higher"
+            }
+          ]
+        },
+        "amount": {
+          "source": "S42",
+          "page": 8,
+          "quote": "Property Transfer Tax - Measure W - $ 1,500,000 $ 3,000,000 $",
+          "label": "Property Transfer Tax - Measure W",
+          "figure": 1,
+          "as": "FY2027 proposed"
+        }
       }
     ]
   }
