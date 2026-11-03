@@ -220,7 +220,7 @@ describe('each rule, broken on purpose', () => {
     const w = run('berkeley', (s) => ((tax(s, 'measure-w').amount as { figure: number }).figure = 2));
     expect(w.errors).toEqual([]);
     expect(w.budget.voterTaxes!.taxes.find((t) => t.id === 'measure-w')!.amount!.value).toBe(3_000_000);
-    const typed = run('berkeley', (s) => (tax(s, 'measure-w').amount = { ...(tax(s, 'measure-w').amount as object), value: 9 } as VoterTaxSpec['amount']));
+    const typed = run('berkeley', (s) => (tax(s, 'measure-w').amount = { ...(tax(s, 'measure-w').amount as object), value: 9 } as unknown as VoterTaxSpec['amount']));
     expect(typed.budget.voterTaxes!.taxes.find((t) => t.id === 'measure-w')!.amount!.value).toBe(1_500_000);
   });
 
