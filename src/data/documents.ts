@@ -5,7 +5,7 @@
  * sentence-stated facts follow (citedFacts).
  */
 import type { PrintedTable } from './berkeley/printed-rows.ts';
-import { nextNumber } from './source-numbers.ts';
+import { nextNumber, numberFromIds } from './source-numbers.ts';
 import type { AdoptionAmendments, ByYear, DocCapitalLine, GapBudget, DocCapitalPart, DocRef, DocumentFacts, Restoration, Source, SourceId, StepNote, WorkbookBudget } from './types.ts';
 
 export interface DocumentsFile {
@@ -248,14 +248,10 @@ export function applyDocuments(budget: WorkbookBudget, file: DocumentsFile, exce
   const errors: string[] = [];
   // Each source continues the numbering, or (a document found after coverage.json and faq.json were numbered) jumps
   // past them; checkNumbering confirms the whole chain runs S1…Sn once every file has added its sources (#63).
-  const first = nextNumber(budget.sources);
-  const added: Source[] = file.sources.map((s) => ({ ...s, number: Number(s.id.slice(1)) }));
-  added.forEach((s, i) => {
-    const expected = i === 0 ? first : added[i - 1].number + 1;
-    if (!/^S\d+$/.test(s.id) || s.number < expected)
-      errors.push(`documents.json: source ${i + 1} is ${s.id}, expected S${expected} or later (it continues the workbook's numbering)`);
-    if ((s.type === 'city') !== (s.publisher === 'City of Berkeley')) errors.push(`${s.id}: type "${s.type}" but publisher "${s.publisher}"`);
-  });
+  const numbered = numberFromIds(file.sources, nextNumber(budget.sources), 'documents.json');
+  const added: Source[] = numbered.sources;
+  errors.push(...numbered.errors);
+  for (const s of added) if ((s.type === 'city') !== (s.publisher === 'City of Berkeley')) errors.push(`${s.id}: type "${s.type}" but publisher "${s.publisher}"`);
   const known = new Set([...budget.sources, ...added].map((s) => s.id));
 
   const q = (key: string): DocRef => {

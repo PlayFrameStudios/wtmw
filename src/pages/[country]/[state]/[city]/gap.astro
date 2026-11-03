@@ -6,6 +6,7 @@
  * checks the story's numbers from budget.json.
  */
 import DepartmentCuts from '../../../../components/DepartmentCuts.astro';
+import History from '../../../../components/History.astro';
 import Sourced from '../../../../components/Sourced.astro';
 import SourceChip from '../../../../components/SourceChip.astro';
 import StepInfo from '../../../../components/StepInfo.astro';
@@ -17,6 +18,7 @@ import { cityStaticPaths, type City } from '../../../../lib/cities';
 import { shortMoney } from '../../../../lib/format';
 import { fy } from '../../../../lib/city-settings';
 import { gapPage } from '../../../../lib/gap';
+import { historyPanels } from '../../../../lib/history';
 
 export const getStaticPaths = cityStaticPaths('gap');
 
@@ -24,6 +26,8 @@ const { city } = Astro.props as { city: City };
 const budget = gapPlan(budgetFor(city)!, 'The Gap page');
 const g = gapPage(budget, city.budget.years, (y) => fy(city.budget.labels, y));
 const [fy27] = g.years;
+// The General Fund over the years (#64): the annual report's results and the budget's plans, as separate panels.
+const history = historyPanels(budget, (y) => fy(city.budget.labels, y));
 // The budget's years together ("FY2027-28").
 const span = `${fy27.label}-${String(city.budget.years.at(-1)).slice(2)}`;
 // Show only the chosen year's waterfall (works without JavaScript).
@@ -183,6 +187,7 @@ const taxStart = new Date(`${budget.documentFacts.salesTaxTerm.start}T12:00:00Z`
       </aside>
     </section>
 
+    {history.length > 0 && <History city={city} panels={history} />}
     <DepartmentCuts city={city} />
   </div>
 </Base>

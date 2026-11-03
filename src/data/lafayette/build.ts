@@ -10,6 +10,7 @@
  */
 import { checkNote, checkQuote, normalize, type Excerpts } from '../documents.ts';
 import { factFrom } from '../fremont/build.ts';
+import { numberFromIds } from '../source-numbers.ts';
 import { readTable, splitRow, tieOut, type TableRow, type TableSpec } from '../tables.ts';
 import type { BudgetColumn, CityBudget, DocRef, Fact, Pension, RevenueLine, ReservePosition, Source, SourceId, StepNote } from '../types.ts';
 import { SCHEMA_VERSION } from '../types.ts';
@@ -168,11 +169,11 @@ export function readScannedTable(spec: ScannedTableSpec, excerpts: Excerpts) {
 
 export function buildLafayette(file: LafayetteDocuments, excerpts: Excerpts): { budget: CityBudget; errors: string[] } {
   const errors: string[] = [];
-  const sources: Source[] = file.sources.map((s, i) => ({ ...s, number: i + 1 }));
-  sources.forEach((s, i) => {
-    if (s.id !== `S${i + 1}`) errors.push(`documents.json: source ${i + 1} is ${s.id}, expected S${i + 1}`);
-    if ((s.type === 'city') !== (s.publisher === 'City of Lafayette')) errors.push(`${s.id}: type "${s.type}" but publisher "${s.publisher}"`);
-  });
+  // Numbered from their ids: the FY 2024-25 book (#64) is S7, after coverage.json's S5 and S6, which keep their numbers.
+  const numbered = numberFromIds(file.sources, 1, 'documents.json');
+  const sources: Source[] = numbered.sources;
+  errors.push(...numbered.errors);
+  for (const s of sources) if ((s.type === 'city') !== (s.publisher === 'City of Lafayette')) errors.push(`${s.id}: type "${s.type}" but publisher "${s.publisher}"`);
   const known = new Set<SourceId>(sources.map((s) => s.id));
   for (const [name, spec] of [...Object.entries(file.tables), ...Object.entries(file.scans)]) {
     if (!known.has(spec.source)) errors.push(`documents.json ${name}: unknown source ${spec.source}`);

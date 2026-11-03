@@ -14,6 +14,21 @@ export function nextNumber(sources: Pick<Source, 'number'>[]): number {
   return n;
 }
 
+/**
+ * A file's sources, numbered from their ids: the first continues at `first`, and each later one follows the one
+ * before it or jumps past the files numbered after this one (a document found later, #63 and #64). Returns errors
+ * for an id that would go back.
+ */
+export function numberFromIds<S extends Pick<Source, 'id'>>(sources: S[], first: number, file: string): { sources: (S & { number: number })[]; errors: string[] } {
+  const errors: string[] = [];
+  const numbered = sources.map((s) => ({ ...s, number: Number(s.id.slice(1)) }));
+  numbered.forEach((s, i) => {
+    const expected = i === 0 ? first : numbered[i - 1].number + 1;
+    if (!/^S\d+$/.test(s.id) || s.number < expected) errors.push(`${file}: source ${i + 1} is ${s.id}, expected S${expected} or later (it continues the numbering)`);
+  });
+  return { sources: numbered, errors };
+}
+
 /** S1…Sn, each once, and each id matching its number; returns errors. */
 export function checkNumbering(sources: Pick<Source, 'id' | 'number'>[]): string[] {
   const errors: string[] = [];

@@ -14,6 +14,7 @@ import { applyDocuments, checkQuotesIn, type DocumentsFile, type Excerpts } from
 import { buildFremont, type FremontDocuments } from './fremont/build.ts';
 import { buildLafayette, type LafayetteDocuments } from './lafayette/build.ts';
 import { applyFaq, type CityFaqFile, type SiteFaqFile } from './faq.ts';
+import { applyHistory, type HistorySpec } from './history.ts';
 import { applySchools, type SchoolsFile } from './schools.ts';
 import { byNumber, checkNumbering } from './source-numbers.ts';
 import type { CityBudget, DocRef, GapBudget } from './types.ts';
@@ -82,9 +83,12 @@ export async function buildCity(root: string, city: string, workbookPath?: strin
           const sha256 = createHash('sha256').update(await readFile(path)).digest('hex');
           return withCoverage(await pipeline.build(path, { file: pipeline.workbook!, sha256 }, cityDir), cityDir, root);
         })();
-  const numbering = checkNumbering(result.budget.sources).map((e) => `${city}: ${e}`);
-  const budget = { ...result.budget, sources: byNumber(result.budget.sources) } as CityBudget;
-  return { budget, errors: [...result.errors, ...numbering, ...(await checkScans(budget, root, city))] };
+  // The General Fund over the years (#64): last, so its rows can cite any of the city's sources.
+  const docs = await readDocuments(cityDir);
+  const history = applyHistory(result.budget, (docs.file as { history?: HistorySpec }).history, docs.excerpts, `${city} documents.json`);
+  const numbering = checkNumbering(history.budget.sources).map((e) => `${city}: ${e}`);
+  const budget = { ...history.budget, sources: byNumber(history.budget.sources) } as CityBudget;
+  return { budget, errors: [...result.errors, ...history.errors, ...numbering, ...(await checkScans(budget, root, city))] };
 }
 
 /** Every cite read from a scanned page (#59), wherever it sits in budget.json. */
