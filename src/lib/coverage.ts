@@ -78,20 +78,24 @@ export function coverageFor(city: City, budget: CityBudget, revenueGroups: Reven
     tone: 'neutral',
     ...(property.lines.length > 1 ? { parts: property.lines.map((l) => ({ label: l.name, value: l.values[revenue.primary] })) } : {}),
   };
-  const sized = (s: typeof size.allFunds, what: string): Figure => ({
+  const sized = (s: typeof size.generalFund, what: string): Figure => ({
     value: s.amount,
     label: `${what}, ${label(year)}${s.note ? ` (${s.note})` : ''}`,
     ref: s,
     tone: 'neutral',
   });
+  // No all-funds figure where the City's books don't give one we can stand behind (#59); the data check keeps {allFunds} out of its text.
   const figures: Record<string, Figure> = {
-    allFunds: sized(size.allFunds, 'Citywide spending, all funds'),
+    ...(size.allFunds ? { allFunds: sized(size.allFunds, 'Citywide spending, all funds') } : {}),
     generalFund: sized(size.generalFund, 'General Fund spending'),
     propertyTax,
   };
 
   const tokens: Record<string, Segment> = Object.fromEntries(
-    COVERAGE_TOKENS.map((t) => [t, t === 'year' ? { kind: 'text', text: label(year) } : { kind: 'figure', text: shortMoney(figures[t].value), figure: figures[t] }]),
+    COVERAGE_TOKENS.filter((t) => t === 'year' || figures[t]).map((t) => [
+      t,
+      t === 'year' ? { kind: 'text', text: label(year) } : { kind: 'figure', text: shortMoney(figures[t].value), figure: figures[t] },
+    ]),
   );
   const segments = (text: string) => paragraphSegments(city, text, tokens);
   const paragraph = (p: CoverageParagraph): CoverageBlockParagraph => ({ segments: segments(p.text), cites: p.cites ?? [] });
@@ -104,6 +108,14 @@ export function coverageFor(city: City, budget: CityBudget, revenueGroups: Reven
       agencies: q.agencies ?? [],
     })),
     overview: { ...paragraph(coverage.overview), href: coverageHref(city) },
+    /** What kind of city this is, for the overview (#59). */
+    profile: coverage.profile && paragraph(coverage.profile),
+    /** Services the General Fund doesn't pay for (#59), each with why. */
+    outside: (coverage.notInBudget ?? []).map((n) => ({ id: n.id, name: n.name, provider: n.provider, paragraph: paragraph(n.paragraph) })),
+    /** Who provides a department's service, where it isn't City staff (#59), by department id. */
+    providedBy: Object.fromEntries(
+      budget.generalFund[0].lines.filter((l) => l.providedBy).map((l) => [l.id, paragraph(l.providedBy!)]),
+    ) as Record<string, CoverageBlockParagraph>,
     /** The figures its tokens name, for the FAQ's answers (#54). */
     figures,
   };

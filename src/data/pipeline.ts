@@ -11,9 +11,10 @@ import { validateBerkeley } from './berkeley/validate.ts';
 import { ALWAYS_PAGES, applyCoverage, type CoverageFile } from './coverage.ts';
 import { applyDocuments, checkQuotesIn, type DocumentsFile, type Excerpts } from './documents.ts';
 import { buildFremont, type FremontDocuments } from './fremont/build.ts';
+import { buildLafayette, type LafayetteDocuments } from './lafayette/build.ts';
 import { applyFaq, type CityFaqFile, type SiteFaqFile } from './faq.ts';
 import { applySchools, type SchoolsFile } from './schools.ts';
-import type { CityBudget, GapBudget } from './types.ts';
+import type { CityBudget, DocRef, GapBudget } from './types.ts';
 import { openWorkbook } from './workbook.ts';
 
 type Pipeline =
@@ -40,6 +41,12 @@ export const PIPELINES: Record<string, Pipeline> = {
       return buildFremont(docs.file as unknown as FremontDocuments, docs.excerpts);
     },
   },
+  'us/ca/lafayette': {
+    build: async (cityDir) => {
+      const docs = await readDocuments(cityDir);
+      return buildLafayette(docs.file as unknown as LafayetteDocuments, docs.excerpts);
+    },
+  },
 };
 
 /** documents.json and the page excerpts it quotes (source/excerpts/S{n}.json). */
@@ -64,10 +71,39 @@ export async function buildCity(root: string, city: string, workbookPath?: strin
   const pipeline = PIPELINES[city];
   if (!pipeline) throw new Error(`no data pipeline for ${city}`);
   const cityDir = join(root, 'data/cities', city);
-  if (pipeline.workbook === undefined) return withCoverage(await pipeline.build(cityDir), cityDir, root);
-  const path = workbookPath ?? join(root, 'data/cities', city, pipeline.workbook);
-  const sha256 = createHash('sha256').update(await readFile(path)).digest('hex');
-  return withCoverage(await pipeline.build(path, { file: pipeline.workbook, sha256 }, cityDir), cityDir, root);
+  const result =
+    pipeline.workbook === undefined
+      ? await withCoverage(await pipeline.build(cityDir), cityDir, root)
+      : await (async () => {
+          const path = workbookPath ?? join(root, 'data/cities', city, pipeline.workbook!);
+          const sha256 = createHash('sha256').update(await readFile(path)).digest('hex');
+          return withCoverage(await pipeline.build(path, { file: pipeline.workbook!, sha256 }, cityDir), cityDir, root);
+        })();
+  return { ...result, errors: [...result.errors, ...(await checkScans(result.budget, root, city))] };
+}
+
+/** Every cite read from a scanned page (#59), wherever it sits in budget.json. */
+export function scannedRefs(budget: CityBudget): (DocRef & { scanned: { image: string } })[] {
+  const found: (DocRef & { scanned: { image: string } })[] = [];
+  const walk = (v: unknown) => {
+    if (Array.isArray(v)) return v.forEach(walk);
+    if (!v || typeof v !== 'object') return;
+    const o = v as Record<string, unknown>;
+    if (typeof o.source === 'string' && typeof o.quote === 'string' && o.scanned) found.push(o as unknown as DocRef & { scanned: { image: string } });
+    Object.values(o).forEach(walk);
+  };
+  walk(budget);
+  return found;
+}
+
+/** A scanned receipt links its rendered page, so the image must be the city's and must be in public/. */
+export async function checkScans(budget: CityBudget, root: string, city: string): Promise<string[]> {
+  const errors: string[] = [];
+  for (const image of new Set(scannedRefs(budget).map((r) => r.scanned.image))) {
+    if (!image.startsWith(`/${city}/scans/`)) errors.push(`scanned image ${image}: must be under /${city}/scans/`);
+    else if (!(await present(join(root, 'public', image)))) errors.push(`scanned image ${image}: not in public/`);
+  }
+  return errors;
 }
 
 /** The site-wide FAQ (#54) and the page excerpts it quotes: data/site/faq.json, data/site/source/excerpts/. */

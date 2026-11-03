@@ -40,6 +40,8 @@ export interface WaffleItem {
   /** Its details, a tap away (#33), and the link's words: "Department details". */
   href: string;
   details: string;
+  /** Who provides it, where that isn't City staff (#59): a few words, no figures; the details carry the receipts. */
+  note?: string;
 }
 
 /** The 100 squares in fill order: columns top to bottom, biggest item first. */

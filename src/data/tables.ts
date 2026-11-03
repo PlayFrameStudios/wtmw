@@ -17,8 +17,16 @@ export interface TableSpec {
   unit: number;
   /** One key per printed column, left to right ("adopted-2027"). */
   columns: string[];
-  /** Each column's heading as printed ("2026/27 Adopted"), checked on the page: a receipt names the column its figure is in. */
-  headings: string[];
+  /**
+   * Each column's heading as printed ("2026/27 Adopted"), checked on the page: a receipt names the column its figure is in.
+   * A heading printed over several lines is its lines, top to bottom (["Proposed", "2026-2027", "Budget"]), each checked.
+   */
+  headings: (string | string[])[];
+  /**
+   * What the table prints in its last column instead of a figure ("N/A", or a footnote mark like "(1)"): a row ending
+   * in one has no figure in that column. Without this, "(1)" would read as a figure, and "N/A" would end the row's cells.
+   */
+  placeholders?: string[];
 }
 
 export interface TableRow {
@@ -31,11 +39,11 @@ export interface TableRow {
   at(column: string): DocRef;
 }
 
-/** "-" and "$" are fillers; "(1,234)" is negative; "70.4%" is a rate (0.704). Returns null for a token that isn't a cell. */
+/** "-" and "$" are fillers; "(1,234)" and "-15.5%" are negative; "70.4%" is a rate (0.704). Returns null for a token that isn't a cell. */
 function cell(token: string): number | null {
-  if (token === '-') return 0;
-  const m = token.match(/^(\()?\$?([\d,]*\.?\d+)(%)?(\))?$/);
-  if (!m || /[^\d]/.test(m[2].replace(/[,.]/g, '')) || Boolean(m[1]) !== Boolean(m[4])) return null;
+  if (token === '-' || token === '\u2012') return 0;
+  const m = token.match(/^(\(|-|\u2212)?\$?([\d,]*\.?\d+)(%)?(\))?$/);
+  if (!m || /[^\d]/.test(m[2].replace(/[,.]/g, '')) || (m[1] === '(') !== Boolean(m[4])) return null;
   const n = Number(m[2].replace(/,/g, ''));
   if (!Number.isFinite(n)) return null;
   // A percent is a rate, rounded so 76.2% is 0.762 and not 0.7620000000000001.
@@ -44,7 +52,11 @@ function cell(token: string): number | null {
 
 /** Splits a printed line into its label and trailing cells (a "$" before a figure is dropped). */
 export function splitRow(line: string): { label: string; cells: number[]; percent: boolean[] } {
-  const tokens = normalize(line).split(' ').filter((t) => t !== '$');
+  // A negative figure after another ("177,444 -15.5%") is its own cell, and so is an empty one between two ("150,000 - 350,000");
+  // normalize() would join either to its neighbor as a hyphenated word.
+  const tokens = normalize(line.replace(/(?<=[\d%)])\s+-(?=\s+[$(\d])/g, ' \u2012').replace(/(\d)\s+-(?=\d)/g, '$1 \u2212'))
+    .split(' ')
+    .filter((t) => t !== '$');
   const cells: number[] = [];
   const percent: boolean[] = [];
   while (tokens.length) {
@@ -68,11 +80,22 @@ export function readTable(spec: TableSpec, excerpts: Excerpts) {
   if (text === undefined) throw new Error(`${where}: no excerpt for ${spec.source} page ${spec.page}`);
   if (!normalize(text).includes(normalize(spec.title))) throw new Error(`${where}: the title isn't on the page`);
   if (spec.headings.length !== spec.columns.length) throw new Error(`${where}: ${spec.columns.length} columns but ${spec.headings.length} headings`);
-  for (const h of spec.headings) if (!normalize(text).includes(normalize(h))) throw new Error(`${where}: the column heading "${h}" isn't on the page`);
-  const heading = Object.fromEntries(spec.columns.map((c, i) => [c, spec.headings[i]]));
-  const lines = text.split('\n').map((l) => ({ quote: normalize(l), ...splitRow(l) })).filter((l) => l.label && l.cells.length);
+  for (const h of spec.headings.flat()) if (!normalize(text).includes(normalize(h))) throw new Error(`${where}: the column heading "${h}" isn't on the page`);
+  const heading = Object.fromEntries(spec.columns.map((c, i) => [c, [spec.headings[i]].flat().join(' ')]));
+  const lines = text
+    .split('\n')
+    .map((l) => {
+      const quote = normalize(l);
+      const raw = l.trim();
+      const last = raw.split(/\s+/).at(-1)!;
+      // A placeholder in the last column: the cells are the ones before it, and the row has no figure there.
+      const blank = spec.placeholders?.includes(last) ?? false;
+      return { quote, blank, ...splitRow(blank ? raw.slice(0, -last.length) : raw) };
+    })
+    .filter((l) => l.label && l.cells.length);
 
-  const toRow = (l: (typeof lines)[number], columns = spec.columns): TableRow => {
+  const toRow = (l: (typeof lines)[number], given?: string[]): TableRow => {
+    const columns = given ?? (l.blank ? spec.columns.slice(0, -1) : spec.columns);
     if (l.cells.length !== columns.length) throw new Error(`${where}: "${l.quote}" has ${l.cells.length} figures, expected ${columns.length}`);
     // Percentages are rates as printed; money is scaled to dollars (rounded: "$23.244" million is $23,244,000).
     const values = Object.fromEntries(columns.map((c, i) => [c, Math.round((l.percent[i] ? l.cells[i] : l.cells[i] * spec.unit) * 1e6) / 1e6]));
@@ -89,6 +112,10 @@ export function readTable(spec: TableSpec, excerpts: Excerpts) {
       const found = lines.filter((l) => l.label === label);
       if (found.length !== 1) throw new Error(`${where}: expected one "${label}" row, found ${found.length}`);
       return toRow(found[0], columns);
+    },
+    /** Every line with as many figures as `columns` (default: the table's), in page order. */
+    all(columns = spec.columns): TableRow[] {
+      return lines.filter((l) => l.cells.length === columns.length).map((l) => toRow(l, columns));
     },
     rows(label: string, columns?: string[]): TableRow[] {
       const found = lines.filter((l) => l.label === label);

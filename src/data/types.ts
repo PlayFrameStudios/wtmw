@@ -45,6 +45,12 @@ export interface DocRef {
   quote: string;
   /** For a figure read from a table row: the heading of its column, as printed. */
   column?: string;
+  /**
+   * Set when the page is a scanned image with no text to check against (#59): the quote is our reading of the
+   * printed line, not checked, and `image` is the rendered page the site serves ("/us/ca/lafayette/scans/S1-p17.png").
+   * The build accepts one only on a page whose extracted text is empty, so a figure with a text page is always quoted.
+   */
+  scanned?: { image: string };
 }
 
 export interface Source {
@@ -95,6 +101,14 @@ export type DepartmentLine = Cite & {
   name: string;
   kind: 'department' | 'citywide';
   amount: number;
+  /**
+   * Who actually provides the service, where that isn't City staff (#59): Lafayette's police are a contract with the
+   * County Sheriff. From coverage.json's `lines`, quote-checked; shown on the line wherever the reader sees its number.
+   */
+  providedBy?: CoverageParagraph & {
+    /** The same in a few words, with no figures, for the chart's square ("A contract with the County Sheriff"). */
+    short?: string;
+  };
 };
 
 /** General Fund uses for one budget year, by department. */
@@ -106,6 +120,8 @@ export interface GeneralFundUses {
   note?: string;
   /** The same in a few words, for chart labels and captions: "department baseline". */
   noun: string;
+  /** What one line is, when it isn't a department: Lafayette's are "program"s (#59). */
+  unit?: string;
   lines: DepartmentLine[];
   /** The table's own total of every line, which the build ties to the lines. */
   total: Cite & { amount: number };
@@ -123,27 +139,68 @@ export type Staffing = Cite & {
 
 /** The budget's size: all funds, and the General Fund (the part the Council can spend on anything). */
 export interface BudgetSize {
-  allFunds: DocRef & { amount: number; note?: string };
+  /** Absent when the City's books don't give one all-funds total we can stand behind (Lafayette's two differ, #59). */
+  allFunds?: DocRef & { amount: number; note?: string };
   generalFund: DocRef & { amount: number; note?: string };
 }
 
 /** A capital plan by program category and year, from a table in a City document. */
 export interface CapitalPlan {
   title: string;
+  /** What one line is: "program" (a program category, the default), or "project" (#59). */
+  unit?: string;
   years: number[];
   /** The ref is the five-year total's; `cites` holds each year's. */
   lines: (DocRef & { name: string; years: ByYear; cites?: Record<number, DocRef>; total: number })[];
   total: DocRef & { years: ByYear; cites?: Record<number, DocRef>; total: number };
 }
 
-/** Pension obligations as the budget reports them. */
-export interface Pension {
+/**
+ * Pension obligations as the budget reports them: a defined-benefit plan's unfunded liability (Fremont), or for a City
+ * with no defined-benefit plan (Lafayette, #59) what it pays into employees' own accounts. That variant never has an
+ * unfunded liability to show, rather than a zero one.
+ */
+export type Pension = DefinedBenefitPension | DefinedContributionPension;
+
+export interface DefinedContributionPension {
+  plan: 'defined-contribution';
+  /** The City saying it has no defined-benefit plan. */
+  noDefinedBenefit: DocRef;
+  /** What the City pays in, as a share of base pay. */
+  rate: DocRef & { rate: number };
+  /** What the City paid in, in a fiscal year (the audited one). */
+  contribution: DocRef & { amount: number; year: number };
+  /** The liability for retiree health care (OPEB), its only retiree liability, as of a date. */
+  opeb: DocRef & { amount: number; asOf: string };
+}
+
+export interface DefinedBenefitPension {
+  plan?: 'defined-benefit';
   /** The actuarial valuation date: "6/30/2024". */
   asOf: string;
   unfunded: DocRef & { amount: number };
   fundedRatio: DocRef & { rate: number };
   /** The employer's contribution in the budget year. */
   contribution: DocRef & { amount: number; year: number };
+}
+
+/**
+ * Where a City's reserve stands against its own policy (#59), for a city whose budget states it as a share of
+ * spending: Lafayette's core cash ends FY 2026/27 at 72% of General Fund spending against a 60% minimum. Each figure
+ * is its own receipt; `change` is what the budget year draws from (negative) or adds to the reserve.
+ */
+export interface ReservePosition {
+  year: number;
+  /** The reserve at the end of the year, in dollars and as a share of spending. */
+  balance: DocRef & { amount: number };
+  level: DocRef & { rate: number };
+  /** The minimum the City's policy sets, as a share of the same spending. */
+  policy: DocRef & { rate: number };
+  change?: DocRef & { amount: number };
+  /** The share the City's forecast shows in its last year. */
+  outlook?: DocRef & { rate: number; year: number };
+  /** What the City has said about it, each sentence with the words it rests on. */
+  notes?: StepNote[];
 }
 
 /** A figure a city's pages quote from a sentence or table row, parsed from the quote. */
@@ -454,6 +511,7 @@ export interface CityBudget {
   statements?: Record<string, DocRef>;
   capitalPlan?: CapitalPlan;
   pension?: Pension;
+  reservePosition?: ReservePosition;
   /** What the City's budget covers and what it doesn't (#51), from coverage.json. */
   coverage?: Coverage;
   /** The school district's budget (#52), from schools.json: another government's, on a page of its own. */
@@ -514,9 +572,26 @@ export interface CoverageQuestion {
   agencies?: CoverageAgency[];
 }
 
+/**
+ * A service the City's General Fund doesn't pay for, which a reader comparing cities would look for (#59): Lafayette's
+ * fire service is a separate district's. Shown as a muted row with no squares wherever the departments are listed.
+ */
+export interface NotInBudget {
+  id: string;
+  name: string;
+  /** Who provides it, in a few words: "Contra Costa County Fire Protection District". */
+  provider: string;
+  /** Why it isn't in these numbers, with its cites. */
+  paragraph: CoverageParagraph;
+}
+
 /** The five reader questions, in order: is this everything, where are the schools, what else isn't here, where does property tax go, does the City pay for schools. */
 export interface Coverage {
   questions: CoverageQuestion[];
+  /** Services the General Fund doesn't pay for (#59); the block leads with them. */
+  notInBudget?: NotInBudget[];
+  /** What kind of city this is, in one cited line for the overview: "a limited service city" (#59). */
+  profile?: CoverageParagraph;
   /** The overview's line under the property-tax card; the whole line links to the block. */
   overview: CoverageParagraph;
 }

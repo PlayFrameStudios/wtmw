@@ -1,0 +1,40 @@
+{
+  "note": "Program groups for the $100 chart and legends: the five sections the FY 2026-27 budget's General Fund program summary prints (S1 PDF 25), in the colors Berkeley's and Fremont's families use. Within a section, bigger programs get darker shades.",
+  "families": [
+    { "id": "police", "name": "Police services", "colors": ["#23395B", "#3F5E96", "#7A93C2"] },
+    { "id": "public-works", "name": "Public works", "colors": ["#0E6B6F", "#2E8A84", "#3E9A8F", "#7CBFB3", "#A9D6CC"] },
+    { "id": "planning", "name": "Planning & engineering", "colors": ["#3E6B3A", "#6B9A5E", "#A4C79A"] },
+    { "id": "administration", "name": "Administration", "colors": ["#6F5536", "#8C6D46", "#A88A62", "#C2A982", "#D8C6A6"] },
+    { "id": "council", "name": "Council, commissions & community", "colors": ["#7A4E7E", "#94699A", "#AE86B3", "#C7A6CB", "#DDC6E0"] }
+  ],
+  "members": {
+    "police-services": "police",
+    "emergency-preparedness-commission": "police",
+    "crossing-guards": "police",
+    "road-drain-maintenance": "public-works",
+    "traffic-maintenance": "public-works",
+    "parks-trails-maintenance": "public-works",
+    "community-center-maintenance": "public-works",
+    "emergency-response": "public-works",
+    "planning-services": "planning",
+    "code-enforcement": "planning",
+    "engineering-services": "planning",
+    "city-manager": "administration",
+    "legal-services": "administration",
+    "city-clerk": "administration",
+    "administrative-services": "administration",
+    "communications": "administration",
+    "rent-and-expenses": "administration",
+    "technology-services": "administration",
+    "city-council": "council",
+    "public-art": "council",
+    "transportation-circulation-commission": "council",
+    "crime-prevention-commission": "council",
+    "parks-trails-recreation-commission": "council",
+    "senior-services": "council",
+    "youth-commission": "council",
+    "planning-commission": "council",
+    "design-review-commission": "council",
+    "environmental-task-force": "council"
+  }
+}

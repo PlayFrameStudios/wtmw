@@ -1,0 +1,32 @@
+{
+  "name": "Lafayette",
+  "state": "California",
+  "stateCode": "CA",
+  "country": "United States",
+  "countryCode": "US",
+  "government": "City of Lafayette",
+  "budget": {
+    "cadence": "annual",
+    "years": [2027],
+    "labels": { "long": "FY {start}-{yy}", "short": "FY{ss}-{yy}", "spoken": "fiscal year {start}-{yy}" }
+  },
+  "fiscalPosition": {
+    "variant": "reserves",
+    "reason": {
+      "text": "Lafayette is spending down part of its reserve on purpose, to catch up on long-standing maintenance of its buildings, parks and trails while its reserve is strong and Measure H sales-tax money is coming in.",
+      "cites": [
+        {
+          "source": "S2",
+          "page": 1,
+          "quote": "The City Council Finance Subcommittee recommends prioritizing funding the City’s long-standing deferred maintenance needs while reserves remain strong, and Measure H revenues are available."
+        },
+        {
+          "source": "S1",
+          "page": 10,
+          "quote": "Accordingly, the budget includes an additional annual contribution of $500K to Fund 16 for the Community Center sinking fund."
+        }
+      ]
+    }
+  },
+  "ballot": false
+}

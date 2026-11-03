@@ -24,6 +24,8 @@ export function departmentBudgets(b: CityBudget, families: Families, names: Reco
     color: families.color(s.item.id),
     per100: s.exact,
     figure: figure(s.item, budget),
+    /** Who provides the service, where it isn't City staff (#59). */
+    providedBy: s.item.providedBy,
   }));
   const deptTotal = departments.reduce((a, d) => a + d.amount, 0);
   const departmentsFigure: Figure = {
@@ -33,12 +35,14 @@ export function departmentBudgets(b: CityBudget, families: Families, names: Reco
     tone: 'neutral',
     parts: departments.map((d) => ({ label: d.name, value: d.amount })),
   };
+  // With citywide lines, the total is built from the departments and them. Without (#59), it is the table's own total:
+  // its lines are printed rounded to the dollar, so their sum can be a dollar off it, and the page shows only the City's.
   const total: Figure = {
     value: uses.total.amount,
     label: `General Fund expenditures, ${y}${uses.note ? ` (${uses.note})` : ''}`,
     ref: uses.total,
     tone: 'neutral',
-    parts: [{ label: 'Departments', value: deptTotal }, ...citywide.map((l) => ({ label: l.name, value: l.amount }))],
+    ...(citywide.length ? { parts: [{ label: 'Departments', value: deptTotal }, ...citywide.map((l) => ({ label: l.name, value: l.amount }))] } : {}),
   };
 
   const staff = b.staffing;
@@ -48,7 +52,11 @@ export function departmentBudgets(b: CityBudget, families: Families, names: Reco
 
   return {
     year: uses.year,
+    /** What one line is: "department", or the city's own word ("program", #59). */
+    unit: uses.unit ?? 'department',
     rows,
+    /** Services the General Fund doesn't pay for (#59): muted rows with no squares. */
+    outside: b.coverage?.notInBudget ?? [],
     /** The lines below the departments: their figures, in the table's order. */
     citywide: citywide.map((l) => ({ id: l.id, name: l.name, figure: figure(l, 'General Fund') })),
     departments: departmentsFigure,

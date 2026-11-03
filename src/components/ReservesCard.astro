@@ -10,7 +10,10 @@ import SourceChip from './SourceChip.astro';
 import Sourced from './Sourced.astro';
 import type { Balance } from '../lib/balance';
 import type { City } from '../lib/cities';
+import { fy } from '../lib/city-settings';
 import { shortMoney } from '../lib/format';
+import { formatValue } from '../lib/receipts';
+import type { reservePositionOf } from '../lib/reserve-position';
 import type { CityReserves } from '../lib/reserves';
 
 interface Props {
@@ -19,9 +22,12 @@ interface Props {
   /** The card's number on the overview. */
   n: number;
   balance?: Balance;
+  /** Where the reserve stands against the City's policy (#59). */
+  position?: ReturnType<typeof reservePositionOf>;
 }
 
-const { city, reserves, n, balance } = Astro.props;
+const { city, reserves, n, balance, position } = Astro.props;
+const pct = (v: number) => formatValue(v, 'percent');
 ---
 
 <li class="reserves-card">
@@ -39,6 +45,24 @@ const { city, reserves, n, balance } = Astro.props;
         <Sourced city={city} figure={balance.notRestored.personnel}>{shortMoney(balance.notRestored.personnel.value)}</Sourced> of ongoing personnel, supplies and services
         reductions made in FY 2025/26. Its spending total also counts on <Sourced city={city} figure={balance.savings}>{shortMoney(balance.savings.value)}</Sourced> of
         Citywide Savings, money it expects to go unspent, mostly from vacant positions.
+      </p>
+    )
+  }
+  {
+    position && (
+      <p class="reserves-card-body" data-reserve-position>
+        {position.change?.drawn && (
+          <>
+            This budget draws <Sourced city={city} figure={position.change.figure}>{shortMoney(position.change.figure.value)}</Sourced> from it.{' '}
+          </>
+        )}
+        The reserve ends the year at <Sourced city={city} figure={position.level}>{pct(position.level.value)}</Sourced> of General Fund spending, against a{' '}
+        <Sourced city={city} figure={position.policy}>{pct(position.policy.value)}</Sourced> minimum{position.outlook ? ', and the City’s forecast shows ' : '.'}
+        {position.outlook && (
+          <>
+            <Sourced city={city} figure={position.outlook.figure}>{pct(position.outlook.figure.value)}</Sourced> by {fy(city.budget.labels, position.outlook.year)}.
+          </>
+        )}
       </p>
     )
   }

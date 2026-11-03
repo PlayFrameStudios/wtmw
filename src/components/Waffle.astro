@@ -74,6 +74,7 @@ const whole = (it: WaffleItem) => perHundred(it.squares, it.exact);
           <p class="panel-figure">
             <span class="num">{whole(it)}</span> <span class="of">of every $100</span>
           </p>
+          {it.note && <p class="panel-note">{it.note}</p>}
           <a class="panel-link" href={it.href} data-details={it.id}>
             {it.details} <span aria-hidden="true">→</span>
           </a>
@@ -292,6 +293,13 @@ const whole = (it: WaffleItem) => perHundred(it.squares, it.exact);
   .of {
     color: rgb(255 255 255 / 0.8);
     font-size: 0.875rem;
+  }
+  .panel-note {
+    max-width: 16rem;
+    margin-top: 0.375rem !important;
+    color: rgb(255 255 255 / 0.85);
+    font-size: 0.875rem;
+    line-height: 1.4;
   }
   .panel-link {
     display: none;

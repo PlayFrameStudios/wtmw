@@ -7,6 +7,7 @@
  * assumes and the City's forecast.
  */
 import BalanceSheet from '../../../../components/BalanceSheet.astro';
+import ReservePosition from '../../../../components/ReservePosition.astro';
 import Reserves from '../../../../components/Reserves.astro';
 import SourceChip from '../../../../components/SourceChip.astro';
 import Base from '../../../../layouts/Base.astro';
@@ -14,6 +15,7 @@ import { balanceOf } from '../../../../lib/balance';
 import { budgetFor } from '../../../../lib/budget';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
 import { fy } from '../../../../lib/city-settings';
+import { reservePositionOf } from '../../../../lib/reserve-position';
 import { reservesFor } from '../../../../lib/reserves';
 
 export const getStaticPaths = cityStaticPaths('reserves');
@@ -23,6 +25,8 @@ const reserves = reservesFor(city)!;
 const reason = city.fiscalPosition.reason;
 const years = city.budget.years.map((y) => fy(city.budget.labels, y));
 const balance = balanceOf(budgetFor(city)!, (y) => fy(city.budget.labels, y));
+// Where the reserve stands against the City's policy (#59), for a city whose budget states it.
+const position = reservePositionOf(budgetFor(city)!, (y) => fy(city.budget.labels, y));
 ---
 
 <Base title={`Balance & reserves · ${city.name}`} city={city} description={`Where ${city.name}'s budget stands, and what it keeps in reserve. Every number links to the public document it came from.`}>
@@ -43,7 +47,10 @@ const balance = balanceOf(budgetFor(city)!, (y) => fy(city.budget.labels, y));
           <Reserves city={city} reserves={reserves} />
         </BalanceSheet>
       ) : (
-        <Reserves city={city} reserves={reserves} />
+        <>
+          {position && <ReservePosition city={city} position={position} />}
+          <Reserves city={city} reserves={reserves} />
+        </>
       )
     }
   </div>

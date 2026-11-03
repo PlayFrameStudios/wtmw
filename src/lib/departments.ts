@@ -55,6 +55,8 @@ export function fullNames(cityPath: string, b: CityBudget): Record<string, strin
 /** The department waffle's squares: each department's full name and family color, linking to its details. */
 export function departmentItems(cityPath: string, b: CityBudget, shares: Share<{ id: string; amount: number }>[], families: Families): WaffleItem[] {
   const name = fullNames(cityPath, b);
+  const unit = b.generalFund[0].unit ?? 'department';
+  const lines = new Map(b.generalFund[0].lines.map((l) => [l.id, l]));
   return shares.map((s) => ({
     id: s.item.id,
     name: name[s.item.id],
@@ -63,7 +65,8 @@ export function departmentItems(cityPath: string, b: CityBudget, shares: Share<{
     squares: s.squares,
     exact: s.exact,
     href: `${cityPath}departments/#${s.item.id}`,
-    details: 'Department details',
+    details: `${unit[0].toUpperCase()}${unit.slice(1)} details`,
+    ...(lines.get(s.item.id)?.providedBy?.short ? { note: lines.get(s.item.id)!.providedBy!.short } : {}),
   }));
 }
 

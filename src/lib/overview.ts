@@ -51,7 +51,7 @@ export function cityOverview(b: CityBudget, families: Families, revenueGroups: R
     /** The whole budget, and its General Fund. For Berkeley a different document and basis from the
      *  baseline below (S1's planning figure), so the page never shows a difference between them. */
     size: {
-      allFunds: { value: size.allFunds.amount, label: `Citywide spending, all funds, ${y}${size.allFunds.note ? ` (${size.allFunds.note})` : ''}`, ref: size.allFunds, tone: 'neutral' } satisfies Figure,
+      allFunds: size.allFunds && ({ value: size.allFunds.amount, label: `Citywide spending, all funds, ${y}${size.allFunds.note ? ` (${size.allFunds.note})` : ''}`, ref: size.allFunds, tone: 'neutral' } satisfies Figure),
       generalFund: { value: size.generalFund.amount, label: `General Fund spending, ${y}${size.generalFund.note ? ` (${size.generalFund.note})` : ''}`, ref: size.generalFund, tone: 'neutral' } satisfies Figure,
     },
     baseline,

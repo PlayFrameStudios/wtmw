@@ -7,6 +7,7 @@
  * the city's fiscal-position variant; card 3 is the ballot only while the city has
  * one, otherwise its capital program (#42). Year labels are in the city's own style.
  */
+import CitedText from '../../../../components/CitedText.astro';
 import SourceChip from '../../../../components/SourceChip.astro';
 import Sourced from '../../../../components/Sourced.astro';
 import StepInfo from '../../../../components/StepInfo.astro';
@@ -25,6 +26,7 @@ import { cityOverview, gapOverview } from '../../../../lib/overview';
 import { coverageFor } from '../../../../lib/coverage';
 import { balanceOf } from '../../../../lib/balance';
 import { formatValue, type Figure } from '../../../../lib/receipts';
+import { reservePositionOf } from '../../../../lib/reserve-position';
 import { reservesFor } from '../../../../lib/reserves';
 import { schoolsFor } from '../../../../lib/schools';
 import { revenueGroupsFor } from '../../../../lib/revenue-groups';
@@ -42,7 +44,14 @@ const year = city.budget.years[0];
 const label = (y: number, form: 'long' | 'short' | 'spoken' = 'long') => fy(city.budget.labels, y, form);
 const o = cityOverview(budget, families, revenueGroupsFor(city, budget), (y) => label(y));
 // #51: the property tax bill pays several governments; this card shows the City's part.
-const covers = coverageFor(city, budget, revenueGroupsFor(city, budget))?.overview;
+const coverage = coverageFor(city, budget, revenueGroupsFor(city, budget));
+const covers = coverage?.overview;
+// #59: what kind of city this is, and the services its General Fund doesn't pay for (muted, no squares).
+const profile = coverage?.profile;
+const outside = coverage?.outside ?? [];
+// What one square's line is: a department, or the city's own unit ("program", #59).
+const unit = budget.generalFund[0].unit ?? 'department';
+const units = `${unit}s`;
 // A city with a gap has a deficit plan: the bridge, cost growth and the ballot (#43).
 const plan = gapCity ? gapPlan(budget, "The overview's gap card") : undefined;
 const gp = plan && gapOverview(plan);
@@ -53,9 +62,12 @@ const reserves = gapCity ? undefined : reservesFor(city)!;
 const balance = gapCity ? undefined : balanceOf(budget, (y) => label(y));
 // #52: the school district's budget, a step aside from the City's. Only where the city has the page.
 const schools = has('schools') ? schoolsFor(city, budget) : undefined;
+const numberWords: Record<number, string> = { 5: 'five', 10: 'ten' };
 const plan5 = budget.capitalPlan;
+// A one-year capital program (Lafayette's, #59) has no multi-year total to name.
+const planYears = plan5?.years.length ?? 0;
 const capital = plan5 && {
-  total: { value: plan5.total.total, label: `${plan5.title}, five-year total`, ref: plan5.total, tone: 'neutral' } satisfies Figure,
+  total: { value: plan5.total.total, label: planYears > 1 ? `${plan5.title}, ${numberWords[planYears] ?? planYears}-year total` : plan5.title, ref: plan5.total, tone: 'neutral' } satisfies Figure,
   year: { value: plan5.total.years[year], label: `${plan5.title}, ${label(year)}`, ref: plan5.total.cites?.[year] ?? plan5.total, tone: 'neutral' } satisfies Figure,
   transfer: budget.facts?.cipTransfer && ({ value: budget.facts.cipTransfer.value, label: 'General Fund transfer to the capital plan each year, for capital maintenance', ref: budget.facts.cipTransfer, tone: 'neutral' } satisfies Figure),
 };
@@ -87,7 +99,6 @@ const wf = (() => {
 })();
 const rate = (r: number) => `${(r * 100).toLocaleString('en-US')}%`;
 const g = gp?.growth.cited;
-const numberWords: Record<number, string> = { 10: 'ten' };
 
 ---
 
@@ -96,19 +107,36 @@ const numberWords: Record<number, string> = { 10: 'ten' };
     <div class="hero-copy">
       <h1>Where every $100 of {city.name}'s budget goes.</h1>
       <p class="lede">
-        Each square is $1 of every $100 the City plans to spend on departments this year.
-        <StepInfo city={city} id="lede-sizes" label="the City plans to spend on departments" part="button" />
+        Each square is $1 of every $100 the City plans to spend on {units} this year.
+        <StepInfo city={city} id="lede-sizes" label={`the City plans to spend on ${units}`} part="button" />
       </p>
+      {
+        profile && (
+          <p class="lede profile" data-city-profile>
+            <CitedText city={city} p={profile} />
+          </p>
+        )
+      }
       <!-- #33: the three sizes, a tap away. Each keeps its receipt, and no difference between them is computed. -->
-      <StepInfo city={city} id="lede-sizes" label="the City plans to spend on departments" part="panel">
-        <p class="sizes">
-          {city.name}'s whole budget for {label(year, 'spoken')} is <Sourced city={city} figure={o.size.allFunds}>{shortMoney(o.size.allFunds.value)}</Sourced>. Most
-          of it is set aside for specific uses, like sewers, parking or grants. The <Sourced city={city} figure={o.size.generalFund}
-            >{shortMoney(o.size.generalFund.value)}</Sourced
-          >{' '}
-          <Term city={city} name="General Fund (GF)">General Fund</Term> is the part the Council can spend on anything. The chart shows the{' '}
-          <Sourced city={city} figure={o.baseline}>{shortMoney(o.baseline.value)}</Sourced> of it {gapCity ? 'planned for departments, before cuts' : 'budgeted for departments, before citywide costs and savings'}.
-        </p>
+      <StepInfo city={city} id="lede-sizes" label={`the City plans to spend on ${units}`} part="panel">
+        {
+          o.size.allFunds ? (
+            <p class="sizes">
+              {city.name}'s whole budget for {label(year, 'spoken')} is <Sourced city={city} figure={o.size.allFunds}>{shortMoney(o.size.allFunds.value)}</Sourced>. Most
+              of it is set aside for specific uses, like sewers, parking or grants. The <Sourced city={city} figure={o.size.generalFund}
+                >{shortMoney(o.size.generalFund.value)}</Sourced
+              >{' '}
+              <Term city={city} name="General Fund (GF)">General Fund</Term> is the part the Council can spend on anything. The chart shows the{' '}
+              <Sourced city={city} figure={o.baseline}>{shortMoney(o.baseline.value)}</Sourced> of it {gapCity ? 'planned for departments, before cuts' : 'budgeted for departments, before citywide costs and savings'}.
+            </p>
+          ) : (
+            <p class="sizes">
+              The chart shows {city.name}'s <Term city={city} name="General Fund (GF)">General Fund</Term>, its main account for day-to-day services:{' '}
+              <Sourced city={city} figure={o.size.generalFund}>{shortMoney(o.size.generalFund.value)}</Sourced> for {label(year, 'spoken')}, all of it in its {units}. The
+              City's other funds, set aside for specific uses like capital projects or recreation, aren't in these squares.
+            </p>
+          )
+        }
       </StepInfo>
       {
         balance && (
@@ -135,9 +163,9 @@ const numberWords: Record<number, string> = { 10: 'ten' };
       <Waffle
         items={departmentItems(city.path, budget, o.shares, families)}
         label={`${city.name}'s ${label(year)} ${o.uses.noun}`}
-        noun="department"
+        noun={unit}
         title={{ what: `${generalFundNoun(budget, o.uses.year)}, per $100`, year: label(o.uses.year) }}
-        table={{ caption: `${label(year)} General Fund ${o.uses.noun}, per $100`, name: 'Department', value: `${label(year)} ${o.uses.noun.replace(/^department /, '')}` }}
+        table={{ caption: `${label(year)} General Fund ${o.uses.noun}, per $100`, name: unit[0].toUpperCase() + unit.slice(1), value: `${label(year)} ${o.uses.noun.replace(/^department /, '')}` }}
       />
       <ul class="legend">
         {
@@ -150,6 +178,17 @@ const numberWords: Record<number, string> = { 10: 'ten' };
               </span>
               <span class="fam">{f.family.name}</span>
               <span class="dollars num">{perHundred(f.dollars, f.exact)}</span>
+            </li>
+          ))
+        }
+        {
+          outside.map((x) => (
+            <li class="legend-outside" data-not-in-budget={x.id}>
+              <span class="swatches" aria-hidden="true" />
+              <span class="fam">
+                {x.name}: provided by {x.provider}
+              </span>
+              <span class="dollars">not in this budget</span>
             </li>
           ))
         }
@@ -309,7 +348,7 @@ const numberWords: Record<number, string> = { 10: 'ten' };
             <a class="more" href={`${city.path}gap/`}>See the gap step by step <span aria-hidden="true">→</span></a>
           </li>
         ) : (
-          <ReservesCard city={city} reserves={reserves!} n={2} balance={balance} />
+          <ReservesCard city={city} reserves={reserves!} n={2} balance={balance} position={reservePositionOf(budget, (y) => label(y))} />
         )
       }
 
@@ -334,8 +373,16 @@ const numberWords: Record<number, string> = { 10: 'ten' };
                 capital && (
                   <>
                     {' '}
-                    It sets out <Sourced city={city} figure={capital.total}>{shortMoney(capital.total.value)}</Sourced> over five years,{' '}
-                    <Sourced city={city} figure={capital.year}>{shortMoney(capital.year.value)}</Sourced> of it in {label(year)}.
+                    {planYears > 1 ? (
+                      <>
+                        It sets out <Sourced city={city} figure={capital.total}>{shortMoney(capital.total.value)}</Sourced> over {numberWords[planYears] ?? planYears} years,{' '}
+                        <Sourced city={city} figure={capital.year}>{shortMoney(capital.year.value)}</Sourced> of it in {label(year)}.
+                      </>
+                    ) : (
+                      <>
+                        It sets out <Sourced city={city} figure={capital.total}>{shortMoney(capital.total.value)}</Sourced> for {label(year)}.
+                      </>
+                    )}
                     {capital.transfer && (
                       <>
                         {' '}
@@ -535,6 +582,24 @@ const numberWords: Record<number, string> = { 10: 'ten' };
     margin-inline-start: auto;
     color: var(--muted);
     white-space: nowrap;
+  }
+  /* A service the General Fund doesn't pay for (#59): an empty outline where the squares would be. */
+  .legend .legend-outside {
+    grid-column: 1 / -1;
+    color: var(--muted);
+  }
+  .legend-outside .swatches {
+    flex: none;
+    width: 1.625rem;
+    height: 0.875rem;
+    border: 1px dashed var(--faint);
+    border-radius: 1px;
+  }
+  .legend-outside .fam {
+    font-weight: 400;
+  }
+  .profile {
+    font-size: 1rem;
   }
   @media (min-width: 64rem) {
     .hero {

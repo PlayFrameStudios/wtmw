@@ -1,11 +1,13 @@
 ---
 /**
- * "What this budget covers" (#51): five reader questions, answered from coverage.json, on the Sources page.
+ * "What this budget covers" (#51): five reader questions, answered from coverage.json, on the Sources page. It
+ * leads with the services the City's General Fund doesn't pay for, where a city has them (#59).
  * Each paragraph ends in its receipt; figures are their own (Sourced); each other government names the
  * document that says it serves the city.
  */
 import type { City } from '../lib/cities';
 import type { CoverageBlockParagraph, coverageFor } from '../lib/coverage';
+import CitedText from './CitedText.astro';
 import SourceChip from './SourceChip.astro';
 import Sourced from './Sourced.astro';
 
@@ -20,6 +22,21 @@ const chip = (p: Pick<CoverageBlockParagraph, 'cites'>) => (p.cites.length ? { s
 
 <section id="what-this-covers" class="covers card" aria-labelledby="covers-title" data-coverage>
   <h2 id="covers-title">What this budget covers</h2>
+  {
+    block.outside.length > 0 && (
+      <div class="outside" data-not-in-budget-list>
+        <h3>Not in this budget</h3>
+        <ul>
+          {block.outside.map((o) => (
+            <li data-not-in-budget={o.id}>
+              <strong>{o.name}.</strong>{' '}
+              <CitedText city={city} p={o.paragraph} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
   <div class="qa">
     {
       block.questions.map((q) => (
@@ -77,6 +94,22 @@ const chip = (p: Pick<CoverageBlockParagraph, 'cites'>) => (p.cites.length ? { s
   h2 {
     margin: 0 0 1.25rem;
     font-size: clamp(1.375rem, 3vw, 1.75rem);
+  }
+  .outside {
+    margin: 0 0 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: 0.625rem;
+    background: var(--paper, transparent);
+    border: 1px dashed var(--faint);
+  }
+  .outside h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+  }
+  .outside ul {
+    margin: 0;
+    padding-left: 1.125rem;
+    line-height: 1.6;
   }
   .qa {
     display: grid;
