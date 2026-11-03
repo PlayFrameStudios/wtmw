@@ -97,16 +97,22 @@
     }
   },
   "countsCaveat": {
-    "text": "At adoption, the Council was reported to have restored nine fire positions; the counts shown are from the April 16 plan.",
+    "text": "Position counts are from the proposed budget. At adoption on June 23, the Council restored 9 Fire positions and 1 City Manager's Office position for FY2027, paid for with $2.29M of revenue transfers, so the gap didn't change. The motion funds the Fire positions in FY2028 too; its table lists FY2027 amounts only.",
     "cites": [
       {
-        "source": "S23",
-        "page": 1,
-        "quote": "This supplemental item proposes to fund 9.00 full-time equivalent positions in the Fire Department"
+        "source": "S41",
+        "page": 3,
+        "quote": "In both FY 2027 and FY 2028 increase the amount of the revenue transfer for the Annual Ambulance Transport Revenue by $200,000 to fund the 9.0 positions in the Fire Department (for a total of $978,334 in FY 2027 as reflected in the table below)."
       },
       {
-        "source": "S24",
-        "quote": "officials preserved funding for nine positions in the fire department that had been on the chopping block"
+        "source": "S41",
+        "page": 4,
+        "quote": "1 OED FTE identified for removal in the CMO Reduction Plan ($236K) $236,000"
+      },
+      {
+        "source": "S41",
+        "page": 4,
+        "quote": "General Fund $750,000 Total $2,292,334 $25,000 Vote: All Ayes."
       }
     ]
   }

@@ -19,7 +19,8 @@ export const PINNED = {
 
 const fmt = (n: number | null) => (n === null ? 'null' : n.toLocaleString('en-US', { maximumFractionDigits: 6 }));
 
-export function validateBerkeley(budget: WorkbookBudget, checks: CrossCheck[] = []): string[] {
+/** `later` is the ids of documents.json's sources, which a workbook tab may name (Dept Reductions FY28 is S40, #63). */
+export function validateBerkeley(budget: WorkbookBudget, checks: CrossCheck[] = [], later: SourceId[] = []): string[] {
   const errors: string[] = [];
   const expectEqual = (what: string, actual: number, expected: number, tolerance = 0) => {
     if (!(Math.abs(actual - expected) <= tolerance)) {
@@ -126,10 +127,10 @@ export function validateBerkeley(budget: WorkbookBudget, checks: CrossCheck[] = 
       errors.push(`${s.id}: type "${s.type}" but publisher "${s.publisher}"`);
     }
   }
-  const known = new Set<SourceId>(ids);
+  const known = new Set<SourceId>([...ids, ...later]);
   for (const ref of allRefs(budget)) {
     for (const id of [ref.source, ...(ref.related ?? [])]) {
-      if (!known.has(id)) errors.push(`${ref.table} row ${ref.row}: source ${id} is not in Sources & Links`);
+      if (!known.has(id)) errors.push(`${ref.table} row ${ref.row}: source ${id} is not in Sources & Links or documents.json`);
     }
   }
 

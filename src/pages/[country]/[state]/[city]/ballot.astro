@@ -6,9 +6,11 @@
  * colors and weight. Results are a data change in ballot.json (status).
  */
 import ReadMore from '../../../../components/ReadMore.astro';
+import Restored from '../../../../components/Restored.astro';
 import SourceChip from '../../../../components/SourceChip.astro';
 import Sourced from '../../../../components/Sourced.astro';
 import Base from '../../../../layouts/Base.astro';
+import { restorationsFor } from '../../../../lib/adoption';
 import { ballotFileFor, ballotPage, type Outcome } from '../../../../lib/ballot';
 import { budgetFor } from '../../../../lib/budget';
 import { gapPlan } from '../../../../data/types';
@@ -44,6 +46,8 @@ const people = (filled: number) => Array.from({ length: p.pictogramSlots }, (_, 
 const depts = departmentsPage(budget, familiesFor(city, budget), shortNames(city.path, budget), city.budget.years, (y) => fy(city.budget.labels, y));
 const [firstYear] = depts.years;
 const split = byOutcome(depts.rows, firstYear);
+// What the Council restored at adoption (#63), beside the proposed cut it softens.
+const restored = restorationsFor(budget);
 const OUTCOMES = ['passes', 'fails'] as const;
 const barW = (v: number) => `${((v / split.max) * 100).toFixed(2)}%`;
 const list = (xs: string[]) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
@@ -163,6 +167,11 @@ const planDate = longDate(p.plan.date!);
                   <span class="dc-cut" style={`width:${barW(v.d.netReduction)}`} />
                   <span class="dc-soft" style={`width:${barW(v.d.salesTaxAllocation)}`} />
                 </span>
+                {restored.has(r.id) && (
+                  <span class="dc-restored" data-restored={r.id}>
+                    <Restored city={city} n={restored.get(r.id)!} />
+                  </span>
+                )}
               </li>
             );
           })
@@ -176,6 +185,11 @@ const planDate = longDate(p.plan.date!);
               <li data-dept={r.id}>
                 <span>{r.display}</span>{' '}
                 <span class="num">{figure.value === 0 ? 'no cut' : <Sourced city={city} figure={figure}>{shortMoney(figure.value)}</Sourced>}</span>
+                {restored.has(r.id) && (
+                  <span class="dc-restored" data-restored={r.id}>
+                    <Restored city={city} n={restored.get(r.id)!} />
+                  </span>
+                )}
               </li>
             ))
           }
@@ -486,8 +500,17 @@ const planDate = longDate(p.plan.date!);
   }
   .dc-same li {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0 1rem;
+  }
+  /* What the Council restored at adoption (#63), under the proposed cut it softens. */
+  .dc-restored {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    flex-basis: 100%;
+    color: var(--muted);
+    font-size: 0.8125rem;
   }
   .dc-all {
     display: inline-block;

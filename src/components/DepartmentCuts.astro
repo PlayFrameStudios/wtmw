@@ -7,8 +7,11 @@
  * The Gap has a year switch of its own (#year-fy2027), so every control here is prefixed "cuts-": unprefixed,
  * the two would be one radio group with duplicate ids, and The Gap's :has(#year-…) rules would follow this one.
  */
+import Restored from './Restored.astro';
+import SourceChip from './SourceChip.astro';
 import Sourced from './Sourced.astro';
 import { gapPlan } from '../data/types';
+import { restorationsFor } from '../lib/adoption';
 import { budgetFor } from '../lib/budget';
 import type { City } from '../lib/cities';
 import { fy } from '../lib/city-settings';
@@ -25,6 +28,8 @@ const YEARS = p.years;
 const measure = `Measure ${budget.documentFacts.salesTaxMeasure.letter}`;
 const primary = sourcesById(budget).get('S1')!;
 const yearOf = (y: Year) => Number(y.slice(2));
+// What the Council restored at adoption (#63): shown beside the proposed cut, never taken off it.
+const restored = restorationsFor(budget);
 const yearLabel = (y: Year) => fy(city.budget.labels, yearOf(y));
 const short = (y: Year) => fy(city.budget.labels, yearOf(y), 'short');
 // Only one year shows at a time: hide the others' figures.
@@ -218,6 +223,25 @@ const selectRules = p.rows
                       ));
                     })}
                   </dl>
+                  {restored.has(r.id) &&
+                    (() => {
+                      const n = restored.get(r.id)!;
+                      if (yearOf(y) === 2027)
+                        return (
+                          <p class="panel-note" data-restored={r.id}>
+                            <Restored city={city} n={n} />
+                          </p>
+                        );
+                      // The motion's own words: the same positions in both years, with amounts for the first only.
+                      return (
+                        n.r.bothYears && (
+                          <p class="panel-note" data-restored={r.id}>
+                            The adopted motion funds the same {n.r.positions} positions in {yearLabel(y)}; its table lists {fy(city.budget.labels, 2027)} amounts only.
+                            <SourceChip city={city} source={n.motion.source} at={n.motion} />
+                          </p>
+                        )
+                      );
+                    })()}
                 </div>
               );
             })}

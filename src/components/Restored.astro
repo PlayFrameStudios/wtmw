@@ -1,0 +1,25 @@
+---
+/**
+ * What the Council restored at adoption, said beside a department's proposed cut (#63): the amount, with its line in
+ * the motion's table as the receipt, and the motion itself where its words back the sentence (the funding).
+ */
+import SourceChip from './SourceChip.astro';
+import Sourced from './Sourced.astro';
+import { restoredMoney, type RestorationNote } from '../lib/adoption';
+import type { City } from '../lib/cities';
+
+const { city, n } = Astro.props as { city: City; n: RestorationNote };
+const amount = restoredMoney(n.r.amount);
+---
+
+At adoption, the Council restored{' '}{
+  n.r.positions > 1 ? (
+    <>
+      <Sourced city={city} figure={n.figure}>{amount}</Sourced> of this, for {n.r.positions} positions ({n.r.what})
+    </>
+  ) : (
+    <>
+      {n.r.what} (<Sourced city={city} figure={n.figure}>{amount}</Sourced>)
+    </>
+  )
+}{n.r.funding ? `, ${n.r.funding}` : ''}.{n.r.funding && <SourceChip city={city} source={n.motion.source} at={n.motion} />}

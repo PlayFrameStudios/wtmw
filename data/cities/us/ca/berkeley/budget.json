@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "workbook": {
     "file": "source/Berkeley_Budget_FY25-FY28.xlsx",
-    "sha256": "944ea34b26979ee07bfdbe67a00d2ccf1ae1e9c6d48d591dedd6ed0526fb8f77"
+    "sha256": "7a45296e193f635b1f062a3faedd459bf4ec9a07f6327f49dede0229f414e911"
   },
   "notes": {
     "coverage": "FY2025–FY2028",
@@ -431,6 +431,30 @@
       "type": "city",
       "usedFor": "Principal property taxpayers",
       "number": 39
+    },
+    {
+      "id": "S40",
+      "publisher": "City of Berkeley",
+      "title": "Proposed FY 2027 and FY 2028 Biennial Budget, staff report (Item 21)",
+      "committee": "City Council",
+      "date": "2026-05-19",
+      "dateLabel": "May 19 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-05/2026-05-19%20Item%2021%20Proposed%20FY%202027%20and%20FY%202028.pdf",
+      "type": "city",
+      "usedFor": "FY2028 department baselines and proposed cuts",
+      "number": 40
+    },
+    {
+      "id": "S41",
+      "publisher": "City of Berkeley",
+      "title": "Special Meeting Annotated Agenda (budget adoption)",
+      "committee": "City Council",
+      "date": "2026-06-23",
+      "dateLabel": "Jun 23 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/city-council-meetings/2026-06-23%20Annotated%20Agenda%20-%20Council.pdf",
+      "type": "city",
+      "usedFor": "The adopted motion: positions restored at adoption and the revenue transfers that pay for them",
+      "number": 41
     }
   ],
   "generalFund": [
@@ -602,152 +626,186 @@
           "id": "city-attorney",
           "name": "City Attorney",
           "kind": "department",
-          "amount": 7696001,
-          "source": "S1",
+          "amount": 7828432,
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 5
+          "row": 5,
+          "page": 11,
+          "quote": "City Attorney 7,828,432 0 7,828,432 0.0% 0 0 0.0%"
         },
         {
           "id": "city-auditor",
           "name": "City Auditor",
           "kind": "department",
-          "amount": 3929199,
-          "source": "S1",
+          "amount": 4061371,
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 6
+          "row": 6,
+          "page": 11,
+          "quote": "City Auditor 4,061,371 367,458 3,693,914 9.0% 0 367,458 9.0%"
         },
         {
           "id": "odpa",
           "name": "Office of Dir. of Police Accountability (ODPA)",
           "kind": "department",
-          "amount": 1289953,
-          "source": "S1",
+          "amount": 1339846,
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 7
+          "row": 7,
+          "page": 11,
+          "quote": "ODPA 1,339,846 71,708 1,268,138 5.4% 0 71,708 5.4%"
         },
         {
           "id": "mayor-council",
           "name": "Mayor & Council",
           "kind": "department",
-          "amount": 6899331,
-          "source": "S1",
+          "amount": 7014592,
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 8
+          "row": 8,
+          "page": 11,
+          "quote": "Mayor & Council* 7,014,592 877,248 6,136,365 12.5% 0 877,248 12.5%"
         },
         {
           "id": "city-clerk",
           "name": "City Clerk",
           "kind": "department",
           "amount": 3998036,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 9
+          "row": 9,
+          "page": 11,
+          "quote": "City Clerk (1) 3,998,036 94,456 3,903,580 2.4% 0 94,456 2.4%"
         },
         {
           "id": "cmo",
           "name": "City Manager's Office (CMO)",
           "kind": "department",
           "amount": 19041413,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 10
+          "row": 10,
+          "page": 11,
+          "quote": "CMO 19,041,413 2,432,623 16,608,790 12.8% 0 2,432,623 12.8%"
         },
         {
           "id": "finance",
           "name": "Finance",
           "kind": "department",
           "amount": 10178435,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 11
+          "row": 11,
+          "page": 11,
+          "quote": "Finance 10,178,435 715,714 9,462,721 7.0% 0 715,714 7.0%"
         },
         {
           "id": "fire",
           "name": "Fire",
           "kind": "department",
           "amount": 57206818,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 12
+          "row": 12,
+          "page": 11,
+          "quote": "Fire 57,206,818 6,800,791 50,406,027 11.9% 3,703,328 3,097,463 5.4%"
         },
         {
           "id": "hhcs",
           "name": "Health, Housing & Community Svcs (HHCS)",
           "kind": "department",
           "amount": 38021381,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 13
+          "row": 13,
+          "page": 11,
+          "quote": "HHCS 38,021,381 3,455,468 34,565,913 9.1% 0 3,455,468 9.1%"
         },
         {
           "id": "human-resources",
           "name": "Human Resources",
           "kind": "department",
           "amount": 5387455,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 14
+          "row": 14,
+          "page": 11,
+          "quote": "HR 5,387,455 622,032 4,765,423 11.5% 0 622,032 11.5%"
         },
         {
           "id": "information-technology",
           "name": "Information Technology",
           "kind": "department",
           "amount": 1150454,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 15
+          "row": 15,
+          "page": 11,
+          "quote": "IT 1,150,454 185,391 965,062 16.1% 0 185,391 16.1%"
         },
         {
           "id": "prw",
           "name": "Parks, Recreation & Waterfront (PRW)",
           "kind": "department",
           "amount": 13382163,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 16
+          "row": 16,
+          "page": 11,
+          "quote": "PRW 13,382,163 1,205,811 12,176,353 9.0% 477,313 728,498 5.4%"
         },
         {
           "id": "planning-development",
           "name": "Planning & Development",
           "kind": "department",
           "amount": 3763360,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 17
+          "row": 17,
+          "page": 11,
+          "quote": "Planning & Dev. 3,763,360 470,419 3,292,941 12.5% 0 470,419 12.5%"
         },
         {
           "id": "police",
           "name": "Police",
           "kind": "department",
           "amount": 107356946,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 18
+          "row": 18,
+          "page": 11,
+          "quote": "Police 107,356,946 10,789,378 96,567,568 10.1% 5,453,304 5,336,074 5.0%"
         },
         {
           "id": "public-works",
           "name": "Public Works",
           "kind": "department",
           "amount": 8302692,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 19
+          "row": 19,
+          "page": 11,
+          "quote": "Public Works 8,302,692 1,084,523 7,218,169 13.1% 0 1,084,523 13.1%"
         },
         {
           "id": "it-cost-allocation-plan",
           "name": "IT Cost Allocation Plan",
           "kind": "department",
           "amount": 600000,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 20
+          "row": 20,
+          "page": 11,
+          "quote": "IT Cost Allocation Plan 600,000 0 600,000"
         }
       ],
       "total": {
-        "amount": 288203637,
-        "source": "S1",
+        "amount": 288633394,
+        "source": "S40",
         "table": "Dept Reductions FY28",
-        "row": 21
+        "row": 21,
+        "page": 12,
+        "quote": "Total Citywide 288,033,394 29,773,019 258,260,375 10.3% 9,633,945 20,139,074 7.0%"
       }
     }
   ],
@@ -1517,61 +1575,69 @@
           "id": "city-attorney",
           "name": "City Attorney",
           "charter": true,
-          "baseline": 7696001,
+          "baseline": 7828432,
           "reduction": 0,
           "salesTaxAllocation": 0,
-          "budgetAfterReduction": 7696001,
+          "budgetAfterReduction": 7828432,
           "reductionPct": 0,
           "netReduction": 0,
           "netReductionPct": 0,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 5
+          "row": 5,
+          "page": 11,
+          "quote": "City Attorney 7,828,432 0 7,828,432 0.0% 0 0 0.0%"
         },
         {
           "id": "city-auditor",
           "name": "City Auditor",
           "charter": true,
-          "baseline": 3929199,
-          "reduction": 288560,
+          "baseline": 4061371,
+          "reduction": 367458,
           "salesTaxAllocation": 0,
-          "budgetAfterReduction": 3640639,
-          "reductionPct": 0.07343990467268265,
-          "netReduction": 288560,
-          "netReductionPct": 0.07343990467268265,
-          "source": "S1",
+          "budgetAfterReduction": 3693913,
+          "reductionPct": 0.09047634407198948,
+          "netReduction": 367458,
+          "netReductionPct": 0.09047634407198948,
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 6
+          "row": 6,
+          "page": 11,
+          "quote": "City Auditor 4,061,371 367,458 3,693,914 9.0% 0 367,458 9.0%"
         },
         {
           "id": "odpa",
           "name": "Office of Dir. of Police Accountability (ODPA)",
           "charter": true,
-          "baseline": 1289953,
+          "baseline": 1339846,
           "reduction": 71708,
           "salesTaxAllocation": 0,
-          "budgetAfterReduction": 1218245,
-          "reductionPct": 0.05558962225755512,
+          "budgetAfterReduction": 1268138,
+          "reductionPct": 0.053519583593935424,
           "netReduction": 71708,
-          "netReductionPct": 0.05558962225755512,
-          "source": "S1",
+          "netReductionPct": 0.053519583593935424,
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 7
+          "row": 7,
+          "page": 11,
+          "quote": "ODPA 1,339,846 71,708 1,268,138 5.4% 0 71,708 5.4%"
         },
         {
           "id": "mayor-council",
           "name": "Mayor & Council",
           "charter": true,
-          "baseline": 6899331,
-          "reduction": 863145,
+          "baseline": 7014592,
+          "reduction": 877248,
           "salesTaxAllocation": 0,
-          "budgetAfterReduction": 6036186,
-          "reductionPct": 0.12510560806547766,
-          "netReduction": 863145,
-          "netReductionPct": 0.12510560806547766,
-          "source": "S1",
+          "budgetAfterReduction": 6137344,
+          "reductionPct": 0.1250604454257639,
+          "netReduction": 877248,
+          "netReductionPct": 0.1250604454257639,
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 8
+          "row": 8,
+          "page": 11,
+          "quote": "Mayor & Council* 7,014,592 877,248 6,136,365 12.5% 0 877,248 12.5%"
         },
         {
           "id": "city-clerk",
@@ -1584,9 +1650,11 @@
           "reductionPct": 0.023625600169683316,
           "netReduction": 94456,
           "netReductionPct": 0.023625600169683316,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 9
+          "row": 9,
+          "page": 11,
+          "quote": "City Clerk (1) 3,998,036 94,456 3,903,580 2.4% 0 94,456 2.4%"
         },
         {
           "id": "cmo",
@@ -1599,9 +1667,11 @@
           "reductionPct": 0.12775433209709805,
           "netReduction": 2432623,
           "netReductionPct": 0.12775433209709805,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 10
+          "row": 10,
+          "page": 11,
+          "quote": "CMO 19,041,413 2,432,623 16,608,790 12.8% 0 2,432,623 12.8%"
         },
         {
           "id": "finance",
@@ -1614,9 +1684,11 @@
           "reductionPct": 0.07031670389406623,
           "netReduction": 715714,
           "netReductionPct": 0.07031670389406623,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 11
+          "row": 11,
+          "page": 11,
+          "quote": "Finance 10,178,435 715,714 9,462,721 7.0% 0 715,714 7.0%"
         },
         {
           "id": "fire",
@@ -1629,9 +1701,11 @@
           "reductionPct": 0.11888077746257447,
           "netReduction": 3097463,
           "netReductionPct": 0.054144997192467514,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 12
+          "row": 12,
+          "page": 11,
+          "quote": "Fire 57,206,818 6,800,791 50,406,027 11.9% 3,703,328 3,097,463 5.4%"
         },
         {
           "id": "hhcs",
@@ -1644,9 +1718,11 @@
           "reductionPct": 0.0908822328152678,
           "netReduction": 3455468,
           "netReductionPct": 0.0908822328152678,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 13
+          "row": 13,
+          "page": 11,
+          "quote": "HHCS 38,021,381 3,455,468 34,565,913 9.1% 0 3,455,468 9.1%"
         },
         {
           "id": "human-resources",
@@ -1659,9 +1735,11 @@
           "reductionPct": 0.11545934026363097,
           "netReduction": 622032,
           "netReductionPct": 0.11545934026363097,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 14
+          "row": 14,
+          "page": 11,
+          "quote": "HR 5,387,455 622,032 4,765,423 11.5% 0 622,032 11.5%"
         },
         {
           "id": "information-technology",
@@ -1674,24 +1752,28 @@
           "reductionPct": 0.16114594759981712,
           "netReduction": 185391,
           "netReductionPct": 0.16114594759981712,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 15
+          "row": 15,
+          "page": 11,
+          "quote": "IT 1,150,454 185,391 965,062 16.1% 0 185,391 16.1%"
         },
         {
           "id": "prw",
           "name": "Parks, Recreation & Waterfront (PRW)",
           "charter": false,
           "baseline": 13382163,
-          "reduction": 1205810,
+          "reduction": 1205811,
           "salesTaxAllocation": 477313,
-          "budgetAfterReduction": 12176353,
-          "reductionPct": 0.09010576242420601,
-          "netReduction": 728497,
-          "netReductionPct": 0.0544379111209451,
-          "source": "S1",
+          "budgetAfterReduction": 12176352,
+          "reductionPct": 0.09010583715054137,
+          "netReduction": 728498,
+          "netReductionPct": 0.05443798584728044,
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 16
+          "row": 16,
+          "page": 11,
+          "quote": "PRW 13,382,163 1,205,811 12,176,353 9.0% 477,313 728,498 5.4%"
         },
         {
           "id": "planning-development",
@@ -1704,9 +1786,11 @@
           "reductionPct": 0.1249997342800051,
           "netReduction": 470419,
           "netReductionPct": 0.1249997342800051,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 17
+          "row": 17,
+          "page": 11,
+          "quote": "Planning & Dev. 3,763,360 470,419 3,292,941 12.5% 0 470,419 12.5%"
         },
         {
           "id": "police",
@@ -1719,9 +1803,11 @@
           "reductionPct": 0.10050004589363039,
           "netReduction": 5336074,
           "netReductionPct": 0.04970404057507374,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 18
+          "row": 18,
+          "page": 11,
+          "quote": "Police 107,356,946 10,789,378 96,567,568 10.1% 5,453,304 5,336,074 5.0%"
         },
         {
           "id": "public-works",
@@ -1734,9 +1820,11 @@
           "reductionPct": 0.13062305575107447,
           "netReduction": 1084523,
           "netReductionPct": 0.13062305575107447,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 19
+          "row": 19,
+          "page": 11,
+          "quote": "Public Works 8,302,692 1,084,523 7,218,169 13.1% 0 1,084,523 13.1%"
         },
         {
           "id": "it-cost-allocation-plan",
@@ -1749,22 +1837,26 @@
           "reductionPct": 1,
           "netReduction": 600000,
           "netReductionPct": 1,
-          "source": "S1",
+          "source": "S40",
           "table": "Dept Reductions FY28",
-          "row": 20
+          "row": 20,
+          "page": 11,
+          "quote": "IT Cost Allocation Plan 600,000 0 600,000"
         }
       ],
       "total": {
-        "baseline": 288203637,
-        "reduction": 29680018,
+        "baseline": 288633394,
+        "reduction": 29773020,
         "salesTaxAllocation": 9633945,
-        "budgetAfterReduction": 258523619,
-        "reductionPct": 0.10298280170558709,
-        "netReduction": 20046073,
-        "netReductionPct": 0.06955523951281711,
-        "source": "S1",
+        "budgetAfterReduction": 258860374,
+        "reductionPct": 0.10315168174892472,
+        "netReduction": 20139075,
+        "netReductionPct": 0.06977389109729971,
+        "source": "S40",
         "table": "Dept Reductions FY28",
-        "row": 21
+        "row": 21,
+        "page": 12,
+        "quote": "Total Citywide 288,033,394 29,773,019 258,260,375 10.3% 9,633,945 20,139,074 7.0%"
       }
     }
   ],
@@ -3169,6 +3261,72 @@
       "letter": "U",
       "title": "General Obligation Bond Measure for Public Infrastructure and Facilities",
       "vote": "2/3 vote"
+    },
+    "adoptionAmendments": {
+      "motion": {
+        "source": "S41",
+        "page": 3,
+        "quote": "In both FY 2027 and FY 2028 increase the amount of the revenue transfer for the Annual Ambulance Transport Revenue by $200,000 to fund the 9.0 positions in the Fire Department (for a total of $978,334 in FY 2027 as reflected in the table below)."
+      },
+      "spending": {
+        "source": "S41",
+        "page": 4,
+        "quote": "Total $2,292,334 $25,000 General Fund: Revenue Transfers",
+        "amount": 2292334
+      },
+      "transfers": {
+        "source": "S41",
+        "page": 4,
+        "quote": "General Fund $750,000 Total $2,292,334 $25,000 Vote: All Ayes.",
+        "amount": 2292334
+      },
+      "restored": [
+        {
+          "department": "fire",
+          "amount": 1728334,
+          "positions": 9,
+          "what": "a fire inspector, 5 firefighters and 3 paramedics",
+          "lines": [
+            {
+              "label": "Fire Inspector 1.0 FTE",
+              "amount": 238232
+            },
+            {
+              "label": "5.0 FTE Fire Fighters (Step 1)",
+              "amount": 1109795
+            },
+            {
+              "label": "3.0 FTE Paramedics (Step 1)",
+              "amount": 380307
+            }
+          ],
+          "bothYears": true,
+          "funding": "paid for with revenue transfers that include more ambulance transport revenue",
+          "cite": {
+            "source": "S41",
+            "page": 4,
+            "quote": "Fire Inspector 1.0 FTE $238,232 5.0 FTE Fire Fighters (Step 1) $1,109,795 3.0 FTE Paramedics (Step 1) $380,307"
+          }
+        },
+        {
+          "department": "cmo",
+          "amount": 236000,
+          "positions": 1,
+          "what": "one economic development position",
+          "lines": [
+            {
+              "label": "1 OED FTE identified for removal in the CMO Reduction Plan ($236K)",
+              "amount": 236000
+            }
+          ],
+          "bothYears": false,
+          "cite": {
+            "source": "S41",
+            "page": 4,
+            "quote": "1 OED FTE identified for removal in the CMO Reduction Plan ($236K) $236,000"
+          }
+        }
+      ]
     }
   },
   "coverage": {

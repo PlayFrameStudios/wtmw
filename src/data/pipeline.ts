@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 import { access, readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { extractBerkeley } from './berkeley/extract.ts';
+import { applyPrintedRows } from './berkeley/printed-rows.ts';
 import { validateBerkeley } from './berkeley/validate.ts';
 import { ALWAYS_PAGES, applyCoverage, type CoverageFile } from './coverage.ts';
 import { applyDocuments, checkQuotesIn, type DocumentsFile, type Excerpts } from './documents.ts';
@@ -14,6 +15,7 @@ import { buildFremont, type FremontDocuments } from './fremont/build.ts';
 import { buildLafayette, type LafayetteDocuments } from './lafayette/build.ts';
 import { applyFaq, type CityFaqFile, type SiteFaqFile } from './faq.ts';
 import { applySchools, type SchoolsFile } from './schools.ts';
+import { byNumber, checkNumbering } from './source-numbers.ts';
 import type { CityBudget, DocRef, GapBudget } from './types.ts';
 import { openWorkbook } from './workbook.ts';
 
@@ -25,14 +27,15 @@ export const PIPELINES: Record<string, Pipeline> = {
   'us/ca/berkeley': {
     workbook: 'source/Berkeley_Budget_FY25-FY28.xlsx',
     build: async (path, meta, cityDir) => {
-      const { budget, checks } = await extractBerkeley(await openWorkbook(path), meta);
-      const errors = validateBerkeley(budget, checks);
       const docs = await readDocuments(cityDir);
+      const { budget, checks } = await extractBerkeley(await openWorkbook(path), meta, docs.file.sources);
+      const errors = validateBerkeley(budget, checks, docs.file.sources.map((s) => s.id));
       const merged = applyDocuments(budget, docs.file, docs.excerpts);
       const ballot = JSON.parse(await readFile(join(cityDir, 'ballot.json'), 'utf8'));
       const known = new Set<string>(merged.budget.sources.map((s) => s.id));
+      const printed = applyPrintedRows(merged.budget, docs.file.departmentRows, docs.excerpts, known);
       const quotes = checkQuotesIn(ballot, docs.excerpts, known, 'ballot.json');
-      return { budget: merged.budget, errors: [...errors, ...merged.errors, ...quotes] };
+      return { budget: printed.budget, errors: [...errors, ...merged.errors, ...printed.errors, ...quotes] };
     },
   },
   'us/ca/fremont': {
@@ -79,7 +82,9 @@ export async function buildCity(root: string, city: string, workbookPath?: strin
           const sha256 = createHash('sha256').update(await readFile(path)).digest('hex');
           return withCoverage(await pipeline.build(path, { file: pipeline.workbook!, sha256 }, cityDir), cityDir, root);
         })();
-  return { ...result, errors: [...result.errors, ...(await checkScans(result.budget, root, city))] };
+  const numbering = checkNumbering(result.budget.sources).map((e) => `${city}: ${e}`);
+  const budget = { ...result.budget, sources: byNumber(result.budget.sources) } as CityBudget;
+  return { budget, errors: [...result.errors, ...numbering, ...(await checkScans(budget, root, city))] };
 }
 
 /** Every cite read from a scanned page (#59), wherever it sits in budget.json. */

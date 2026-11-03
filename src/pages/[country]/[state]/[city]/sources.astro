@@ -14,6 +14,8 @@ import Base from '../../../../layouts/Base.astro';
 import { csvTables } from '../../../../data/csv';
 import { hasGapPlan } from '../../../../data/types';
 import { budgetFor } from '../../../../lib/budget';
+import { fy as fyLabel } from '../../../../lib/city-settings';
+import { fullNames } from '../../../../lib/departments';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
 import { shortMoney } from '../../../../lib/format';
 import { ballotFileFor } from '../../../../lib/ballot';
@@ -39,7 +41,8 @@ const raw = new Map(budget.sources.map((s) => [s.id, s]));
 // A deficit-plan city (Berkeley) has its known-gaps cards and its workbook; a city built from documents (#43), its own cards.
 const plan = hasGapPlan(budget) ? budget : undefined;
 // The pages each document is cited at: every page a budget.json record quotes, for a city built from documents.
-const pages = plan ? pagesBySource(plan.documentFacts, ballotFileFor(city.path)) : pagesBySource({ ...budget, sources: [] });
+// A department table a later document prints row by row cites its pages too (FY2028's, Item 21, #63).
+const pages = plan ? pagesBySource(plan.documentFacts, ballotFileFor(city.path), plan.departmentReductions) : pagesBySource({ ...budget, sources: [] });
 const pageList = (id: (typeof sources)[number]['id'], ps: number[]) => `${ps.length > 1 ? 'pp.' : 'p.'} ${ps.map((p) => folio(raw.get(id)!, p)).join(', ')}`;
 const meta = (id: (typeof sources)[number]['id'], date?: string) =>
   [raw.get(id)!.publisher, date, raw.get(id)!.usedFor, pages.has(id) ? pageList(id, pages.get(id)!) : undefined].filter(Boolean).join(' · ');
@@ -58,9 +61,20 @@ const g = plan && {
   workbookProgram: plan.capitalProgram.total,
   liabilities: plan.personnelAndPension.unfundedLiabilities,
   itAllocation: plan.departmentReductions[0].departments.find((d) => d.id === 'it-cost-allocation-plan')!,
+  // #63: what the annotated agenda records the Council changing at adoption.
+  amendments: plan.documentFacts.adoptionAmendments,
+  generalFund: plan.size.generalFund,
 };
 const adoptedOn = g && new Date(`${g.adoption.date}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
 const liability = (asOf: string) => g!.liabilities.find((l) => l.asOf.startsWith(asOf))!;
+// "9 Fire positions and 1 City Manager's Office position", from the restorations.
+const restoredList =
+  g &&
+  (() => {
+    const name = fullNames(city.path, plan!);
+    const items = g.amendments.restored.map((r) => `${r.positions} ${name[r.department]} position${r.positions === 1 ? '' : 's'}`);
+    return items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`;
+  })();
 // A city built from documents: what its gap cards cite.
 const statements = budget.statements ?? {};
 const facts = budget.facts ?? {};
@@ -195,15 +209,30 @@ const humanize = (name: string) =>
             </p>
           </li>
           <li class="gap card" data-gap="adoption">
-            <h3>Adopted with amendments not yet in City records</h3>
+            <h3>Adopted with amendments</h3>
             <p>
-              The Council adopted the budget on {adoptedOn} "as amended by subsequent Council action". A Council supplemental proposed restoring nine fire positions, and reporting says the Council funded
-              them. Until the minutes are posted, position and workforce counts are from the April 16 plan.<SourceChip
+              The Council adopted the budget on {adoptedOn} "as amended by subsequent Council action".<SourceChip city={city} source={g.adoption.source} at={g.adoption} />{' '}
+              The annotated agenda records the amendments: the Council restored {restoredList} for {fyLabel(city.budget.labels, 2027)}, paid for with{' '}
+              <Sourced city={city} figure={{ value: g.amendments.transfers.amount, label: 'Revenue transfers added at adoption, FY2027', ref: g.amendments.transfers, tone: 'neutral' }}
+                >{shortMoney(g.amendments.transfers.amount, 2)}</Sourced
+              >{' '}
+              of revenue transfers, so the gap didn't change.<SourceChip
                 city={city}
-                source={g.adoption.source}
-                at={g.adoption}
+                source={g.amendments.motion.source}
+                at={g.amendments.motion}
                 also={[{ source: 'S23' }, { source: 'S24' }]}
-              />
+              />{' '}
+              Department cuts and position counts on this site are the proposal's; the Fire and City Manager's Office cuts say what was restored.
+            </p>
+            <p>
+              The overview's{' '}
+              <Sourced city={city} figure={{ value: g.generalFund.amount, label: 'General Fund spending, FY2027 (adoption staff report estimate)', ref: g.generalFund, tone: 'neutral' }}
+                >{shortMoney(g.generalFund.amount)}</Sourced
+              >{' '}
+              General Fund total is the adoption staff report's estimate, from before these amendments. The General Fund additions in the motion's table come to{' '}
+              <Sourced city={city} figure={{ value: g.amendments.spending.amount, label: 'General Fund spending added at adoption, FY2027', ref: g.amendments.spending, tone: 'neutral' }}
+                >{shortMoney(g.amendments.spending.amount, 2)}</Sourced
+              >, matched by the same amount of revenue transfers.
             </p>
           </li>
           <li class="gap card" data-gap="capital-total">
