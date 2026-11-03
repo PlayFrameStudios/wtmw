@@ -8,6 +8,7 @@
  */
 import { CITY_PAGES } from '../lib/city-pages.ts';
 import { checkQuote, normalize, type Excerpts } from './documents.ts';
+import { nextNumber } from './source-numbers.ts';
 import { COVERAGE_QUESTIONS, type CityBudget, type Coverage, type CoverageParagraph, type DocRef, type GlossaryEntry, type NotInBudget, type Source } from './types.ts';
 
 export interface CoverageFile {
@@ -113,7 +114,7 @@ export function applyCoverage(
   pages: readonly string[] = ALWAYS_PAGES,
 ): { budget: CityBudget; errors: string[] } {
   const errors: string[] = [];
-  const first = budget.sources.length + 1;
+  const first = nextNumber(budget.sources);
   const added: Source[] = file.sources.map((s, i) => ({ ...s, number: first + i }));
   added.forEach((s, i) => {
     if (s.id !== `S${first + i}`) errors.push(`coverage.json: source ${i + 1} is ${s.id}, expected S${first + i} (it continues the City's numbering)`);

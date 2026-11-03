@@ -269,6 +269,9 @@ export interface DepartmentReduction extends Ref {
   netReduction: number;
   /** Derived: netReduction / baseline. */
   netReductionPct: number;
+  /** Where a later City document prints the same row (#63: FY2028's are Item 21's): its PDF page and the row as printed. */
+  page?: number;
+  quote?: string;
 }
 
 export interface DepartmentReductionTotal extends Ref {
@@ -279,6 +282,8 @@ export interface DepartmentReductionTotal extends Ref {
   reductionPct: number;
   netReduction: number;
   netReductionPct: number;
+  page?: number;
+  quote?: string;
 }
 
 export interface DepartmentReductions {

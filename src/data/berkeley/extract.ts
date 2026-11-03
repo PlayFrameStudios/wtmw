@@ -39,7 +39,9 @@ import type { Tab, Workbook } from '../workbook.ts';
 /**
  * Each tab names its source in prose on row 2. Pin that line and the S-number
  * it means, and require the S-number's title to agree, so an edited workbook
- * can't silently re-point a tab at the wrong document.
+ * can't silently re-point a tab at the wrong document. A tab can name a document
+ * published after the workbook (documents.json's sources): Dept Reductions FY28
+ * is the May 19 proposed budget's table, which the April 16 plan doesn't have (#63).
  */
 const TAB_SOURCES: Record<string, { line: string; source: SourceId; titleIncludes: string }> = {
   'GF Revenue FY26': {
@@ -58,9 +60,9 @@ const TAB_SOURCES: Record<string, { line: string; source: SourceId; titleInclude
     titleIncludes: 'FY27-FY28 Budget Balancing Plan',
   },
   'Dept Reductions FY28': {
-    line: 'Source: Berkeley Budget & Finance Committee, FY27-FY28 Budget Balancing Plan, April 16, 2026',
-    source: 'S1',
-    titleIncludes: 'FY27-FY28 Budget Balancing Plan',
+    line: 'Source: City of Berkeley, Proposed FY 2027 and FY 2028 Biennial Budget, staff report (Item 21), May 19, 2026',
+    source: 'S40',
+    titleIncludes: 'Proposed FY 2027 and FY 2028 Biennial Budget',
   },
   'FTE & Positions': {
     line: 'Source: Berkeley Budget & Finance Committee, FY27-FY28 Budget Balancing Plan, April 16, 2026',
@@ -148,7 +150,8 @@ function rowsUntil(tab: Tab, start: number, stop: string): [number[], number] {
   throw new Error(`${tab.name}: no "${stop}" row found below row ${start}`);
 }
 
-export async function extractBerkeley(wb: Workbook, meta: GapBudget['workbook']) {
+/** `later` is documents.json's sources, which a tab's source line may name. */
+export async function extractBerkeley(wb: Workbook, meta: GapBudget['workbook'], later: Pick<Source, 'id' | 'title'>[] = []) {
   const checks: CrossCheck[] = [];
   /** Record a formula cell the workbook computed, beside our own value for it. */
   const check = (tab: Tab, address: string, computed: number | null) => {
@@ -157,7 +160,7 @@ export async function extractBerkeley(wb: Workbook, meta: GapBudget['workbook'])
   };
 
   const sources = readSources(wb.tab('Sources & Links'));
-  const byId = new Map(sources.map((s) => [s.id, s]));
+  const byId = new Map<string, Pick<Source, 'id' | 'title'>>([...sources, ...later].map((s) => [s.id, s]));
 
   const sourced = (name: string) => {
     const tab = wb.tab(name);

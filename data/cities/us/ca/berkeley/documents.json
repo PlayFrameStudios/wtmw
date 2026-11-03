@@ -77,6 +77,28 @@
       "url": "https://berkeleyca.gov/sites/default/files/Berkeley_Sales%20Tax%20-%20Full%20Text.pdf",
       "type": "city",
       "usedFor": "The sales-tax measure as voters will see it"
+    },
+    {
+      "id": "S40",
+      "publisher": "City of Berkeley",
+      "title": "Proposed FY 2027 and FY 2028 Biennial Budget, staff report (Item 21)",
+      "committee": "City Council",
+      "date": "2026-05-19",
+      "dateLabel": "May 19 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-05/2026-05-19%20Item%2021%20Proposed%20FY%202027%20and%20FY%202028.pdf",
+      "type": "city",
+      "usedFor": "FY2028 department baselines and proposed cuts"
+    },
+    {
+      "id": "S41",
+      "publisher": "City of Berkeley",
+      "title": "Special Meeting Annotated Agenda (budget adoption)",
+      "committee": "City Council",
+      "date": "2026-06-23",
+      "dateLabel": "Jun 23 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/city-council-meetings/2026-06-23%20Annotated%20Agenda%20-%20Council.pdf",
+      "type": "city",
+      "usedFor": "The adopted motion: positions restored at adoption and the revenue transfers that pay for them"
     }
   ],
   "quotes": {
@@ -334,6 +356,92 @@
           "quote": "The City’s governmental activities revenues generally outpaced expenses"
         }
       ]
+    }
+  },
+  "departmentRows": {
+    "year": 2028,
+    "source": "S40",
+    "rows": {
+      "city-attorney": {
+        "page": 11,
+        "quote": "City Attorney 7,828,432 0 7,828,432 0.0% 0 0 0.0%"
+      },
+      "city-auditor": {
+        "page": 11,
+        "quote": "City Auditor 4,061,371 367,458 3,693,914 9.0% 0 367,458 9.0%"
+      },
+      "odpa": {
+        "page": 11,
+        "quote": "ODPA 1,339,846 71,708 1,268,138 5.4% 0 71,708 5.4%"
+      },
+      "mayor-council": {
+        "page": 11,
+        "quote": "Mayor & Council* 7,014,592 877,248 6,136,365 12.5% 0 877,248 12.5%",
+        "differs": {
+          "budgetAfterReduction": "The City prints 6,136,365, but its baseline less its cut is 6,137,344, and its Total Charter row (18,927,827 after reductions) agrees with 6,137,344."
+        }
+      },
+      "city-clerk": {
+        "page": 11,
+        "quote": "City Clerk (1) 3,998,036 94,456 3,903,580 2.4% 0 94,456 2.4%"
+      },
+      "cmo": {
+        "page": 11,
+        "quote": "CMO 19,041,413 2,432,623 16,608,790 12.8% 0 2,432,623 12.8%"
+      },
+      "finance": {
+        "page": 11,
+        "quote": "Finance 10,178,435 715,714 9,462,721 7.0% 0 715,714 7.0%"
+      },
+      "fire": {
+        "page": 11,
+        "quote": "Fire 57,206,818 6,800,791 50,406,027 11.9% 3,703,328 3,097,463 5.4%"
+      },
+      "hhcs": {
+        "page": 11,
+        "quote": "HHCS 38,021,381 3,455,468 34,565,913 9.1% 0 3,455,468 9.1%"
+      },
+      "human-resources": {
+        "page": 11,
+        "quote": "HR 5,387,455 622,032 4,765,423 11.5% 0 622,032 11.5%"
+      },
+      "information-technology": {
+        "page": 11,
+        "quote": "IT 1,150,454 185,391 965,062 16.1% 0 185,391 16.1%"
+      },
+      "prw": {
+        "page": 11,
+        "quote": "PRW 13,382,163 1,205,811 12,176,353 9.0% 477,313 728,498 5.4%"
+      },
+      "planning-development": {
+        "page": 11,
+        "quote": "Planning & Dev. 3,763,360 470,419 3,292,941 12.5% 0 470,419 12.5%"
+      },
+      "police": {
+        "page": 11,
+        "quote": "Police 107,356,946 10,789,378 96,567,568 10.1% 5,453,304 5,336,074 5.0%"
+      },
+      "public-works": {
+        "page": 11,
+        "quote": "Public Works 8,302,692 1,084,523 7,218,169 13.1% 0 1,084,523 13.1%"
+      },
+      "it-cost-allocation-plan": {
+        "page": 11,
+        "quote": "IT Cost Allocation Plan 600,000 0 600,000",
+        "differs": {
+          "reduction": "The City's row shows no cut, but its totals count the $600,000 as cut. The site leaves this line out of the departments it shows.",
+          "budgetAfterReduction": "The City's row shows no cut, but its totals count the $600,000 as cut. The site leaves this line out of the departments it shows."
+        }
+      },
+      "total": {
+        "page": 12,
+        "quote": "Total Citywide 288,033,394 29,773,019 258,260,375 10.3% 9,633,945 20,139,074 7.0%",
+        "differs": {
+          "baseline": "The City's baseline total leaves out the $600,000 IT Cost Allocation Plan line that its cut total counts; ours counts it in both, as in FY2027.",
+          "reduction": "$1 of rounding: the City's PRW row prints a cut of 1,205,811, but its totals add 1,205,810, as its PRW budget after reduction (12,176,353) does.",
+          "budgetAfterReduction": "The City's baseline total leaves out the $600,000 IT Cost Allocation Plan line that its cut total counts; ours counts it in both, as in FY2027."
+        }
+      }
     }
   }
 }

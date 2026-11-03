@@ -4,6 +4,8 @@
  * number is parsed from the quote, never typed in: the same rule the workbook's
  * sentence-stated facts follow (citedFacts).
  */
+import type { PrintedTable } from './berkeley/printed-rows.ts';
+import { nextNumber } from './source-numbers.ts';
 import type { ByYear, DocCapitalLine, GapBudget, DocCapitalPart, DocRef, DocumentFacts, Source, SourceId, StepNote, WorkbookBudget } from './types.ts';
 
 export interface DocumentsFile {
@@ -12,6 +14,8 @@ export interface DocumentsFile {
   capitalProgram: { source: SourceId; byFund: number; generalFund: string; generalFundBreakdown: number[] };
   stepNotes: Record<string, StepNote>;
   notes: Record<string, StepNote>;
+  /** FY2028's department table as Item 21 prints it, row by row (#63). */
+  departmentRows: PrintedTable;
 }
 /** Page number → page text, as extracted from the PDF. */
 export type Excerpts = Record<SourceId, Record<string, string>>;
@@ -185,10 +189,14 @@ function checkedNotes(notes: Record<string, StepNote>, field: string, known: Set
 
 export function applyDocuments(budget: WorkbookBudget, file: DocumentsFile, excerpts: Excerpts): { budget: GapBudget; errors: string[] } {
   const errors: string[] = [];
-  const first = budget.sources.length + 1;
-  const added: Source[] = file.sources.map((s, i) => ({ ...s, number: first + i }));
+  // Each source continues the numbering, or (a document found after coverage.json and faq.json were numbered) jumps
+  // past them; checkNumbering confirms the whole chain runs S1…Sn once every file has added its sources (#63).
+  const first = nextNumber(budget.sources);
+  const added: Source[] = file.sources.map((s) => ({ ...s, number: Number(s.id.slice(1)) }));
   added.forEach((s, i) => {
-    if (s.id !== `S${first + i}`) errors.push(`documents.json: source ${i + 1} is ${s.id}, expected S${first + i} (it continues the workbook's numbering)`);
+    const expected = i === 0 ? first : added[i - 1].number + 1;
+    if (!/^S\d+$/.test(s.id) || s.number < expected)
+      errors.push(`documents.json: source ${i + 1} is ${s.id}, expected S${expected} or later (it continues the workbook's numbering)`);
     if ((s.type === 'city') !== (s.publisher === 'City of Berkeley')) errors.push(`${s.id}: type "${s.type}" but publisher "${s.publisher}"`);
   });
   const known = new Set([...budget.sources, ...added].map((s) => s.id));

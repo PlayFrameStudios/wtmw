@@ -8,6 +8,7 @@
  */
 import { COVERAGE_TOKENS, paragraphChecks } from './coverage.ts';
 import { checkQuote, normalize, type Excerpts } from './documents.ts';
+import { nextNumber } from './source-numbers.ts';
 import type { CityBudget, CityFaq, DocRef, FaqAmount, FaqQuestion, Source } from './types.ts';
 
 type NewSource = Omit<Source, 'number' | 'row'>;
@@ -128,7 +129,7 @@ export function applyFaq(
 ): { budget: CityBudget; errors: string[] } {
   const errors: string[] = [];
   const where = 'faq.json';
-  const added = numbered(file.sources, budget.sources.length + 1, where, errors);
+  const added = numbered(file.sources, nextNumber(budget.sources), where, errors);
   for (const s of added) {
     const own = s.publisher === ctx.publisher;
     if (own && s.type !== 'city') errors.push(`${where} ${s.id}: published by ${ctx.publisher}, so type "city"`);
