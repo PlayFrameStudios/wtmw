@@ -10,6 +10,7 @@
 import CitedText from '../CitedText.astro';
 import SourceChip from '../SourceChip.astro';
 import Sourced from '../Sourced.astro';
+import StaffCosts from '../StaffCosts.astro';
 import Base from '../../layouts/Base.astro';
 import { hasGapPlan } from '../../data/types';
 import { budgetFor } from '../../lib/budget';
@@ -22,6 +23,7 @@ import { siteFaqHref } from '../../lib/faq';
 import { familiesFor } from '../../lib/families';
 import { shortMoney } from '../../lib/format';
 import { revenueGroupsFor } from '../../lib/revenue-groups';
+import { staffCostsView } from '../../lib/staff-costs';
 
 interface Props {
   city: City;
@@ -42,6 +44,8 @@ const covers = coverageFor(city, budget, revenueGroupsFor(city, budget));
 const units = `${p.unit}s`;
 const width = (v: number, max: number) => `${((Math.abs(v) / max) * 100).toFixed(3)}%`;
 const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 });
+// What staff cost (#65), after the positions: one city's figures only, each block on the basis it names.
+const costs = staffCostsView(budget, label);
 ---
 
 <Base
@@ -197,6 +201,7 @@ const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 
         )
       }
     </section>
+    {costs && <StaffCosts city={city} view={costs} />}
   </div>
 </Base>
 

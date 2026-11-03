@@ -1838,5 +1838,225 @@
         "adjustments": []
       }
     ]
+  },
+  "staffCosts": {
+    "sections": [
+      {
+        "id": "pay",
+        "title": "City staff and the Sheriff contract",
+        "basis": {
+          "text": "General Fund spending. Lafayette's police service is a contract with the Contra Costa County Sheriff, so its officers are paid through the contract, not counted in the City's personnel. The share is each line divided by total General Fund expenditures.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 23,
+              "quote": "EXPENDITURE SUMMARY - GENERAL FUND"
+            },
+            {
+              "source": "S1",
+              "page": 77,
+              "quote": "This program provides contract law enforcement services to the community via the Contra Costa Sheriff's Department."
+            }
+          ]
+        },
+        "figures": [],
+        "bars": {
+          "layout": "grouped",
+          "legend": [
+            "City personnel",
+            "Contract Sheriff Services"
+          ],
+          "periods": [
+            {
+              "year": 2024,
+              "as": "actual",
+              "basis": "actual",
+              "parts": [
+                {
+                  "value": 5986378,
+                  "label": "Subtotal PERSONNEL",
+                  "cite": {
+                    "source": "S1",
+                    "page": 23,
+                    "quote": "Subtotal PERSONNEL $5,986,378 $5,975,214 $7,151,162 $6,370,819 $7,096,466 -0.8%"
+                  }
+                },
+                {
+                  "value": 4948004,
+                  "label": "862 Contract Sheriff Services",
+                  "cite": {
+                    "source": "S1",
+                    "page": 23,
+                    "quote": "862 Contract Sheriff Services 4,948,004 4,880,462 5,600,039 5,450,312 6,454,458 15.3%"
+                  }
+                }
+              ],
+              "of": {
+                "value": 16808802,
+                "label": "TOTAL G.F. EXPENDITURES",
+                "cite": {
+                  "source": "S1",
+                  "page": 23,
+                  "quote": "TOTAL G.F. EXPENDITURES $16,808,802 $16,598,677 $20,542,098 $18,270,688 $22,457,240 9.3%"
+                }
+              }
+            },
+            {
+              "year": 2025,
+              "as": "actual",
+              "basis": "actual",
+              "parts": [
+                {
+                  "value": 5975214,
+                  "label": "Subtotal PERSONNEL",
+                  "cite": {
+                    "source": "S1",
+                    "page": 23,
+                    "quote": "Subtotal PERSONNEL $5,986,378 $5,975,214 $7,151,162 $6,370,819 $7,096,466 -0.8%"
+                  }
+                },
+                {
+                  "value": 4880462,
+                  "label": "862 Contract Sheriff Services",
+                  "cite": {
+                    "source": "S1",
+                    "page": 23,
+                    "quote": "862 Contract Sheriff Services 4,948,004 4,880,462 5,600,039 5,450,312 6,454,458 15.3%"
+                  }
+                }
+              ],
+              "of": {
+                "value": 16598677,
+                "label": "TOTAL G.F. EXPENDITURES",
+                "cite": {
+                  "source": "S1",
+                  "page": 23,
+                  "quote": "TOTAL G.F. EXPENDITURES $16,808,802 $16,598,677 $20,542,098 $18,270,688 $22,457,240 9.3%"
+                }
+              }
+            },
+            {
+              "year": 2026,
+              "as": "estimate",
+              "basis": "estimate",
+              "parts": [
+                {
+                  "value": 6370819,
+                  "label": "Subtotal PERSONNEL",
+                  "cite": {
+                    "source": "S1",
+                    "page": 23,
+                    "quote": "Subtotal PERSONNEL $5,986,378 $5,975,214 $7,151,162 $6,370,819 $7,096,466 -0.8%"
+                  }
+                },
+                {
+                  "value": 5450312,
+                  "label": "862 Contract Sheriff Services",
+                  "cite": {
+                    "source": "S1",
+                    "page": 23,
+                    "quote": "862 Contract Sheriff Services 4,948,004 4,880,462 5,600,039 5,450,312 6,454,458 15.3%"
+                  }
+                }
+              ],
+              "of": {
+                "value": 18270688,
+                "label": "TOTAL G.F. EXPENDITURES",
+                "cite": {
+                  "source": "S1",
+                  "page": 23,
+                  "quote": "TOTAL G.F. EXPENDITURES $16,808,802 $16,598,677 $20,542,098 $18,270,688 $22,457,240 9.3%"
+                }
+              }
+            },
+            {
+              "year": 2027,
+              "as": "adopted",
+              "basis": "budget",
+              "parts": [
+                {
+                  "value": 7096466,
+                  "label": "Subtotal PERSONNEL",
+                  "cite": {
+                    "source": "S1",
+                    "page": 23,
+                    "quote": "Subtotal PERSONNEL $5,986,378 $5,975,214 $7,151,162 $6,370,819 $7,096,466 -0.8%"
+                  }
+                },
+                {
+                  "value": 6454458,
+                  "label": "862 Contract Sheriff Services",
+                  "cite": {
+                    "source": "S1",
+                    "page": 23,
+                    "quote": "862 Contract Sheriff Services 4,948,004 4,880,462 5,600,039 5,450,312 6,454,458 15.3%"
+                  }
+                }
+              ],
+              "of": {
+                "value": 22457240,
+                "label": "TOTAL G.F. EXPENDITURES",
+                "cite": {
+                  "source": "S1",
+                  "page": 23,
+                  "quote": "TOTAL G.F. EXPENDITURES $16,808,802 $16,598,677 $20,542,098 $18,270,688 $22,457,240 9.3%"
+                }
+              }
+            }
+          ]
+        },
+        "notes": []
+      },
+      {
+        "id": "retirement",
+        "title": "Retirement and retiree health",
+        "basis": {
+          "text": "Lafayette has no defined-benefit pension plan, so it has no pension debt. Its employees have defined-contribution plans (401 and 457) instead, which the City's annual report says are fully funded every pay period.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 12,
+              "quote": "Unlike most public sector organizations, the City of Lafayette does not participate in a defined benefit retirement program. Rather, City employees have traditional defined contribution programs (401 and 457 plans), which are fully funded every pay period."
+            }
+          ]
+        },
+        "figures": [
+          {
+            "value": 842472,
+            "label": "The City’s total payroll in fiscal year",
+            "cite": {
+              "source": "S3",
+              "page": 87,
+              "quote": "The City’s total payroll in fiscal year 2025 was approximately $5,667,041. Contributions to the Plan totaled $842,472 by the City and $276,236 by individuals during the year."
+            },
+            "name": "City contributions to the retirement plan",
+            "asOf": "FY 2024-25"
+          },
+          {
+            "value": 758015,
+            "label": "Net OPEB liability",
+            "cite": {
+              "source": "S3",
+              "page": 43,
+              "quote": "Net OPEB liability 758,015 90,539 848,554"
+            },
+            "name": "Net retiree-health (OPEB) liability, governmental activities",
+            "asOf": "June 30, 2025"
+          }
+        ],
+        "notes": [
+          {
+            "text": "The City's report: “The contribution on behalf of each participant equal 10% of base earnings up to the maximum allowable by law. In addition, each participant may contribute up to 5% of earnings to the Plan and the City has elected to match such contributions by the same percentage.”",
+            "cites": [
+              {
+                "source": "S3",
+                "page": 87,
+                "quote": "The contribution on behalf of each participant equal 10% of base earnings up to the maximum allowable by law. In addition, each participant may contribute up to 5% of earnings to the Plan and the City has elected to match such contributions by the same percentage."
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

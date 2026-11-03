@@ -2960,5 +2960,225 @@
         "adjustments": []
       }
     ]
+  },
+  "staffCosts": {
+    "sections": [
+      {
+        "id": "pension",
+        "title": "Pensions",
+        "basis": {
+          "text": "Citywide: the City's two CalPERS plans, Miscellaneous and Safety, combined, from the adopted budget's pension table (valuation date 6/30/2024).",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 45,
+              "quote": "The City’s pension plans for miscellaneous and safety employees are administered by the California Public Employees Retirement System (CalPERS)."
+            },
+            {
+              "source": "S1",
+              "page": 45,
+              "quote": "Valuation Date: 6/30/2024"
+            }
+          ]
+        },
+        "figures": [
+          {
+            "value": 477258000,
+            "label": "Unfunded Accrued Liability (UAL)",
+            "cite": {
+              "source": "S1",
+              "page": 45,
+              "quote": "Unfunded Accrued Liability (UAL) $ 162,419 $ 314,839 $ 477,258"
+            },
+            "name": "Unfunded pension liability",
+            "asOf": "6/30/2024 valuation"
+          },
+          {
+            "value": 0.704,
+            "percent": true,
+            "label": "Funded Ratio",
+            "cite": {
+              "source": "S1",
+              "page": 45,
+              "quote": "Funded Ratio 76.2% 66.0% 70.4%"
+            },
+            "name": "Funded ratio",
+            "asOf": "6/30/2024 valuation"
+          }
+        ],
+        "bars": {
+          "layout": "stacked",
+          "legend": [
+            "Normal cost",
+            "Unfunded-liability contribution",
+            "Additional UAL contribution"
+          ],
+          "periods": [
+            {
+              "year": 2027,
+              "as": "adopted",
+              "basis": "budget",
+              "parts": [
+                {
+                  "value": 20676000,
+                  "label": "Normal Cost",
+                  "cite": {
+                    "source": "S1",
+                    "page": 45,
+                    "quote": "Normal Cost $ 8,452 $ 12,224 $ 20,676"
+                  }
+                },
+                {
+                  "value": 43119000,
+                  "label": "Unfunded Liability Contribution",
+                  "cite": {
+                    "source": "S1",
+                    "page": 45,
+                    "quote": "Unfunded Liability Contribution 13,678 29,441 43,119"
+                  }
+                },
+                {
+                  "value": 1439000,
+                  "label": "Additional UAL Contribution",
+                  "cite": {
+                    "source": "S1",
+                    "page": 45,
+                    "quote": "Additional UAL Contribution 456 983 1,439"
+                  }
+                }
+              ],
+              "total": {
+                "value": 65234000,
+                "label": "Total Employer Contribution",
+                "cite": {
+                  "source": "S1",
+                  "page": 45,
+                  "quote": "Total Employer Contribution $ 22,586 $ 42,648 $ 65,234"
+                }
+              }
+            }
+          ]
+        },
+        "notes": [
+          {
+            "text": "The City's note: “The employer contributions to the pension plans are budgeted in each department as part of salaries and benefits.”",
+            "cites": [
+              {
+                "source": "S1",
+                "page": 45,
+                "quote": "The employer contributions to the pension plans are budgeted in each department as part of salaries and benefits."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "opeb",
+        "title": "Retiree health (OPEB)",
+        "basis": {
+          "text": "Citywide: the City's retiree healthcare plan, from the adopted budget's OPEB table.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 46,
+              "quote": "The City’s retiree healthcare plan (the OPEB plan) is administered by CalPERS through its Californian Employers’ Retiree Benefit Trust (CERBT)."
+            }
+          ]
+        },
+        "figures": [
+          {
+            "value": 57094000,
+            "label": "Unfunded Accrued Liability (UAL)",
+            "cite": {
+              "source": "S1",
+              "page": 46,
+              "quote": "Unfunded Accrued Liability (UAL) $ 57,094"
+            },
+            "name": "Unfunded retiree-health liability",
+            "asOf": "June 30, 2025"
+          },
+          {
+            "value": 0.536,
+            "percent": true,
+            "label": "Funded Ratio",
+            "cite": {
+              "source": "S1",
+              "page": 46,
+              "quote": "Funded Ratio 53.6%"
+            },
+            "name": "Funded ratio",
+            "asOf": "June 30, 2025"
+          }
+        ],
+        "bars": {
+          "layout": "stacked",
+          "legend": [
+            "Normal cost",
+            "Administrative expenses",
+            "Unfunded-liability contribution"
+          ],
+          "periods": [
+            {
+              "year": 2027,
+              "as": "adopted",
+              "basis": "budget",
+              "parts": [
+                {
+                  "value": 2572000,
+                  "label": "Normal Cost",
+                  "cite": {
+                    "source": "S1",
+                    "page": 46,
+                    "quote": "Normal Cost $ 2,572"
+                  }
+                },
+                {
+                  "value": 35000,
+                  "label": "Administrative Expenses",
+                  "cite": {
+                    "source": "S1",
+                    "page": 46,
+                    "quote": "Administrative Expenses 35"
+                  }
+                },
+                {
+                  "value": 6427000,
+                  "label": "Unfunded Liability Contribution",
+                  "cite": {
+                    "source": "S1",
+                    "page": 46,
+                    "quote": "Unfunded Liability Contribution 6,427"
+                  }
+                }
+              ],
+              "total": {
+                "value": 9034000,
+                "label": "Total Employer Contribution",
+                "cite": {
+                  "source": "S1",
+                  "page": 46,
+                  "quote": "Total Employer Contribution $ 9,034"
+                }
+              }
+            }
+          ]
+        },
+        "notes": [
+          {
+            "text": "The City's note: “The OPEB UAL is measured as of June 30, 2025, using an actuarial valuation as of June 30, 2024.”",
+            "cites": [
+              {
+                "source": "S1",
+                "page": 46,
+                "quote": "*The OPEB UAL is measured as of June 30, 2025, using an actuarial valuation as of June 30, 2024."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "unpublished": [
+      "Fremont's budget doesn't publish a General Fund total for salaries and benefits."
+    ]
   }
 }

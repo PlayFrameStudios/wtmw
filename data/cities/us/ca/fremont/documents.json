@@ -1867,5 +1867,436 @@
         "equals": "reserved-fund-balance"
       }
     ]
+  },
+  "staffCosts": {
+    "note": "What staff cost (#65): rows as printed (the adopted budget's pension and retiree-health tables, in thousands), each figure parsed from its quote; the sections the Departments page draws; and the workbook's tie-outs, run on every build. Approved rows: Foundry #65 (staff-costs-rows.json).",
+    "unpublished": [
+      "Fremont's budget doesn't publish a General Fund total for salaries and benefits."
+    ],
+    "rows": [
+      {
+        "id": "pension-accrued",
+        "label": "Accrued Liability",
+        "source": "S1",
+        "page": 45,
+        "quote": "Accrued Liability $ 682,587 $ 927,238 $ 1,609,825",
+        "columns": [
+          "miscellaneous",
+          "safety",
+          "combined"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "pension-assets",
+        "label": "Less Market Value of Assets",
+        "source": "S1",
+        "page": 45,
+        "quote": "Less Market Value of Assets (520,168) (612,399) (1,132,567)",
+        "columns": [
+          "miscellaneous",
+          "safety",
+          "combined"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "pension-ual",
+        "label": "Unfunded Accrued Liability (UAL)",
+        "source": "S1",
+        "page": 45,
+        "quote": "Unfunded Accrued Liability (UAL) $ 162,419 $ 314,839 $ 477,258",
+        "columns": [
+          "miscellaneous",
+          "safety",
+          "combined"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "pension-ratio",
+        "label": "Funded Ratio",
+        "source": "S1",
+        "page": 45,
+        "quote": "Funded Ratio 76.2% 66.0% 70.4%",
+        "columns": [
+          "miscellaneous",
+          "safety",
+          "combined"
+        ]
+      },
+      {
+        "id": "pension-normal",
+        "label": "Normal Cost",
+        "source": "S1",
+        "page": 45,
+        "quote": "Normal Cost $ 8,452 $ 12,224 $ 20,676",
+        "columns": [
+          "miscellaneous",
+          "safety",
+          "combined"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "pension-ual-contribution",
+        "label": "Unfunded Liability Contribution",
+        "source": "S1",
+        "page": 45,
+        "quote": "Unfunded Liability Contribution 13,678 29,441 43,119",
+        "columns": [
+          "miscellaneous",
+          "safety",
+          "combined"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "pension-adc",
+        "label": "Actuarial Determined Contributions (ADC)",
+        "source": "S1",
+        "page": 45,
+        "quote": "Actuarial Determined Contributions (ADC) 22,130 41,665 63,795",
+        "columns": [
+          "miscellaneous",
+          "safety",
+          "combined"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "pension-additional",
+        "label": "Additional UAL Contribution",
+        "source": "S1",
+        "page": 45,
+        "quote": "Additional UAL Contribution 456 983 1,439",
+        "columns": [
+          "miscellaneous",
+          "safety",
+          "combined"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "pension-total",
+        "label": "Total Employer Contribution",
+        "source": "S1",
+        "page": 45,
+        "quote": "Total Employer Contribution $ 22,586 $ 42,648 $ 65,234",
+        "columns": [
+          "miscellaneous",
+          "safety",
+          "combined"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "opeb-accrued",
+        "label": "Accrued Liability",
+        "source": "S1",
+        "page": 46,
+        "quote": "Accrued Liability $ 123,068",
+        "columns": [
+          "value"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "opeb-assets",
+        "label": "Less Market Value of Assets",
+        "source": "S1",
+        "page": 46,
+        "quote": "Less Market Value of Assets (65,974)",
+        "columns": [
+          "value"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "opeb-ual",
+        "label": "Unfunded Accrued Liability (UAL)",
+        "source": "S1",
+        "page": 46,
+        "quote": "Unfunded Accrued Liability (UAL) $ 57,094",
+        "columns": [
+          "value"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "opeb-ratio",
+        "label": "Funded Ratio",
+        "source": "S1",
+        "page": 46,
+        "quote": "Funded Ratio 53.6%",
+        "columns": [
+          "value"
+        ]
+      },
+      {
+        "id": "opeb-normal",
+        "label": "Normal Cost",
+        "source": "S1",
+        "page": 46,
+        "quote": "Normal Cost $ 2,572",
+        "columns": [
+          "value"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "opeb-admin",
+        "label": "Administrative Expenses",
+        "source": "S1",
+        "page": 46,
+        "quote": "Administrative Expenses 35",
+        "columns": [
+          "value"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "opeb-ual-contribution",
+        "label": "Unfunded Liability Contribution",
+        "source": "S1",
+        "page": 46,
+        "quote": "Unfunded Liability Contribution 6,427",
+        "columns": [
+          "value"
+        ],
+        "unit": 1000
+      },
+      {
+        "id": "opeb-total",
+        "label": "Total Employer Contribution",
+        "source": "S1",
+        "page": 46,
+        "quote": "Total Employer Contribution $ 9,034",
+        "columns": [
+          "value"
+        ],
+        "unit": 1000
+      }
+    ],
+    "sections": [
+      {
+        "id": "pension",
+        "title": "Pensions",
+        "basis": {
+          "text": "Citywide: the City's two CalPERS plans, Miscellaneous and Safety, combined, from the adopted budget's pension table (valuation date 6/30/2024).",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 45,
+              "quote": "The City’s pension plans for miscellaneous and safety employees are administered by the California Public Employees Retirement System (CalPERS)."
+            },
+            {
+              "source": "S1",
+              "page": 45,
+              "quote": "Valuation Date: 6/30/2024"
+            }
+          ]
+        },
+        "figures": [
+          {
+            "name": "Unfunded pension liability",
+            "asOf": "6/30/2024 valuation",
+            "ref": {
+              "row": "pension-ual",
+              "col": "combined"
+            }
+          },
+          {
+            "name": "Funded ratio",
+            "asOf": "6/30/2024 valuation",
+            "ref": {
+              "row": "pension-ratio",
+              "col": "combined"
+            }
+          }
+        ],
+        "bars": {
+          "layout": "stacked",
+          "legend": [
+            "Normal cost",
+            "Unfunded-liability contribution",
+            "Additional UAL contribution"
+          ],
+          "periods": [
+            {
+              "year": 2027,
+              "as": "adopted",
+              "parts": [
+                {
+                  "row": "pension-normal",
+                  "col": "combined"
+                },
+                {
+                  "row": "pension-ual-contribution",
+                  "col": "combined"
+                },
+                {
+                  "row": "pension-additional",
+                  "col": "combined"
+                }
+              ],
+              "total": {
+                "row": "pension-total",
+                "col": "combined"
+              }
+            }
+          ]
+        },
+        "notes": [
+          {
+            "text": "The City's note: “The employer contributions to the pension plans are budgeted in each department as part of salaries and benefits.”",
+            "cites": [
+              {
+                "source": "S1",
+                "page": 45,
+                "quote": "The employer contributions to the pension plans are budgeted in each department as part of salaries and benefits."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "opeb",
+        "title": "Retiree health (OPEB)",
+        "basis": {
+          "text": "Citywide: the City's retiree healthcare plan, from the adopted budget's OPEB table.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 46,
+              "quote": "The City’s retiree healthcare plan (the OPEB plan) is administered by CalPERS through its Californian Employers’ Retiree Benefit Trust (CERBT)."
+            }
+          ]
+        },
+        "figures": [
+          {
+            "name": "Unfunded retiree-health liability",
+            "asOf": "June 30, 2025",
+            "ref": {
+              "row": "opeb-ual",
+              "col": "value"
+            }
+          },
+          {
+            "name": "Funded ratio",
+            "asOf": "June 30, 2025",
+            "ref": {
+              "row": "opeb-ratio",
+              "col": "value"
+            }
+          }
+        ],
+        "bars": {
+          "layout": "stacked",
+          "legend": [
+            "Normal cost",
+            "Administrative expenses",
+            "Unfunded-liability contribution"
+          ],
+          "periods": [
+            {
+              "year": 2027,
+              "as": "adopted",
+              "parts": [
+                {
+                  "row": "opeb-normal",
+                  "col": "value"
+                },
+                {
+                  "row": "opeb-admin",
+                  "col": "value"
+                },
+                {
+                  "row": "opeb-ual-contribution",
+                  "col": "value"
+                }
+              ],
+              "total": {
+                "row": "opeb-total",
+                "col": "value"
+              }
+            }
+          ]
+        },
+        "notes": [
+          {
+            "text": "The City's note: “The OPEB UAL is measured as of June 30, 2025, using an actuarial valuation as of June 30, 2024.”",
+            "cites": [
+              {
+                "source": "S1",
+                "page": 46,
+                "quote": "*The OPEB UAL is measured as of June 30, 2025, using an actuarial valuation as of June 30, 2024."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "ties": [
+      {
+        "kind": "sum",
+        "rows": [
+          "pension-normal",
+          "pension-ual-contribution"
+        ],
+        "equals": "pension-adc"
+      },
+      {
+        "kind": "sum",
+        "rows": [
+          "pension-adc",
+          "pension-additional"
+        ],
+        "equals": "pension-total"
+      },
+      {
+        "kind": "sum",
+        "rows": [
+          "opeb-normal",
+          "opeb-admin",
+          "opeb-ual-contribution"
+        ],
+        "equals": "opeb-total"
+      },
+      {
+        "kind": "sum",
+        "rows": [
+          "pension-accrued",
+          "pension-assets"
+        ],
+        "equals": "pension-ual"
+      },
+      {
+        "kind": "sum",
+        "rows": [
+          "opeb-accrued",
+          "opeb-assets"
+        ],
+        "equals": "opeb-ual"
+      },
+      {
+        "kind": "across",
+        "rows": [
+          "pension-accrued",
+          "pension-assets",
+          "pension-ual",
+          "pension-normal",
+          "pension-ual-contribution",
+          "pension-adc",
+          "pension-additional",
+          "pension-total"
+        ],
+        "parts": [
+          "miscellaneous",
+          "safety"
+        ],
+        "equals": "combined"
+      }
+    ]
   }
 }

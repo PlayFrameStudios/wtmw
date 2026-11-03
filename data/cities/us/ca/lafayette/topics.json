@@ -26,8 +26,7 @@
       "status": "covered"
     },
     "staff-costs": {
-      "status": "pending",
-      "story": 65
+      "status": "covered"
     },
     "capital": {
       "status": "covered"

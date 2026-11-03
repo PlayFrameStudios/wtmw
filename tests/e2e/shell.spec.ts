@@ -206,7 +206,7 @@ test.describe('desktop shell', () => {
   test('shows the breadcrumb, the source count from the data, and the city switcher', async ({ page }) => {
     await page.goto(`${berkeley.path}gap/`);
     await expect(page.locator('.crumbs')).toHaveText(/wherethemoneywent\.com \/ us \/ ca \/ berkeley \/ gap/);
-    await expect(page.locator('nav.desktop .sources-pill')).toHaveText('42 sources');
+    await expect(page.locator('nav.desktop .sources-pill')).toHaveText('44 sources');
     await expect(page.locator('nav.desktop .sources-pill')).toHaveAttribute('href', `${berkeley.path}sources/`);
     await page.locator('.switcher summary').click();
     await expect(page.locator('.switcher .panel').getByRole('link', { name: 'Berkeley, CA' })).toBeVisible();

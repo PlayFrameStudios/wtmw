@@ -41,8 +41,11 @@ const raw = new Map(budget.sources.map((s) => [s.id, s]));
 // A deficit-plan city (Berkeley) has its known-gaps cards and its workbook; a city built from documents (#43), its own cards.
 const plan = hasGapPlan(budget) ? budget : undefined;
 // The pages each document is cited at: every page a budget.json record quotes, for a city built from documents.
-// A department table a later document prints row by row cites its pages too (FY2028's, Item 21, #63).
-const pages = plan ? pagesBySource(plan.documentFacts, ballotFileFor(city.path), plan.departmentReductions, plan.history) : pagesBySource({ ...budget, sources: [] });
+// A department table a later document prints row by row cites its pages too (FY2028's, Item 21, #63), as do the
+// history (#64) and staff-cost (#65) rows.
+const pages = plan
+  ? pagesBySource(plan.documentFacts, ballotFileFor(city.path), plan.departmentReductions, plan.history, plan.staffCosts)
+  : pagesBySource({ ...budget, sources: [] });
 const pageList = (id: (typeof sources)[number]['id'], ps: number[]) => `${ps.length > 1 ? 'pp.' : 'p.'} ${ps.map((p) => folio(raw.get(id)!, p)).join(', ')}`;
 const meta = (id: (typeof sources)[number]['id'], date?: string) =>
   [raw.get(id)!.publisher, date, raw.get(id)!.usedFor, pages.has(id) ? pageList(id, pages.get(id)!) : undefined].filter(Boolean).join(' · ');

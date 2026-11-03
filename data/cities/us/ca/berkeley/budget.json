@@ -466,6 +466,30 @@
       "type": "city",
       "usedFor": "General Fund revenue and spending on the budget basis, FY2024–FY2028",
       "number": 42
+    },
+    {
+      "id": "S43",
+      "publisher": "City of Berkeley",
+      "title": "Proposed FY 2027 and FY 2028 Biennial Budget, Supplemental 2 (Item 21)",
+      "committee": "City Council",
+      "date": "2026-05-19",
+      "dateLabel": "May 19 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/2026-05/2026-05-19%20Item%2021%20Proposed%20FY%202027%20and%20FY%202028%20-%20Supp%202.pdf",
+      "type": "city",
+      "usedFor": "General Fund spending by category: salaries and benefits, FY2024–FY2028",
+      "number": 43
+    },
+    {
+      "id": "S44",
+      "publisher": "City of Berkeley",
+      "title": "FY 2027 and FY 2028 Biennial Budget Update",
+      "committee": "Budget & Finance Cmte",
+      "date": "2026-01-22",
+      "dateLabel": "Jan 22 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/legislative-body-meeting-attachments/Item%2002%20BFPC-FY2728%20Budget%20Update_Final_01.22.26.pdf",
+      "type": "city",
+      "usedFor": "The General Fund pension bill: normal cost and unfunded-liability payment, FY2025–FY2028",
+      "number": 44
     }
   ],
   "generalFund": [
@@ -4514,6 +4538,382 @@
         ],
         "notes": [],
         "adjustments": []
+      }
+    ]
+  },
+  "staffCosts": {
+    "sections": [
+      {
+        "id": "pay",
+        "title": "Salaries and benefits",
+        "basis": {
+          "text": "General Fund spending on the budget basis, from the proposed budget's spending by category. The share is salaries and benefits divided by the General Fund's Grand Total.",
+          "cites": [
+            {
+              "source": "S43",
+              "page": 33,
+              "quote": "Category FY 2024 Actual FY 2025 Actual FY 2026 Adopted FY 2027 Proposed FY 2028 Proposed"
+            }
+          ]
+        },
+        "figures": [],
+        "bars": {
+          "layout": "stacked",
+          "legend": [
+            "Salaries and benefits"
+          ],
+          "periods": [
+            {
+              "year": 2024,
+              "as": "actual",
+              "basis": "actual",
+              "parts": [
+                {
+                  "value": 173407276,
+                  "label": "Salaries & Benefits",
+                  "cite": {
+                    "source": "S43",
+                    "page": 33,
+                    "quote": "Salaries & Benefits 173,407,276 187,785,129 210,685,113 207,920,092 212,945,750"
+                  }
+                }
+              ],
+              "of": {
+                "value": 307150230,
+                "label": "Grand Total",
+                "cite": {
+                  "source": "S43",
+                  "page": 33,
+                  "quote": "Grand Total 307,150,230 311,539,113 311,435,259 313,917,287 319,588,707"
+                }
+              }
+            },
+            {
+              "year": 2025,
+              "as": "actual",
+              "basis": "actual",
+              "parts": [
+                {
+                  "value": 187785129,
+                  "label": "Salaries & Benefits",
+                  "cite": {
+                    "source": "S43",
+                    "page": 33,
+                    "quote": "Salaries & Benefits 173,407,276 187,785,129 210,685,113 207,920,092 212,945,750"
+                  }
+                }
+              ],
+              "of": {
+                "value": 311539113,
+                "label": "Grand Total",
+                "cite": {
+                  "source": "S43",
+                  "page": 33,
+                  "quote": "Grand Total 307,150,230 311,539,113 311,435,259 313,917,287 319,588,707"
+                }
+              }
+            },
+            {
+              "year": 2026,
+              "as": "adopted",
+              "basis": "budget",
+              "parts": [
+                {
+                  "value": 210685113,
+                  "label": "Salaries & Benefits",
+                  "cite": {
+                    "source": "S43",
+                    "page": 33,
+                    "quote": "Salaries & Benefits 173,407,276 187,785,129 210,685,113 207,920,092 212,945,750"
+                  }
+                }
+              ],
+              "of": {
+                "value": 311435259,
+                "label": "Grand Total",
+                "cite": {
+                  "source": "S43",
+                  "page": 33,
+                  "quote": "Grand Total 307,150,230 311,539,113 311,435,259 313,917,287 319,588,707"
+                }
+              }
+            },
+            {
+              "year": 2027,
+              "as": "proposed",
+              "basis": "budget",
+              "parts": [
+                {
+                  "value": 207920092,
+                  "label": "Salaries & Benefits",
+                  "cite": {
+                    "source": "S43",
+                    "page": 33,
+                    "quote": "Salaries & Benefits 173,407,276 187,785,129 210,685,113 207,920,092 212,945,750"
+                  }
+                }
+              ],
+              "of": {
+                "value": 313917287,
+                "label": "Grand Total",
+                "cite": {
+                  "source": "S43",
+                  "page": 33,
+                  "quote": "Grand Total 307,150,230 311,539,113 311,435,259 313,917,287 319,588,707"
+                }
+              }
+            },
+            {
+              "year": 2028,
+              "as": "proposed",
+              "basis": "budget",
+              "parts": [
+                {
+                  "value": 212945750,
+                  "label": "Salaries & Benefits",
+                  "cite": {
+                    "source": "S43",
+                    "page": 33,
+                    "quote": "Salaries & Benefits 173,407,276 187,785,129 210,685,113 207,920,092 212,945,750"
+                  }
+                }
+              ],
+              "of": {
+                "value": 319588707,
+                "label": "Grand Total",
+                "cite": {
+                  "source": "S43",
+                  "page": 33,
+                  "quote": "Grand Total 307,150,230 311,539,113 311,435,259 313,917,287 319,588,707"
+                }
+              }
+            }
+          ]
+        },
+        "notes": [
+          {
+            "text": "The City's note: “Salaries & Benefit account for 66% of the total General Fund budget in FY 2027 and 67% in FY 2028.”",
+            "cites": [
+              {
+                "source": "S43",
+                "page": 33,
+                "quote": "Salaries & Benefit account for 66% of the total General Fund budget in FY 2027 and 67% in FY 2028."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "pension",
+        "title": "The pension bill",
+        "basis": {
+          "text": "General Fund pension costs, as the City's January budget update charts them: the normal cost, for benefits employees earn this year, and the payment toward the unfunded liability (UAL), for past service.",
+          "cites": [
+            {
+              "source": "S44",
+              "page": 9,
+              "quote": "2028 GENERAL FUND E X P E N D I T U R E S MAJOR COST DRIVERS – PENSION"
+            },
+            {
+              "source": "S44",
+              "page": 9,
+              "quote": "FY 2025 Adopted FY 2026 Adopted FY 2027 Baseline FY 2028 Baseline"
+            }
+          ]
+        },
+        "figures": [],
+        "bars": {
+          "layout": "stacked",
+          "legend": [
+            "Normal cost",
+            "Unfunded-liability payment"
+          ],
+          "periods": [
+            {
+              "year": 2025,
+              "as": "adopted",
+              "basis": "budget",
+              "parts": [
+                {
+                  "value": 17720000,
+                  "label": "Normal Cost",
+                  "cite": {
+                    "source": "S44",
+                    "page": 9,
+                    "quote": "Normal Cost $17.72 $19.25 $20.23 $19.63"
+                  }
+                },
+                {
+                  "value": 34080000,
+                  "label": "UAL",
+                  "cite": {
+                    "source": "S44",
+                    "page": 9,
+                    "quote": "UAL $34.08 $37.05 $38.07 $39.67"
+                  }
+                }
+              ]
+            },
+            {
+              "year": 2026,
+              "as": "adopted",
+              "basis": "budget",
+              "parts": [
+                {
+                  "value": 19250000,
+                  "label": "Normal Cost",
+                  "cite": {
+                    "source": "S44",
+                    "page": 9,
+                    "quote": "Normal Cost $17.72 $19.25 $20.23 $19.63"
+                  }
+                },
+                {
+                  "value": 37050000,
+                  "label": "UAL",
+                  "cite": {
+                    "source": "S44",
+                    "page": 9,
+                    "quote": "UAL $34.08 $37.05 $38.07 $39.67"
+                  }
+                }
+              ]
+            },
+            {
+              "year": 2027,
+              "as": "baseline",
+              "basis": "budget",
+              "parts": [
+                {
+                  "value": 20230000,
+                  "label": "Normal Cost",
+                  "cite": {
+                    "source": "S44",
+                    "page": 9,
+                    "quote": "Normal Cost $17.72 $19.25 $20.23 $19.63"
+                  }
+                },
+                {
+                  "value": 38070000,
+                  "label": "UAL",
+                  "cite": {
+                    "source": "S44",
+                    "page": 9,
+                    "quote": "UAL $34.08 $37.05 $38.07 $39.67"
+                  }
+                }
+              ]
+            },
+            {
+              "year": 2028,
+              "as": "baseline",
+              "basis": "budget",
+              "parts": [
+                {
+                  "value": 19630000,
+                  "label": "Normal Cost",
+                  "cite": {
+                    "source": "S44",
+                    "page": 9,
+                    "quote": "Normal Cost $17.72 $19.25 $20.23 $19.63"
+                  }
+                },
+                {
+                  "value": 39670000,
+                  "label": "UAL",
+                  "cite": {
+                    "source": "S44",
+                    "page": 9,
+                    "quote": "UAL $34.08 $37.05 $38.07 $39.67"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "notes": []
+      },
+      {
+        "id": "liabilities",
+        "title": "Pension and retiree-health liabilities",
+        "basis": {
+          "text": "What the City owes for pensions and retiree health care beyond what its plans hold, for all City activities (governmental and business-type), from the annual report's Statement of Net Position, June 30, 2025 and 2024.",
+          "cites": [
+            {
+              "source": "S39",
+              "page": 45,
+              "quote": "Statement of Net Position June 30, 2025 and 2024"
+            }
+          ]
+        },
+        "figures": [
+          {
+            "value": 723822972,
+            "label": "Net Pension Liability",
+            "cite": {
+              "source": "S39",
+              "page": 45,
+              "quote": "Net Pension Liability 595,295,398 628,297,778 91,138,494 95,525,194 686,433,892 723,822,972"
+            },
+            "name": "Net pension liability",
+            "asOf": "June 30, 2024"
+          },
+          {
+            "value": 686433892,
+            "label": "Net Pension Liability",
+            "cite": {
+              "source": "S39",
+              "page": 45,
+              "quote": "Net Pension Liability 595,295,398 628,297,778 91,138,494 95,525,194 686,433,892 723,822,972"
+            },
+            "name": "Net pension liability",
+            "asOf": "June 30, 2025"
+          },
+          {
+            "value": 83389781,
+            "label": "Net OPEB Liability",
+            "cite": {
+              "source": "S39",
+              "page": 45,
+              "quote": "Net OPEB Liability 38,733,630 77,531,231 4,477,343 5,858,550 43,210,973 83,389,781"
+            },
+            "name": "Net OPEB (retiree health) liability",
+            "asOf": "June 30, 2024"
+          },
+          {
+            "value": 43210973,
+            "label": "Net OPEB Liability",
+            "cite": {
+              "source": "S39",
+              "page": 45,
+              "quote": "Net OPEB Liability 38,733,630 77,531,231 4,477,343 5,858,550 43,210,973 83,389,781"
+            },
+            "name": "Net OPEB (retiree health) liability",
+            "asOf": "June 30, 2025"
+          }
+        ],
+        "notes": [
+          {
+            "text": "The report's words: “Net pension liability decreased by $37.4 million or 5.2% during FY 2025 to $686.4 million from $723.8 million.”",
+            "cites": [
+              {
+                "source": "S39",
+                "page": 42,
+                "quote": "Net pension liability decreased by $37.4 million or 5.2% during FY 2025 to $686.4 million from $723.8 million;"
+              }
+            ]
+          },
+          {
+            "text": "The report's words: “Net OPEB liability decreased by $38.8 million or 50.0% during FY 2025 to $38.7 million from $77.5 million for governmental activities, while net OPEB liability decreased by $1.4 million or 23.6% to $4.5 million from $5.9 million for business-type activities.” The report doesn't say why.",
+            "cites": [
+              {
+                "source": "S39",
+                "page": 42,
+                "quote": "Net OPEB liability decreased by $38.8 million or 50.0% during FY 2025 to $38.7 million from $77.5 million for governmental activities, while net OPEB liability decreased by $1.4 million or 23.6% to $4.5 million from $5.9 million for business-type activities."
+              }
+            ]
+          }
+        ]
       }
     ]
   }

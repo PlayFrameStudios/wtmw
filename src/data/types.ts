@@ -557,6 +557,50 @@ export interface CityBudget {
   faq?: CityFaq;
   /** The General Fund over the years (#64), from documents.json's history rows. */
   history?: History;
+  /** What staff cost (#65): pay and benefits, pensions and retiree health, from documents.json's staffCosts rows. */
+  staffCosts?: StaffCosts;
+}
+
+/** A staff-cost column's word: the History words, and "baseline" for a forecast before any decisions (Berkeley's January deck). */
+export type StaffAs = HistoryAs | 'baseline';
+export const staffBasisOf = (as: StaffAs): HistoryBasis => (as === 'baseline' ? 'budget' : basisOf(as));
+
+/** One printed figure: a dollar amount, or a percent as a fraction (70.4% is 0.704), with its row as its receipt. */
+export interface StaffFigure {
+  value: number;
+  percent?: boolean;
+  /** The row's label as printed. */
+  label: string;
+  cite: DocRef;
+}
+
+/** One year's bar: its parts (stacked, or side by side), the total they sum to, and the total it is a share of. */
+export interface StaffPeriod {
+  year: number;
+  as: StaffAs;
+  basis: HistoryBasis;
+  parts: StaffFigure[];
+  total?: StaffFigure;
+  of?: StaffFigure;
+}
+
+/**
+ * One block of the "What staff cost" section: one document's figures, on one basis, which it names (General Fund, or
+ * citywide in all funds). A block never holds another city's figures, and the page never sets two cities side by side.
+ */
+export interface StaffSection {
+  id: string;
+  title: string;
+  basis: StepNote;
+  figures: (StaffFigure & { name: string; asOf: string })[];
+  bars?: { layout: 'stacked' | 'grouped'; legend: string[]; periods: StaffPeriod[] };
+  notes: StepNote[];
+}
+
+export interface StaffCosts {
+  sections: StaffSection[];
+  /** What the City doesn't publish, said plainly rather than estimated. */
+  unpublished?: string[];
 }
 
 /** What a printed column is, in the City's word: an actual result, an estimate, or an adopted or proposed budget. */

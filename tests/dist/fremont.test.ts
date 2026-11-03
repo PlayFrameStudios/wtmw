@@ -78,8 +78,8 @@ describe('Fremont (built)', () => {
 
   it('the sources list names printed pages', () => {
     const t = text(html('sources/'));
-    // 19, 107, 112, 176, 184 and 188 are cited by the FAQ (#54); 33, by the staffing scope (#60).
-    expect(t).toMatch(/pp\. 19, 27, 28, 29, 32, 33, 34, 39, 65, 66, 67, 68, 71, 73, 75, 85, 87, 89, 107, 112, 114, 120, 137, 176, 184, 186, 188,/);
+    // 19, 107, 112, 176, 184 and 188 are cited by the FAQ (#54); 33, by the staffing scope (#60); 40, by retiree health (#65).
+    expect(t).toMatch(/pp\. 19, 27, 28, 29, 32, 33, 34, 39, 40, 65, 66, 67, 68, 71, 73, 75, 85, 87, 89, 107, 112, 114, 120, 137, 176, 184, 186, 188,/);
     // FUSD's budget report has four pages before its printed page 1 (#51).
     expect(t).toMatch(/Fremont Unified School District · June 24, 2026 · .* · pp\. 1, 13, 18/);
     expect(t).not.toMatch(/pp\. 33, 38/);
