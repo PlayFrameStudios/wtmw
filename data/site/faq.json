@@ -69,6 +69,16 @@
       ]
     },
     {
+      "id": "staff-positions-fte",
+      "question": "Why are staff positions shown as fractions?",
+      "paragraphs": [
+        {
+          "text": "Budgets count staff in full-time equivalents (FTE). A full-time position counts as one and a half-time position as half of one, so a city's total can end in a fraction. We show the figure exactly as the city's budget prints it. FTE counts budgeted positions, not people: it can include vacant positions, and the budgets we use don't say how many positions are part-time. Some cities count only regular positions and leave out hourly or seasonal staff; where a city's budget says so, its page notes it.",
+          "unsourced": "Definition of the unit budgets use to count staff."
+        }
+      ]
+    },
+    {
       "id": "schools",
       "question": "Why aren't schools in a city's budget?",
       "paragraphs": [

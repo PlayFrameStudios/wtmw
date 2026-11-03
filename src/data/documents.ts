@@ -44,6 +44,22 @@ export function checkQuote(ref: Pick<DocRef, 'source' | 'quote' | 'scanned'> & {
   if (!normalize(page).includes(normalize(ref.quote))) throw new Error(`${where}: "${ref.quote}" is not on ${ref.source} page ${ref.page ?? 1}`);
 }
 
+/**
+ * A cited sentence (#59, #60): it needs a cite, each cite must be on its page (checkQuote throws if not), and every
+ * number in its text must be in a quote it cites. Returns the other errors.
+ */
+export function checkNote(n: StepNote, excerpts: Excerpts, known: Set<string>, where: string): string[] {
+  const errors: string[] = [];
+  if (!n.cites.length) errors.push(`${where}: needs a cite`);
+  for (const c of n.cites) {
+    if (!known.has(c.source)) errors.push(`${where}: unknown source ${c.source}`);
+    else checkQuote(c, excerpts, where);
+  }
+  const quoted = n.cites.map((c) => normalize(c.quote)).join(' ');
+  for (const d of n.text.match(/\d[\d,.]*/g) ?? []) if (!quoted.includes(d.replace(/[.,]$/, ''))) errors.push(`${where}: ${d} isn't in a quote it cites`);
+  return errors;
+}
+
 /** Every {source, quote} in a JSON file (ballot.json), checked against the excerpts; returns errors. */
 export function checkQuotesIn(value: unknown, excerpts: Excerpts, known: Set<string>, where: string): string[] {
   const errors: string[] = [];

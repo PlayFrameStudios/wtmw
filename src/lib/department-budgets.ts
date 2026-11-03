@@ -65,6 +65,8 @@ export function departmentBudgets(b: CityBudget, families: Families, names: Reco
     staff: {
       rows: staffRows,
       max: Math.max(...staffRows.map((r) => r.figure.value)),
+      /** What the count leaves out, where the City's document says (#60). */
+      scope: staff.scope,
       total: { value: staff.fte, label: `Staff positions (FTE), ${yearLabel(staff.year)} ${staff.basis}`, ref: staff, format: 'number', tone: 'neutral' } satisfies Figure,
     },
   };

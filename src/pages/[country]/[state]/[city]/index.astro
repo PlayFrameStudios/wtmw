@@ -24,6 +24,7 @@ import { familiesFor } from '../../../../lib/families';
 import { shortMoney } from '../../../../lib/format';
 import { cityOverview, gapOverview } from '../../../../lib/overview';
 import { coverageFor } from '../../../../lib/coverage';
+import { siteFaqHref } from '../../../../lib/faq';
 import { balanceOf } from '../../../../lib/balance';
 import { formatValue, type Figure } from '../../../../lib/receipts';
 import { reservePositionOf } from '../../../../lib/reserve-position';
@@ -202,7 +203,7 @@ const g = gp?.growth.cited;
           <dd class="num"><Sourced city={city} figure={o.baseline}>{shortMoney(o.baseline.value)}</Sourced></dd>
         </div>
         <div>
-          <dt>staff positions (FTE), {label(year, 'short')}</dt>
+          <dt>staff positions (<a href={siteFaqHref('staff-positions-fte')} data-fte-faq-link>FTE</a>), {label(year, 'short')}</dt>
           <dd class="num"><Sourced city={city} figure={o.fte}>{fte}</Sourced></dd>
         </div>
         {

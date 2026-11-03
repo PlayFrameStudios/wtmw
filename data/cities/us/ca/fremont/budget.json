@@ -1254,7 +1254,22 @@
     "source": "S1",
     "page": 40,
     "quote": "CITYWIDE TOTAL 969.57 998.72 1,018.47 1,003.44 996.04 994.24",
-    "column": "2026/27"
+    "column": "2026/27",
+    "scope": {
+      "text": "The count covers regular positions only; temporary staff are paid from salary budgets and aren't counted.",
+      "cites": [
+        {
+          "source": "S1",
+          "page": 39,
+          "quote": "The total authorized regular staffing level of 994.24"
+        },
+        {
+          "source": "S1",
+          "page": 282,
+          "quote": "Salaries and Benefits A budget category that generally accounts for salaries of regular and temporary employees"
+        }
+      ]
+    }
   },
   "size": {
     "allFunds": {

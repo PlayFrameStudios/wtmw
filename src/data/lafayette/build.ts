@@ -8,7 +8,7 @@
  * scanned table's rows must add up to its own totals, so a misread figure fails the build. Where a text page prints a
  * figure, that page is the receipt; a scanned page is the receipt only for figures no text page has.
  */
-import { checkQuote, normalize, type Excerpts } from '../documents.ts';
+import { checkNote, checkQuote, normalize, type Excerpts } from '../documents.ts';
 import { factFrom } from '../fremont/build.ts';
 import { readTable, splitRow, tieOut, type TableRow, type TableSpec } from '../tables.ts';
 import type { BudgetColumn, CityBudget, DocRef, Fact, Pension, RevenueLine, ReservePosition, Source, SourceId, StepNote } from '../types.ts';
@@ -30,6 +30,8 @@ export interface LafayetteDocuments {
   quotes: Record<string, DocRef>;
   /** Sentences about the reserve, for the Balance & Reserves page: every number in one must be in a quote it cites. */
   reserveNotes: StepNote[];
+  /** What the staffing count leaves out (#60), in the City's words: for the departments page. */
+  staffingScope?: StepNote;
   /** Terms the City's documents define, in the City's words: `quote` is on the page and the definition holds it verbatim. */
   glossary: { term: string; source: SourceId; page: number; definition: string; quote: string }[];
 }
@@ -289,7 +291,14 @@ export function buildLafayette(file: LafayetteDocuments, excerpts: Excerpts): { 
   const positionRows = positions.all();
   const positionTotal = positions.row('TOTAL:', ['employees']);
   tieOut(positionRows, positionTotal, 'employees', positions.where, 0.005);
-  const staffing = { year: YEAR, fte: positionTotal.values.employees, basis: 'budgeted City positions', ...positionTotal.at('employees') };
+  const staffing = {
+    year: YEAR,
+    fte: positionTotal.values.employees,
+    basis: 'budgeted City positions',
+    ...positionTotal.at('employees'),
+    ...(file.staffingScope && { scope: file.staffingScope }),
+  };
+  if (file.staffingScope) errors.push(...checkNote(file.staffingScope, excerpts, known, 'documents.json staffingScope'));
 
   // The reserve standard (PDF 16): the core funds' cash adds up to the core cash position; the target is 60% of
   // expenditures and transfers; the printed share is that cash over the same base; and the excess is cash over target.
@@ -329,14 +338,7 @@ export function buildLafayette(file: LafayetteDocuments, excerpts: Excerpts): { 
     change: { amount: deficit.values[BUDGET], ...deficit.at(BUDGET) },
     outlook: { rate: forecastLevel.values[lastYear], year: Number(lastYear.slice(-4)), ...forecastLevel.at(lastYear) },
     notes: file.reserveNotes.map((n, i) => {
-      const where = `documents.json reserveNotes[${i}]`;
-      if (!n.cites.length) errors.push(`${where}: needs a cite`);
-      for (const c of n.cites) {
-        if (!known.has(c.source)) errors.push(`${where}: unknown source ${c.source}`);
-        else checkQuote(c, excerpts, where);
-      }
-      const quoted = n.cites.map((c) => normalize(c.quote)).join(' ');
-      for (const d of n.text.match(/\d[\d,.]*/g) ?? []) if (!quoted.includes(d.replace(/[.,]$/, ''))) errors.push(`${where}: ${d} isn't in a quote it cites`);
+      errors.push(...checkNote(n, excerpts, known, `documents.json reserveNotes[${i}]`));
       return n;
     }),
   };
