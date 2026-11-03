@@ -1,0 +1,203 @@
+---
+/**
+ * "Money voters set aside" (#66): each voter-approved City tax, grouped by what the City's own documents call it.
+ * Every amount is its own receipt and every quote has one; a cell no City document we use fills says so. Berkeley's
+ * special taxes add up to a figure the City doesn't print, so it is labeled as our sum, with the parts in its receipt.
+ */
+import type { City } from '../lib/cities';
+import { NOT_IN_SOURCES, type VoterTaxGroupView } from '../lib/voter-taxes';
+import SourceChip from './SourceChip.astro';
+import Sourced from './Sourced.astro';
+
+interface Props {
+  city: City;
+  groups: VoterTaxGroupView[];
+}
+
+const { city, groups } = Astro.props;
+---
+
+<section class="vt" aria-labelledby="vt-title" id="voter-taxes">
+  <h2 id="vt-title">Money voters set aside</h2>
+  <p class="vt-note">
+    The {groups.some((g) => g.group === 'bonds') ? 'taxes and bonds' : 'taxes'} {city.name}'s voters approved, grouped by what the City's documents call each one. Where those
+    documents don't give a figure, we say so rather than estimate it.
+  </p>
+  {
+    groups.map((g) => (
+      <div class="vt-group" data-voter-group={g.group}>
+        <h3>{g.title}</h3>
+        {g.sum && (
+          <p class="vt-sum" data-voter-sum>
+            <Sourced city={city} figure={g.sum.figure}>
+              {g.sum.text}
+            </Sourced>
+            : {g.sum.label}.{g.sum.missing.length > 0 && ` It leaves out ${g.sum.missing.join(' and ')}, whose amount is not in the City's documents we use.`}
+          </p>
+        )}
+        <ul class="vt-list" role="list">
+          {g.taxes.map(({ tax, amount }) => (
+            <li class="vt-tax" data-voter-tax={tax.id}>
+              <h4>{tax.name}</h4>
+              <dl>
+                <div>
+                  <dt>Amount</dt>
+                  <dd data-cell="amount">
+                    {amount ? (
+                      <>
+                        <Sourced city={city} figure={amount.figure}>
+                          {amount.text}
+                        </Sourced>{' '}
+                        <span class="vt-as">{tax.amount!.as}</span>
+                      </>
+                    ) : (
+                      <span class="vt-none" data-unsourced>
+                        {NOT_IN_SOURCES}
+                      </span>
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt>{tax.group === 'special' ? 'May pay for' : 'What the City says it funds'}</dt>
+                  <dd data-cell="purpose">
+                    {tax.purpose ? (
+                      <>
+                        “{tax.purpose.quote}”<SourceChip city={city} source={tax.purpose.source} at={tax.purpose} />
+                      </>
+                    ) : (
+                      <span class="vt-none" data-unsourced>
+                        {NOT_IN_SOURCES}
+                      </span>
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Approved</dt>
+                  <dd data-cell="approved">
+                    {tax.approved ? (
+                      <>
+                        {tax.approved.text}
+                        <SourceChip city={city} source={tax.approved.cites[0].source} at={tax.approved.cites[0]} also={tax.approved.cites.slice(1)} />
+                      </>
+                    ) : (
+                      <span class="vt-none" data-unsourced>
+                        {NOT_IN_SOURCES}
+                      </span>
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Rate</dt>
+                  <dd data-cell="rate">
+                    {tax.rate ? (
+                      <>
+                        {tax.rate.text}
+                        <SourceChip city={city} source={tax.rate.cites[0].source} at={tax.rate.cites[0]} also={tax.rate.cites.slice(1)} />
+                      </>
+                    ) : (
+                      <span class="vt-none" data-unsourced>
+                        {NOT_IN_SOURCES}
+                      </span>
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt>In the City's words</dt>
+                  <dd data-cell="kind">
+                    “{tax.kind.quote}”<SourceChip city={city} source={tax.kind.source} at={tax.kind} />
+                  </dd>
+                </div>
+              </dl>
+              {tax.notes.map((n) => (
+                <p class="vt-tax-note">
+                  {n.text}
+                  <SourceChip city={city} source={n.cites[0].source} at={n.cites[0]} also={n.cites.slice(1)} />
+                </p>
+              ))}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .vt {
+    padding-block: 2rem 3rem;
+  }
+  .vt h2 {
+    margin: 0;
+  }
+  .vt-note,
+  .vt-sum {
+    max-width: 44rem;
+    margin: 0.5rem 0 0;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .vt-sum {
+    color: inherit;
+  }
+  .vt-group {
+    margin-top: 1.75rem;
+  }
+  .vt-group h3 {
+    margin: 0;
+    font-size: 1.125rem;
+  }
+  .vt-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+    gap: 1rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .vt-tax {
+    min-width: 0;
+    padding: 1rem clamp(1rem, 3vw, 1.25rem);
+    border-radius: 0.75rem;
+    background: var(--card);
+    box-shadow: 0 1px 2px rgb(22 25 29 / 0.06), 0 8px 24px rgb(22 25 29 / 0.06);
+  }
+  .vt-tax h4 {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+  .vt-tax dl {
+    margin: 0.75rem 0 0;
+  }
+  .vt-tax dl > div + div {
+    margin-top: 0.5rem;
+  }
+  .vt-tax dt {
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+  .vt-tax dd {
+    margin: 0.125rem 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+  .vt-tax dd[data-cell='amount'] {
+    font-size: 1.25rem;
+  }
+  .vt-as {
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+  .vt-none {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    font-style: italic;
+  }
+  .vt-tax-note {
+    margin: 0.75rem 0 0;
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+</style>

@@ -1884,7 +1884,18 @@
           "label": "is projected to yield",
           "figure": 0,
           "as": "FY2027 estimate"
-        }
+        },
+        "notes": [
+          {
+            "text": "The City's property-tax page prints the residential rate as 0.17482.",
+            "cites": [
+              {
+                "source": "S45",
+                "quote": "Residential: 0.17482 Non-Residential: 0.26238"
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "measure-p",

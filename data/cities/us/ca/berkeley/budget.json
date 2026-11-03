@@ -5481,7 +5481,17 @@
             "quote": "is projected to yield $16,651,651 in revenues."
           }
         },
-        "notes": []
+        "notes": [
+          {
+            "text": "The City's property-tax page prints the residential rate as 0.17482.",
+            "cites": [
+              {
+                "source": "S45",
+                "quote": "Residential: 0.17482 Non-Residential: 0.26238"
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "measure-p",
