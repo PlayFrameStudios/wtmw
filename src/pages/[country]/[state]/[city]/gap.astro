@@ -1,9 +1,11 @@
 ---
 /**
  * The Gap (D3): how the city got from its first deficit estimate to the number
- * it planned around, and how it plans to close it. Figures come from gapPage()
- * in src/lib/gap.ts; tests/dist checks the story's numbers from budget.json.
+ * it planned around, how it plans to close it, and who's being asked to cut (#61,
+ * DepartmentCuts at #cuts). Figures come from gapPage() in src/lib/gap.ts; tests/dist
+ * checks the story's numbers from budget.json.
  */
+import DepartmentCuts from '../../../../components/DepartmentCuts.astro';
 import Sourced from '../../../../components/Sourced.astro';
 import SourceChip from '../../../../components/SourceChip.astro';
 import StepInfo from '../../../../components/StepInfo.astro';
@@ -43,7 +45,7 @@ const notesSource = 'S15';
 const taxStart = new Date(`${budget.documentFacts.salesTaxTerm.start}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 ---
 
-<Base title={`The gap · ${city.name}`} city={city} description={`How ${city.name} got from its first deficit estimate to the ${shortMoney(Math.abs(fy27.final.value))} gap it planned around, step by step, and how it plans to close it.`}>
+<Base title={`The gap · ${city.name}`} city={city} description={`How ${city.name} got from its first deficit estimate to the ${shortMoney(Math.abs(fy27.final.value))} gap it planned around, step by step, how it plans to close it, and who's being asked to cut.`}>
   <div class="gap-page wrap">
     <section class="intro">
       <div>
@@ -180,6 +182,8 @@ const taxStart = new Date(`${budget.documentFacts.salesTaxTerm.start}T12:00:00Z`
         </p>
       </aside>
     </section>
+
+    <DepartmentCuts city={city} />
   </div>
 </Base>
 

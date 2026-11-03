@@ -1,9 +1,10 @@
 /**
- * Figures for the Departments page of a city without a deficit plan (#43): each department's
- * General Fund budget and its share of every $100, the citywide lines that bring the
- * departments to the table's total, and staff positions by department. All from budget.json.
+ * Figures for the Departments page (#43): each department's General Fund budget and its share of
+ * every $100, the citywide lines that bring the departments to the table's total, and staff
+ * positions by department. All from budget.json. A city with a deficit plan (#61) has a baseline
+ * before its proposed cuts, not a budget, and its figures' labels say so.
  */
-import type { CityBudget, DepartmentLine } from '../data/types.ts';
+import { hasGapPlan, type CityBudget, type DepartmentLine } from '../data/types.ts';
 import type { Families } from './families.ts';
 import type { Figure } from './receipts.ts';
 import { per100 } from './waffle.ts';
@@ -12,7 +13,8 @@ import { per100 } from './waffle.ts';
 export function departmentBudgets(b: CityBudget, families: Families, names: Record<string, string>, yearLabel: (year: number) => string) {
   const uses = b.generalFund[0];
   const y = yearLabel(uses.year);
-  const budget = `General Fund${uses.note ? ` ${uses.note}` : ''} budget`;
+  const baseline = hasGapPlan(b);
+  const budget = baseline ? uses.basis : `General Fund${uses.note ? ` ${uses.note}` : ''} budget`;
   const departments = uses.lines.filter((l) => l.kind === 'department');
   const citywide = uses.lines.filter((l) => l.kind === 'citywide');
   const figure = (l: DepartmentLine, what: string): Figure => ({ value: l.amount, label: `${l.name}, ${y}: ${what}`, ref: l, tone: 'neutral' });
@@ -39,7 +41,7 @@ export function departmentBudgets(b: CityBudget, families: Families, names: Reco
   // its lines are printed rounded to the dollar, so their sum can be a dollar off it, and the page shows only the City's.
   const total: Figure = {
     value: uses.total.amount,
-    label: `General Fund expenditures, ${y}${uses.note ? ` (${uses.note})` : ''}`,
+    label: `${baseline ? uses.basis : 'General Fund expenditures'}, ${y}${uses.note ? ` (${uses.note})` : ''}`,
     ref: uses.total,
     tone: 'neutral',
     ...(citywide.length ? { parts: [{ label: 'Departments', value: deptTotal }, ...citywide.map((l) => ({ label: l.name, value: l.amount }))] } : {}),

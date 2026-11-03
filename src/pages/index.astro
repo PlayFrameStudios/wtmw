@@ -71,8 +71,9 @@ const questions = [
     q: "Who's cutting what?",
     a: ['', shortMoney(h.cuts.value), ` across ${h.departmentsCut} departments.`],
     figure: h.cuts,
-    href: pageHref('departments'),
-    page: 'Departments',
+    // The cuts are a section of The Gap (#61); Departments shows what each one starts with.
+    href: `${pageHref('gap')}#cuts`,
+    page: 'The Gap',
     tone: 'blue',
   },
 ];
