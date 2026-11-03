@@ -96,11 +96,13 @@ const full = (v: number) => `${v < 0 ? '−' : ''}$${Math.abs(v).toLocaleString(
                   </svg>
                   {c.lines.map((l) =>
                     l.points.map((pt) => (
-                      <Sourced city={city} figure={pt.figure} class={`hc-pt hc-pt--${pt.basis}${c.under?.line === l.id ? ' hc-pt--under' : ''}`}>
-                        <span class="hc-sr" style={`left: ${x(c, pt.year)}%; top: ${y(c, pt.value)}%; --c: ${color(l.id)}`}>
-                          {l.label}, {fy(pt.year)} ({AS_WORD[pt.as]}): {shortMoney(pt.value)}
-                        </span>
-                      </Sourced>
+                      <span class="hc-at" style={`left: ${x(c, pt.year)}%; top: ${y(c, pt.value)}%; --c: ${color(l.id)}`}>
+                        <Sourced city={city} figure={pt.figure} class={`hc-pt hc-pt--${pt.basis}${c.under?.line === l.id ? ' hc-pt--under' : ''}`}>
+                          <span class="hc-sr">
+                            {l.label}, {fy(pt.year)} ({AS_WORD[pt.as]}): {shortMoney(pt.value)}
+                          </span>
+                        </Sourced>
+                      </span>
                     )),
                   )}
                 </div>
@@ -246,7 +248,7 @@ const full = (v: number) => `${v < 0 ? '−' : ''}$${Math.abs(v).toLocaleString(
     outline: 2px solid var(--bay);
     outline-offset: 2px;
   }
-  .hist-charts {
+  .hist-charts:not([hidden]) {
     display: grid;
     gap: 1.5rem;
     margin-top: 1rem;
@@ -333,9 +335,6 @@ const full = (v: number) => `${v < 0 ? '−' : ''}$${Math.abs(v).toLocaleString(
     font-size: 0.875rem;
     color: var(--muted);
   }
-  .hc-plot :global(.hc-pt--under .hc-sr)::before {
-    inset: 0.25rem;
-  }
   .hc-y,
   .hc-x {
     position: absolute;
@@ -379,21 +378,29 @@ const full = (v: number) => `${v < 0 ? '−' : ''}$${Math.abs(v).toLocaleString(
       transform-origin: right top;
     }
   }
-  /* A point: the receipt button's text is for screen readers; the dot is drawn on it. */
-  .hc-plot :global(.hc-pt) {
-    position: static;
-  }
-  .hc-plot :global(.hc-pt .hc-sr) {
+  /* A point: a 1.5rem receipt button centered on it; its text is for screen readers and the dot is drawn on it. */
+  .hc-at {
     position: absolute;
     width: 1.5rem;
     height: 1.5rem;
-    overflow: hidden;
     transform: translate(-50%, -50%);
+  }
+  .hc-at :global(.hc-pt) {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+  .hc-sr {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
     color: transparent;
     font-size: 0;
     white-space: nowrap;
   }
-  .hc-plot :global(.hc-pt .hc-sr)::before {
+  .hc-at :global(.hc-pt)::before {
     content: '';
     position: absolute;
     inset: 0.4375rem;
@@ -401,20 +408,15 @@ const full = (v: number) => `${v < 0 ? '−' : ''}$${Math.abs(v).toLocaleString(
     border-radius: 50%;
     background: var(--c);
   }
-  .hc-plot :global(.hc-pt--estimate .hc-sr)::before,
-  .hc-plot :global(.hc-pt--budget .hc-sr)::before {
+  .hc-at :global(.hc-pt--estimate)::before,
+  .hc-at :global(.hc-pt--budget)::before {
     background: var(--card);
   }
-  .hc-plot :global(.hc-pt:focus-visible) {
-    outline: none;
-  }
-  .hc-plot :global(.hc-pt:focus-visible .hc-sr) {
-    outline: 2px solid var(--bay);
-    outline-offset: -2px;
-    border-radius: 50%;
-  }
-  .hc-plot :global(.hc-pt:hover .hc-sr)::before {
+  .hc-at :global(.hc-pt:hover)::before {
     inset: 0.3125rem;
+  }
+  .hc-at :global(.hc-pt--under)::before {
+    inset: 0.25rem;
   }
   .hist-table-wrap {
     position: relative;

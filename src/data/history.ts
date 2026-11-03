@@ -111,7 +111,10 @@ export function applyHistory(
   const at = `${where} history`;
 
   const rows = new Map<string, Row>();
+  // Rows whose quote or figures failed, already reported: what draws on them says nothing more.
+  const failed = new Set<string>();
   for (const r of spec.rows) {
+    failed.add(r.id);
     const here = `${at} row ${r.id}`;
     if (rows.has(r.id)) errors.push(`${here}: two rows have this id`);
     if (!known.has(r.source)) {
@@ -136,6 +139,7 @@ export function applyHistory(
     }
     const cells = r.columns.flatMap((c, i) => (c ? [{ ...c, value: figures[i] * (r.unit ?? 1) }] : []));
     rows.set(r.id, { spec: r, cells, cite: { source: r.source, page: r.page, quote: r.quote } });
+    failed.delete(r.id);
   }
 
   const valueAt = (id: string, year: number, as?: HistoryAs): Cell | undefined => {
@@ -159,7 +163,8 @@ export function applyHistory(
     const ids = tie.kind === 'next' ? [tie.row, tie.equals] : tie.kind === 'sum' ? [...tie.rows, tie.equals] : tie.rows;
     const missing = ids.filter((id) => !rows.has(id));
     if (missing.length) {
-      errors.push(`${at}: a ${tie.kind} tie-out names ${missing.join(', ')}, which isn't a row that parsed`);
+      const unknown = missing.filter((id) => !failed.has(id));
+      if (unknown.length) errors.push(`${at}: a ${tie.kind} tie-out names ${unknown.join(', ')}, which isn't a row`);
       continue;
     }
     const label = (id: string) => rows.get(id)!.spec.label;
@@ -207,7 +212,7 @@ export function applyHistory(
       for (const f of l.from) {
         const row = rows.get(f.row);
         if (!row) {
-          errors.push(`${here}: no row ${f.row}`);
+          if (!failed.has(f.row)) errors.push(`${here}: no row ${f.row}`);
           continue;
         }
         used.add(f.row);
