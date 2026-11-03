@@ -188,21 +188,21 @@ describe('source numbers (#63)', () => {
   it('a later City document can be numbered past the files after it; the chain still runs S1–Sn', () => {
     expect(nextNumber([{ number: 1 }, { number: 2 }, { number: 40 }])).toBe(3);
     expect(checkNumbering(b.sources)).toEqual([]);
-    expect(b.sources.map((s) => s.number)).toEqual(Array.from({ length: 44 }, (_, i) => i + 1));
+    expect(b.sources.map((s) => s.number)).toEqual(Array.from({ length: 57 }, (_, i) => i + 1));
   });
 
-  // Since #65, the last City document is S44 (the January budget update); renumbering it S45 leaves the gap.
-  it('the data build runs the check: S44 renumbered S45 leaves a gap at 44, and the build says so', async () => {
+  // Since #66, the last City document is S57 (the Safe Streets measure page); renumbering it S58 leaves the gap.
+  it('the data build runs the check: S57 renumbered S58 leaves a gap at 57, and the build says so', async () => {
     const tmp = mkdtempSync(join(tmpdir(), 'wtmw-63-'));
     try {
       cpSync(join(root, 'data'), join(tmp, 'data'), { recursive: true });
       const city = join(tmp, 'data/cities/us/ca/berkeley');
       const docs = JSON.parse(readFileSync(join(city, 'documents.json'), 'utf8'));
-      docs.sources.find((s: { id: string }) => s.id === 'S44').id = 'S45';
-      writeFileSync(join(city, 'documents.json'), JSON.stringify(docs).replaceAll('"source":"S44"', '"source":"S45"'));
-      cpSync(join(city, 'source/excerpts/S44.json'), join(city, 'source/excerpts/S45.json'));
+      docs.sources.find((s: { id: string }) => s.id === 'S57').id = 'S58';
+      writeFileSync(join(city, 'documents.json'), JSON.stringify(docs).replaceAll('"source":"S57"', '"source":"S58"'));
+      cpSync(join(city, 'source/excerpts/S57.json'), join(city, 'source/excerpts/S58.json'));
       const { errors } = await buildCity(tmp, 'us/ca/berkeley');
-      expect(errors).toEqual(['us/ca/berkeley: no source is numbered 44: the numbers must run S1–S45 with no gaps']);
+      expect(errors).toEqual(['us/ca/berkeley: no source is numbered 57: the numbers must run S1–S58 with no gaps']);
     } finally {
       rmSync(tmp, { recursive: true, force: true });
     }
