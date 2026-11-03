@@ -1,8 +1,8 @@
 /**
- * The Ballot page's passes/fails switch (#36) shows the Departments page's
- * figures: for every department and both outcomes, the same receipt (label and
- * value) and the same displayed amount. Which departments differ, and their
- * order, is worked out here from budget.json, not from the page code.
+ * The Ballot page's passes/fails switch (#36) shows the cuts view's figures (The Gap #cuts since
+ * #61): for every department and both outcomes, the same receipt (label and value) and the same
+ * displayed amount. Which departments differ, and their order, is worked out here from
+ * budget.json, not from the page code.
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -14,7 +14,9 @@ const root = join(import.meta.dirname, '../..');
 const b: GapBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
 const page = (p: string) => readFileSync(join(root, 'dist/us/ca/berkeley', p, 'index.html'), 'utf8');
 const ballot = page('ballot');
-const departments = page('departments');
+// The cuts view, a section of The Gap since #61: from its opening tag to the end of the page.
+const gap = page('gap');
+const departments = gap.slice(gap.indexOf('id="cuts"'));
 const unescape = (s: string) => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 const receipts = (html: string) =>
   [...html.matchAll(/data-receipt="([^"]*)"[^>]*>([\s\S]*?)<\/button/g)].map((m) => ({ ...(JSON.parse(unescape(m[1])) as { label?: string; value?: string }), shown: m[2].replace(/<[^>]+>/g, '').trim() }));
@@ -35,7 +37,7 @@ describe("Ballot: each department's cut, passes or fails (#36)", () => {
     expect(sameList).toContain(`${same.length} departments: same cut either way`);
   });
 
-  it('every figure in the switch is the Departments page receipt, with the same label, value and displayed amount', () => {
+  it("every figure in the switch is the cuts view's receipt, with the same label, value and displayed amount", () => {
     const mine = receipts(section);
     const twins = mine.filter((r) => !/passes or fails/.test(r.label!));
     expect(twins).toHaveLength(rows.length * 2);
@@ -43,7 +45,7 @@ describe("Ballot: each department's cut, passes or fails (#36)", () => {
       const d = deptReceipts.find((x) => x.label === r.label);
       expect(d, r.label).toBeDefined();
       expect(r.value, r.label).toBe(d!.value);
-      // The Departments page's button also carries the percentage: "$5.2M (4.9%)".
+      // The cuts view's button also carries the percentage: "$5.2M (4.9%)".
       expect(d!.shown.split(' ')[0], r.label).toBe(r.shown);
     }
   });
@@ -58,7 +60,7 @@ describe("Ballot: each department's cut, passes or fails (#36)", () => {
     }
   });
 
-  it('a department cut the same either way shows the amount both Departments page outcomes show', () => {
+  it("a department cut the same either way shows the amount both of the cuts view's outcomes show", () => {
     for (const { id, html } of same) {
       const d = fy27.find((x) => x.id === id)!;
       if (d.reduction === 0) {
@@ -76,6 +78,6 @@ describe("Ballot: each department's cut, passes or fails (#36)", () => {
   });
 
   it('links to all departments', () => {
-    expect(section).toMatch(/<a class="dc-all"[^>]*href="\/us\/ca\/berkeley\/departments\/"/);
+    expect(section).toMatch(/<a class="dc-all"[^>]*href="\/us\/ca\/berkeley\/gap\/#cuts"/);
   });
 });

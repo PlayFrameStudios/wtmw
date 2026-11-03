@@ -31,7 +31,7 @@ test.describe('landing page', () => {
     for (const [q, href] of [
       ['Where does the money go?', '/us/ca/berkeley/'],
       ['Why is there a deficit?', '/us/ca/berkeley/gap/'],
-      ["Who's cutting what?", '/us/ca/berkeley/departments/'],
+      ["Who's cutting what?", '/us/ca/berkeley/gap/#cuts'],
     ]) {
       await expect(page.locator('.question').filter({ hasText: q }).locator('a.open')).toHaveAttribute('href', href);
     }

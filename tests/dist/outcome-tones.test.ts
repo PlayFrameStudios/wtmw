@@ -25,9 +25,10 @@ const OUTCOME = /\bif (?:the sales tax|it) (passes|fails)\b/;
 describe('ballot outcomes are colored the same way (#23)', () => {
   const outcomes = receipts.filter((r) => OUTCOME.test(r.label));
 
-  it('finds the outcome figures on the overview, the Gap, Departments and the Ballot page', () => {
+  // The cuts by outcome are a section of The Gap since #61; Departments shows the baseline before them.
+  it('finds the outcome figures on the overview, the Gap and the Ballot page', () => {
     const pages = new Set(outcomes.map((r) => r.page.replace(/index\.html$/, '')));
-    for (const p of ['/us/ca/berkeley/', '/us/ca/berkeley/gap/', '/us/ca/berkeley/departments/', '/us/ca/berkeley/ballot/']) expect(pages, p).toContain(p);
+    for (const p of ['/us/ca/berkeley/', '/us/ca/berkeley/gap/', '/us/ca/berkeley/ballot/']) expect(pages, p).toContain(p);
   });
 
   it("each outcome's figure has a twin for the other outcome, with the same tone", () => {

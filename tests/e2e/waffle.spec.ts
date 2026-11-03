@@ -90,15 +90,16 @@ test.describe('the $100 waffle (phone)', () => {
   });
 });
 
-// #33: the sheet's old "proposed cut" was the full reduction, which is the fails outcome. Department details
-// labels each outcome: Fire $6.7M if Measure V fails, $3.0M if it passes.
-test('Department details names the ballot outcome each cut assumes', async ({ page }) => {
+// #33: the sheet's old "proposed cut" was the full reduction, which is the fails outcome. The cuts view's panel
+// labels each outcome: Fire $6.7M if Measure V fails, $3.0M if it passes. Since #61 the cuts are on The Gap, and
+// Department details lands on the department's row on the Departments page (berkeley-departments.spec.ts).
+test("the cuts view's department panel names the ballot outcome each cut assumes", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto(`${PAGE}departments/#fire`);
+  await page.goto(`${PAGE}gap/#fire`);
   const panel = page.locator('section.panel#fire');
   await expect(panel).toBeVisible();
   for (const [t, net] of [['passes', '$3.0M'], ['fails', '$6.7M']]) {
-    await page.locator(`label[for="tax-${t}"]`).first().click();
+    await page.locator(`label[for="cuts-tax-${t}"]`).first().click();
     const row = panel.locator('.yr--fy2027 .facts > div').filter({ hasText: `Net cut if Measure V ${t}` });
     await expect(row).toBeVisible();
     await expect(row.locator('dd')).toContainText(net);

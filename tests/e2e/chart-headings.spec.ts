@@ -4,9 +4,10 @@
  */
 import { expect, test } from '@playwright/test';
 
+// Berkeley's Departments page is Fremont's view since #61; its cuts list, which switches year, is on The Gap.
 const CITIES = [
-  { path: '/us/ca/berkeley/', chart: 'General Fund department baseline, per $100 · FY2027', list: ['General Fund department baseline · FY2027', 'General Fund department baseline · FY2028'] },
-  { path: '/us/ca/fremont/', chart: 'General Fund department budgets, per $100 · FY 2026/27', list: ['General Fund department budgets, per $100 · FY 2026/27'] },
+  { path: '/us/ca/berkeley/', chart: 'General Fund department baseline, per $100 · FY2027', list: 'General Fund department baseline, per $100 · FY2027' },
+  { path: '/us/ca/fremont/', chart: 'General Fund department budgets, per $100 · FY 2026/27', list: 'General Fund department budgets, per $100 · FY 2026/27' },
 ];
 
 for (const c of CITIES) {
@@ -27,15 +28,7 @@ for (const c of CITIES) {
       await page.goto(`${c.path}departments/`);
       const heading = page.locator('[data-list-title], #db-depts');
       const rows = page.locator('.rows, .db-list').first();
-      if (c.list.length === 1) {
-        await expect(heading).toHaveText(c.list[0]);
-      } else {
-        // Berkeley's list switches year; the heading follows the selected year.
-        // The other year's text is display:none, so read what's rendered.
-        await expect(heading).toHaveText(c.list[0], { useInnerText: true });
-        await page.locator('label[for="year-fy2028"]').click();
-        await expect(heading).toHaveText(c.list[1], { useInnerText: true });
-      }
+      await expect(heading).toHaveText(c.list);
       const h = (await heading.boundingBox())!;
       const r = (await rows.boundingBox())!;
       expect(r.y - (h.y + h.height)).toBeLessThanOrEqual(48);
@@ -43,3 +36,17 @@ for (const c of CITIES) {
     });
   });
 }
+
+test("The Gap's cuts list names the fund and the year above its rows, following its year switch", async ({ page }) => {
+  await page.goto('/us/ca/berkeley/gap/');
+  const heading = page.locator('#cuts [data-list-title]');
+  const rows = page.locator('#cuts .rows');
+  // The other year's text is display:none, so read what's rendered.
+  await expect(heading).toHaveText('General Fund department baseline · FY2027', { useInnerText: true });
+  await page.locator('label[for="cuts-year-fy2028"]').click();
+  await expect(heading).toHaveText('General Fund department baseline · FY2028', { useInnerText: true });
+  const h = (await heading.boundingBox())!;
+  const r = (await rows.boundingBox())!;
+  expect(r.y - (h.y + h.height)).toBeLessThanOrEqual(48);
+  expect(r.y).toBeGreaterThan(h.y);
+});

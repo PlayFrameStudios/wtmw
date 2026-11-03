@@ -27,11 +27,13 @@ const CARD3 = /^figure \| (0\.5%|\$300,000,000) \| Measure [A-Z]: proposed (loca
 // details; each department's baseline receipt lives on the Departments page (checked below).
 const SHEET = /^figure \| \$[\d,]+ \| .+ General Fund baseline, FY2027 \| S1 \| {2}\| $/;
 const RETIRED: Record<string, RegExp> = { '/us/ca/berkeley/': new RegExp(`${STRIP.source}|${CARD3.source}|${SHEET.source}`) };
+// #61: the cuts view moved from Departments to The Gap (#cuts), so its receipts are reachable there.
+const MOVED: Record<string, string[]> = { '/us/ca/berkeley/departments/': ['/us/ca/berkeley/gap/'] };
 
 describe('every receipt that had a chip is still reachable on its page (#29)', () => {
   for (const [path, keys] of Object.entries(before)) {
     it(path, () => {
-      const now = new Set(receipts(html(path)).flatMap(reachable));
+      const now = new Set([path, ...(MOVED[path] ?? [])].flatMap((p) => receipts(html(p)).flatMap(reachable)));
       const missing = keys.filter((k) => !now.has(k) && !RETIRED[path]?.test(k));
       expect(missing).toEqual([]);
     });
@@ -43,8 +45,8 @@ describe('every receipt that had a chip is still reachable on its page (#29)', (
     expect(receipts(h).flatMap(reachable).filter((k) => RETIRED['/us/ca/berkeley/'].test(k))).toEqual([]);
   });
 
-  it("each department baseline the sheets dropped still opens its receipt on the Departments page (#33)", () => {
-    const depts = receipts(html('/us/ca/berkeley/departments/'));
+  it("each department baseline the sheets dropped still opens its receipt on the cuts view, The Gap's since #61 (#33)", () => {
+    const depts = receipts(html('/us/ca/berkeley/gap/'));
     // The overview's sheets carried them. (The homepage's static chart never did: main's homepage stays, #28.)
     for (const path of ['/us/ca/berkeley/']) {
       const dropped = before[path].filter((k) => SHEET.test(k));

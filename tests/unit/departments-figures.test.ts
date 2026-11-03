@@ -13,7 +13,7 @@ const city = cities[0];
 const budget = gapPlan(budgetFor(city)!, 'test');
 const p = departmentsPage(budget, familiesFor(city, budget), shortNames(city.path, budget), city.budget.years, (y) => fy(city.budget.labels, y));
 const police = p.rows.find((r) => r.id === 'police')!;
-const page = new URL('https://wherethemoneywent.com/us/ca/berkeley/departments/');
+const page = new URL('https://wherethemoneywent.com/us/ca/berkeley/gap/');
 
 describe('departments page figures', () => {
   it('FY27 Police, tax passes: $106.2M baseline, $10.6M cut (10.0%), +$5.3M softened, $5.2M net (4.9%)', () => {
@@ -59,8 +59,11 @@ describe('departments page figures', () => {
   });
 
   it('has no figure typed into the page', () => {
-    const src = readFileSync(join(import.meta.dirname, '../../src/components/views/DepartmentCuts.astro'), 'utf8');
-    for (const literal of ['106.2', '10.6M', '5.3M', '5.2M', '4.9%', '29.3', '283.8', '600K', '37.42']) expect(src, literal).not.toContain(literal);
+    // The cuts, a section of The Gap since #61, and the Departments view Berkeley now shares with Fremont.
+    for (const file of ['src/components/DepartmentCuts.astro', 'src/components/views/DepartmentBudgets.astro']) {
+      const src = readFileSync(join(import.meta.dirname, '../..', file), 'utf8');
+      for (const literal of ['106.2', '10.6M', '5.3M', '5.2M', '4.9%', '29.3', '283.8', '600K', '37.42', '1,559', '1559']) expect(src, `${file}: ${literal}`).not.toContain(literal);
+    }
   });
 
   // #33: the chart's sheet spells every name out.

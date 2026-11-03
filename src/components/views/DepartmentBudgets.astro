@@ -1,18 +1,19 @@
 ---
 /**
- * Departments for a city without a deficit plan (#43): what each department's General Fund
- * budget is, per $100, then the citywide lines (non-departmental spending, debt service, a
+ * Departments (#43): what each department's General Fund budget is, per $100, then the citywide lines (non-departmental spending, debt service, a
  * citywide savings assumption) that bring the departments to the budget's total, and staff
  * positions, by department where the budget lists them, with what FTE means (#60). Every number from
  * departmentBudgets() in src/lib/department-budgets.ts.
- * Styles are inline so they ship only with this view, never on a deficit-plan city's page.
+ * A city with a deficit plan (#61) shows its baseline before the proposed cuts, and links to who's being asked to
+ * cut, a section of The Gap. Styles are inline, as they were when this was one of two views.
  */
 import CitedText from '../CitedText.astro';
 import SourceChip from '../SourceChip.astro';
 import Sourced from '../Sourced.astro';
 import Base from '../../layouts/Base.astro';
+import { hasGapPlan } from '../../data/types';
 import { budgetFor } from '../../lib/budget';
-import type { City } from '../../lib/cities';
+import { hasPage, type City } from '../../lib/cities';
 import { fy } from '../../lib/city-settings';
 import { coverageFor } from '../../lib/coverage';
 import { departmentBudgets } from '../../lib/department-budgets';
@@ -31,8 +32,11 @@ const budget = budgetFor(city)!;
 const label = (y: number) => fy(city.budget.labels, y);
 const p = departmentBudgets(budget, familiesFor(city, budget), fullNames(city.path, budget), label);
 const y = label(p.year);
-// Fremont's position table covers every fund; a list with no fund split (Lafayette's) is just the City's (#60).
-const staffWhere = p.staff.rows.length > 0 ? 'in every fund, not just the General Fund' : "in the City's budget";
+// Fremont's and Berkeley's counts cover every fund; a list with no fund split (Lafayette's) is just the City's (#60, #61).
+const staffWhere = /all funds/i.test(budget.staffing.basis) ? 'in every fund, not just the General Fund' : "in the City's budget";
+// A deficit plan's figures are a baseline before the proposed cuts, not what departments will get (#61).
+const beforeCuts = hasGapPlan(budget);
+const cutsHref = beforeCuts && hasPage(city, 'gap') ? `${city.path}gap/#cuts` : undefined;
 // Who provides a service, and the services the General Fund doesn't pay for (#59), as cited paragraphs.
 const covers = coverageFor(city, budget, revenueGroupsFor(city, budget));
 const units = `${p.unit}s`;
@@ -40,12 +44,33 @@ const width = (v: number, max: number) => `${((Math.abs(v) / max) * 100).toFixed
 const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 });
 ---
 
-<Base title={`Departments · ${city.name}`} city={city} description={`What each of ${city.name}'s ${units} gets from the ${y} General Fund, per $100${p.staff.rows.length ? ', and how many people work there' : ''}. Every number links to the public document it came from.`}>
+<Base
+  title={`Departments · ${city.name}`}
+  city={city}
+  description={
+    beforeCuts
+      ? `What each of ${city.name}'s ${units} starts with in the ${y} General Fund, per $100, before the proposed cuts. Every number links to the public document it came from.`
+      : `What each of ${city.name}'s ${units} gets from the ${y} General Fund, per $100${p.staff.rows.length ? ', and how many people work there' : ''}. Every number links to the public document it came from.`
+  }
+>
   <div class="db-page wrap">
     <section class="db-intro">
-      <h1>What each {p.unit} gets in {y}</h1>
+      <h1>{beforeCuts ? `What each ${p.unit} starts with in ${y}, before cuts` : `What each ${p.unit} gets in ${y}`}</h1>
       {
-        p.citywide.length > 0 ? (
+        beforeCuts ? (
+          <p class="db-lede">
+            Before the proposed cuts, the City's {y} plan gives its {units} <Sourced city={city} figure={p.total}>{shortMoney(p.total.value)}</Sourced> of General
+            Fund money.
+            {cutsHref && (
+              <>
+                {' '}
+                <a href={cutsHref} data-cuts-link>
+                  Who's being asked to cut, and by how much <span aria-hidden="true">→</span>
+                </a>
+              </>
+            )}
+          </p>
+        ) : p.citywide.length > 0 ? (
           <p class="db-lede">
             The City's {units} have <Sourced city={city} figure={p.departments}>{shortMoney(p.departments.value)}</Sourced> of General Fund money this year.
             Non-departmental costs and debt service add to that, and a citywide savings assumption takes some back, for{' '}
@@ -143,6 +168,14 @@ const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 
           )
         }
         {p.staff.rows.length > 0 && ' This table lists the administrative departments separately.'}
+        {
+          beforeCuts && (
+            <span data-staff-baseline>
+              {' '}
+              This is the {y} baseline, before the {cutsHref ? <a href={cutsHref}>proposed reductions</a> : 'proposed reductions'}.
+            </span>
+          )
+        }
       </p>
       {
         p.staff.rows.length > 0 && (

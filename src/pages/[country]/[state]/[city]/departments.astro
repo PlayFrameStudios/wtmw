@@ -1,18 +1,14 @@
 ---
 /**
- * Departments: a city with a deficit plan gets who's being asked to cut, by year and ballot
- * outcome (DepartmentCuts); a city without one, what each department gets (DepartmentBudgets, #43).
+ * Departments: what each department gets, per $100, and staff positions (DepartmentBudgets, #43). A city with a
+ * deficit plan shows its baseline before the proposed cuts; who's being asked to cut is on The Gap (#61).
  */
 import DepartmentBudgets from '../../../../components/views/DepartmentBudgets.astro';
-import DepartmentCuts from '../../../../components/views/DepartmentCuts.astro';
-import { hasGapPlan } from '../../../../data/types';
-import { budgetFor } from '../../../../lib/budget';
 import { cityStaticPaths, type City } from '../../../../lib/cities';
 
 export const getStaticPaths = cityStaticPaths();
 
 const { city } = Astro.props as { city: City };
-const budget = budgetFor(city)!;
 ---
 
-{hasGapPlan(budget) ? <DepartmentCuts city={city} /> : <DepartmentBudgets city={city} />}
+<DepartmentBudgets city={city} />
