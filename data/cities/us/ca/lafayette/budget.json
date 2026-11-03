@@ -1020,7 +1020,17 @@
     "source": "S1",
     "page": 32,
     "quote": "TOTAL: 50.10",
-    "column": "NUMBER OF EMPLOYEES"
+    "column": "NUMBER OF EMPLOYEES",
+    "scope": {
+      "text": "The count covers regular positions; the City also employs temporary and seasonal staff who aren't counted.",
+      "cites": [
+        {
+          "source": "S3",
+          "page": 12,
+          "quote": "The City employs 50.1 FTE regular employees as well as many temporary and seasonal"
+        }
+      ]
+    }
   },
   "size": {
     "generalFund": {

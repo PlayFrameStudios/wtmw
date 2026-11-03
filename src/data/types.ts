@@ -135,6 +135,8 @@ export type Staffing = Cite & {
   basis: string;
   /** By department, where the budget lists them. */
   byDepartment?: (DocRef & { name: string; fte: number })[];
+  /** What the count leaves out (#60), where the City's own document says: "regular positions only". */
+  scope?: StepNote;
 };
 
 /** The budget's size: all funds, and the General Fund (the part the Council can spend on anything). */

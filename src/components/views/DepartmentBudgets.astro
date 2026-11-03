@@ -3,10 +3,12 @@
  * Departments for a city without a deficit plan (#43): what each department's General Fund
  * budget is, per $100, then the citywide lines (non-departmental spending, debt service, a
  * citywide savings assumption) that bring the departments to the budget's total, and staff
- * positions by department. Every number from departmentBudgets() in src/lib/department-budgets.ts.
+ * positions, by department where the budget lists them, with what FTE means (#60). Every number from
+ * departmentBudgets() in src/lib/department-budgets.ts.
  * Styles are inline so they ship only with this view, never on a deficit-plan city's page.
  */
 import CitedText from '../CitedText.astro';
+import SourceChip from '../SourceChip.astro';
 import Sourced from '../Sourced.astro';
 import Base from '../../layouts/Base.astro';
 import { budgetFor } from '../../lib/budget';
@@ -15,6 +17,7 @@ import { fy } from '../../lib/city-settings';
 import { coverageFor } from '../../lib/coverage';
 import { departmentBudgets } from '../../lib/department-budgets';
 import { fullNames, generalFundNoun } from '../../lib/departments';
+import { siteFaqHref } from '../../lib/faq';
 import { familiesFor } from '../../lib/families';
 import { shortMoney } from '../../lib/format';
 import { revenueGroupsFor } from '../../lib/revenue-groups';
@@ -28,6 +31,8 @@ const budget = budgetFor(city)!;
 const label = (y: number) => fy(city.budget.labels, y);
 const p = departmentBudgets(budget, familiesFor(city, budget), fullNames(city.path, budget), label);
 const y = label(p.year);
+// Fremont's position table covers every fund; a list with no fund split (Lafayette's) is just the City's (#60).
+const staffWhere = p.staff.rows.length > 0 ? 'in every fund, not just the General Fund' : "in the City's budget";
 // Who provides a service, and the services the General Fund doesn't pay for (#59), as cited paragraphs.
 const covers = coverageFor(city, budget, revenueGroupsFor(city, budget));
 const units = `${p.unit}s`;
@@ -122,14 +127,25 @@ const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 
       </table>
     </section>
 
-    {
-      p.staff.rows.length > 0 && (
-        <section class="db-section" aria-labelledby="db-staff">
-          <h2 id="db-staff">Staff positions</h2>
-          <p class="db-note">
-            Full-time-equivalent positions in every fund, not just the General Fund: <Sourced city={city} figure={p.staff.total}>{fte(p.staff.total.value)}</Sourced> in all. This
-            table lists the administrative departments separately.
-          </p>
+    <section class="db-section" aria-labelledby="db-staff">
+      <h2 id="db-staff">Staff positions</h2>
+      <p class="db-note">
+        <a href={siteFaqHref('staff-positions-fte')} data-fte-faq-link>Full-time-equivalent</a> positions {staffWhere}:{' '}
+        <Sourced city={city} figure={p.staff.total}>{fte(p.staff.total.value)}</Sourced> in all.{' '}
+        <span data-fte-note>FTE counts budgeted positions, not people: a position budgeted at half time counts as 0.50, so the total can end in a fraction.</span>
+        {
+          p.staff.scope && (
+            <span data-staff-scope>
+              {' '}
+              {p.staff.scope.text}
+              <SourceChip city={city} source={p.staff.scope.cites[0].source} at={p.staff.scope.cites[0]} also={p.staff.scope.cites.slice(1)} />
+            </span>
+          )
+        }
+        {p.staff.rows.length > 0 && ' This table lists the administrative departments separately.'}
+      </p>
+      {
+        p.staff.rows.length > 0 && (
           <ol class="db-list" role="list">
             {p.staff.rows.map((r) => (
               <li class="db-row db-row--staff">
@@ -145,9 +161,9 @@ const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 
               </li>
             ))}
           </ol>
-        </section>
-      )
-    }
+        )
+      }
+    </section>
   </div>
 </Base>
 

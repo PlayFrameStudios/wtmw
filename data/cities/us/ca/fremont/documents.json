@@ -420,5 +420,20 @@
       "page": 282,
       "definition": "Amounts transferred between funds; not considered a revenue or expense. For example, legally authorized transfers from a fund receiving revenue to the fund through which the resources are to be expended are shown as operating transfers."
     }
-  ]
+  ],
+  "staffingScope": {
+    "text": "The count covers regular positions only; temporary staff are paid from salary budgets and aren't counted.",
+    "cites": [
+      {
+        "source": "S1",
+        "page": 39,
+        "quote": "The total authorized regular staffing level of 994.24"
+      },
+      {
+        "source": "S1",
+        "page": 282,
+        "quote": "Salaries and Benefits A budget category that generally accounts for salaries of regular and temporary employees"
+      }
+    ]
+  }
 }

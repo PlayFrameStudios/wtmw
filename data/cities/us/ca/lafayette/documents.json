@@ -470,5 +470,15 @@
       "definition": "Money the City sets aside year by year for a known future cost. The City’s financial report describes “sinking funds” for future operating costs such as vehicle replacements, vacation accruals, retiree healthcare, capital expenditures, deferred maintenance, and other monies that have been earmarked for specific purposes by the Council.",
       "quote": "“sinking funds” for future operating costs such as vehicle replacements, vacation accruals, retiree healthcare, capital expenditures, deferred maintenance, and other monies that have been earmarked for specific purposes by the Council."
     }
-  ]
+  ],
+  "staffingScope": {
+    "text": "The count covers regular positions; the City also employs temporary and seasonal staff who aren't counted.",
+    "cites": [
+      {
+        "source": "S3",
+        "page": 12,
+        "quote": "The City employs 50.1 FTE regular employees as well as many temporary and seasonal"
+      }
+    ]
+  }
 }

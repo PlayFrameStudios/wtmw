@@ -6,9 +6,9 @@
  * Every table is tied to its own total rows, figures that two tables both print must agree, and
  * every sentence-stated number is parsed from its quote. The build fails on any mismatch.
  */
-import { checkQuote, normalize, type Excerpts } from '../documents.ts';
+import { checkNote, checkQuote, normalize, type Excerpts } from '../documents.ts';
 import { readTable, tieOut, type TableRow, type TableSpec } from '../tables.ts';
-import type { BudgetColumn, CityBudget, DocRef, Fact, RevenueLine, Source, SourceId } from '../types.ts';
+import type { BudgetColumn, CityBudget, DocRef, Fact, RevenueLine, Source, SourceId, StepNote } from '../types.ts';
 import { SCHEMA_VERSION } from '../types.ts';
 
 export interface FremontDocuments {
@@ -21,6 +21,8 @@ export interface FremontDocuments {
    * the glossary doesn't define is defined from the text: `quote` is the City's words, and the definition holds them verbatim.
    */
   glossary: { term: string; source: SourceId; page: number; definition: string; quote?: string }[];
+  /** What the staffing count leaves out (#60), in the City's words: for the departments page. */
+  staffingScope?: StepNote;
 }
 
 /** The budget year: FY 2026/27, by the year it ends in. */
@@ -251,7 +253,9 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
     basis: 'adopted, all funds',
     byDepartment: byDepartment.map((r) => ({ name: r.label, fte: r.values[String(YEAR)], ...r.at(String(YEAR)) })),
     ...citywide.at(String(YEAR)),
+    ...(file.staffingScope && { scope: file.staffingScope }),
   };
+  if (file.staffingScope) errors.push(...checkNote(file.staffingScope, excerpts, known, 'documents.json staffingScope'));
 
   // Size: all funds (p.32) and the General Fund (p.66), total uses; the all-funds table's General Funds column must match.
   const allFunds = readTable(file.tables.allFunds, excerpts);
