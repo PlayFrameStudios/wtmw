@@ -77,7 +77,7 @@ describe('every figure equals the approved workbook (#65)', () => {
 
   it("every workbook figure, by the row and column it's printed in", () => {
     let compared = 0;
-    for (const [city, measure, period, value, unit, , , , , quote] of workbook) {
+    for (const [city, measure, period, value, unit, , src, pdf, , quote] of workbook) {
       if (typeof value !== 'number') continue;
       const c = city.toLowerCase() as CityId;
       const { row, col } = where(city, measure, period);
@@ -86,8 +86,9 @@ describe('every figure equals the approved workbook (#65)', () => {
         const r = data.lafayette.spec.rows.find((x) => x.id === row)!;
         expect(printedNumbers(r.quote.slice(r.label.length))[2].value, `${measure} ${period}`).toBe(value);
       } else expect(built[c].values[row]?.[col], `${city} ${measure} ${period}`).toEqual(unit === '%' ? { value: Number((value / 100).toFixed(6)), percent: true } : { value, percent: false });
-      // The workbook's quote is the same printed row (less its note on units).
+      // The workbook's quote is the same printed row (less its note on units), on the same document and page.
       const r = data[c].spec.rows.find((x) => x.id === row)!;
+      expect([r.source, r.page], `${measure}`).toEqual([SOURCE[src], pdf]);
       expect(normalize(r.quote), `${measure}`).toContain(normalize(quote.replace(/ \((thousands|\$ in millions)[^)]*\)$/, '')));
       compared++;
     }

@@ -8,9 +8,9 @@ test.describe('sources page', () => {
   test('filters: all, city documents, news reports, other governments', async ({ page }) => {
     await page.goto(PAGE);
     const rows = page.locator('.src-row');
-    await expect(rows.filter({ visible: true })).toHaveCount(42);
+    await expect(rows.filter({ visible: true })).toHaveCount(44);
     await page.locator('label[for="filter-city"]').click();
-    await expect(rows.filter({ visible: true })).toHaveCount(21);
+    await expect(rows.filter({ visible: true })).toHaveCount(23);
     await expect(page.locator('.src-row[data-type="news"]').first()).toBeHidden();
     await expect(page.locator('.src-row[data-type="other"]').first()).toBeHidden();
     await page.locator('label[for="filter-news"]').click();

@@ -16,12 +16,12 @@ const pages = (dir: string): string[] =>
 describe('sources page', () => {
   const rows = [...html.matchAll(/<li class="src-row" id="(S\d+)" data-type="(city|news|other)"/g)].map((m) => ({ id: m[1], type: m[2] }));
 
-  it('lists all 42 sources, in order: 21 city documents, 10 news reports, 11 from other governments (#51, #54, #63, #64)', () => {
+  it('lists all 44 sources, in order: 23 city documents, 10 news reports, 11 from other governments (#51, #54, #63, #64, #65)', () => {
     expect(rows.map((r) => r.id)).toEqual(b.sources.map((s) => s.id));
-    expect(rows.map((r) => r.id)).toEqual(Array.from({ length: 42 }, (_, i) => `S${i + 1}`));
-    expect(rows.filter((r) => r.type === 'city')).toHaveLength(21);
+    expect(rows.map((r) => r.id)).toEqual(Array.from({ length: 44 }, (_, i) => `S${i + 1}`));
+    expect(rows.filter((r) => r.type === 'city')).toHaveLength(23);
     expect(rows.filter((r) => r.type === 'other')).toHaveLength(11);
-    expect(text).toContain('City documents (21)');
+    expect(text).toContain('City documents (23)');
     expect(text).toContain('News reports (10)');
     expect(text).toContain('Other governments (11)');
   });
@@ -44,6 +44,9 @@ describe('sources page', () => {
     expect(meta('S41')).toMatch(/· pp\. 3, 4$/);
     // #64: the Financial Summaries' revenue and spending totals.
     expect(meta('S42')).toMatch(/· pp\. 8, 10$/);
+    // #65: salaries and benefits by year (Supplemental 2), and the January update's pension chart.
+    expect(meta('S43')).toMatch(/· p\. 33$/);
+    expect(meta('S44')).toMatch(/· p\. 9$/);
     expect(meta('S1')).not.toMatch(/ p\. /);
   });
 
