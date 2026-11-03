@@ -23,8 +23,7 @@
       "note": "Balance & Reserves shows each reserve, and the Contingency Reserve at 16.7% of spending, but not against a City target; #68 adds the City's own targets."
     },
     "history": {
-      "status": "pending",
-      "story": 64
+      "status": "covered"
     },
     "staff-costs": {
       "status": "pending",
