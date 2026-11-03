@@ -130,8 +130,10 @@ test('the department switch works by tap at 390px: Police shows $5.2M if it pass
   await expect(police.locator('.dc-v').filter({ visible: true })).toHaveText(['$5.2M']);
   await page.locator('.dc-same summary').tap();
   await expect(page.locator('.dc-same li[data-dept="hhcs"]')).toBeVisible();
+  // The cuts are a section of The Gap since #61.
   await page.getByRole('link', { name: 'All departments' }).tap();
-  await expect(page).toHaveURL(/\/us\/ca\/berkeley\/departments\/$/);
+  await expect(page).toHaveURL(/\/us\/ca\/berkeley\/gap\/#cuts$/);
+  await expect(page.locator('#cuts-title')).toBeInViewport();
   await ctx.close();
 });
 
