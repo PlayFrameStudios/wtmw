@@ -6,11 +6,12 @@ import { unwrapFigures } from './figures';
 
 const root = join(import.meta.dirname, '../..');
 const b: GapBudget = JSON.parse(readFileSync(join(root, 'data/cities/us/ca/berkeley/budget.json'), 'utf8'));
-const html = readFileSync(join(root, 'dist/us/ca/berkeley/departments/index.html'), 'utf8');
+// The cuts view, a section of The Gap since #61.
+const html = readFileSync(join(root, 'dist/us/ca/berkeley/gap/index.html'), 'utf8');
 const m = (v: number) => `$${(v / 1e6).toFixed(1)}M`;
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
 
-describe('departments page (built)', () => {
+describe('who is being asked to cut, on The Gap (built)', () => {
   const police = b.departmentReductions[0].departments.find((d) => d.id === 'police')!;
   const panel = html.slice(html.indexOf('id="police"'), html.indexOf('</section>', html.indexOf('id="police"')));
   const fy27 = panel.slice(panel.indexOf('yr--fy2027'), panel.indexOf('yr--fy2028'));

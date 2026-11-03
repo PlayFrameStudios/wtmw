@@ -48,8 +48,10 @@ describe('no eyebrows (#32)', () => {
     [`${B}gap/`, /<h2>The city plans to close it with ongoing cuts, one-time money and, if voters approve it, new sales-tax revenue\.<\/h2>/],
     [`${B}revenue/`, /in General Fund revenue for FY2026/],
     [`${B}capital/`, /This page covers the program's FY2027-28 plan\./],
-    [`${B}departments/`, /<h1>Who's being asked to cut in <span class="yr yr--fy2027"[^>]*>FY2027<\/span><span class="yr yr--fy2028"[^>]*>FY2028<\/span>, and by how much<\/h1>/],
-    [`${B}departments/`, /Every department was asked to find savings in the proposed budget\./],
+    // The cuts view's h1 became The Gap's #cuts section heading (#61).
+    [`${B}gap/`, /<h2 id="cuts-title">Who's being asked to cut in <span class="yr yr--fy2027"[^>]*>FY2027<\/span><span class="yr yr--fy2028"[^>]*>FY2028<\/span>, and by how much<\/h2>/],
+    [`${B}gap/`, /Every department was asked to find savings in the proposed budget\./],
+    [`${B}departments/`, /<h1>What each department starts with in FY2027, before cuts<\/h1>/],
     [`${B}ballot/`, /<p class="lede"[^>]*>The election is November 3, 2026\./],
     [`${B}ballot/`, /It needs a simple majority to pass\./],
     [`${B}ballot/`, /It needs a two-thirds vote to pass\./],
