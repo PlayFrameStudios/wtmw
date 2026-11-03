@@ -1,0 +1,60 @@
+{
+  "note": "Where this city stands on each topic in README \"What every city covers\" (#70): covered, not-published (with what was searched, and when), pending (with the story that adds it), or, for a ballot, not-applicable. npm run data checks it.",
+  "topics": {
+    "per-100": {
+      "status": "covered"
+    },
+    "departments": {
+      "status": "covered"
+    },
+    "staff-positions": {
+      "status": "covered"
+    },
+    "revenue": {
+      "status": "covered"
+    },
+    "restricted-taxes": {
+      "status": "pending",
+      "story": 66
+    },
+    "reserves": {
+      "status": "pending",
+      "story": 68,
+      "note": "Balance & Reserves shows the reserve against the City's 60% minimum; #68 adds the City's other targets."
+    },
+    "history": {
+      "status": "pending",
+      "story": 64
+    },
+    "staff-costs": {
+      "status": "pending",
+      "story": 65
+    },
+    "capital": {
+      "status": "covered"
+    },
+    "forecast": {
+      "status": "pending",
+      "story": 67,
+      "note": "Partly: Balance & Reserves gives the forecast's reserve share for FY 2030-31. #67 adds the forecast itself."
+    },
+    "coverage": {
+      "status": "covered"
+    },
+    "schools": {
+      "status": "covered",
+      "note": "A pointer to the school districts' own budgets, in the Sources page's coverage block."
+    },
+    "ballot": {
+      "status": "not-applicable",
+      "reason": "No City of Lafayette measure on the November 3, 2026 ballot: the finalized list of Lamorinda candidates and measures has only the Acalanes Union High School District's Measure W, and no City Council race.",
+      "checked": {
+        "source": "https://lamorindaweekly.com/articles/2026/candidates-and-measures-for-november-election-finalized/",
+        "date": "2026-11-03"
+      }
+    },
+    "sources": {
+      "status": "covered"
+    }
+  }
+}

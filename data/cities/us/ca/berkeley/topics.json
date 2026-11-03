@@ -1,0 +1,55 @@
+{
+  "note": "Where this city stands on each topic in README \"What every city covers\" (#70): covered, not-published (with what was searched, and when), pending (with the story that adds it), or, for a ballot, not-applicable. npm run data checks it.",
+  "topics": {
+    "per-100": {
+      "status": "covered"
+    },
+    "departments": {
+      "status": "covered",
+      "note": "From the April 16 Budget & Finance plan, before the Council adopted the budget on June 23; #63 moves it to the adopted figures."
+    },
+    "staff-positions": {
+      "status": "covered"
+    },
+    "revenue": {
+      "status": "covered"
+    },
+    "restricted-taxes": {
+      "status": "pending",
+      "story": 66
+    },
+    "reserves": {
+      "status": "pending",
+      "story": 68,
+      "note": "The Gap shows the one-time money that softens the cuts; no reserve level against the City's policy yet."
+    },
+    "history": {
+      "status": "pending",
+      "story": 64
+    },
+    "staff-costs": {
+      "status": "pending",
+      "story": 65
+    },
+    "capital": {
+      "status": "covered"
+    },
+    "forecast": {
+      "status": "pending",
+      "story": 67
+    },
+    "coverage": {
+      "status": "covered"
+    },
+    "schools": {
+      "status": "covered",
+      "note": "The school district's budget has a page of its own."
+    },
+    "ballot": {
+      "status": "covered"
+    },
+    "sources": {
+      "status": "covered"
+    }
+  }
+}

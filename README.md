@@ -114,7 +114,44 @@ Every city gets an overview at its root, plus the pages `pagesFor()` in `src/lib
 
 The build fails if a city switches on a page without the data that page needs: `gap` and `ballot` need `budget.json` and `ballot.json`, and `reserves` needs `reserves.json` in the city's folder. That file lists each reserve's name, what it's for in plain words, and its amount as a quote and PDF page. The amount is parsed from the quote, which must hold exactly one dollar figure, and the quote is checked against its page. `src/components/Reserves.astro` renders it, for the Balance & Reserves page now and the Gap page later.
 
-**To add a city**, create its folder and `city.json` (copy Berkeley's and set the settings above). The budget data for each city lives in the same folder.
+**To add a city**, create its folder and `city.json` (copy Berkeley's and set the settings above). The budget data for each city lives in the same folder, and so does its `topics.json` (below).
+
+### What every city covers
+
+Every city reports on the same topics, so a reader can expect the same things from each city's pages. Sourcing a new city searches its documents for every one of them:
+
+- **Where every $100 goes**
+- **Departments**
+- **Staff positions**
+- **Revenue**
+- **Restricted taxes**
+- **Balance & reserves, and the City's own targets**
+- **History**
+- **Staff costs and pensions**
+- **Capital**
+- **The City's forecast**
+- **Services provided by other governments**
+- **Schools pointer**
+- **Ballot (when there is one)**
+- **Sources & receipts**
+
+`src/data/topics.ts` defines them, and a unit test checks that this list matches it. Each city's `data/cities/{country}/{state}/{city}/topics.json` says where the city stands on every topic:
+
+```json
+"topics": {
+  "revenue": { "status": "covered" },
+  "history": { "status": "pending", "story": 64 },
+  "forecast": { "status": "not-published", "checked": { "source": "S1", "date": "2026-11-03" } },
+  "ballot": { "status": "not-applicable", "reason": "…", "checked": { "source": "https://…", "date": "2026-11-03" } }
+}
+```
+
+- **`covered`**: the pages show it. A topic with a page of its own (Departments, Revenue, Capital, Ballot, Sources) needs that page to be on.
+- **`not-published`**: the City doesn't publish it. `checked` names the document or page searched (a source id or a URL) and the date.
+- **`pending`**: not on the pages yet. `story` is the story that adds it.
+- **`not-applicable`**: only for a topic reported when there is one (a ballot measure). It needs a `reason` and `checked`, and the topic's page must be off.
+
+Any status may add a `note`, for example "Partly: …". `npm run data` fails if a real city has no `topics.json`, leaves out a topic, names one that isn't in the list, or gives a status without what it needs. Fixture cities don't keep one. (`coverage.json` is a different file: what the City's budget covers and what other governments pay for, #51.)
 
 ### Test fixture cities
 
