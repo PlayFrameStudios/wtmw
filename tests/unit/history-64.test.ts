@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { checkQuote, type Excerpts } from '../../src/data/documents';
-import { applyHistory, printedFigures, type HistorySpec, type HistoryValues, type TieResult } from '../../src/data/history';
+import { applyHistory, printedFigures, type HistorySpec } from '../../src/data/history';
 import { readDocuments } from '../../src/data/pipeline';
 import { numberFromIds } from '../../src/data/source-numbers';
 import type { CityBudget, HistoryAs } from '../../src/data/types';
@@ -23,7 +23,7 @@ const run = (c: CityId, edit: (s: HistorySpec) => void = () => {}) => {
   edit(spec);
   return applyHistory({ ...data[c].budget, history: undefined }, spec, data[c].excerpts, c);
 };
-let built: Record<CityId, { errors: string[]; ties: TieResult[]; values: HistoryValues }>;
+let built: Record<CityId, ReturnType<typeof applyHistory>>;
 
 beforeAll(async () => {
   for (const c of CITIES) {
