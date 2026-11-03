@@ -175,6 +175,11 @@ describe('broken on purpose', () => {
     expect(errors.filter((e) => /"Total Revenues = Property Tax \+ .*" doesn't tie/.test(e))).toHaveLength(6);
   });
 
+  it('the tie-outs hold to the dollar, as the workbook\'s: Other Revenues read 0.1% high ($52 to $111) fails the revenue sum every year', () => {
+    const errors = run('fremont', (s) => (rowOf(s, 'other-revenues').unit = 1001)).errors;
+    expect(errors.filter((e) => /"Total Revenues = Property Tax \+ .*" doesn't tie/.test(e))).toHaveLength(6);
+  });
+
   it('a row left out of its sum fails that sum every year, and is reported as unchecked', () => {
     const errors = run('fremont', (s) => {
       const tie = s.ties.find((t) => t.kind === 'sum' && t.equals === 'total-expenditures') as { rows: string[] };
