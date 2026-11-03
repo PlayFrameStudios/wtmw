@@ -60,7 +60,7 @@ describe('families', () => {
 describe('landing headlines follow the data', () => {
   it('reads every figure from budget.json', () => {
     const h = headlines(budget, families);
-    expect(h).toMatchObject({ safetyPer100: 57, positionsWithoutTax: 138, departmentsCut: 15, sourceCount: 41 });
+    expect(h).toMatchObject({ safetyPer100: 57, positionsWithoutTax: 138, departmentsCut: 15, sourceCount: 42 });
     expect(h.positionsWithTax.value).toBe(105);
     expect(h.baseline.value).toBe(283_764_035);
     expect(h.gap.value).toBe(-29_249_339);

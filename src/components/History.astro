@@ -1,0 +1,450 @@
+---
+/**
+ * "Over the years" (#64): the General Fund's revenue, spending and transfers by year, and its fund balance where the
+ * City prints one, one panel per document basis. The lines are drawn in an SVG; every point is a receipt button
+ * placed over it (solid for an actual result, hollow for an estimate or a budget). "Show as a table" swaps the charts
+ * for the same figures as a table; without the script both show, so the table is always reachable.
+ */
+import { fy as fyLabel } from '../lib/city-settings';
+import type { City } from '../lib/cities';
+import { shortMoney } from '../lib/format';
+import { AS_WORD, type HistoryChart, type HistoryPanelView } from '../lib/history';
+import SourceChip from './SourceChip.astro';
+import Sourced from './Sourced.astro';
+
+interface Props {
+  city: City;
+  panels: HistoryPanelView[];
+}
+
+const { city, panels } = Astro.props;
+const fy = (y: number) => fyLabel(city.budget.labels, y);
+const COLORS: Record<string, string> = {
+  revenue: 'var(--bay)',
+  spending: 'var(--family-safety-1)',
+  'transfers-in': 'var(--family-people-3)',
+  'transfers-out': 'var(--family-running-start)',
+  'fund-balance': 'var(--family-oversight-1)',
+};
+const color = (id: string) => COLORS[id] ?? 'var(--ink)';
+// Points sit inside the plot's edges so the first and last aren't cut off.
+const x = (c: HistoryChart, year: number) => (c.years.length === 1 ? 50 : 4 + (c.years.indexOf(year) / (c.years.length - 1)) * 92);
+const y = (c: HistoryChart, value: number) => 100 - (Math.max(0, value) / c.max) * 100;
+const title = (c: HistoryChart) =>
+  c.kind === 'balance' ? `Ending fund balance, ${fy(c.years[0])} to ${fy(c.years.at(-1)!)}` : `${c.lines.map((l) => l.label).join(', ')}, ${fy(c.years[0])} to ${fy(c.years.at(-1)!)}`;
+const full = (v: number) => `${v < 0 ? '−' : ''}$${Math.abs(v).toLocaleString('en-US')}`;
+---
+
+<section class="history" id="history" aria-labelledby="history-title">
+  <h2 id="history-title">Over the years</h2>
+  <p class="lede">
+    The General Fund in past years and in the budget years, as the City prints them. Solid points are actual results; hollow points are estimates and budgets.
+    Every point opens its source.
+  </p>
+  {
+    panels.map((p) => (
+      <div class="hist-panel" data-panel={p.id} data-history-panel>
+        <h3>{p.title}</h3>
+        <p class="hist-basis">
+          {p.basis.text}
+          <SourceChip city={city} source={p.basis.cites[0].source} at={p.basis.cites[0]} also={p.basis.cites.slice(1)} />
+        </p>
+        <button type="button" class="hist-toggle" aria-controls={`history-${p.id}-table`} aria-expanded="false" data-history-toggle hidden>
+          Show as a table
+        </button>
+        <div class="hist-charts" data-history-charts>
+          {p.charts.map((c) => (
+            <figure class="hc" data-chart={c.kind}>
+              <figcaption class="hc-title">{title(c)}</figcaption>
+              <ul class="hc-legend">
+                {c.lines.map((l) => (
+                  <li style={`--c: ${color(l.id)}`}>
+                    <span class="hc-swatch" aria-hidden="true" />
+                    {l.label}
+                  </li>
+                ))}
+                <li class="hc-key">
+                  <span class="hc-dot" aria-hidden="true" /> actual
+                </li>
+                <li class="hc-key">
+                  <span class="hc-dot hc-dot--open" aria-hidden="true" /> estimate or budget
+                </li>
+              </ul>
+              <div class="hc-box">
+                <div class="hc-y" aria-hidden="true">
+                  {c.ticks.map((t) => (
+                    <span style={`top: ${y(c, t)}%`}>{shortMoney(t, 0)}</span>
+                  ))}
+                </div>
+                <div class="hc-plot">
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    {c.ticks.map((t) => (
+                      <line class="hc-grid" x1="0" x2="100" y1={y(c, t)} y2={y(c, t)} />
+                    ))}
+                    {c.lines.map((l) =>
+                      l.points.slice(1).map((pt, i) => (
+                        <line
+                          class:list={['hc-seg', { 'hc-seg--planned': pt.basis !== 'actual', 'hc-seg--under': c.under?.line === l.id }]}
+                          style={`--c: ${color(l.id)}`}
+                          x1={x(c, l.points[i].year)}
+                          y1={y(c, l.points[i].value)}
+                          x2={x(c, pt.year)}
+                          y2={y(c, pt.value)}
+                        />
+                      )),
+                    )}
+                  </svg>
+                  {c.lines.map((l) =>
+                    l.points.map((pt) => (
+                      <Sourced city={city} figure={pt.figure} class={`hc-pt hc-pt--${pt.basis}${c.under?.line === l.id ? ' hc-pt--under' : ''}`}>
+                        <span class="hc-sr" style={`left: ${x(c, pt.year)}%; top: ${y(c, pt.value)}%; --c: ${color(l.id)}`}>
+                          {l.label}, {fy(pt.year)} ({AS_WORD[pt.as]}): {shortMoney(pt.value)}
+                        </span>
+                      </Sourced>
+                    )),
+                  )}
+                </div>
+                <div class:list={['hc-x', { 'hc-x--long': c.years.some((yr) => fyLabel(city.budget.labels, yr, 'short').length > 5) }]} aria-hidden="true">
+                  {c.years.map((yr) => (
+                    <span style={`left: ${x(c, yr)}%`}>{fyLabel(city.budget.labels, yr, 'short')}</span>
+                  ))}
+                </div>
+              </div>
+              {c.under && (
+                <p class="hc-overlap">
+                  {c.lines.find((l) => l.id === c.under!.line)!.label} and {c.lines.find((l) => l.id === c.under!.over)!.label.toLowerCase()} are within{' '}
+                  {shortMoney(c.under.gap)} of each other in every year both are printed, so their lines overlap; the wider, lighter line underneath is{' '}
+                  {c.lines.find((l) => l.id === c.under!.line)!.label.toLowerCase()}.
+                </p>
+              )}
+            </figure>
+          ))}
+        </div>
+        <div class="hist-table-wrap" id={`history-${p.id}-table`} data-history-table>
+          <table class="hist-table">
+            <caption>{p.title}: the figures in the charts</caption>
+            <thead>
+              <tr>
+                <th scope="col">Line</th>
+                {p.columns.map((col) => (
+                  <th scope="col" class="num">
+                    {fy(col.year)}
+                    <span class="hist-as">{AS_WORD[col.as]}</span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {p.lines.map((l) => (
+                <tr>
+                  <th scope="row">{l.label}</th>
+                  {p.columns.map((col) => {
+                    const pt = l.points.find((q) => q.year === col.year);
+                    return (
+                      <td class="num">
+                        {pt ? (
+                          <Sourced city={city} figure={pt.figure}>
+                            {shortMoney(pt.value)}
+                          </Sourced>
+                        ) : (
+                          <span aria-label="not printed">—</span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {p.notes.map((n) => (
+          <p class="hist-note">
+            The City's note: “{n.text}”
+            <SourceChip city={city} source={n.cites[0].source} at={n.cites[0]} also={n.cites.slice(1)} />
+          </p>
+        ))}
+        {p.adjustments.map((a) => (
+          <p class="hist-note" data-adjustment>
+            {a.reason} The difference is{' '}
+            <Sourced city={city} figure={a.figure}>
+              {full(a.figure.value)}
+            </Sourced>
+            .
+          </p>
+        ))}
+      </div>
+    ))
+  }
+</section>
+
+<script>
+  for (const panel of document.querySelectorAll<HTMLElement>('[data-history-panel]')) {
+    const button = panel.querySelector<HTMLButtonElement>('[data-history-toggle]')!;
+    const charts = panel.querySelector<HTMLElement>('[data-history-charts]')!;
+    const table = panel.querySelector<HTMLElement>('[data-history-table]')!;
+    let asTable = false;
+    const show = (next: boolean) => {
+      asTable = next;
+      charts.hidden = asTable;
+      table.hidden = !asTable;
+      button.setAttribute('aria-expanded', String(asTable));
+      button.textContent = asTable ? 'Show as a chart' : 'Show as a table';
+    };
+    show(false);
+    button.hidden = false;
+    button.addEventListener('click', () => show(!asTable));
+  }
+</script>
+
+<style>
+  .history {
+    padding-block: 2.5rem;
+    border-top: 1px solid var(--rule);
+  }
+  h2 {
+    margin: 0;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+  .lede {
+    max-width: 44rem;
+    margin: 0.75rem 0 0;
+    line-height: 1.6;
+  }
+  .hist-panel {
+    margin-top: 2rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    border-radius: var(--radius-card);
+    background: var(--card);
+  }
+  h3 {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+  .hist-basis,
+  .hist-note {
+    max-width: 44rem;
+    margin: 0.5rem 0 0;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .hist-note {
+    margin-top: 1rem;
+    font-size: 0.9375rem;
+  }
+  .hist-toggle {
+    margin-top: 1rem;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-pill);
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+  .hist-toggle:focus-visible {
+    outline: 2px solid var(--bay);
+    outline-offset: 2px;
+  }
+  .hist-charts {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .hc {
+    margin: 0;
+    min-width: 0;
+  }
+  .hc-title {
+    font-weight: 700;
+  }
+  .hc-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  .hc-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+  .hc-swatch {
+    width: 1rem;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--c);
+  }
+  .hc-dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    border: 2px solid var(--muted);
+    border-radius: 50%;
+    background: var(--muted);
+  }
+  .hc-dot--open {
+    background: var(--card);
+  }
+  /* Axis labels in the gutters; the plot is everything else. position: relative keeps the hidden text inside. */
+  .hc-box {
+    position: relative;
+    height: clamp(12rem, 40vw, 17rem);
+    margin-top: 0.75rem;
+    padding: 0.5rem 0.75rem 1.75rem 3.25rem;
+  }
+  .hc-plot {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .hc-plot svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .hc-grid {
+    stroke: var(--rule);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .hc-seg {
+    stroke: var(--c);
+    stroke-width: 2.5;
+    vector-effect: non-scaling-stroke;
+  }
+  .hc-seg--planned {
+    stroke-dasharray: 5 4;
+  }
+  /* The first line is drawn wider, under the rest, so where two lines carry the same figures (a balanced budget's
+     revenue and spending) both still show. */
+  .hc-seg--under {
+    stroke-width: 7;
+    stroke-opacity: 0.45;
+    stroke-dasharray: none;
+  }
+  .hc-overlap {
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  .hc-plot :global(.hc-pt--under .hc-sr)::before {
+    inset: 0.25rem;
+  }
+  .hc-y,
+  .hc-x {
+    position: absolute;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .hc-y {
+    top: 0.5rem;
+    bottom: 1.75rem;
+    left: 0;
+    width: 3rem;
+  }
+  .hc-y span {
+    position: absolute;
+    right: 0.5rem;
+    transform: translateY(-50%);
+  }
+  .hc-x {
+    left: 3.25rem;
+    right: 0.75rem;
+    bottom: 0;
+    height: 1.25rem;
+  }
+  .hc-x span {
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+  /* Six "FY21-22" labels don't fit side by side on a phone: slant them. */
+  @media (max-width: 40rem) {
+    .hc-box:has(.hc-x--long) {
+      padding-bottom: 3.75rem;
+    }
+    .hc-x--long {
+      height: 3.25rem;
+    }
+    .hc-x--long span {
+      top: 0.625rem;
+      transform: translateX(-100%) rotate(-40deg);
+      transform-origin: right top;
+    }
+  }
+  /* A point: the receipt button's text is for screen readers; the dot is drawn on it. */
+  .hc-plot :global(.hc-pt) {
+    position: static;
+  }
+  .hc-plot :global(.hc-pt .hc-sr) {
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    overflow: hidden;
+    transform: translate(-50%, -50%);
+    color: transparent;
+    font-size: 0;
+    white-space: nowrap;
+  }
+  .hc-plot :global(.hc-pt .hc-sr)::before {
+    content: '';
+    position: absolute;
+    inset: 0.4375rem;
+    border: 2px solid var(--c);
+    border-radius: 50%;
+    background: var(--c);
+  }
+  .hc-plot :global(.hc-pt--estimate .hc-sr)::before,
+  .hc-plot :global(.hc-pt--budget .hc-sr)::before {
+    background: var(--card);
+  }
+  .hc-plot :global(.hc-pt:focus-visible) {
+    outline: none;
+  }
+  .hc-plot :global(.hc-pt:focus-visible .hc-sr) {
+    outline: 2px solid var(--bay);
+    outline-offset: -2px;
+    border-radius: 50%;
+  }
+  .hc-plot :global(.hc-pt:hover .hc-sr)::before {
+    inset: 0.3125rem;
+  }
+  .hist-table-wrap {
+    position: relative;
+    margin-top: 1rem;
+    overflow-x: auto;
+  }
+  .hist-table {
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+  }
+  .hist-table caption {
+    text-align: left;
+    font-weight: 700;
+    padding-bottom: 0.5rem;
+  }
+  .hist-table th,
+  .hist-table td {
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+  }
+  .hist-table .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .hist-as {
+    display: block;
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+</style>

@@ -68,6 +68,17 @@
       "type": "other",
       "usedFor": "Glossary: special district",
       "number": 6
+    },
+    {
+      "id": "S7",
+      "publisher": "City of Lafayette",
+      "title": "FY 2024-25 Final Budget & Workplan",
+      "date": "2025-01-13",
+      "url": "https://www.lovelafayette.org/home/showpublisheddocument/8038/638723780789770000",
+      "format": "PDF",
+      "type": "city",
+      "usedFor": "General Fund revenue, spending and transfers, FY 2021-22 to FY 2023-24",
+      "number": 7
     }
   ],
   "generalFund": [
@@ -1613,5 +1624,219 @@
         }
       ]
     }
+  },
+  "history": {
+    "panels": [
+      {
+        "id": "budget",
+        "title": "The City's budget books",
+        "basis": {
+          "text": "From the City's budget books, each year from the latest book that prints it. Transfers are the reserve standard's ongoing General Fund transfers, net of one-time adjustments, which the City adds to expenditures when it sets its reserve target.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 16,
+              "quote": "Ongoing General Fund Transfers"
+            },
+            {
+              "source": "S1",
+              "page": 16,
+              "quote": "One time adjustments (250,000) (1,735,000) (1,952,286)"
+            },
+            {
+              "source": "S1",
+              "page": 16,
+              "quote": "TOTAL EXPENDITURES + TRANSFERS 19,814,428 20,914,725 24,543,779"
+            }
+          ]
+        },
+        "lines": [
+          {
+            "id": "revenue",
+            "label": "Revenue",
+            "kind": "flow",
+            "series": [
+              {
+                "label": "TOTAL GENERAL FUND REVENUE",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2022": 23946423,
+                  "2023": 22477226
+                },
+                "cite": {
+                  "source": "S7",
+                  "page": 32,
+                  "quote": "TOTAL GENERAL FUND REVENUE $23,946,423 $22,477,226 $19,532,811 $20,546,997 $20,140,441 3.1%"
+                }
+              },
+              {
+                "label": "TOTAL GENERAL FUND REVENUE",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2024": 20546997,
+                  "2025": 21664217
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 37,
+                  "quote": "TOTAL GENERAL FUND REVENUE $20,546,997 $21,664,217 $23,755,625 $24,803,461 $25,225,308 6.2%"
+                }
+              },
+              {
+                "label": "TOTAL GENERAL FUND REVENUE",
+                "basis": "estimate",
+                "as": "estimate",
+                "years": {
+                  "2026": 24803461
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 37,
+                  "quote": "TOTAL GENERAL FUND REVENUE $20,546,997 $21,664,217 $23,755,625 $24,803,461 $25,225,308 6.2%"
+                }
+              },
+              {
+                "label": "TOTAL GENERAL FUND REVENUE",
+                "basis": "budget",
+                "as": "adopted",
+                "years": {
+                  "2027": 25225308
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 37,
+                  "quote": "TOTAL GENERAL FUND REVENUE $20,546,997 $21,664,217 $23,755,625 $24,803,461 $25,225,308 6.2%"
+                }
+              }
+            ]
+          },
+          {
+            "id": "spending",
+            "label": "Expenditures",
+            "kind": "flow",
+            "series": [
+              {
+                "label": "Subtotal General Fund",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2022": 16715467,
+                  "2023": 16118871
+                },
+                "cite": {
+                  "source": "S7",
+                  "page": 19,
+                  "quote": "Subtotal General Fund $16,715,467 $16,118,871 $19,896,850 $16,808,802 $20,216,496 1.6%"
+                }
+              },
+              {
+                "label": "Subtotal General Fund",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2024": 16808802,
+                  "2025": 16598677
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 25,
+                  "quote": "Subtotal General Fund $16,808,802 $16,598,677 $20,542,098 $18,270,688 $22,457,240 9.3%"
+                }
+              },
+              {
+                "label": "Subtotal General Fund",
+                "basis": "estimate",
+                "as": "estimate",
+                "years": {
+                  "2026": 18270688
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 25,
+                  "quote": "Subtotal General Fund $16,808,802 $16,598,677 $20,542,098 $18,270,688 $22,457,240 9.3%"
+                }
+              },
+              {
+                "label": "Subtotal General Fund",
+                "basis": "budget",
+                "as": "adopted",
+                "years": {
+                  "2027": 22457240
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 25,
+                  "quote": "Subtotal General Fund $16,808,802 $16,598,677 $20,542,098 $18,270,688 $22,457,240 9.3%"
+                }
+              }
+            ]
+          },
+          {
+            "id": "transfers-out",
+            "label": "Transfers out",
+            "kind": "flow",
+            "series": [
+              {
+                "label": "Subtotal Transfers",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2023": 575516,
+                  "2024": 1163894
+                },
+                "cite": {
+                  "source": "S7",
+                  "page": 11,
+                  "quote": "Subtotal Transfers 575,516 $1,163,894 858,748"
+                }
+              },
+              {
+                "label": "Subtotal Transfers",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2025": 3215751
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 16,
+                  "quote": "Subtotal Transfers $3,215,751 $2,644,037 2,086,539"
+                }
+              },
+              {
+                "label": "Subtotal Transfers",
+                "basis": "estimate",
+                "as": "estimate",
+                "years": {
+                  "2026": 2644037
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 16,
+                  "quote": "Subtotal Transfers $3,215,751 $2,644,037 2,086,539"
+                }
+              },
+              {
+                "label": "Subtotal Transfers",
+                "basis": "budget",
+                "as": "adopted",
+                "years": {
+                  "2027": 2086539
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 16,
+                  "quote": "Subtotal Transfers $3,215,751 $2,644,037 2,086,539"
+                }
+              }
+            ]
+          }
+        ],
+        "notes": [],
+        "adjustments": []
+      }
+    ]
   }
 }

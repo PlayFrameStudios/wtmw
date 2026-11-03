@@ -555,6 +555,55 @@ export interface CityBudget {
   schools?: Schools;
   /** Questions people ask about this budget (#54), from faq.json; the general part of each lives in the site-wide FAQ. */
   faq?: CityFaq;
+  /** The General Fund over the years (#64), from documents.json's history rows. */
+  history?: History;
+}
+
+/** What a printed column is, in the City's word: an actual result, an estimate, or an adopted or proposed budget. */
+export type HistoryAs = 'actual' | 'estimate' | 'adopted' | 'proposed';
+/** Actual years are drawn solid; estimates and budgets hollow. */
+export type HistoryBasis = 'actual' | 'estimate' | 'budget';
+export const basisOf = (as: HistoryAs): HistoryBasis => (as === 'adopted' || as === 'proposed' ? 'budget' : as);
+
+/** One printed row's figures of one kind: by year (the year the fiscal year ends in), with the row as its receipt. */
+export interface HistorySeries {
+  label: string;
+  basis: HistoryBasis;
+  as: HistoryAs;
+  years: Record<string, number>;
+  cite: DocRef;
+}
+
+/**
+ * A measure drawn as one line (revenue, spending, transfers, fund balance), from one or more printed rows. A line
+ * never joins two panels, so figures on different bases are never one line. 'net' lines are in the table only.
+ */
+export interface HistoryLine {
+  id: string;
+  label: string;
+  kind: 'flow' | 'balance' | 'net';
+  series: HistorySeries[];
+}
+
+/** A year-to-year step the City's own figures don't make (a restated opening balance), and why. */
+export interface HistoryAdjustment {
+  reason: string;
+  from: { label: string; year: number; value: number; cite: DocRef };
+  to: { label: string; year: number; value: number; cite: DocRef };
+}
+
+/** One document's figures, on one basis: what they are (basis) and the City's notes printed with them. */
+export interface HistoryPanel {
+  id: string;
+  title: string;
+  basis: StepNote;
+  lines: HistoryLine[];
+  notes: StepNote[];
+  adjustments: HistoryAdjustment[];
+}
+
+export interface History {
+  panels: HistoryPanel[];
 }
 
 /**

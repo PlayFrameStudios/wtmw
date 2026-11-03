@@ -435,5 +435,1437 @@
         "quote": "Salaries and Benefits A budget category that generally accounts for salaries of regular and temporary employees"
       }
     ]
+  },
+  "history": {
+    "rows": [
+      {
+        "id": "beginning-unreserved-fund-balance",
+        "label": "Beginning Unreserved Fund Balance",
+        "source": "S1",
+        "page": 95,
+        "quote": "Beginning Unreserved Fund Balance $ 27,102 $ 44,616 $ 23,139 $ 1,510 $ 1,045 $ 1,668",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "property-tax",
+        "label": "Property Tax",
+        "source": "S1",
+        "page": 95,
+        "quote": "Property Tax 118,943 130,525 140,361 145,460 152,527 158,193",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "sales-tax",
+        "label": "Sales Tax",
+        "source": "S1",
+        "page": 95,
+        "quote": "Sales Tax 86,799 111,575 50,887 58,087 69,335 71,218",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "business-tax",
+        "label": "Business Tax",
+        "source": "S1",
+        "page": 95,
+        "quote": "Business Tax 13,933 14,234 13,330 13,048 14,850 15,105",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "hotel-motel-tax",
+        "label": "Hotel/Motel Tax",
+        "source": "S1",
+        "page": 95,
+        "quote": "Hotel/Motel Tax 4,722 6,012 6,071 6,195 6,911 7,256",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "property-transfer-tax",
+        "label": "Property Transfer Tax",
+        "source": "S1",
+        "page": 95,
+        "quote": "Property Transfer Tax 3,398 1,818 2,133 1,747 2,159 2,159",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "paramedic-tax",
+        "label": "Paramedic Tax",
+        "source": "S1",
+        "page": 95,
+        "quote": "Paramedic Tax 1,209 1,212 1,223 1,228 1,224 1,231",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "franchise-fees",
+        "label": "Franchise Fees",
+        "source": "S1",
+        "page": 95,
+        "quote": "Franchise Fees 11,213 11,813 12,595 13,426 13,413 13,967",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "charges-for-services",
+        "label": "Charges for Services",
+        "source": "S1",
+        "page": 95,
+        "quote": "Charges for Services 6,840 7,098 7,260 8,133 7,327 7,703",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "fines",
+        "label": "Fines",
+        "source": "S1",
+        "page": 95,
+        "quote": "Fines 2,966 2,883 3,002 3,762 3,468 3,468",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "use-of-money-and-property",
+        "label": "Use of Money and Property",
+        "source": "S1",
+        "page": 95,
+        "quote": "Use of Money and Property 1,202 3,346 4,622 5,278 3,923 3,676",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "intergovernmental",
+        "label": "Intergovernmental",
+        "source": "S1",
+        "page": 95,
+        "quote": "Intergovernmental 22,593 430 2,098 653 727 641",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "other-revenues",
+        "label": "Other Revenues",
+        "source": "S1",
+        "page": 95,
+        "quote": "Other Revenues 76 111 52 73 70 69",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "total-revenues",
+        "label": "Total Revenues",
+        "source": "S1",
+        "page": 95,
+        "quote": "Total Revenues 273,894 291,057 243,634 257,090 275,934 284,686",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "transfers-in",
+        "label": "Transfers In",
+        "source": "S1",
+        "page": 95,
+        "quote": "Transfers In 6,446 5,698 16,018 6,318 6,760 6,361",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "total-sources",
+        "label": "Total Sources",
+        "source": "S1",
+        "page": 95,
+        "quote": "Total Sources 307,442 341,371 282,791 264,918 283,739 292,715",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "city-council",
+        "label": "City Council",
+        "source": "S1",
+        "page": 95,
+        "quote": "City Council 481 545 527 601 646 898",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "community-development",
+        "label": "Community Development",
+        "source": "S1",
+        "page": 95,
+        "quote": "Community Development 1,451 2,313 2,114 2,069 2,129 2,286",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "community-services",
+        "label": "Community Services",
+        "source": "S1",
+        "page": 95,
+        "quote": "Community Services 316 1,782 1,998 2,761 2,803 3,256",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "economic-development",
+        "label": "Economic Development",
+        "source": "S1",
+        "page": 95,
+        "quote": "Economic Development 1,016 1,276 1,403 1,683 1,458 1,588",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "fire",
+        "label": "Fire",
+        "source": "S1",
+        "page": 95,
+        "quote": "Fire 58,181 66,544 72,566 73,806 74,982 78,517",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "human-services",
+        "label": "Human Services",
+        "source": "S1",
+        "page": 95,
+        "quote": "Human Services 4,401 5,345 4,677 5,097 4,838 5,558",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "maintenance-operations",
+        "label": "Maintenance Operations",
+        "source": "S1",
+        "page": 95,
+        "quote": "Maintenance Operations 26,171 30,492 32,312 35,374 34,916 38,861",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "police",
+        "label": "Police",
+        "source": "S1",
+        "page": 95,
+        "quote": "Police 92,607 107,791 103,683 113,613 116,012 129,087",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "public-works",
+        "label": "Public Works",
+        "source": "S1",
+        "page": 95,
+        "quote": "Public Works 974 1,337 1,388 1,549 2,148 2,326",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "administrative-departments",
+        "label": "Administrative Departments",
+        "source": "S1",
+        "page": 95,
+        "quote": "Administrative Departments 15,342 17,750 18,157 20,263 21,167 23,606",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "non-departmental-expenditures",
+        "label": "Non-departmental Expenditures",
+        "source": "S1",
+        "page": 95,
+        "quote": "Non-departmental Expenditures 1,187 1,634 1,324 2,256 1,633 4,440",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "debt-service",
+        "label": "Debt Service",
+        "source": "S1",
+        "page": 95,
+        "quote": "Debt Service 8,534 25,762 7,206 6,766 7,327 6,249",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "less-citywide-savings",
+        "label": "Less: Citywide Savings",
+        "source": "S1",
+        "page": 95,
+        "quote": "Less: Citywide Savings - - - - - (19,700)",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "total-expenditures",
+        "label": "Total Expenditures",
+        "source": "S1",
+        "page": 95,
+        "quote": "Total Expenditures 210,661 262,571 247,355 265,838 270,059 276,972",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "transfers-out",
+        "label": "Transfers Out",
+        "source": "S1",
+        "page": 95,
+        "quote": "Transfers Out 44,630 50,077 20,905 14,834 11,762 12,117",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "total-uses",
+        "label": "Total Uses",
+        "source": "S1",
+        "page": 95,
+        "quote": "Total Uses 255,291 312,648 268,260 280,672 281,821 289,089",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "contingency-reserve",
+        "label": "Contingency Reserve",
+        "source": "S1",
+        "page": 95,
+        "quote": "Contingency Reserve 38,636 41,720 42,995 46,144 46,394 48,278",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "budget-uncertainty-reserve",
+        "label": "Budget Uncertainty Reserve",
+        "source": "S1",
+        "page": 95,
+        "quote": "Budget Uncertainty Reserve 10,000 12,500 24,246 4,298 4,298 4,298",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "reserved-fund-balance",
+        "label": "Reserved Fund Balance",
+        "source": "S1",
+        "page": 95,
+        "quote": "Reserved Fund Balance 48,636 54,220 67,241 50,442 50,692 52,576",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "unreserved-fund-balance",
+        "label": "Unreserved Fund Balance",
+        "source": "S1",
+        "page": 95,
+        "quote": "Unreserved Fund Balance 44,616 23,139 1,510 1,045 1,668 1,742",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      },
+      {
+        "id": "total-ending-fund-balance",
+        "label": "Total Ending Fund Balance",
+        "source": "S1",
+        "page": 95,
+        "quote": "Total Ending Fund Balance $ 93,252 $ 77,359 $ 68,751 $ 51,487 $ 52,360 $ 54,318",
+        "unit": 1000,
+        "columns": [
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "estimate"
+          },
+          {
+            "year": 2027,
+            "as": "adopted"
+          }
+        ]
+      }
+    ],
+    "panels": [
+      {
+        "id": "budget",
+        "title": "The adopted budget's General Fund history",
+        "sources": [
+          "S1"
+        ],
+        "basis": {
+          "text": "From the adopted budget's table of General Fund sources and uses, printed in thousands of dollars and shown here in dollars. The City prints transfers in and out apart from revenue and expenditures, and so do we.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 95,
+              "quote": "General Fund Historical and Adopted Budget FY 2026/27 (Thousands of Dollars)"
+            }
+          ]
+        },
+        "lines": [
+          {
+            "id": "revenue",
+            "label": "Revenue",
+            "kind": "flow",
+            "from": [
+              {
+                "row": "total-revenues"
+              }
+            ]
+          },
+          {
+            "id": "spending",
+            "label": "Expenditures",
+            "kind": "flow",
+            "from": [
+              {
+                "row": "total-expenditures"
+              }
+            ]
+          },
+          {
+            "id": "transfers-in",
+            "label": "Transfers in",
+            "kind": "flow",
+            "from": [
+              {
+                "row": "transfers-in"
+              }
+            ]
+          },
+          {
+            "id": "transfers-out",
+            "label": "Transfers out",
+            "kind": "flow",
+            "from": [
+              {
+                "row": "transfers-out"
+              }
+            ]
+          },
+          {
+            "id": "fund-balance",
+            "label": "Ending fund balance",
+            "kind": "balance",
+            "from": [
+              {
+                "row": "total-ending-fund-balance"
+              }
+            ]
+          }
+        ],
+        "notes": [
+          {
+            "text": "The sales tax reduction in FY 2023/24 and FY 2024/25 reflects the impact of the State’s recovery of sales tax revenue misallocated to the City of Fremont in FY 2022/23.",
+            "cites": [
+              {
+                "source": "S1",
+                "page": 95,
+                "quote": "The sales tax reduction in FY 2023/24 and FY 2024/25 reflects the impact of the State’s recovery of sales tax revenue misallocated to the City of Fremont in FY 2022/23."
+              }
+            ]
+          },
+          {
+            "text": "The Maintenance Operations Department took over responsibility for building, fleet, park, and street maintenance from the Public Works and Community Services Departments in FY 2024/25. For comparability, the expenditures for those activities have been reallocated to the Maintenance Operations Department in the prior-year columns.",
+            "cites": [
+              {
+                "source": "S1",
+                "page": 95,
+                "quote": "The Maintenance Operations Department took over responsibility for building, fleet, park, and street maintenance from the Public Works and Community Services Departments in FY 2024/25. For comparability, the expenditures for those activities have been reallocated to the Maintenance Operations Department in the prior-year columns."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "ties": [
+      {
+        "kind": "sum",
+        "rows": [
+          "property-tax",
+          "sales-tax",
+          "business-tax",
+          "hotel-motel-tax",
+          "property-transfer-tax",
+          "paramedic-tax",
+          "franchise-fees",
+          "charges-for-services",
+          "fines",
+          "use-of-money-and-property",
+          "intergovernmental",
+          "other-revenues"
+        ],
+        "equals": "total-revenues"
+      },
+      {
+        "kind": "sum",
+        "rows": [
+          "beginning-unreserved-fund-balance",
+          "total-revenues",
+          "transfers-in"
+        ],
+        "equals": "total-sources"
+      },
+      {
+        "kind": "sum",
+        "rows": [
+          "city-council",
+          "community-development",
+          "community-services",
+          "economic-development",
+          "fire",
+          "human-services",
+          "maintenance-operations",
+          "police",
+          "public-works",
+          "administrative-departments",
+          "non-departmental-expenditures",
+          "debt-service",
+          "less-citywide-savings"
+        ],
+        "equals": "total-expenditures"
+      },
+      {
+        "kind": "sum",
+        "rows": [
+          "total-expenditures",
+          "transfers-out"
+        ],
+        "equals": "total-uses"
+      },
+      {
+        "kind": "sum",
+        "rows": [
+          "reserved-fund-balance",
+          "unreserved-fund-balance"
+        ],
+        "equals": "total-ending-fund-balance"
+      },
+      {
+        "kind": "next",
+        "row": "unreserved-fund-balance",
+        "equals": "beginning-unreserved-fund-balance"
+      },
+      {
+        "kind": "sum",
+        "rows": [
+          "contingency-reserve",
+          "budget-uncertainty-reserve"
+        ],
+        "equals": "reserved-fund-balance"
+      }
+    ]
   }
 }
