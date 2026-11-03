@@ -1,0 +1,60 @@
+{
+  "note": "Where this city stands on each topic in README \"What every city covers\" (#70): covered, not-published (with what was searched, and when), pending (with the story that adds it), or, for a ballot, not-applicable. npm run data checks it.",
+  "topics": {
+    "per-100": {
+      "status": "covered"
+    },
+    "departments": {
+      "status": "covered"
+    },
+    "staff-positions": {
+      "status": "covered"
+    },
+    "revenue": {
+      "status": "covered"
+    },
+    "restricted-taxes": {
+      "status": "pending",
+      "story": 66
+    },
+    "reserves": {
+      "status": "pending",
+      "story": 68,
+      "note": "Balance & Reserves shows each reserve, and the Contingency Reserve at 16.7% of spending, but not against a City target; #68 adds the City's own targets."
+    },
+    "history": {
+      "status": "pending",
+      "story": 64
+    },
+    "staff-costs": {
+      "status": "pending",
+      "story": 65
+    },
+    "capital": {
+      "status": "covered"
+    },
+    "forecast": {
+      "status": "pending",
+      "story": 67,
+      "note": "Partly: Revenue runs each source through the City's two forecast years, and Balance & Reserves shows the forecast's reserves. #67 adds the forecast itself."
+    },
+    "coverage": {
+      "status": "covered"
+    },
+    "schools": {
+      "status": "covered",
+      "note": "A pointer to FUSD's own budget, in the Sources page's coverage block."
+    },
+    "ballot": {
+      "status": "not-applicable",
+      "reason": "No City of Fremont measure on the November 3, 2026 ballot: the Council voted on July 28 not to add a city charter, and no other City measure was found.",
+      "checked": {
+        "source": "https://localnewsmatters.org/2026/07/30/fremont-council-shelves-charter-city-proposal-after-poll-shows-weak-public-support/",
+        "date": "2026-11-03"
+      }
+    },
+    "sources": {
+      "status": "covered"
+    }
+  }
+}

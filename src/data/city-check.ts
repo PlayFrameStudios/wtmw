@@ -1,7 +1,8 @@
 /**
  * Checks every city.json (and a fixture's) the way the site build reads it, then checks what
  * the build can't: that the fiscal-position reason and each reserve amount quote a sentence
- * that is really on its PDF page (#42). Run by `npm run data` and `npm run data:check`.
+ * that is really on its PDF page (#42), and that every real city's topics.json says where it stands on every
+ * topic (#70). Run by `npm run data` and `npm run data:check`.
  */
 import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
@@ -10,6 +11,7 @@ import { buildRegistry, type City } from '../lib/city-registry.ts';
 import { parseReserves } from '../lib/city-settings.ts';
 import { checkQuotesIn } from './documents.ts';
 import { readDocuments } from './pipeline.ts';
+import { checkTopics } from './topics.ts';
 
 async function cityFiles(root: string): Promise<Record<string, unknown>> {
   const found: string[] = [];
@@ -23,7 +25,7 @@ async function cityFiles(root: string): Promise<Record<string, unknown>> {
 }
 
 /** The registry, or the error that stops it loading; then each city's quote errors. */
-export async function checkCities(root: string): Promise<{ cities: City[]; errors: string[] }> {
+export async function checkCities(root: string, today = new Date().toISOString().slice(0, 10)): Promise<{ cities: City[]; errors: string[] }> {
   let cities: City[];
   try {
     cities = buildRegistry(await cityFiles(root), (p) => existsSync(join(root, p)));
@@ -48,6 +50,10 @@ export async function checkCities(root: string): Promise<{ cities: City[]; error
         errors.push((e as Error).message);
       }
     }
+    // A fixture borrows its pages' data and reports on nothing, so only a real city keeps the list.
+    const topicsFile = join(root, city.dir, 'topics.json');
+    if (existsSync(topicsFile)) errors.push(...checkTopics(JSON.parse(await readFile(topicsFile, 'utf8')), city, `${city.dir.slice(1)}topics.json`, today));
+    else if (!city.fixture) errors.push(`${city.dir.slice(1)}topics.json: missing. Every city lists where it stands on each topic in README "What every city covers"`);
   }
   return { cities, errors };
 }
