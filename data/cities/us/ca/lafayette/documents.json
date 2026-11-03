@@ -728,5 +728,316 @@
         "year": 2024
       }
     ]
+  },
+  "staffCosts": {
+    "note": "What staff cost (#65): rows as printed, each figure parsed from its quote; the sections the Departments page draws; and the tie-outs, run on every build. The General Fund summary prints a final budget and an estimate for FY 2025-26; the page uses the estimate, as #64's history does. Approved rows: Foundry #65 (staff-costs-rows.json).",
+    "rows": [
+      {
+        "id": "personnel",
+        "label": "Subtotal PERSONNEL",
+        "source": "S1",
+        "page": 23,
+        "quote": "Subtotal PERSONNEL $5,986,378 $5,975,214 $7,151,162 $6,370,819 $7,096,466 -0.8%",
+        "columns": [
+          "2024",
+          "2025",
+          null,
+          "2026",
+          "2027",
+          null
+        ]
+      },
+      {
+        "id": "sheriff",
+        "label": "862 Contract Sheriff Services",
+        "source": "S1",
+        "page": 23,
+        "quote": "862 Contract Sheriff Services 4,948,004 4,880,462 5,600,039 5,450,312 6,454,458 15.3%",
+        "columns": [
+          "2024",
+          "2025",
+          null,
+          "2026",
+          "2027",
+          null
+        ]
+      },
+      {
+        "id": "operations",
+        "label": "Subtotal OP'S AND MAINTENANCE",
+        "source": "S1",
+        "page": 23,
+        "quote": "Subtotal OP'S AND MAINTENANCE $10,391,136 $10,020,683 $12,398,645 $11,254,886 $14,244,274 14.9%",
+        "columns": [
+          "2024",
+          "2025",
+          null,
+          "2026",
+          "2027",
+          null
+        ]
+      },
+      {
+        "id": "capital",
+        "label": "Subtotal CAPITAL OUTLAY",
+        "source": "S1",
+        "page": 23,
+        "quote": "Subtotal CAPITAL OUTLAY $431,287 $602,781 $764,821 $644,984 $902,786 18.0%",
+        "columns": [
+          "2024",
+          "2025",
+          null,
+          "2026",
+          "2027",
+          null
+        ]
+      },
+      {
+        "id": "base",
+        "label": "BASE PROGRAM COST",
+        "source": "S1",
+        "page": 23,
+        "quote": "BASE PROGRAM COST $16,808,802 $16,598,677 $20,314,628 $18,270,688 $22,243,526 9.5%",
+        "columns": [
+          "2024",
+          "2025",
+          null,
+          "2026",
+          "2027",
+          null
+        ]
+      },
+      {
+        "id": "carried",
+        "label": "999 Total Savings Carried Forward",
+        "source": "S1",
+        "page": 23,
+        "quote": "999 Total Savings Carried Forward $0 $0 $227,470 $0 $213,714 -6.0%",
+        "columns": [
+          "2024",
+          "2025",
+          null,
+          "2026",
+          "2027",
+          null
+        ]
+      },
+      {
+        "id": "total",
+        "label": "TOTAL G.F. EXPENDITURES",
+        "source": "S1",
+        "page": 23,
+        "quote": "TOTAL G.F. EXPENDITURES $16,808,802 $16,598,677 $20,542,098 $18,270,688 $22,457,240 9.3%",
+        "columns": [
+          "2024",
+          "2025",
+          null,
+          "2026",
+          "2027",
+          null
+        ]
+      },
+      {
+        "id": "retirement",
+        "label": "The City’s total payroll in fiscal year",
+        "source": "S3",
+        "page": 87,
+        "quote": "The City’s total payroll in fiscal year 2025 was approximately $5,667,041. Contributions to the Plan totaled $842,472 by the City and $276,236 by individuals during the year.",
+        "columns": [
+          null,
+          "payroll",
+          "city",
+          "employees"
+        ]
+      },
+      {
+        "id": "opeb",
+        "label": "Net OPEB liability",
+        "source": "S3",
+        "page": 43,
+        "quote": "Net OPEB liability 758,015 90,539 848,554",
+        "columns": [
+          "governmental",
+          "business",
+          "total"
+        ]
+      }
+    ],
+    "sections": [
+      {
+        "id": "pay",
+        "title": "City staff and the Sheriff contract",
+        "basis": {
+          "text": "General Fund spending. Lafayette's police service is a contract with the Contra Costa County Sheriff, so its officers are paid through the contract, not counted in the City's personnel. The share is each line divided by total General Fund expenditures.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 23,
+              "quote": "EXPENDITURE SUMMARY - GENERAL FUND"
+            },
+            {
+              "source": "S1",
+              "page": 77,
+              "quote": "This program provides contract law enforcement services to the community via the Contra Costa Sheriff's Department."
+            }
+          ]
+        },
+        "bars": {
+          "layout": "grouped",
+          "legend": [
+            "City personnel",
+            "Contract Sheriff Services"
+          ],
+          "periods": [
+            {
+              "year": 2024,
+              "as": "actual",
+              "parts": [
+                {
+                  "row": "personnel",
+                  "col": "2024"
+                },
+                {
+                  "row": "sheriff",
+                  "col": "2024"
+                }
+              ],
+              "of": {
+                "row": "total",
+                "col": "2024"
+              }
+            },
+            {
+              "year": 2025,
+              "as": "actual",
+              "parts": [
+                {
+                  "row": "personnel",
+                  "col": "2025"
+                },
+                {
+                  "row": "sheriff",
+                  "col": "2025"
+                }
+              ],
+              "of": {
+                "row": "total",
+                "col": "2025"
+              }
+            },
+            {
+              "year": 2026,
+              "as": "estimate",
+              "parts": [
+                {
+                  "row": "personnel",
+                  "col": "2026"
+                },
+                {
+                  "row": "sheriff",
+                  "col": "2026"
+                }
+              ],
+              "of": {
+                "row": "total",
+                "col": "2026"
+              }
+            },
+            {
+              "year": 2027,
+              "as": "adopted",
+              "parts": [
+                {
+                  "row": "personnel",
+                  "col": "2027"
+                },
+                {
+                  "row": "sheriff",
+                  "col": "2027"
+                }
+              ],
+              "of": {
+                "row": "total",
+                "col": "2027"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "retirement",
+        "title": "Retirement and retiree health",
+        "basis": {
+          "text": "Lafayette has no defined-benefit pension plan, so it has no pension debt. Its employees have defined-contribution plans (401 and 457) instead, which the City's annual report says are fully funded every pay period.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 12,
+              "quote": "Unlike most public sector organizations, the City of Lafayette does not participate in a defined benefit retirement program. Rather, City employees have traditional defined contribution programs (401 and 457 plans), which are fully funded every pay period."
+            }
+          ]
+        },
+        "figures": [
+          {
+            "name": "City contributions to the retirement plan",
+            "asOf": "FY 2024-25",
+            "ref": {
+              "row": "retirement",
+              "col": "city"
+            }
+          },
+          {
+            "name": "Net retiree-health (OPEB) liability, governmental activities",
+            "asOf": "June 30, 2025",
+            "ref": {
+              "row": "opeb",
+              "col": "governmental"
+            }
+          }
+        ],
+        "notes": [
+          {
+            "text": "The City's report: “The contribution on behalf of each participant equal 10% of base earnings up to the maximum allowable by law. In addition, each participant may contribute up to 5% of earnings to the Plan and the City has elected to match such contributions by the same percentage.”",
+            "cites": [
+              {
+                "source": "S3",
+                "page": 87,
+                "quote": "The contribution on behalf of each participant equal 10% of base earnings up to the maximum allowable by law. In addition, each participant may contribute up to 5% of earnings to the Plan and the City has elected to match such contributions by the same percentage."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "ties": [
+      {
+        "kind": "sum",
+        "rows": [
+          "personnel",
+          "operations",
+          "capital"
+        ],
+        "equals": "base"
+      },
+      {
+        "kind": "sum",
+        "rows": [
+          "base",
+          "carried"
+        ],
+        "equals": "total"
+      },
+      {
+        "kind": "across",
+        "rows": [
+          "opeb"
+        ],
+        "parts": [
+          "governmental",
+          "business"
+        ],
+        "equals": "total"
+      }
+    ]
   }
 }

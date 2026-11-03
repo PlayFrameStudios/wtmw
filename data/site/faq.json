@@ -155,6 +155,20 @@
       ]
     },
     {
+      "id": "why-not-compare-staff-costs",
+      "question": "Why can't I compare one city's pension or staff costs with another's?",
+      "paragraphs": [
+        {
+          "text": "Because cities don't report them on the same basis. One city's figures cover only its General Fund; another's cover every fund the City runs. One city has a pension plan with a debt for past service; another has no such plan, because its employees save in defined-contribution plans instead. And a city that contracts for a service, such as police, pays for those staff through the contract, so their pay isn't in the City's personnel costs.",
+          "unsourced": "Why the bases differ, in general; each city's own figures are cited on its Departments page."
+        },
+        {
+          "text": "On this site, Berkeley's pension split is for its General Fund only. Fremont's pension and retiree-health figures are citywide, across all funds, and its budget doesn't publish a General Fund total for salaries and benefits. Lafayette has no defined-benefit pension plan, and contracts its police to the Contra Costa County Sheriff. Each city's Departments page shows its own figures, with the City's documents as sources, and never beside another city's.",
+          "unsourced": "A summary of each city's Departments page, where every figure cites that City's own document."
+        }
+      ]
+    },
+    {
       "id": "report-an-error",
       "question": "How do I report an error?",
       "paragraphs": [

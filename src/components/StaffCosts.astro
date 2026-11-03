@@ -1,0 +1,281 @@
+---
+/**
+ * "What staff cost" (#65): one city's pay and benefits, pension and retiree-health figures, one block per document,
+ * each naming its basis (General Fund, or citywide in all funds). Bars are drawn with CSS and hidden from assistive
+ * tech; the figures beside them are the receipts. Solid bars are actual results; hollow ones are budgets, baselines
+ * and estimates, as in "Over the years" (#64). Nothing here is set beside another city's figures.
+ */
+import type { City } from '../lib/cities';
+import { siteFaqHref } from '../lib/faq';
+import { STAFF_FAQ, type StaffCostsView } from '../lib/staff-costs';
+import SourceChip from './SourceChip.astro';
+import Sourced from './Sourced.astro';
+
+interface Props {
+  city: City;
+  view: StaffCostsView;
+}
+
+const { city, view } = Astro.props;
+const COLORS = ['var(--bay)', 'var(--family-safety-1)', 'var(--family-oversight-1)'];
+---
+
+<section class="db-section sc" aria-labelledby="db-costs" id="staff-costs">
+  <h2 id="db-costs">What staff cost</h2>
+  <p class="db-note">
+    Pay and benefits, pensions and retiree health care, from {city.name}'s own documents. Each block says what its figures cover.{' '}
+    <a href={siteFaqHref(STAFF_FAQ)} data-staff-faq-link>Why these can't be compared with another city's</a>.
+  </p>
+  {
+    view.unpublished.map((u) => (
+      <p class="db-note" data-unpublished>
+        {u}
+      </p>
+    ))
+  }
+  {
+    view.sections.map((s) => (
+      <div class="sc-block" data-staff-section={s.id}>
+        <h3>{s.title}</h3>
+        <p class="sc-basis" data-staff-basis>
+          {s.basis.text}
+          <SourceChip city={city} source={s.basis.cites[0].source} at={s.basis.cites[0]} also={s.basis.cites.slice(1)} />
+        </p>
+        {s.figures.length > 0 && (
+          <dl class="sc-figs">
+            {s.figures.map((f) => (
+              <div class="sc-fig">
+                <dt>
+                  {f.name}
+                  <span class="sc-asof">{f.asOf}</span>
+                </dt>
+                <dd class="num">
+                  <Sourced city={city} figure={f.figure}>
+                    {f.text}
+                  </Sourced>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        )}
+        {s.bars && (
+          <figure class={`sc-bars sc-bars--${s.bars.layout}`}>
+            <figcaption class="sc-legend">
+              {s.bars.legend.map((name, i) => (
+                <span class="sc-key" style={`--c: ${COLORS[i]}`}>
+                  {name}
+                </span>
+              ))}
+              {s.bars.rows.some((r) => r.basis !== 'actual') && <span class="sc-key sc-key--basis">Solid: actual. Hollow: budget, baseline or estimate.</span>}
+            </figcaption>
+            <ol class="sc-rows" role="list">
+              {s.bars.rows.map((r) => (
+                <li class={`sc-row sc-row--${r.basis}`} data-year={r.year}>
+                  <span class="sc-year">{r.label}</span>
+                  {s.bars!.layout === 'stacked' ? (
+                    <>
+                      <span class="sc-vals">
+                        {r.segments.map((g) => (
+                          <span class="sc-val" style={`--c: ${COLORS[g.index]}`}>
+                            {r.segments.length > 1 && <span class="sc-val-name">{g.name}</span>}
+                            <Sourced city={city} figure={g.figure}>
+                              {g.text}
+                            </Sourced>
+                            {g.share && (
+                              <span class="sc-share">
+                                <Sourced city={city} figure={g.share.figure}>
+                                  {g.share.text}
+                                </Sourced>{' '}
+                                of the General Fund
+                              </span>
+                            )}
+                          </span>
+                        ))}
+                        {r.total && (
+                          <span class="sc-val sc-val--total">
+                            <span class="sc-val-name">Total</span>
+                            <Sourced city={city} figure={r.total.figure}>
+                              {r.total.text}
+                            </Sourced>
+                          </span>
+                        )}
+                      </span>
+                      <span class="sc-track" aria-hidden="true">
+                        {r.segments.map((g) => (
+                          <span class="sc-seg" style={`width: ${g.width.toFixed(3)}%; --c: ${COLORS[g.index]}`} />
+                        ))}
+                      </span>
+                    </>
+                  ) : (
+                    r.segments.map((g) => (
+                      <span class="sc-group" style={`--c: ${COLORS[g.index]}`}>
+                        <span class="sc-vals">
+                          <span class="sc-val">
+                            <span class="sc-val-name">{g.name}</span>
+                            <Sourced city={city} figure={g.figure}>
+                              {g.text}
+                            </Sourced>
+                            {g.share && (
+                              <span class="sc-share">
+                                <Sourced city={city} figure={g.share.figure}>
+                                  {g.share.text}
+                                </Sourced>{' '}
+                                of the General Fund
+                              </span>
+                            )}
+                          </span>
+                        </span>
+                        <span class="sc-track" aria-hidden="true">
+                          <span class="sc-seg" style={`width: ${g.width.toFixed(3)}%`} />
+                        </span>
+                      </span>
+                    ))
+                  )}
+                </li>
+              ))}
+            </ol>
+          </figure>
+        )}
+        {s.notes.map((n) => (
+          <p class="sc-note">
+            {n.text}
+            <SourceChip city={city} source={n.cites[0].source} at={n.cites[0]} also={n.cites.slice(1)} />
+          </p>
+        ))}
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .sc-block {
+    margin-top: 1.75rem;
+    padding: 1.25rem clamp(1rem, 3vw, 1.5rem);
+    border-radius: 0.75rem;
+    background: var(--card);
+  }
+  .sc-block h3 {
+    margin: 0;
+    font-size: 1.125rem;
+  }
+  .sc-basis,
+  .sc-note {
+    max-width: 44rem;
+    margin: 0.5rem 0 0;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .sc-note {
+    margin-top: 1rem;
+    font-size: 0.9375rem;
+  }
+  .sc-figs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 0.75rem 1.5rem;
+    max-width: 36rem;
+    margin: 1rem 0 0;
+  }
+  .sc-fig dt {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.875rem;
+  }
+  .sc-asof {
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+  .sc-fig dd {
+    margin: 0.125rem 0 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  .sc-bars {
+    margin: 1rem 0 0;
+  }
+  .sc-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+  .sc-key::before {
+    content: '';
+    display: inline-block;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-right: 0.375rem;
+    border-radius: 0.125rem;
+    background: var(--c);
+    vertical-align: -0.0625rem;
+  }
+  .sc-key--basis::before {
+    display: none;
+  }
+  .sc-rows {
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sc-row {
+    display: grid;
+    gap: 0.25rem;
+    padding-block: 0.5rem;
+    border-top: 1px solid var(--rule);
+  }
+  .sc-year {
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+  .sc-vals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.125rem 1rem;
+    min-width: 0;
+    font-size: 0.875rem;
+  }
+  .sc-val {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.375rem;
+    min-width: 0;
+  }
+  .sc-val-name {
+    color: var(--muted);
+  }
+  .sc-bars--stacked .sc-val:not(.sc-val--total) .sc-val-name::before {
+    content: '';
+    display: inline-block;
+    width: 0.625rem;
+    height: 0.625rem;
+    margin-right: 0.3125rem;
+    border-radius: 0.125rem;
+    background: var(--c);
+  }
+  .sc-share {
+    color: var(--muted);
+  }
+  .sc-group {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .sc-track {
+    display: flex;
+    height: 0.875rem;
+  }
+  .sc-seg {
+    display: block;
+    height: 100%;
+    background: var(--c);
+  }
+  .sc-group .sc-seg {
+    background: var(--c);
+  }
+  /* A budget, baseline or estimate: hollow, as the planned points of "Over the years" are. */
+  .sc-row:not(.sc-row--actual) .sc-seg {
+    background: color-mix(in srgb, var(--c) 14%, var(--card));
+    box-shadow: inset 0 0 0 2px var(--c);
+  }
+</style>

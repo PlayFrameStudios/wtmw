@@ -26,8 +26,8 @@
       "status": "covered"
     },
     "staff-costs": {
-      "status": "pending",
-      "story": 65
+      "status": "covered",
+      "note": "Departments page: pension and retiree-health figures, citywide; the budget doesn't publish a General Fund total for salaries and benefits."
     },
     "capital": {
       "status": "covered"
