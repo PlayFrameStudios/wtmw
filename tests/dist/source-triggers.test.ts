@@ -29,15 +29,41 @@ const SHEET = /^figure \| \$[\d,]+ \| .+ General Fund baseline, FY2027 \| S1 \| 
 const RETIRED: Record<string, RegExp> = { '/us/ca/berkeley/': new RegExp(`${STRIP.source}|${CARD3.source}|${SHEET.source}`) };
 // #61: the cuts view moved from Departments to The Gap (#cuts), so its receipts are reachable there.
 const MOVED: Record<string, string[]> = { '/us/ca/berkeley/departments/': ['/us/ca/berkeley/gap/'] };
+// #63: FY2028's department figures cited the April 16 plan (S1), which has no FY2028 table; they now cite Item 21 (S40)
+// row by row. And the Ballot page's position-count caveat, which cited the supplemental and news (S23, S24), now cites
+// the adopted motion (S41). Each is checked below: the same figure, re-cited; the caveat, replaced.
+const RECITED = /^figure \| [^|]+ \| [^|]+, FY2028[:,][^|]* \| S1 \| {2}\| $/;
+const REPLACED: Record<string, RegExp> = { '/us/ca/berkeley/ballot/': /^source \| {2}\| {2}\| S2[34] \| / };
 
 describe('every receipt that had a chip is still reachable on its page (#29)', () => {
   for (const [path, keys] of Object.entries(before)) {
     it(path, () => {
       const now = new Set([path, ...(MOVED[path] ?? [])].flatMap((p) => receipts(html(p)).flatMap(reachable)));
-      const missing = keys.filter((k) => !now.has(k) && !RETIRED[path]?.test(k));
+      const missing = keys.filter((k) => !now.has(k) && !RETIRED[path]?.test(k) && !RECITED.test(k) && !REPLACED[path]?.test(k));
       expect(missing).toEqual([]);
     });
   }
+
+  it('every FY2028 department figure that cited S1 is still there, cited to its row of Item 21 (S40) instead (#63)', () => {
+    const now = receipts(html('/us/ca/berkeley/gap/')).filter((r) => r.kind === 'figure');
+    const recited = Object.values(before).flat().filter((k) => RECITED.test(k));
+    expect(recited.length).toBeGreaterThanOrEqual(75);
+    // The five rows #63 corrected (the charter offices repeated FY2027's figures; PRW's cut was $1 low) changed value too.
+    const corrected = /^(City Attorney|City Auditor|Office of Dir\. of Police Accountability \(ODPA\)|Mayor & Council|Parks, Recreation & Waterfront \(PRW\)), /;
+    for (const k of new Set(recited)) {
+      const [, value, label] = k.split(' | ');
+      const match = now.filter((r) => r.label === label && (corrected.test(label) || r.value === value));
+      expect(match.length, k).toBeGreaterThan(0);
+      for (const r of match) expect([r.sources.join('+'), r.page], k).toEqual(['S40', 11]);
+    }
+    expect(now.some((r) => r.sources[0] === 'S1' && / FY2028[:,]/.test(r.label!))).toBe(false);
+  });
+
+  it("the Ballot page's position-count caveat cites the adopted motion, not the supplemental and news (#63)", () => {
+    const keys = receipts(html('/us/ca/berkeley/ballot/')).flatMap(reachable);
+    expect(keys.some((k) => /^source \| {2}\| {2}\| S41 \| 3 \| In both FY 2027 and FY 2028 /.test(k))).toBe(true);
+    expect(keys.filter((k) => REPLACED['/us/ca/berkeley/ballot/'].test(k))).toEqual([]);
+  });
 
   it('the retired strip is gone, and the Sources page is still in the nav and footer (#33)', () => {
     const h = html('/us/ca/berkeley/');

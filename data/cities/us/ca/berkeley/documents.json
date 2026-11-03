@@ -443,5 +443,43 @@
         }
       }
     }
+  },
+  "adoptionAmendments": {
+    "motion": {
+      "source": "S41",
+      "page": 3,
+      "quote": "In both FY 2027 and FY 2028 increase the amount of the revenue transfer for the Annual Ambulance Transport Revenue by $200,000 to fund the 9.0 positions in the Fire Department (for a total of $978,334 in FY 2027 as reflected in the table below)."
+    },
+    "spending": {
+      "source": "S41",
+      "page": 4,
+      "quote": "Total $2,292,334 $25,000 General Fund: Revenue Transfers"
+    },
+    "transfers": {
+      "source": "S41",
+      "page": 4,
+      "quote": "General Fund $750,000 Total $2,292,334 $25,000 Vote: All Ayes."
+    },
+    "restored": {
+      "fire": {
+        "cite": {
+          "source": "S41",
+          "page": 4,
+          "quote": "Fire Inspector 1.0 FTE $238,232 5.0 FTE Fire Fighters (Step 1) $1,109,795 3.0 FTE Paramedics (Step 1) $380,307"
+        },
+        "what": "a fire inspector, 5 firefighters and 3 paramedics",
+        "bothYears": true,
+        "funding": "paid for with revenue transfers that include more ambulance transport revenue"
+      },
+      "cmo": {
+        "cite": {
+          "source": "S41",
+          "page": 4,
+          "quote": "1 OED FTE identified for removal in the CMO Reduction Plan ($236K) $236,000"
+        },
+        "what": "one economic development position",
+        "bothYears": false
+      }
+    }
   }
 }

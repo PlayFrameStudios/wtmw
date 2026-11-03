@@ -65,9 +65,10 @@ describe('ballot page (built)', () => {
     }
   });
 
-  it('the nine-fire-positions caveat is said once, under both cards, since it applies to both alike (#31)', () => {
-    const caveat = 'At adoption, the Council was reported to have restored nine fire positions; the counts shown are from the April 16 plan.';
-    for (const c of cards) expect(c.text).not.toContain('nine fire positions');
+  it('the position-count caveat is said once, under both cards, since it applies to both alike (#31, #63)', () => {
+    const caveat =
+      "Position counts are from the proposed budget. At adoption on June 23, the Council restored 9 Fire positions and 1 City Manager's Office position for FY2027, paid for with $2.29M of revenue transfers, so the gap didn't change.";
+    for (const c of cards) expect(c.text).not.toContain('Fire positions');
     const t = strip(html);
     expect(t.split(caveat)).toHaveLength(2);
     const after = html.slice(html.lastIndexOf('<li class="card scenario"'));

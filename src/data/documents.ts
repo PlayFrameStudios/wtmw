@@ -6,7 +6,7 @@
  */
 import type { PrintedTable } from './berkeley/printed-rows.ts';
 import { nextNumber } from './source-numbers.ts';
-import type { ByYear, DocCapitalLine, GapBudget, DocCapitalPart, DocRef, DocumentFacts, Source, SourceId, StepNote, WorkbookBudget } from './types.ts';
+import type { AdoptionAmendments, ByYear, DocCapitalLine, GapBudget, DocCapitalPart, DocRef, DocumentFacts, Restoration, Source, SourceId, StepNote, WorkbookBudget } from './types.ts';
 
 export interface DocumentsFile {
   sources: Omit<Source, 'number' | 'row'>[];
@@ -16,6 +16,13 @@ export interface DocumentsFile {
   notes: Record<string, StepNote>;
   /** FY2028's department table as Item 21 prints it, row by row (#63). */
   departmentRows: PrintedTable;
+  /** The adopted motion's amendments (#63); amounts and counts are parsed from the quotes. */
+  adoptionAmendments: {
+    motion: DocRef;
+    spending: DocRef;
+    transfers: DocRef;
+    restored: Record<string, { cite: DocRef; what: string; bothYears: boolean; funding?: string }>;
+  };
 }
 /** Page number → page text, as extracted from the PDF. */
 export type Excerpts = Record<SourceId, Record<string, string>>;
@@ -92,6 +99,56 @@ const MONTH = ['january', 'february', 'march', 'april', 'may', 'june', 'july', '
 const iso = (month: string, day: string, year: string) => `${year}-${String(MONTH.indexOf(month.toLowerCase()) + 1).padStart(2, '0')}-${day.padStart(2, '0')}`;
 
 const AMOUNT = String.raw`\$ (-|[\d,]+)`;
+
+/** Dollar amounts in a quote, in order; "$236K" is a label, not an amount. */
+const dollars = (quote: string) => [...normalize(quote).matchAll(/\$([\d,]+)(?![\d,]*K)/g)].map((m) => money(m[1]));
+
+/**
+ * The adopted motion's amendments (#63): each restoration's amount and positions are read from its lines of the
+ * motion's table, and the motion's spending and revenue transfers must be equal (that's what leaves the gap unchanged).
+ */
+export function adoptionFrom(spec: DocumentsFile['adoptionAmendments'], q: (ref: DocRef, key: string) => DocRef, departments: string[]): { facts: AdoptionAmendments; errors: string[] } {
+  const errors: string[] = [];
+  const motion = q(spec.motion, 'adoptionAmendments.motion');
+  const total = (key: 'spending' | 'transfers') => {
+    const ref = q(spec[key], `adoptionAmendments.${key}`);
+    const m = normalize(ref.quote).match(/Total \$([\d,]+)/);
+    if (!m) throw new Error(`documents.json adoptionAmendments.${key}: "${ref.quote}" has no "Total $…"`);
+    return { ...ref, amount: money(m[1]) };
+  };
+  const spending = total('spending');
+  const transfers = total('transfers');
+  if (spending.amount !== transfers.amount) errors.push(`documents.json adoptionAmendments: spending ${spending.amount} and transfers ${transfers.amount} differ, so the gap changed`);
+  const restored = Object.entries(spec.restored).map(([department, r]): Restoration => {
+    const where = `documents.json adoptionAmendments.restored.${department}`;
+    const cite = q(r.cite, where);
+    const text = normalize(cite.quote);
+    const amounts = dollars(text);
+    const fte = [...text.matchAll(/(\d+(?:\.\d+)?)(?: [A-Z]{2,})? FTE/g)].map((m) => Number(m[1]));
+    if (!departments.includes(department)) errors.push(`${where}: no department "${department}"`);
+    if (!amounts.length || amounts.length !== fte.length) errors.push(`${where}: "${cite.quote}" should give one amount per position line`);
+    for (const d of r.what.match(/\d+/g) ?? []) if (!text.includes(d)) errors.push(`${where}: "${r.what}" says ${d}, which isn't in the quote`);
+    if (r.bothYears && !/In both FY 2027 and FY 2028/.test(normalize(motion.quote))) errors.push(`${where}: bothYears, but the motion doesn't say "In both FY 2027 and FY 2028"`);
+    const labels = text.split(/\$[\d,]+(?![\d,]*K)/).map((s) => s.trim()).slice(0, amounts.length);
+    return {
+      department,
+      amount: amounts.reduce((a, v) => a + v, 0),
+      positions: fte.reduce((a, v) => a + v, 0),
+      what: r.what,
+      lines: labels.map((label, i) => ({ label, amount: amounts[i] })),
+      bothYears: r.bothYears,
+      ...(r.funding ? { funding: r.funding } : {}),
+      cite,
+    };
+  });
+  // The motion names the Fire positions it funds; the table's Fire lines must come to the same count.
+  const named = normalize(motion.quote).match(/to fund the ([\d.]+) positions in the Fire Department/);
+  const fire = restored.find((r) => r.department === 'fire');
+  if (!named || !fire || Number(named[1]) !== fire.positions) errors.push(`documents.json adoptionAmendments: the motion funds ${named?.[1]} Fire positions, but the table's lines name ${fire?.positions}`);
+  const restoredTotal = restored.reduce((a, r) => a + r.amount, 0);
+  if (restoredTotal > spending.amount) errors.push(`documents.json adoptionAmendments: restorations (${restoredTotal}) exceed the motion's spending (${spending.amount})`);
+  return { facts: { motion, spending, transfers, restored }, errors };
+}
 /** The two proposed years of Berkeley's five-year CIP tables (the first two columns). */
 const CIP_YEARS = [2027, 2028];
 const any = (years: ByYear) => Object.values(years).some((v) => v !== 0);
@@ -244,6 +301,13 @@ export function applyDocuments(budget: WorkbookBudget, file: DocumentsFile, exce
     const [stTitle, stTitleM] = m('salesTaxTitle', TITLE);
     const [bTitle, bTitleM] = m('bondTitle', TITLE);
     const words: Record<string, number> = { two: 2, three: 3, four: 4, five: 5 };
+    const at = (ref: DocRef, key: string) => {
+      for (const id of [ref.source, ...(ref.related ?? [])]) if (!known.has(id)) throw new Error(`${key}: unknown source ${id}`);
+      checkQuote(ref, excerpts, key);
+      return ref;
+    };
+    const adoption = adoptionFrom(file.adoptionAmendments, at, budget.departmentReductions[0].departments.map((d) => d.id));
+    errors.push(...adoption.errors);
     const s20 = added.find((s) => s.id === ad.source);
     if (!s20?.date) throw new Error(`documents.json adoption: ${ad.source} has no date`);
     documentFacts = {
@@ -268,6 +332,7 @@ export function applyDocuments(budget: WorkbookBudget, file: DocumentsFile, exce
       notes: checkedNotes(file.notes, 'notes', known, excerpts),
       salesTaxTitle: { ...stTitle, letter: stTitleM[1], title: stTitleM[2].trim(), vote: stTitleM[3] },
       bondTitle: { ...bTitle, letter: bTitleM[1], title: bTitleM[2].trim(), vote: bTitleM[3] },
+      adoptionAmendments: adoption.facts,
     };
   } catch (e) {
     errors.push((e as Error).message);

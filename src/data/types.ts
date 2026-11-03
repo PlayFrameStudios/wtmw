@@ -473,6 +473,36 @@ export interface DocumentFacts {
     /** The fund that is the General Fund's capital money ("Capital Improvements", the CIP fund). */
     generalFund: string;
   };
+  /** What the Council changed at adoption, from the annotated agenda (#63). */
+  adoptionAmendments: AdoptionAmendments;
+}
+
+/** A position the Council funded at adoption that the proposal had cut (#63). Amounts are FY2027's, as the motion's table lists them. */
+export interface Restoration {
+  /** The department whose proposed cut it softens: "fire". */
+  department: string;
+  /** Derived: the sum of `lines`. */
+  amount: number;
+  /** Derived: the FTE the lines name. */
+  positions: number;
+  /** The positions in our words, every number in the quote: "a fire inspector, 5 firefighters and 3 paramedics". */
+  what: string;
+  /** Each line of the motion's table as printed: "5.0 FTE Fire Fighters (Step 1)", 1,109,795. */
+  lines: { label: string; amount: number }[];
+  /** The motion funds them in FY2028 too; its table lists FY2027 amounts only. */
+  bothYears: boolean;
+  /** How the motion pays for them, when it says: "paid for with revenue transfers that include more ambulance transport revenue". */
+  funding?: string;
+  cite: DocRef;
+}
+
+export interface AdoptionAmendments {
+  /** The motion that carried. */
+  motion: DocRef;
+  /** The motion's General Fund spending and revenue transfers, FY2027: equal, so the gap didn't change. */
+  spending: DocRef & { amount: number };
+  transfers: DocRef & { amount: number };
+  restored: Restoration[];
 }
 
 /**

@@ -16,11 +16,12 @@ const pages = (dir: string): string[] =>
 describe('sources page', () => {
   const rows = [...html.matchAll(/<li class="src-row" id="(S\d+)" data-type="(city|news|other)"/g)].map((m) => ({ id: m[1], type: m[2] }));
 
-  it('lists all 39 sources: 18 city documents, 10 news reports, 11 from other governments (#51, #54)', () => {
+  it('lists all 41 sources, in order: 20 city documents, 10 news reports, 11 from other governments (#51, #54, #63)', () => {
     expect(rows.map((r) => r.id)).toEqual(b.sources.map((s) => s.id));
-    expect(rows.filter((r) => r.type === 'city')).toHaveLength(18);
+    expect(rows.map((r) => r.id)).toEqual(Array.from({ length: 41 }, (_, i) => `S${i + 1}`));
+    expect(rows.filter((r) => r.type === 'city')).toHaveLength(20);
     expect(rows.filter((r) => r.type === 'other')).toHaveLength(11);
-    expect(text).toContain('City documents (18)');
+    expect(text).toContain('City documents (20)');
     expect(text).toContain('News reports (10)');
     expect(text).toContain('Other governments (11)');
   });
@@ -38,12 +39,21 @@ describe('sources page', () => {
     expect(meta('S20')).toMatch(/· pp\. 1, 2, 55, 96, 170, 172, 173, 248$/);
     expect(meta('S21')).toMatch(/· pp\. 1, 2, 3$/);
     expect(meta('S22')).toMatch(/· p\. 1$/);
+    // #63: Item 21's FY2028 department table, and the annotated agenda's motion.
+    expect(meta('S40')).toMatch(/· pp\. 11, 12$/);
+    expect(meta('S41')).toMatch(/· pp\. 3, 4$/);
     expect(meta('S1')).not.toMatch(/ p\. /);
   });
 
   it('explains the adoption amendments and the two capital totals in the known gaps', () => {
-    expect(text).toContain('Adopted with amendments not yet in City records');
-    expect(text).toContain('Until the minutes are posted, position and workforce counts are from the April 16 plan.');
+    // #63: the annotated agenda records the amendments, so the "until the minutes are posted" caveat is gone.
+    expect(text).toContain('Adopted with amendments');
+    expect(text).not.toContain('not yet in City records');
+    expect(text).not.toMatch(/minutes are posted/i);
+    expect(text).toContain(
+      "The annotated agenda records the amendments: the Council restored 9 Fire positions and 1 City Manager's Office position for FY2027, paid for with $2.29M of revenue transfers, so the gap didn't change.",
+    );
+    expect(text).toContain("The overview's $313.8M General Fund total is the adoption staff report's estimate, from before these amendments.");
     const m = (v: number) => `$${(v / 1e6).toFixed(1)}M`;
     expect(text).toContain(`lists ${m(b.capitalProgram.total.total)} for FY27-28; the adoption report's table by funding source totals ${m(b.documentFacts.capitalProgram.total.total)}`);
   });

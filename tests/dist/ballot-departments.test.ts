@@ -19,7 +19,7 @@ const gap = page('gap');
 const departments = gap.slice(gap.indexOf('id="cuts"'));
 const unescape = (s: string) => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 const receipts = (html: string) =>
-  [...html.matchAll(/data-receipt="([^"]*)"[^>]*>([\s\S]*?)<\/button/g)].map((m) => ({ ...(JSON.parse(unescape(m[1])) as { label?: string; value?: string }), shown: m[2].replace(/<[^>]+>/g, '').trim() }));
+  [...html.matchAll(/data-receipt="([^"]*)"[^>]*>([\s\S]*?)<\/button/g)].map((m) => ({ ...(JSON.parse(unescape(m[1])) as { kind: string; label?: string; value?: string }), shown: m[2].replace(/<[^>]+>/g, '').trim() }));
 const deptReceipts = receipts(departments);
 const fy27 = b.departmentReductions.find((t) => t.year === 2027)!.departments.filter((d) => d.id !== 'it-cost-allocation-plan');
 
@@ -38,7 +38,8 @@ describe("Ballot: each department's cut, passes or fails (#36)", () => {
   });
 
   it("every figure in the switch is the cuts view's receipt, with the same label, value and displayed amount", () => {
-    const mine = receipts(section);
+    // The cuts, not the notes beside them on what the Council restored at adoption (#63, checked in adoption-63.test.ts).
+    const mine = receipts(section).filter((r) => r.kind === 'figure' && !/restored at adoption/.test(r.label!));
     const twins = mine.filter((r) => !/passes or fails/.test(r.label!));
     expect(twins).toHaveLength(rows.length * 2);
     for (const r of twins) {
@@ -70,7 +71,7 @@ describe("Ballot: each department's cut, passes or fails (#36)", () => {
       const [r] = receipts(html);
       expect(r.label).toMatch(/if the sales tax passes or fails \(the same either way\)$/);
       for (const o of ['passes', 'fails']) {
-        const twin = deptReceipts.find((x) => x.label!.startsWith(`${d.name}, FY2027: net cut if the sales tax ${o}`));
+        const twin = deptReceipts.find((x) => x.label?.startsWith(`${d.name}, FY2027: net cut if the sales tax ${o}`));
         expect(twin, `${d.name} ${o}`).toBeDefined();
         expect(r.value).toBe(twin!.value);
       }
