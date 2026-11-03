@@ -7,6 +7,7 @@
  * every sentence-stated number is parsed from its quote. The build fails on any mismatch.
  */
 import { checkNote, checkQuote, normalize, type Excerpts } from '../documents.ts';
+import { numberFromIds } from '../source-numbers.ts';
 import { readTable, tieOut, type TableRow, type TableSpec } from '../tables.ts';
 import type { BudgetColumn, CityBudget, DocRef, Fact, RevenueLine, Source, SourceId, StepNote } from '../types.ts';
 import { SCHEMA_VERSION } from '../types.ts';
@@ -89,11 +90,11 @@ export function factFrom(key: string, ref: DocRef, format: Fact['format']): Fact
 
 export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budget: CityBudget; errors: string[] } {
   const errors: string[] = [];
-  const sources: Source[] = file.sources.map((s, i) => ({ ...s, number: i + 1 }));
-  sources.forEach((s, i) => {
-    if (s.id !== `S${i + 1}`) errors.push(`documents.json: source ${i + 1} is ${s.id}, expected S${i + 1}`);
-    if ((s.type === 'city') !== (s.publisher === 'City of Fremont')) errors.push(`${s.id}: type "${s.type}" but publisher "${s.publisher}"`);
-  });
+  // Numbered from their ids, as Lafayette's: the paramedic-tax page (#66) is S14, after faq.json's S13.
+  const numbered = numberFromIds(file.sources, 1, 'documents.json');
+  const sources: Source[] = numbered.sources;
+  errors.push(...numbered.errors);
+  for (const s of sources) if ((s.type === 'city') !== (s.publisher === 'City of Fremont')) errors.push(`${s.id}: type "${s.type}" but publisher "${s.publisher}"`);
   const known = new Set<SourceId>(sources.map((s) => s.id));
   const quote = (key: string): DocRef => {
     const ref = file.quotes[key];

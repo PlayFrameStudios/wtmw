@@ -16,12 +16,12 @@ const pages = (dir: string): string[] =>
 describe('sources page', () => {
   const rows = [...html.matchAll(/<li class="src-row" id="(S\d+)" data-type="(city|news|other)"/g)].map((m) => ({ id: m[1], type: m[2] }));
 
-  it('lists all 44 sources, in order: 23 city documents, 10 news reports, 11 from other governments (#51, #54, #63, #64, #65)', () => {
+  it('lists all 57 sources, in order: 36 city documents, 10 news reports, 11 from other governments (#51, #54, #63–#66)', () => {
     expect(rows.map((r) => r.id)).toEqual(b.sources.map((s) => s.id));
-    expect(rows.map((r) => r.id)).toEqual(Array.from({ length: 44 }, (_, i) => `S${i + 1}`));
-    expect(rows.filter((r) => r.type === 'city')).toHaveLength(23);
+    expect(rows.map((r) => r.id)).toEqual(Array.from({ length: 57 }, (_, i) => `S${i + 1}`));
+    expect(rows.filter((r) => r.type === 'city')).toHaveLength(36);
     expect(rows.filter((r) => r.type === 'other')).toHaveLength(11);
-    expect(text).toContain('City documents (23)');
+    expect(text).toContain('City documents (36)');
     expect(text).toContain('News reports (10)');
     expect(text).toContain('Other governments (11)');
   });

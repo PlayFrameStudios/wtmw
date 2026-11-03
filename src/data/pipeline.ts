@@ -16,6 +16,7 @@ import { buildLafayette, type LafayetteDocuments } from './lafayette/build.ts';
 import { applyFaq, type CityFaqFile, type SiteFaqFile } from './faq.ts';
 import { applyHistory, type HistorySpec } from './history.ts';
 import { applyStaffCosts, type StaffCostsSpec } from './staff-costs.ts';
+import { applyVoterTaxes, type VoterTaxesSpec } from './voter-taxes.ts';
 import { applySchools, type SchoolsFile } from './schools.ts';
 import { byNumber, checkNumbering } from './source-numbers.ts';
 import type { CityBudget, DocRef, GapBudget } from './types.ts';
@@ -84,14 +85,15 @@ export async function buildCity(root: string, city: string, workbookPath?: strin
           const sha256 = createHash('sha256').update(await readFile(path)).digest('hex');
           return withCoverage(await pipeline.build(path, { file: pipeline.workbook!, sha256 }, cityDir), cityDir, root);
         })();
-  // The General Fund over the years (#64) and what staff cost (#65): last, so their rows can cite any of the city's sources.
+  // The General Fund over the years (#64), what staff cost (#65) and the taxes voters approved (#66): last, so their rows can cite any of the city's sources.
   const docs = await readDocuments(cityDir);
-  const file = docs.file as { history?: HistorySpec; staffCosts?: StaffCostsSpec };
+  const file = docs.file as { history?: HistorySpec; staffCosts?: StaffCostsSpec; voterTaxes?: VoterTaxesSpec };
   const history = applyHistory(result.budget, file.history, docs.excerpts, `${city} documents.json`);
   const staff = applyStaffCosts(history.budget, file.staffCosts, docs.excerpts, `${city} documents.json`);
-  const numbering = checkNumbering(staff.budget.sources).map((e) => `${city}: ${e}`);
-  const budget = { ...staff.budget, sources: byNumber(staff.budget.sources) } as CityBudget;
-  return { budget, errors: [...result.errors, ...history.errors, ...staff.errors, ...numbering, ...(await checkScans(budget, root, city))] };
+  const voter = applyVoterTaxes(staff.budget, file.voterTaxes, docs.excerpts, `${city} documents.json`);
+  const numbering = checkNumbering(voter.budget.sources).map((e) => `${city}: ${e}`);
+  const budget = { ...voter.budget, sources: byNumber(voter.budget.sources) } as CityBudget;
+  return { budget, errors: [...result.errors, ...history.errors, ...staff.errors, ...voter.errors, ...numbering, ...(await checkScans(budget, root, city))] };
 }
 
 /** Every cite read from a scanned page (#59), wherever it sits in budget.json. */
