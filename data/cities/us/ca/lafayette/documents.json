@@ -1,0 +1,474 @@
+{
+  "note": "Lafayette's budget.json is built from these City documents alone (src/data/lafayette/build.ts, #59). Tables are read line by line from each page's extracted text (source/excerpts/{source}.json, PDF page numbers) and tied to their own totals. Two pages of the FY 2026-27 budget are printed as images with no text: the five-year forecast (PDF 17) and the capital program summary (PDF 21). Their rows under 'scans' are our reading of the rendered page, served from public/ at 'image'; no text check can confirm them, so each receipt says so, and the build ties every row to the table's own totals and to the text pages that repeat its figures. The budget's tables keep the heading 'Proposed Budget', though the Council adopted it on June 22, 2026 with four amendments, which the book includes; the City Manager's memo (PDF 7-12) is dated June 8, before them.",
+  "notes": {
+    "coverage": "FY 2026-27",
+    "basis": "Budgetary basis",
+    "caveat": "Figures are from the City of Lafayette's FY 2026-27 budget, adopted June 22, 2026 (its tables keep the heading 'Proposed Budget'), and its audited financial report. Years before FY 2026-27 are shown for context, and years after it are the City's forecast. Not for investment-decision use."
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "publisher": "City of Lafayette",
+      "title": "FY 2026-27 Budget & Workplan",
+      "date": "2026-06-22",
+      "url": "https://www.lovelafayette.org/home/showpublisheddocument/8836/639288856598900000",
+      "format": "PDF",
+      "type": "city",
+      "usedFor": "General Fund programs, revenue, reserve standard, positions, five-year forecast, capital program"
+    },
+    {
+      "id": "S2",
+      "publisher": "City of Lafayette",
+      "title": "FY 2025-26 Final Municipal Budget: staff report",
+      "date": "2026-01-26",
+      "url": "https://lafayette.granicus.com/MetaViewer.php?view_id=3&clip_id=7974&meta_id=204661",
+      "format": "PDF",
+      "type": "city",
+      "usedFor": "Why the City is drawing on its reserves"
+    },
+    {
+      "id": "S3",
+      "publisher": "City of Lafayette",
+      "title": "Annual Comprehensive Financial Report, year ended June 30, 2025",
+      "date": "2025-12",
+      "url": "https://www.lovelafayette.org/home/showpublisheddocument/8477/639035561511330000",
+      "format": "PDF",
+      "type": "city",
+      "usedFor": "Services by contract and by other agencies, Sheriff's deputies, retirement plan, retiree health liability"
+    },
+    {
+      "id": "S4",
+      "publisher": "City of Lafayette",
+      "title": "City Council minutes, June 22, 2026",
+      "date": "2026-06-22",
+      "url": "https://lafayette.granicus.com/MinutesViewer.php?view_id=3&clip_id=8157&doc_id=3ea42db8-8525-11f1-bb61-005056a89546",
+      "format": "PDF",
+      "type": "city",
+      "usedFor": "The Council's adoption of the FY 2026-27 budget"
+    }
+  ],
+  "tables": {
+    "programs": {
+      "source": "S1",
+      "page": 25,
+      "title": "EXPENDITURE SUMMARY - GENERAL FUND",
+      "unit": 1,
+      "columns": [
+        "actual-2024",
+        "actual-2025",
+        "revised-2026",
+        "estimate-2026",
+        "adopted-2027",
+        "change"
+      ],
+      "headings": [
+        [
+          "Actual",
+          "2023-2024",
+          "Expenditures"
+        ],
+        [
+          "Actual",
+          "2024-2025",
+          "Expenditures"
+        ],
+        [
+          "Final",
+          "2025-2026",
+          "Budget"
+        ],
+        [
+          "Estimated",
+          "2025-2026",
+          "Expenditures"
+        ],
+        [
+          "Proposed",
+          "2026-2027",
+          "Budget"
+        ],
+        [
+          "Increase",
+          "Over",
+          "Budget"
+        ]
+      ],
+      "placeholders": [
+        "N/A",
+        "(1)"
+      ]
+    },
+    "expenditures": {
+      "source": "S1",
+      "page": 23,
+      "title": "EXPENDITURE SUMMARY - GENERAL FUND",
+      "unit": 1,
+      "columns": [
+        "actual-2024",
+        "actual-2025",
+        "revised-2026",
+        "estimate-2026",
+        "adopted-2027",
+        "change"
+      ],
+      "headings": [
+        [
+          "Actual",
+          "2023-2024",
+          "Expenditures"
+        ],
+        [
+          "Actual",
+          "2024-2025",
+          "Expenditures"
+        ],
+        [
+          "Final",
+          "2025-2026",
+          "Budget"
+        ],
+        [
+          "Estimated",
+          "2025-2026",
+          "Expenditures"
+        ],
+        [
+          "Proposed",
+          "2026-2027",
+          "Budget"
+        ],
+        [
+          "Increase",
+          "Over",
+          "Budget"
+        ]
+      ],
+      "placeholders": [
+        "N/A"
+      ]
+    },
+    "police": {
+      "source": "S1",
+      "page": 76,
+      "title": "EXPENDITURE DETAIL",
+      "unit": 1,
+      "columns": [
+        "actual-2024",
+        "actual-2025",
+        "revised-2026",
+        "estimate-2026",
+        "adopted-2027",
+        "change"
+      ],
+      "headings": [
+        [
+          "Actual",
+          "2023-2024",
+          "Expenditures"
+        ],
+        [
+          "Actual",
+          "2024-2025",
+          "Expenditures"
+        ],
+        [
+          "Final",
+          "2025-2026",
+          "Budget"
+        ],
+        [
+          "Estimated",
+          "2025-2026",
+          "Expenditures"
+        ],
+        [
+          "Proposed",
+          "2026-2027",
+          "Budget"
+        ],
+        [
+          "Increase",
+          "Over",
+          "Budget"
+        ]
+      ],
+      "placeholders": [
+        "N/A"
+      ]
+    },
+    "revenue": {
+      "source": "S1",
+      "page": 37,
+      "title": "REVENUE ESTIMATE - General Fund",
+      "unit": 1,
+      "columns": [
+        "actual-2024",
+        "actual-2025",
+        "revised-2026",
+        "estimate-2026",
+        "adopted-2027",
+        "change"
+      ],
+      "headings": [
+        [
+          "2023-2024",
+          "Revenues"
+        ],
+        [
+          "2024-2025",
+          "Revenues"
+        ],
+        [
+          "Final",
+          "2025-2026"
+        ],
+        [
+          "Estimated",
+          "2025-2026",
+          "Revenues"
+        ],
+        [
+          "Proposed",
+          "2026-2027"
+        ],
+        [
+          "Increase"
+        ]
+      ],
+      "placeholders": [
+        "N/A"
+      ]
+    },
+    "positions": {
+      "source": "S1",
+      "page": 32,
+      "title": "MONTHLY SALARY RANGES FOR CITY POSITIONS",
+      "unit": 1,
+      "columns": [
+        "employees",
+        "minimum",
+        "maximum"
+      ],
+      "headings": [
+        [
+          "NUMBER OF",
+          "EMPLOYEES"
+        ],
+        "MINIMUM",
+        "MAXIMUM"
+      ]
+    },
+    "reserve": {
+      "source": "S1",
+      "page": 16,
+      "title": "RESERVE STANDARD & CASH POSITION",
+      "unit": 1,
+      "columns": [
+        "june-2025",
+        "june-2026",
+        "june-2027"
+      ],
+      "headings": [
+        "June 30, 2025",
+        "June 30, 2026",
+        "June 30, 2027"
+      ]
+    }
+  },
+  "scans": {
+    "forecast": {
+      "source": "S1",
+      "page": 17,
+      "image": "/us/ca/lafayette/scans/S1-p17.png",
+      "title": "5-YEAR BUDGET FORECAST",
+      "unit": 1,
+      "columns": [
+        "estimate-2026",
+        "adopted-2027",
+        "change-2028",
+        "projected-2028",
+        "change-2029",
+        "projected-2029",
+        "change-2030",
+        "projected-2030",
+        "change-2031",
+        "projected-2031"
+      ],
+      "headings": [
+        [
+          "Estimated",
+          "2025/26"
+        ],
+        [
+          "Budget",
+          "2026/27"
+        ],
+        "Multiplier",
+        [
+          "Projected",
+          "2027/28"
+        ],
+        "Multiplier",
+        [
+          "Projected",
+          "2028/29"
+        ],
+        "Multiplier",
+        [
+          "Projected",
+          "2029/30"
+        ],
+        "Multiplier",
+        [
+          "Projected",
+          "2030/31"
+        ]
+      ],
+      "rows": [
+        "Surplus or (Deficit)?: (3,971,696) (1,760,579) 109,575 (123,751) (153,282) (308,757)",
+        "Projected Ending Fund Balance 19,157,717 17,560,643 1% 17,670,217 -1% 17,546,467 -1% 17,393,185 -2% 17,084,428",
+        "% of General Fund Expenditures 92% 72% 68% 65% 62% 59%"
+      ]
+    },
+    "capital": {
+      "source": "S1",
+      "page": 21,
+      "image": "/us/ca/lafayette/scans/S1-p21.png",
+      "title": "SUMMARY OF CAPITAL IMPROVEMENT PROGRAM",
+      "unit": 1,
+      "columns": [
+        "total"
+      ],
+      "headings": [
+        "Total"
+      ],
+      "rows": [
+        "2027 Pavement Maintenance Project | 2027 Pavement Maintenance Project 840,000 695,000 180,000 1,000,000 1,285,000 4,000,000",
+        "Stanley Blvd and Quandt Rd Traffic Calming and Sidewalk | Stanley Blvd and Quandt Rd Traffic Calming and Sidewalk 1,255,000 1,255,000",
+        "Capital projects overhead | Overhead 786,108 786,108",
+        "Hastings Court Stabilization | Hastings Court Stabilization 150,000 - 350,000 500,000",
+        "Aqueduct Pathway Design | Aqueduct Pathway Design 300,000 300,000",
+        "Cemetery Storm Drain | Cemetary Storm Drain 150,000 150,000",
+        "Parks facilities overhead | Overhead 34,556 $34,556",
+        "Total | GRAND TOTAL: $300,000 $990,000 $695,000 $180,000 $820,664 $1,000,000 $350,000 $1,285,000 $1,405,000 $7,025,664"
+      ]
+    }
+  },
+  "quotes": {
+    "sheriffContract": {
+      "source": "S1",
+      "page": 76,
+      "quote": "862 Contract Sheriff Services 4, 330,339 4,224,586 4,934,755 4,785,028 6,454,458 30.8%"
+    },
+    "sheriffContractDetail": {
+      "source": "S1",
+      "page": 77,
+      "quote": "Subtotal $4,330,339 $4,224,586 $4,934,755 $4,785,028 $6,454,458 30.8%"
+    },
+    "sworn": {
+      "source": "S3",
+      "page": 179,
+      "quote": "Number of Contracted Sworn Personnel 16"
+    },
+    "animalControl": {
+      "source": "S1",
+      "page": 77,
+      "quote": "861 Animal Control Services $336,923"
+    },
+    "consolidation": {
+      "source": "S1",
+      "page": 11,
+      "quote": "Consolidated total police costs by combining Traffic Enforcement (11-215) and Supplementary Law Enforcement (Fund 73) into Police Services (11-210)."
+    },
+    "reservePolicy": {
+      "source": "S1",
+      "page": 16,
+      "quote": "the City Council voted to maintain a targeted minimum reserve balance equivalent to 60% of total General Fund operations"
+    },
+    "limitedService": {
+      "source": "S3",
+      "page": 10,
+      "quote": "Lafayette is a limited service city and contracts with Contra Costa County for police, library, animal, and building services."
+    },
+    "adopted": {
+      "source": "S4",
+      "page": 14,
+      "quote": "It was M/S/C (McCormick/Candell) to adopt Resolution 2026-40"
+    },
+    "strategic": {
+      "source": "S2",
+      "page": 1,
+      "quote": "Importantly, the reduction in reserves reflected in the Final Budget is intentional and strategic."
+    },
+    "deferredMaintenance": {
+      "source": "S2",
+      "page": 1,
+      "quote": "The City Council Finance Subcommittee recommends prioritizing funding the City’s long-standing deferred maintenance needs while reserves remain strong, and Measure H revenues are available."
+    },
+    "communityCenterSinking": {
+      "source": "S1",
+      "page": 10,
+      "quote": "Accordingly, the budget includes an additional annual contribution of $500K to Fund 16 for the Community Center sinking fund."
+    },
+    "noDefinedBenefit": {
+      "source": "S3",
+      "page": 12,
+      "quote": "Unlike most public sector organizations, the City of Lafayette does not participate in a defined benefit retirement program."
+    },
+    "pensionRate": {
+      "source": "S3",
+      "page": 87,
+      "quote": "The contribution on behalf of each participant equal 10% of base earnings up to the maximum allowable by law."
+    },
+    "pensionContribution": {
+      "source": "S3",
+      "page": 87,
+      "quote": "Contributions to the Plan totaled $842,472 by the City"
+    },
+    "opeb": {
+      "source": "S3",
+      "page": 43,
+      "quote": "Net OPEB liability 758,015 90,539 848,554"
+    }
+  },
+  "reserveNotes": [
+    {
+      "text": "The City has said the drop in its reserves is on purpose. Last year's Final Budget called it “intentional and strategic”, a shift from building up reserves toward reinvesting in City facilities while keeping the reserve above its minimum.",
+      "cites": [
+        {
+          "source": "S2",
+          "page": 1,
+          "quote": "Importantly, the reduction in reserves reflected in the Final Budget is intentional and strategic."
+        },
+        {
+          "source": "S2",
+          "page": 1,
+          "quote": "the Final Budget reflects a shift from reserve accumulation toward reinvestment in critical City facilities while still maintaining the 60% threshold."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "General Fund",
+      "source": "S3",
+      "page": 49,
+      "definition": "The City’s primary operating fund. It accounts for all financial resources of the general government, except those required to be accounted for in another fund.",
+      "quote": "primary operating fund. It accounts for all financial resources of the general government, except those required to be accounted for in another fund."
+    },
+    {
+      "term": "Measure H",
+      "source": "S1",
+      "page": 53,
+      "definition": "A half-cent sales tax Lafayette voters approved in November 2024. In the City’s words: “In November 2024 voters approved Measure H -- a 1/2 cent sales tax -- to support ongoing City programs. The additional sales tax was effective on April 1, 2025 and will continue for 7 years until March 30, 2032.”",
+      "quote": "In November 2024 voters approved Measure H -- a 1/2 cent sales tax -- to support ongoing City programs. The additional sales tax was effective on April 1, 2025 and will continue for 7 years until March 30, 2032."
+    },
+    {
+      "term": "Sinking Fund",
+      "source": "S3",
+      "page": 14,
+      "definition": "Money the City sets aside year by year for a known future cost. The City’s financial report describes “sinking funds” for future operating costs such as vehicle replacements, vacation accruals, retiree healthcare, capital expenditures, deferred maintenance, and other monies that have been earmarked for specific purposes by the Council.",
+      "quote": "“sinking funds” for future operating costs such as vehicle replacements, vacation accruals, retiree healthcare, capital expenditures, deferred maintenance, and other monies that have been earmarked for specific purposes by the Council."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "note": "Revenue groups for the $100 chart and the overview mix bar: an editorial grouping of the General Fund revenue lines on the FY 2026-27 budget's revenue estimate (S1 PDF 37), in the colors Berkeley's and Fremont's groups use. Measure H is a sales tax the City counts separately from its Bradley-Burns sales tax. Every line belongs to exactly one group; the build checks it.",
+  "groups": [
+    { "id": "property-tax", "name": "Property tax", "color": "#0E6B6F", "lines": ["Property tax"] },
+    { "id": "vehicle-license-fee", "name": "Vehicle license fee", "color": "#2E8A84", "lines": ["Vehicle license fee (from the State)"] },
+    { "id": "sales-tax", "name": "Sales tax", "color": "#3E9A8F", "lines": ["Sales tax"] },
+    { "id": "measure-h", "name": "Measure H sales tax", "color": "#7CBFB3", "lines": ["Measure H sales tax"] },
+    { "id": "franchise-fees", "name": "Franchise fees", "color": "#23395B", "lines": ["Franchise fee: PG&E", "Franchise fee: cable television", "Franchise fee: waste disposal"] },
+    { "id": "fees", "name": "Fees for service", "color": "#3F5E96", "lines": ["Fees for service"] },
+    { "id": "hotel", "name": "Hotel tax", "color": "#7A93C2", "lines": ["Hotel tax"] },
+    { "id": "interest", "name": "Interest & rents", "color": "#8C6D46", "lines": ["Interest and rents"] },
+    { "id": "other", "name": "Everything else", "color": "#CFCBC2", "lines": ["Property transfer tax", "Other governments", "Fines", "Other revenue"] }
+  ]
+}

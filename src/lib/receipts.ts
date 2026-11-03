@@ -72,6 +72,8 @@ export interface Receipt {
   quote?: string;
   /** For a figure read from a table row, the printed heading of its column: the quote is the whole row. */
   column?: string;
+  /** Read from a page printed as an image (#59): the quote is our reading, unchecked, and `image` is the rendered page. */
+  scanned?: { image: string };
   /** Download for the table this figure came from. */
   csv?: string;
   /** One sign per line, then the amount without one: "+ Operating Reserve $4,177,541", "− Proposed Sales & Use Tax $9,443,000". */
@@ -156,7 +158,7 @@ export function figureReceipt(budget: CityBudget, city: City, figure: Figure, pa
     'quote' in ref ? `${ref.page ? `p. ${folio(views.get(ref.source)!, ref.page)}` : 'web page'}${ref.column ? `, column “${ref.column}”` : ''}` : `${ref.table}, row ${ref.row}`;
   const citation = [
     `${figure.label}: ${value}.`,
-    ...ids.map((id, i) => `${i === 0 ? 'Source' : 'Also'}: ${views.get(id)!.citation}${i === 0 ? ` (${where})` : ''}.`),
+    ...ids.map((id, i) => `${i === 0 ? 'Source' : 'Also'}: ${views.get(id)!.citation}${i === 0 ? ` (${where}${'quote' in ref && ref.scanned ? '; read from a scanned table, not checked against text' : ''})` : ''}.`),
     `Via ${SITE.name}, ${pageUrl.href}`,
   ].join('\n');
   return {
@@ -165,7 +167,7 @@ export function figureReceipt(budget: CityBudget, city: City, figure: Figure, pa
     tone: figure.tone ?? (figure.value < 0 ? 'short' : 'neutral'),
     label: figure.label,
     sources: ids,
-    ...('quote' in ref ? { page: ref.page, quote: ref.quote, ...(ref.column && { column: ref.column }) } : { table: ref.table, row: ref.row }),
+    ...('quote' in ref ? { page: ref.page, quote: ref.quote, ...(ref.column && { column: ref.column }), ...(ref.scanned && { scanned: ref.scanned }) } : { table: ref.table, row: ref.row }),
     csv: csvHref(budget, city, figure.ref),
     parts: figure.parts?.map((p) => ({
       sign: p.value < 0 ? MINUS : '+',
@@ -181,6 +183,8 @@ export function figureReceipt(budget: CityBudget, city: City, figure: Figure, pa
 export interface At {
   page?: number;
   quote?: string;
+  /** A sentence or row read from a page printed as an image (#59). */
+  scanned?: { image: string };
 }
 
 /** Another document (or another page of the same one) behind the same statement. */

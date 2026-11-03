@@ -6,15 +6,18 @@
  * positions by department. Every number from departmentBudgets() in src/lib/department-budgets.ts.
  * Styles are inline so they ship only with this view, never on a deficit-plan city's page.
  */
+import CitedText from '../CitedText.astro';
 import Sourced from '../Sourced.astro';
 import Base from '../../layouts/Base.astro';
 import { budgetFor } from '../../lib/budget';
 import type { City } from '../../lib/cities';
 import { fy } from '../../lib/city-settings';
+import { coverageFor } from '../../lib/coverage';
 import { departmentBudgets } from '../../lib/department-budgets';
 import { fullNames, generalFundNoun } from '../../lib/departments';
 import { familiesFor } from '../../lib/families';
 import { shortMoney } from '../../lib/format';
+import { revenueGroupsFor } from '../../lib/revenue-groups';
 
 interface Props {
   city: City;
@@ -25,19 +28,31 @@ const budget = budgetFor(city)!;
 const label = (y: number) => fy(city.budget.labels, y);
 const p = departmentBudgets(budget, familiesFor(city, budget), fullNames(city.path, budget), label);
 const y = label(p.year);
+// Who provides a service, and the services the General Fund doesn't pay for (#59), as cited paragraphs.
+const covers = coverageFor(city, budget, revenueGroupsFor(city, budget));
+const units = `${p.unit}s`;
 const width = (v: number, max: number) => `${((Math.abs(v) / max) * 100).toFixed(3)}%`;
 const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 });
 ---
 
-<Base title={`Departments · ${city.name}`} city={city} description={`What each of ${city.name}'s departments gets from the ${y} General Fund, per $100, and how many people work there. Every number links to the public document it came from.`}>
+<Base title={`Departments · ${city.name}`} city={city} description={`What each of ${city.name}'s ${units} gets from the ${y} General Fund, per $100${p.staff.rows.length ? ', and how many people work there' : ''}. Every number links to the public document it came from.`}>
   <div class="db-page wrap">
     <section class="db-intro">
-      <h1>What each department gets in {y}</h1>
-      <p class="db-lede">
-        The City's departments have <Sourced city={city} figure={p.departments}>{shortMoney(p.departments.value)}</Sourced> of General Fund money this year.
-        Non-departmental costs and debt service add to that, and a citywide savings assumption takes some back, for{' '}
-        <Sourced city={city} figure={p.total}>{shortMoney(p.total.value)}</Sourced> in all.
-      </p>
+      <h1>What each {p.unit} gets in {y}</h1>
+      {
+        p.citywide.length > 0 ? (
+          <p class="db-lede">
+            The City's {units} have <Sourced city={city} figure={p.departments}>{shortMoney(p.departments.value)}</Sourced> of General Fund money this year.
+            Non-departmental costs and debt service add to that, and a citywide savings assumption takes some back, for{' '}
+            <Sourced city={city} figure={p.total}>{shortMoney(p.total.value)}</Sourced> in all.
+          </p>
+        ) : (
+          <p class="db-lede">
+            The City budgets <Sourced city={city} figure={p.total}>{shortMoney(p.total.value)}</Sourced> of General Fund money this year, all of it in its{' '}
+            {p.rows.length} {units}.
+          </p>
+        )
+      }
     </section>
 
     <section class="db-section" aria-labelledby="db-depts">
@@ -59,11 +74,27 @@ const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 
               <span class="db-bar" aria-hidden="true">
                 <span style={`width:${width(r.figure.value, p.max)};background:${r.color}`} />
               </span>
+              {covers?.providedBy[r.id] && (
+                <p class="db-provided" data-provided-by>
+                  <CitedText city={city} p={covers.providedBy[r.id]} />
+                </p>
+              )}
+            </li>
+          ))
+        }
+        {
+          covers?.outside.map((o) => (
+            <li class="db-row db-row--outside" id={o.id} data-not-in-budget={o.id}>
+              <span class="db-name">{o.name}</span>
+              <span class="db-amount">Not in this budget</span>
+              <p class="db-provided">
+                <CitedText city={city} p={o.paragraph} />
+              </p>
             </li>
           ))
         }
       </ol>
-      <table class="db-sum">
+      <table class="db-sum" hidden={p.citywide.length === 0}>
         <caption>From the departments to the General Fund's total, {y}</caption>
         <tbody>
           <tr>
@@ -205,6 +236,29 @@ const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 
     display: block;
     height: 100%;
     background: var(--bay);
+  }
+  .db-row:has(.db-provided) {
+    grid-template-areas: 'name amount' 'bar per' 'note note';
+  }
+  .db-provided {
+    grid-area: note;
+    max-width: 44rem;
+    margin: 0.25rem 0 0;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+  /* A service someone else provides: no square, no bar, no figure (#59). */
+  .db-row.db-row--outside {
+    grid-template-areas: 'name amount' 'note note';
+  }
+  .db-row--outside .db-name,
+  .db-row--outside .db-amount {
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .db-row--outside .db-amount {
+    font-size: 0.875rem;
   }
   .db-sum {
     width: 100%;

@@ -1,0 +1,322 @@
+{
+  "note": "What the City's budget covers, and what it doesn't (#51, #59). Lafayette is a 'limited service city': its police are a contract with the County Sheriff, and fire, library, water and sewer come from other agencies, so the pages say so where the reader sees the numbers: 'lines' puts a note on a department's line, 'notInBudget' lists services the General Fund doesn't pay for as muted rows with no squares (the coverage block leads with them), and 'profile' is the overview's one-line description of the city. Sources added here are other governments' documents and explainers, never the City's own books; they continue the documents' numbering. Every quote must appear on its page of source/excerpts/{source}.json. Text can name {generalFund}, {propertyTax} and {year}, which the pages fill from budget.json with their receipts ({allFunds} isn't available: the City's two all-funds totals differ, #58). Any other number in a paragraph must appear in one of its cites' quotes. Building services are also County contracts, but no General Fund program shows what the City pays for them, so they appear in the profile line only.",
+  "sources": [
+    {
+      "id": "S5",
+      "publisher": "Legislative Analyst's Office (California)",
+      "title": "The 1 Percent Tax: Where Does Your Money Go?",
+      "url": "https://lao.ca.gov/Media/Videos/2015/one-percent-tax-script.pdf",
+      "type": "other",
+      "usedFor": "How the county divides the basic 1% property tax"
+    },
+    {
+      "id": "S6",
+      "publisher": "Legislative Analyst's Office (California)",
+      "title": "Understanding California's Property Taxes",
+      "date": "2012-11-29",
+      "url": "https://lao.ca.gov/reports/2012/tax/property-tax-primer-112912.pdf",
+      "type": "other",
+      "usedFor": "Glossary: special district"
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Special District",
+      "definition": "A local government set up to provide a particular service in its area, such as fire protection, water, or parks and recreation. Special districts get a share of the 1% property tax, along with counties, cities and schools.",
+      "source": "S6",
+      "page": 18,
+      "quote": "property tax revenue from the 1 percent rate is distributed to counties, cities, K-12 schools, community college districts, and special districts",
+      "also": [
+        {
+          "source": "S6",
+          "page": 18,
+          "quote": "Special Districts Fire protection 348 County service area 316 Cemetery 241 Community services 201 Maintenance 136 Highway lighting 117 County water 100 Recreation and park 85"
+        }
+      ]
+    }
+  ],
+  "profile": {
+    "text": "Lafayette is a limited service city: it contracts with Contra Costa County for police, library, animal and building services, and separate agencies provide fire, water and sewer service.",
+    "cites": [
+      {
+        "source": "S3",
+        "page": 10,
+        "quote": "Lafayette is a limited service city and contracts with Contra Costa County for police, library, animal, and building services."
+      },
+      {
+        "source": "S3",
+        "page": 10,
+        "quote": "fire service by the Contra Costa Consolidated Fire District, water service by East Bay Municipal Utility District, and sewer service by the Central Contra Costa Sanitary District"
+      }
+    ]
+  },
+  "lines": {
+    "police-services": {
+      "short": "A contract with the Contra Costa County Sheriff's Office",
+      "text": "Lafayette's police are a contract with the Contra Costa County Sheriff: $6,454,458 of this program pays the Sheriff, and the City's latest financial report counts 16 contracted sworn officers. The program also pays for County animal control ($336,923). Much of the contract's 30.8% rise is a move, not new spending: this budget folds Traffic Enforcement and the Supplementary Law Enforcement fund into Police Services.",
+      "cites": [
+        {
+          "source": "S1",
+          "page": 76,
+          "quote": "862 Contract Sheriff Services 4, 330,339 4,224,586 4,934,755 4,785,028 6,454,458 30.8%"
+        },
+        {
+          "source": "S1",
+          "page": 77,
+          "quote": "This program provides contract law enforcement services to the community via the Contra Costa Sheriff's Department."
+        },
+        {
+          "source": "S3",
+          "page": 179,
+          "quote": "Number of Contracted Sworn Personnel 16"
+        },
+        {
+          "source": "S1",
+          "page": 77,
+          "quote": "861 Animal Control Services $336,923"
+        },
+        {
+          "source": "S1",
+          "page": 11,
+          "quote": "Consolidated total police costs by combining Traffic Enforcement (11-215) and Supplementary Law Enforcement (Fund 73) into Police Services (11-210)."
+        }
+      ]
+    }
+  },
+  "notInBudget": [
+    {
+      "id": "fire",
+      "name": "Fire",
+      "provider": "Contra Costa Consolidated Fire District",
+      "paragraph": {
+        "text": "Fire service comes from the Contra Costa Consolidated Fire District, a separate district with its own budget, so none of its cost is in the City's budget.",
+        "cites": [
+          {
+            "source": "S3",
+            "page": 10,
+            "quote": "Other examples of services delivered within the City that are provided by separate agencies are: fire service by the Contra Costa Consolidated Fire District"
+          },
+          {
+            "source": "S3",
+            "page": 179,
+            "quote": "Fire Protection: Contra Costa Fire District"
+          }
+        ]
+      }
+    },
+    {
+      "id": "library",
+      "name": "Library",
+      "provider": "Contra Costa County, under contract",
+      "paragraph": {
+        "text": "The City contracts with Contra Costa County for its library. The City's own library costs are in a separate Library Operations fund, outside the General Fund, so they aren't in these squares.",
+        "cites": [
+          {
+            "source": "S3",
+            "page": 10,
+            "quote": "Lafayette is a limited service city and contracts with Contra Costa County for police, library, animal, and building services."
+          },
+          {
+            "source": "S1",
+            "page": 26,
+            "quote": "37 Library Operations 1,436,963 1,425,303 1,492,032 1,458,461 1,533,577 2.8%"
+          }
+        ]
+      }
+    }
+  ],
+  "overview": {
+    "text": "Your property tax bill pays several governments, including the City, the school districts and the county. [This page shows only the City's part.](page:sources#what-this-covers)",
+    "unsourced": "Sums up the block's 'Where does my property tax go?' answer, which it links to and which carries the receipts."
+  },
+  "questions": [
+    {
+      "id": "everything",
+      "question": "Is this everything the City of Lafayette spends?",
+      "paragraphs": [
+        {
+          "text": "No. These pages show the City's [General Fund](glossary:General Fund), its main account for day-to-day services: {generalFund} in {year}. The City also keeps separate funds, for capital projects, recreation programs, the library, school buses and more, and those aren't in the squares on these pages.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 26,
+              "quote": "CAPITAL IMPROVEMENT FUNDS"
+            },
+            {
+              "source": "S1",
+              "page": 26,
+              "quote": "31 Recreation Programs $2,202,688 $2,306,637 $2,296,175 $2,306,491 $2,289,896 -0.3%"
+            },
+            {
+              "source": "S1",
+              "page": 26,
+              "quote": "37 Library Operations 1,436,963 1,425,303 1,492,032 1,458,461 1,533,577 2.8%"
+            },
+            {
+              "source": "S1",
+              "page": 26,
+              "quote": "74 School Bus Program 2,606,052 2,668,520 3,382,027 3,365,317 3,527,820 4.3%"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "schools",
+      "question": "Where are the schools?",
+      "paragraphs": [
+        {
+          "text": "Public schools in Lafayette are run by separate governments. The Lafayette School District runs four elementary schools and a middle school, and the high school is in the Acalanes district, which also serves Canyon, Moraga, Orinda and parts of Walnut Creek.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 10,
+              "quote": "The Lafayette School District operates 4 elementary schools and one middle school within the city boundary. The high school is in the Acalanes Unified High School District, which also serves the communities of Canyon, Moraga, Orinda, and portions of Walnut Creek."
+            }
+          ]
+        },
+        {
+          "text": "The City isn't financially responsible for them, so school spending isn't in the City's numbers.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 10,
+              "quote": "As a result, the City has only one component unit and no other legal entities for which it is financially or legally responsible."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "else",
+      "question": "What else isn't here?",
+      "paragraphs": [
+        {
+          "text": "The City's financial report lists services in Lafayette that separate agencies provide. Each has its own budget, so none of their spending is on these pages.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 10,
+              "quote": "Other examples of services delivered within the City that are provided by separate agencies are"
+            }
+          ]
+        }
+      ],
+      "agencies": [
+        {
+          "name": "Contra Costa County",
+          "does": "The county government. The City contracts with it for police, library, animal and building services.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 10,
+              "quote": "Lafayette is a limited service city and contracts with Contra Costa County for police, library, animal, and building services."
+            }
+          ]
+        },
+        {
+          "name": "Contra Costa Consolidated Fire District",
+          "does": "Fire service.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 10,
+              "quote": "fire service by the Contra Costa Consolidated Fire District"
+            }
+          ]
+        },
+        {
+          "name": "East Bay Municipal Utility District",
+          "does": "Water.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 10,
+              "quote": "water service by East Bay Municipal Utility District"
+            }
+          ]
+        },
+        {
+          "name": "Central Contra Costa Sanitary District",
+          "does": "Sewer.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 10,
+              "quote": "sewer service by the Central Contra Costa Sanitary District"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "property-tax",
+      "question": "Where does my property tax go?",
+      "paragraphs": [
+        {
+          "text": "The basic 1% property tax is pooled by the county and divided under state law among the county, cities, schools and [special districts](glossary:Special District).",
+          "cites": [
+            {
+              "source": "S5",
+              "page": 1,
+              "quote": "Your county auditor pools your 1 percent rate tax payment, as well as payments from other property owners in your county, into a single countywide pot."
+            },
+            {
+              "source": "S5",
+              "page": 1,
+              "quote": "State law directs how your county auditor distributes the revenue in the countywide pot."
+            },
+            {
+              "source": "S5",
+              "page": 1,
+              "quote": "your county auditor sets aside this $1,000 for your city, county, schools, and special districts."
+            }
+          ]
+        },
+        {
+          "text": "The City says it receives about 6.6% of the property taxes its residents pay, against an average of 10.5% for other cities in Contra Costa County. It didn't levy a property tax before Proposition 13 passed in 1978, so the state's formula gives it a low share.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 35,
+              "quote": "Currently, the City receives approximately 6.6% of the property taxes paid by its residents, compared to an average of 10.5% for other cities in Contra Costa."
+            },
+            {
+              "source": "S3",
+              "page": 35,
+              "quote": "the City did not levy a property tax prior to 1978 when Proposition 13 was adopted. Consequently, it receives a relatively low share of the property tax under the statutory formula."
+            }
+          ]
+        },
+        {
+          "text": "The {propertyTax} in property tax on these pages is only the City's share."
+        }
+      ]
+    },
+    {
+      "id": "city-pays",
+      "question": "Does the City pay for the schools?",
+      "paragraphs": [
+        {
+          "text": "The City runs a school bus program from its own fund, outside the General Fund, and it took over the crossing guard program after the school district stopped funding it.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 26,
+              "quote": "74 School Bus Program 2,606,052 2,668,520 3,382,027 3,365,317 3,527,820 4.3%"
+            },
+            {
+              "source": "S1",
+              "page": 11,
+              "quote": "Following the School District's decision to discontinue its funding and management of the Crossing Guard program, the City assumed full program responsibility."
+            }
+          ]
+        },
+        {
+          "text": "We haven't checked every line of the City's full budget, so small City grants or contracts with the districts can't be ruled out.",
+          "unsourced": "A limit of our own review, not a claim about a document."
+        }
+      ]
+    }
+  ]
+}

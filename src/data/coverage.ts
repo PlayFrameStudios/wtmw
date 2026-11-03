@@ -8,13 +8,17 @@
  */
 import { CITY_PAGES } from '../lib/city-pages.ts';
 import { checkQuote, normalize, type Excerpts } from './documents.ts';
-import { COVERAGE_QUESTIONS, type CityBudget, type Coverage, type CoverageParagraph, type DocRef, type GlossaryEntry, type Source } from './types.ts';
+import { COVERAGE_QUESTIONS, type CityBudget, type Coverage, type CoverageParagraph, type DocRef, type GlossaryEntry, type NotInBudget, type Source } from './types.ts';
 
 export interface CoverageFile {
   sources: Omit<Source, 'number' | 'row'>[];
   glossary: (DocRef & { term: string; definition: string; also?: DocRef[] })[];
   questions: Coverage['questions'];
   overview: Coverage['overview'];
+  /** Who provides a department's service, where it isn't City staff, by department id (#59). */
+  lines?: Record<string, CoverageParagraph & { short?: string }>;
+  notInBudget?: NotInBudget[];
+  profile?: CoverageParagraph;
 }
 
 /** The figures a paragraph can name; the pages fill them from budget.json, each with its receipt. */
@@ -119,7 +123,9 @@ export function applyCoverage(
   const sources = [...budget.sources, ...added];
   const known = new Map(sources.map((s) => [s.id, s]));
   const glossaryTerms = new Set<string>();
-  const { cite, paragraph: checkParagraph } = paragraphChecks({ known, excerpts, glossaryTerms, pages, tokens: COVERAGE_TOKENS, errors });
+  // A city whose all-funds total is left off (#59) has no {allFunds} to fill.
+  const tokens = budget.size.allFunds ? COVERAGE_TOKENS : COVERAGE_TOKENS.filter((t) => t !== 'allFunds');
+  const { cite, paragraph: checkParagraph } = paragraphChecks({ known, excerpts, glossaryTerms, pages, tokens, errors });
 
   const glossary: GlossaryEntry[] = [...(budget.glossary ?? [])];
   const terms = new Set(glossary.map((g) => g.term.toLowerCase()));
@@ -151,8 +157,39 @@ export function applyCoverage(
 
   if (!file.overview?.text?.trim()) errors.push('coverage.json overview: needs its line');
   else checkParagraph(file.overview, 'coverage.json overview');
+  if (file.profile) checkParagraph(file.profile, 'coverage.json profile');
 
-  return { budget: { ...budget, sources, glossary, coverage: { questions: file.questions, overview: file.overview } }, errors };
+  // Who provides a department's service (#59): each note is a cited paragraph, on a department the budget has.
+  const departments = new Map(budget.generalFund[0].lines.filter((l) => l.kind === 'department').map((l) => [l.id, l]));
+  for (const [id, p] of Object.entries(file.lines ?? {})) {
+    if (!departments.has(id)) errors.push(`coverage.json lines.${id}: not a department in the budget`);
+    else if (!p.cites?.length) errors.push(`coverage.json lines.${id}: who provides a service needs a source that says so`);
+    // The short form goes where there's no room for a receipt (a chart square), so it can't hold a figure.
+    if (p.short !== undefined && (!p.short.trim() || /\d/.test(p.short))) errors.push(`coverage.json lines.${id}: "short" must be a few words with no figures`);
+    checkParagraph(p, `coverage.json lines.${id}`);
+  }
+  const outside = new Set<string>();
+  for (const n of file.notInBudget ?? []) {
+    const where = `coverage.json notInBudget "${n.id}"`;
+    if (departments.has(n.id) || outside.has(n.id)) errors.push(`${where}: the id is already used`);
+    outside.add(n.id);
+    if (!n.name.trim() || !n.provider.trim()) errors.push(`${where}: needs a name and who provides it`);
+    if (!n.paragraph.cites?.length) errors.push(`${where}: a service outside the budget needs a source that says who provides it`);
+    checkParagraph(n.paragraph, where);
+    checkNumbers(`${n.name} ${n.provider}`, n.paragraph.cites ?? [], where, errors);
+  }
+  const generalFund = budget.generalFund.map((g) => ({
+    ...g,
+    lines: g.lines.map((l) => (file.lines?.[l.id] && l.kind === 'department' ? { ...l, providedBy: file.lines[l.id] } : l)),
+  }));
+
+  const coverage: Coverage = {
+    questions: file.questions,
+    overview: file.overview,
+    ...(file.notInBudget?.length ? { notInBudget: file.notInBudget } : {}),
+    ...(file.profile ? { profile: file.profile } : {}),
+  };
+  return { budget: { ...budget, sources, glossary, generalFund, coverage }, errors };
 }
 
 /** Every number in our words must be in a quote they rest on: a typed-in "$68.9M" fails the build. */

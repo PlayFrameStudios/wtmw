@@ -19,7 +19,7 @@ const EYEBROW = /<(\w+) class="(?:[^"]* )?(?:eyebrow|kicker)[ "][^>]*>([\s\S]*?)
 // The homepage keeps these for now, case by case (Jeremy on #28); "Free · Independent · Every number sourced" is gone.
 // The hero's sample card, once per city behind tabs (#49): its city line and "Source receipt".
 const HOMEPAGE_KEEPS = [
-  ...['Berkeley, CA · FY2027', 'Fremont, CA · FY 2026/27'].flatMap((city) => [city, 'Source receipt']),
+  ...['Berkeley, CA · FY2027', 'Fremont, CA · FY 2026/27', 'Lafayette, CA · FY 2026-27'].flatMap((city) => [city, 'Source receipt']),
   'How it works',
   'Built for the questions people actually ask',
   'Cities',

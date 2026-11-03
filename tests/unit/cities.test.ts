@@ -8,7 +8,7 @@ const exists = () => true;
 
 describe('city registry', () => {
   it('loads Berkeley and Fremont from data/cities', () => {
-    expect(cities.map((c) => c.path)).toEqual(['/us/ca/berkeley/', '/us/ca/fremont/']);
+    expect(cities.map((c) => c.path)).toEqual(['/us/ca/berkeley/', '/us/ca/fremont/', '/us/ca/lafayette/']);
     expect(cities[0].slug).toEqual({ country: 'us', state: 'ca', city: 'berkeley' });
   });
 

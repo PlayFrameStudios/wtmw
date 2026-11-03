@@ -1,0 +1,1607 @@
+{
+  "schemaVersion": 2,
+  "notes": {
+    "coverage": "FY 2026-27",
+    "basis": "Budgetary basis",
+    "caveat": "Figures are from the City of Lafayette's FY 2026-27 budget, adopted June 22, 2026 (its tables keep the heading 'Proposed Budget'), and its audited financial report. Years before FY 2026-27 are shown for context, and years after it are the City's forecast. Not for investment-decision use."
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "publisher": "City of Lafayette",
+      "title": "FY 2026-27 Budget & Workplan",
+      "date": "2026-06-22",
+      "url": "https://www.lovelafayette.org/home/showpublisheddocument/8836/639288856598900000",
+      "format": "PDF",
+      "type": "city",
+      "usedFor": "General Fund programs, revenue, reserve standard, positions, five-year forecast, capital program",
+      "number": 1
+    },
+    {
+      "id": "S2",
+      "publisher": "City of Lafayette",
+      "title": "FY 2025-26 Final Municipal Budget: staff report",
+      "date": "2026-01-26",
+      "url": "https://lafayette.granicus.com/MetaViewer.php?view_id=3&clip_id=7974&meta_id=204661",
+      "format": "PDF",
+      "type": "city",
+      "usedFor": "Why the City is drawing on its reserves",
+      "number": 2
+    },
+    {
+      "id": "S3",
+      "publisher": "City of Lafayette",
+      "title": "Annual Comprehensive Financial Report, year ended June 30, 2025",
+      "date": "2025-12",
+      "url": "https://www.lovelafayette.org/home/showpublisheddocument/8477/639035561511330000",
+      "format": "PDF",
+      "type": "city",
+      "usedFor": "Services by contract and by other agencies, Sheriff's deputies, retirement plan, retiree health liability",
+      "number": 3
+    },
+    {
+      "id": "S4",
+      "publisher": "City of Lafayette",
+      "title": "City Council minutes, June 22, 2026",
+      "date": "2026-06-22",
+      "url": "https://lafayette.granicus.com/MinutesViewer.php?view_id=3&clip_id=8157&doc_id=3ea42db8-8525-11f1-bb61-005056a89546",
+      "format": "PDF",
+      "type": "city",
+      "usedFor": "The Council's adoption of the FY 2026-27 budget",
+      "number": 4
+    },
+    {
+      "id": "S5",
+      "publisher": "Legislative Analyst's Office (California)",
+      "title": "The 1 Percent Tax: Where Does Your Money Go?",
+      "url": "https://lao.ca.gov/Media/Videos/2015/one-percent-tax-script.pdf",
+      "type": "other",
+      "usedFor": "How the county divides the basic 1% property tax",
+      "number": 5
+    },
+    {
+      "id": "S6",
+      "publisher": "Legislative Analyst's Office (California)",
+      "title": "Understanding California's Property Taxes",
+      "date": "2012-11-29",
+      "url": "https://lao.ca.gov/reports/2012/tax/property-tax-primer-112912.pdf",
+      "type": "other",
+      "usedFor": "Glossary: special district",
+      "number": 6
+    }
+  ],
+  "generalFund": [
+    {
+      "year": 2027,
+      "basis": "General Fund program budgets",
+      "noun": "program budgets",
+      "unit": "program",
+      "lines": [
+        {
+          "id": "city-council",
+          "name": "City Council",
+          "kind": "department",
+          "amount": 387950,
+          "source": "S1",
+          "page": 25,
+          "quote": "110 City Council $273,357 $386,368 $318,550 $280,950 $387,950 21.8%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "public-art",
+          "name": "Public Art",
+          "kind": "department",
+          "amount": 380917,
+          "source": "S1",
+          "page": 25,
+          "quote": "115 Public Art 26,261 26,724 239,832 69,410 380,917 58.8%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "transportation-circulation-commission",
+          "name": "Transportation & Circulation Commission",
+          "kind": "department",
+          "amount": 177444,
+          "source": "S1",
+          "page": 25,
+          "quote": "120 Trans/Circ Commission 274,808 189,528 210,014 210,014 177,444-15.5%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "crime-prevention-commission",
+          "name": "Crime Prevention Commission",
+          "kind": "department",
+          "amount": 97205,
+          "source": "S1",
+          "page": 25,
+          "quote": "130 Crime Prevention Com. 97,538 120,124 114,066 105,566 97,205-14.8%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "parks-trails-recreation-commission",
+          "name": "Parks, Trails & Recreation Commission",
+          "kind": "department",
+          "amount": 466097,
+          "source": "S1",
+          "page": 25,
+          "quote": "140 Parks, Trails & RecCommission 91,921 105,700 117,263 97,744 466,097 297.5%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "senior-services",
+          "name": "Senior Services",
+          "kind": "department",
+          "amount": 206081,
+          "source": "S1",
+          "page": 25,
+          "quote": "141 Senior Services 150,042 166,146 184,455 183,788 206,081 11.7%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "youth-commission",
+          "name": "Youth Commission",
+          "kind": "department",
+          "amount": 50219,
+          "source": "S1",
+          "page": 25,
+          "quote": "142 Youth Commission 31,151 44,302 43,632 44,890 50,219 15.1%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "planning-commission",
+          "name": "Planning Commission",
+          "kind": "department",
+          "amount": 492288,
+          "source": "S1",
+          "page": 25,
+          "quote": "150 Planning Commission 281,049 271,522 482,907 291,616 492,288 1.9%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "design-review-commission",
+          "name": "Design Review Commission",
+          "kind": "department",
+          "amount": 354518,
+          "source": "S1",
+          "page": 25,
+          "quote": "151 Design Rev. Commission 254,825 269,495 346,757 198,208 354,518 2.2%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "environmental-task-force",
+          "name": "Environmental Task Force",
+          "kind": "department",
+          "amount": 23979,
+          "source": "S1",
+          "page": 25,
+          "quote": "153 Environmental Task Force 36,714 27,328 33,366 18,630 23,979-28.1%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "police-services",
+          "name": "Police Services",
+          "kind": "department",
+          "amount": 8360960,
+          "source": "S1",
+          "page": 25,
+          "quote": "210 Police Services $6,134,034 $5,963,255 $6,816,416 $6,733,439 $8,360,960 22.7%",
+          "column": "Proposed 2026-2027 Budget",
+          "providedBy": {
+            "short": "A contract with the Contra Costa County Sheriff's Office",
+            "text": "Lafayette's police are a contract with the Contra Costa County Sheriff: $6,454,458 of this program pays the Sheriff, and the City's latest financial report counts 16 contracted sworn officers. The program also pays for County animal control ($336,923). Much of the contract's 30.8% rise is a move, not new spending: this budget folds Traffic Enforcement and the Supplementary Law Enforcement fund into Police Services.",
+            "cites": [
+              {
+                "source": "S1",
+                "page": 76,
+                "quote": "862 Contract Sheriff Services 4, 330,339 4,224,586 4,934,755 4,785,028 6,454,458 30.8%"
+              },
+              {
+                "source": "S1",
+                "page": 77,
+                "quote": "This program provides contract law enforcement services to the community via the Contra Costa Sheriff's Department."
+              },
+              {
+                "source": "S3",
+                "page": 179,
+                "quote": "Number of Contracted Sworn Personnel 16"
+              },
+              {
+                "source": "S1",
+                "page": 77,
+                "quote": "861 Animal Control Services $336,923"
+              },
+              {
+                "source": "S1",
+                "page": 11,
+                "quote": "Consolidated total police costs by combining Traffic Enforcement (11-215) and Supplementary Law Enforcement (Fund 73) into Police Services (11-210)."
+              }
+            ]
+          }
+        },
+        {
+          "id": "emergency-preparedness-commission",
+          "name": "Emergency Preparedness Commission",
+          "kind": "department",
+          "amount": 392604,
+          "source": "S1",
+          "page": 25,
+          "quote": "220 Emergency Prep. Comm. 94,960 88,218 112,576 86,576 392,604 248.7%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "crossing-guards",
+          "name": "Crossing Guards",
+          "kind": "department",
+          "amount": 206000,
+          "source": "S1",
+          "page": 25,
+          "quote": "230 Crossing Guards 140,000 148,000 120,000 120,000 206,000 71.7%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "road-drain-maintenance",
+          "name": "Road & Drain Maintenance",
+          "kind": "department",
+          "amount": 1066183,
+          "source": "S1",
+          "page": 25,
+          "quote": "310 Road & Drain Maintenance $1,010,789 $1,048,107 $1,129,595 $1,061,404 $1,066,183-5.6%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "traffic-maintenance",
+          "name": "Traffic Maintenance",
+          "kind": "department",
+          "amount": 693517,
+          "source": "S1",
+          "page": 25,
+          "quote": "320 Traffic Maintenance 534,144 553,004 674,724 546,198 693,517 2.8%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "parks-trails-maintenance",
+          "name": "Parks & Trails Maintenance",
+          "kind": "department",
+          "amount": 657640,
+          "source": "S1",
+          "page": 25,
+          "quote": "340 Parks & Trails Maint. 472,196 547,196 588,283 519,142 657,640 11.8%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "community-center-maintenance",
+          "name": "Community Center Maintenance",
+          "kind": "department",
+          "amount": 499057,
+          "source": "S1",
+          "page": 25,
+          "quote": "350 Comm. Ctr. Maint. 340,786 354,833 411,924 415,916 499,057 21.2%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "emergency-response",
+          "name": "Emergency Response",
+          "kind": "department",
+          "amount": 50000,
+          "source": "S1",
+          "page": 25,
+          "quote": "360 Emergency Response 94,580 21,832 50,013 50,013 50,000 0.0%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "planning-services",
+          "name": "Planning Services",
+          "kind": "department",
+          "amount": 1723071,
+          "source": "S1",
+          "page": 25,
+          "quote": "410 Planning Services $851,586 $805,600 $2,174,584 $1,241,013 $1,723,071-20.8%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "code-enforcement",
+          "name": "Code Enforcement",
+          "kind": "department",
+          "amount": 196513,
+          "source": "S1",
+          "page": 25,
+          "quote": "415 Code Enforcement 239,191 158,381 163,485 200,289 196,513 20.2%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "engineering-services",
+          "name": "Engineering Services",
+          "kind": "department",
+          "amount": 1839221,
+          "source": "S1",
+          "page": 25,
+          "quote": "420 Engineering Services 1,038,475 1,118,921 1,294,411 1,273,411 1,839,221 42.1%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "city-manager",
+          "name": "City Manager",
+          "kind": "department",
+          "amount": 990552,
+          "source": "S1",
+          "page": 25,
+          "quote": "510 City Manager $630,301 $619,818 $986,287 $792,325 $990,552 0.4%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "legal-services",
+          "name": "Legal Services",
+          "kind": "department",
+          "amount": 649412,
+          "source": "S1",
+          "page": 25,
+          "quote": "520 Legal Services 527,663 503,818 642,320 514,320 649,412 1.1%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "city-clerk",
+          "name": "City Clerk",
+          "kind": "department",
+          "amount": 282396,
+          "source": "S1",
+          "page": 25,
+          "quote": "530 City Clerk 236,475 251,722 269,762 269,760 282,396 4.7%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "administrative-services",
+          "name": "Administrative Services",
+          "kind": "department",
+          "amount": 1428907,
+          "source": "S1",
+          "page": 25,
+          "quote": "540 Administrative Services 1,101,688 1,118,501 1,316,671 1,326,863 1,428,907 8.5%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "communications",
+          "name": "Communications",
+          "kind": "department",
+          "amount": 388432,
+          "source": "S1",
+          "page": 25,
+          "quote": "545 Communications 267,969 309,293 378,707 360,995 388,432 2.6%",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "rent-and-expenses",
+          "name": "Rent and Expenses",
+          "kind": "department",
+          "amount": 184300,
+          "source": "S1",
+          "page": 25,
+          "quote": "550 Rent and Expenses 408,196 207,686 472,786 434,814 184,300 (1)",
+          "column": "Proposed 2026-2027 Budget"
+        },
+        {
+          "id": "technology-services",
+          "name": "Technology Services",
+          "kind": "department",
+          "amount": 211778,
+          "source": "S1",
+          "page": 25,
+          "quote": "560 Technology Services 163,589 89,320 183,426 158,110 211,778 15.5%",
+          "column": "Proposed 2026-2027 Budget"
+        }
+      ],
+      "total": {
+        "amount": 22457240,
+        "source": "S1",
+        "page": 25,
+        "quote": "Subtotal General Fund $16,808,802 $16,598,677 $20,542,098 $18,270,688 $22,457,240 9.3%",
+        "column": "Proposed 2026-2027 Budget"
+      }
+    }
+  ],
+  "revenue": {
+    "title": "General Fund revenues",
+    "note": "FY 2023-24 and FY 2024-25 are actual, FY 2025-26 is the Final Budget the Council adopted in January 2026, and FY 2026-27 is the budget it adopted in June 2026. Measure H is a half-cent sales tax voters approved in November 2024; the City records it in the General Fund.",
+    "columns": [
+      {
+        "key": "actual-2024",
+        "year": 2024,
+        "basis": "actual"
+      },
+      {
+        "key": "actual-2025",
+        "year": 2025,
+        "basis": "actual"
+      },
+      {
+        "key": "revised-2026",
+        "year": 2026,
+        "basis": "revised"
+      },
+      {
+        "key": "adopted-2027",
+        "year": 2027,
+        "basis": "adopted"
+      }
+    ],
+    "primary": "adopted-2027",
+    "totalName": "General Fund revenue",
+    "lines": [
+      {
+        "name": "Measure H sales tax",
+        "values": {
+          "actual-2024": 0,
+          "actual-2025": 702518,
+          "revised-2026": 2800000,
+          "adopted-2027": 3321356
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "401.1 Measure H 0 702,518 2,800,000 3,237,593 3,321,356 18.6%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "401.1 Measure H 0 702,518 2,800,000 3,237,593 3,321,356 18.6%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "401.1 Measure H 0 702,518 2,800,000 3,237,593 3,321,356 18.6%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "401.1 Measure H 0 702,518 2,800,000 3,237,593 3,321,356 18.6%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "401.1 Measure H 0 702,518 2,800,000 3,237,593 3,321,356 18.6%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Sales tax",
+        "values": {
+          "actual-2024": 3358313,
+          "actual-2025": 3405704,
+          "revised-2026": 3454218,
+          "adopted-2027": 3644351
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "401 Sales and Use Tax 3,358,313 3,405,704 3,454,218 $3,580,570 3,644,351 5.5%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "401 Sales and Use Tax 3,358,313 3,405,704 3,454,218 $3,580,570 3,644,351 5.5%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "401 Sales and Use Tax 3,358,313 3,405,704 3,454,218 $3,580,570 3,644,351 5.5%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "401 Sales and Use Tax 3,358,313 3,405,704 3,454,218 $3,580,570 3,644,351 5.5%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "401 Sales and Use Tax 3,358,313 3,405,704 3,454,218 $3,580,570 3,644,351 5.5%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Property tax",
+        "values": {
+          "actual-2024": 7088831,
+          "actual-2025": 7349984,
+          "revised-2026": 7607233,
+          "adopted-2027": 8013403
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "402 Property Taxes and Subventions 7,088,831 7,349,984 7,607,233 7,705,195 8,013,403 5.3%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "402 Property Taxes and Subventions 7,088,831 7,349,984 7,607,233 7,705,195 8,013,403 5.3%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "402 Property Taxes and Subventions 7,088,831 7,349,984 7,607,233 7,705,195 8,013,403 5.3%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "402 Property Taxes and Subventions 7,088,831 7,349,984 7,607,233 7,705,195 8,013,403 5.3%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "402 Property Taxes and Subventions 7,088,831 7,349,984 7,607,233 7,705,195 8,013,403 5.3%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Vehicle license fee (from the State)",
+        "values": {
+          "actual-2024": 4096231,
+          "actual-2025": 4288098,
+          "revised-2026": 4459622,
+          "adopted-2027": 4671627
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "411 State Motor Vehicle In-Lieu Tax 4,096,231 4,288,098 4,459,622 4,491,949 4,671,627 4.8%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "411 State Motor Vehicle In-Lieu Tax 4,096,231 4,288,098 4,459,622 4,491,949 4,671,627 4.8%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "411 State Motor Vehicle In-Lieu Tax 4,096,231 4,288,098 4,459,622 4,491,949 4,671,627 4.8%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "411 State Motor Vehicle In-Lieu Tax 4,096,231 4,288,098 4,459,622 4,491,949 4,671,627 4.8%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "411 State Motor Vehicle In-Lieu Tax 4,096,231 4,288,098 4,459,622 4,491,949 4,671,627 4.8%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Franchise fee: PG&E",
+        "values": {
+          "actual-2024": 497883,
+          "actual-2025": 549059,
+          "revised-2026": 550000,
+          "adopted-2027": 550000
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.1 Franchise Tax-PG&E 497,883 549,059 550,000 548,000 550,000 0.0%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.1 Franchise Tax-PG&E 497,883 549,059 550,000 548,000 550,000 0.0%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.1 Franchise Tax-PG&E 497,883 549,059 550,000 548,000 550,000 0.0%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.1 Franchise Tax-PG&E 497,883 549,059 550,000 548,000 550,000 0.0%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "403.1 Franchise Tax-PG&E 497,883 549,059 550,000 548,000 550,000 0.0%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Franchise fee: cable television",
+        "values": {
+          "actual-2024": 537614,
+          "actual-2025": 494989,
+          "revised-2026": 500000,
+          "adopted-2027": 475000
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.2 Franchise Tax-Cable Television 537,614 494,989 500,000 475,000 475,000-5.0%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.2 Franchise Tax-Cable Television 537,614 494,989 500,000 475,000 475,000-5.0%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.2 Franchise Tax-Cable Television 537,614 494,989 500,000 475,000 475,000-5.0%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.2 Franchise Tax-Cable Television 537,614 494,989 500,000 475,000 475,000-5.0%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "403.2 Franchise Tax-Cable Television 537,614 494,989 500,000 475,000 475,000-5.0%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Franchise fee: waste disposal",
+        "values": {
+          "actual-2024": 645077,
+          "actual-2025": 674953,
+          "revised-2026": 699552,
+          "adopted-2027": 738572
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.3 Franchise Tax-Waste Disposal 645,077 674,953 699,552 706,767 738,572 5.6%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.3 Franchise Tax-Waste Disposal 645,077 674,953 699,552 706,767 738,572 5.6%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.3 Franchise Tax-Waste Disposal 645,077 674,953 699,552 706,767 738,572 5.6%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "403.3 Franchise Tax-Waste Disposal 645,077 674,953 699,552 706,767 738,572 5.6%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "403.3 Franchise Tax-Waste Disposal 645,077 674,953 699,552 706,767 738,572 5.6%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Property transfer tax",
+        "values": {
+          "actual-2024": 353665,
+          "actual-2025": 386032,
+          "revised-2026": 300000,
+          "adopted-2027": 325000
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "404 Real Property Transfer Tax 353,665 386,032 300,000 340,256 325,000 8.3%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "404 Real Property Transfer Tax 353,665 386,032 300,000 340,256 325,000 8.3%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "404 Real Property Transfer Tax 353,665 386,032 300,000 340,256 325,000 8.3%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "404 Real Property Transfer Tax 353,665 386,032 300,000 340,256 325,000 8.3%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "404 Real Property Transfer Tax 353,665 386,032 300,000 340,256 325,000 8.3%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Hotel tax",
+        "values": {
+          "actual-2024": 770243,
+          "actual-2025": 791613,
+          "revised-2026": 775000,
+          "adopted-2027": 800000
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "405 Transient Occupancy Tax 770,243 791,613 775,000 800,000 800,000 3.2%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "405 Transient Occupancy Tax 770,243 791,613 775,000 800,000 800,000 3.2%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "405 Transient Occupancy Tax 770,243 791,613 775,000 800,000 800,000 3.2%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "405 Transient Occupancy Tax 770,243 791,613 775,000 800,000 800,000 3.2%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "405 Transient Occupancy Tax 770,243 791,613 775,000 800,000 800,000 3.2%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Other governments",
+        "values": {
+          "actual-2024": 199856,
+          "actual-2025": 25000,
+          "revised-2026": 0,
+          "adopted-2027": 0
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "GOVERNMENT REVENUE $199,856 $25,000 $0 $102,921 $0 $0",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "GOVERNMENT REVENUE $199,856 $25,000 $0 $102,921 $0 $0",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "GOVERNMENT REVENUE $199,856 $25,000 $0 $102,921 $0 $0",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "GOVERNMENT REVENUE $199,856 $25,000 $0 $102,921 $0 $0",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "GOVERNMENT REVENUE $199,856 $25,000 $0 $102,921 $0 $0",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Fees for service",
+        "values": {
+          "actual-2024": 1648588,
+          "actual-2025": 1565856,
+          "revised-2026": 1370000,
+          "adopted-2027": 1480000
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "FEES FOR SERVICE $1,648,588 $1,565,856 $1,370,000 $1,536,250 $1,480,000 8.0%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "FEES FOR SERVICE $1,648,588 $1,565,856 $1,370,000 $1,536,250 $1,480,000 8.0%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "FEES FOR SERVICE $1,648,588 $1,565,856 $1,370,000 $1,536,250 $1,480,000 8.0%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "FEES FOR SERVICE $1,648,588 $1,565,856 $1,370,000 $1,536,250 $1,480,000 8.0%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "FEES FOR SERVICE $1,648,588 $1,565,856 $1,370,000 $1,536,250 $1,480,000 8.0%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Interest and rents",
+        "values": {
+          "actual-2024": 922943,
+          "actual-2025": 830252,
+          "revised-2026": 840000,
+          "adopted-2027": 845000
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "INVESTMENT REVENUE $922,943 $830,252 $840,000 $829,572 $845,000 0.6%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "INVESTMENT REVENUE $922,943 $830,252 $840,000 $829,572 $845,000 0.6%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "INVESTMENT REVENUE $922,943 $830,252 $840,000 $829,572 $845,000 0.6%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "INVESTMENT REVENUE $922,943 $830,252 $840,000 $829,572 $845,000 0.6%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "INVESTMENT REVENUE $922,943 $830,252 $840,000 $829,572 $845,000 0.6%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Fines",
+        "values": {
+          "actual-2024": 29168,
+          "actual-2025": 35854,
+          "revised-2026": 35000,
+          "adopted-2027": 35000
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "FINES AND FORFEITURES $29,168 $35,854 $35,000 $35,000 $35,000 0.0%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "FINES AND FORFEITURES $29,168 $35,854 $35,000 $35,000 $35,000 0.0%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "FINES AND FORFEITURES $29,168 $35,854 $35,000 $35,000 $35,000 0.0%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "FINES AND FORFEITURES $29,168 $35,854 $35,000 $35,000 $35,000 0.0%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "FINES AND FORFEITURES $29,168 $35,854 $35,000 $35,000 $35,000 0.0%",
+        "column": "Proposed 2026-2027"
+      },
+      {
+        "name": "Other revenue",
+        "values": {
+          "actual-2024": 398584,
+          "actual-2025": 564306,
+          "revised-2026": 365000,
+          "adopted-2027": 326000
+        },
+        "cites": {
+          "actual-2024": {
+            "source": "S1",
+            "page": 37,
+            "quote": "OTHER REVENUE $398,584 $564,306 $365,000 $359,000 $326,000-10.7%",
+            "column": "2023-2024 Revenues"
+          },
+          "actual-2025": {
+            "source": "S1",
+            "page": 37,
+            "quote": "OTHER REVENUE $398,584 $564,306 $365,000 $359,000 $326,000-10.7%",
+            "column": "2024-2025 Revenues"
+          },
+          "revised-2026": {
+            "source": "S1",
+            "page": 37,
+            "quote": "OTHER REVENUE $398,584 $564,306 $365,000 $359,000 $326,000-10.7%",
+            "column": "Final 2025-2026"
+          },
+          "adopted-2027": {
+            "source": "S1",
+            "page": 37,
+            "quote": "OTHER REVENUE $398,584 $564,306 $365,000 $359,000 $326,000-10.7%",
+            "column": "Proposed 2026-2027"
+          }
+        },
+        "source": "S1",
+        "page": 37,
+        "quote": "OTHER REVENUE $398,584 $564,306 $365,000 $359,000 $326,000-10.7%",
+        "column": "Proposed 2026-2027"
+      }
+    ],
+    "total": {
+      "name": "Total General Fund revenue",
+      "values": {
+        "actual-2024": 20546997,
+        "actual-2025": 21664217,
+        "revised-2026": 23755625,
+        "adopted-2027": 25225308
+      },
+      "cites": {
+        "actual-2024": {
+          "source": "S1",
+          "page": 37,
+          "quote": "TOTAL GENERAL FUND REVENUE $20,546,997 $21,664,217 $23,755,625 $24,803,461 $25,225,308 6.2%",
+          "column": "2023-2024 Revenues"
+        },
+        "actual-2025": {
+          "source": "S1",
+          "page": 37,
+          "quote": "TOTAL GENERAL FUND REVENUE $20,546,997 $21,664,217 $23,755,625 $24,803,461 $25,225,308 6.2%",
+          "column": "2024-2025 Revenues"
+        },
+        "revised-2026": {
+          "source": "S1",
+          "page": 37,
+          "quote": "TOTAL GENERAL FUND REVENUE $20,546,997 $21,664,217 $23,755,625 $24,803,461 $25,225,308 6.2%",
+          "column": "Final 2025-2026"
+        },
+        "adopted-2027": {
+          "source": "S1",
+          "page": 37,
+          "quote": "TOTAL GENERAL FUND REVENUE $20,546,997 $21,664,217 $23,755,625 $24,803,461 $25,225,308 6.2%",
+          "column": "Proposed 2026-2027"
+        }
+      },
+      "source": "S1",
+      "page": 37,
+      "quote": "TOTAL GENERAL FUND REVENUE $20,546,997 $21,664,217 $23,755,625 $24,803,461 $25,225,308 6.2%",
+      "column": "Proposed 2026-2027"
+    }
+  },
+  "staffing": {
+    "year": 2027,
+    "fte": 50.1,
+    "basis": "budgeted City positions",
+    "source": "S1",
+    "page": 32,
+    "quote": "TOTAL: 50.10",
+    "column": "NUMBER OF EMPLOYEES"
+  },
+  "size": {
+    "generalFund": {
+      "amount": 22457240,
+      "note": "expenditures, before transfers to other funds",
+      "source": "S1",
+      "page": 23,
+      "quote": "TOTAL G.F. EXPENDITURES $16,808,802 $16,598,677 $20,542,098 $18,270,688 $22,457,240 9.3%",
+      "column": "Proposed 2026-2027 Budget"
+    }
+  },
+  "glossary": [
+    {
+      "term": "General Fund",
+      "source": "S3",
+      "page": 49,
+      "definition": "The City’s primary operating fund. It accounts for all financial resources of the general government, except those required to be accounted for in another fund.",
+      "quote": "primary operating fund. It accounts for all financial resources of the general government, except those required to be accounted for in another fund."
+    },
+    {
+      "term": "Measure H",
+      "source": "S1",
+      "page": 53,
+      "definition": "A half-cent sales tax Lafayette voters approved in November 2024. In the City’s words: “In November 2024 voters approved Measure H -- a 1/2 cent sales tax -- to support ongoing City programs. The additional sales tax was effective on April 1, 2025 and will continue for 7 years until March 30, 2032.”",
+      "quote": "In November 2024 voters approved Measure H -- a 1/2 cent sales tax -- to support ongoing City programs. The additional sales tax was effective on April 1, 2025 and will continue for 7 years until March 30, 2032."
+    },
+    {
+      "term": "Sinking Fund",
+      "source": "S3",
+      "page": 14,
+      "definition": "Money the City sets aside year by year for a known future cost. The City’s financial report describes “sinking funds” for future operating costs such as vehicle replacements, vacation accruals, retiree healthcare, capital expenditures, deferred maintenance, and other monies that have been earmarked for specific purposes by the Council.",
+      "quote": "“sinking funds” for future operating costs such as vehicle replacements, vacation accruals, retiree healthcare, capital expenditures, deferred maintenance, and other monies that have been earmarked for specific purposes by the Council."
+    },
+    {
+      "term": "Special District",
+      "definition": "A local government set up to provide a particular service in its area, such as fire protection, water, or parks and recreation. Special districts get a share of the 1% property tax, along with counties, cities and schools.",
+      "source": "S6",
+      "page": 18,
+      "quote": "property tax revenue from the 1 percent rate is distributed to counties, cities, K-12 schools, community college districts, and special districts",
+      "also": [
+        {
+          "source": "S6",
+          "page": 18,
+          "quote": "Special Districts Fire protection 348 County service area 316 Cemetery 241 Community services 201 Maintenance 136 Highway lighting 117 County water 100 Recreation and park 85"
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "sheriffContract": {
+      "source": "S1",
+      "page": 76,
+      "quote": "862 Contract Sheriff Services 4, 330,339 4,224,586 4,934,755 4,785,028 6,454,458 30.8%",
+      "column": "Proposed 2026-2027 Budget",
+      "value": 6454458,
+      "format": "money"
+    },
+    "sheriffContractRise": {
+      "source": "S1",
+      "page": 76,
+      "quote": "862 Contract Sheriff Services 4, 330,339 4,224,586 4,934,755 4,785,028 6,454,458 30.8%",
+      "column": "Increase Over Budget",
+      "value": 0.308,
+      "format": "percent"
+    },
+    "sworn": {
+      "source": "S3",
+      "page": 179,
+      "quote": "Number of Contracted Sworn Personnel 16",
+      "value": 16,
+      "format": "number"
+    },
+    "animalControl": {
+      "source": "S1",
+      "page": 77,
+      "quote": "861 Animal Control Services $336,923",
+      "value": 336923,
+      "format": "money"
+    },
+    "reserveTarget": {
+      "source": "S1",
+      "page": 16,
+      "quote": "TARGET RESERVE: $11,888,657 $12,548,835 $14,726,267",
+      "column": "June 30, 2027",
+      "value": 14726267,
+      "format": "money"
+    }
+  },
+  "statements": {
+    "limitedService": {
+      "source": "S3",
+      "page": 10,
+      "quote": "Lafayette is a limited service city and contracts with Contra Costa County for police, library, animal, and building services."
+    },
+    "adopted": {
+      "source": "S4",
+      "page": 14,
+      "quote": "It was M/S/C (McCormick/Candell) to adopt Resolution 2026-40"
+    },
+    "consolidation": {
+      "source": "S1",
+      "page": 11,
+      "quote": "Consolidated total police costs by combining Traffic Enforcement (11-215) and Supplementary Law Enforcement (Fund 73) into Police Services (11-210)."
+    },
+    "strategic": {
+      "source": "S2",
+      "page": 1,
+      "quote": "Importantly, the reduction in reserves reflected in the Final Budget is intentional and strategic."
+    },
+    "deferredMaintenance": {
+      "source": "S2",
+      "page": 1,
+      "quote": "The City Council Finance Subcommittee recommends prioritizing funding the City’s long-standing deferred maintenance needs while reserves remain strong, and Measure H revenues are available."
+    },
+    "communityCenterSinking": {
+      "source": "S1",
+      "page": 10,
+      "quote": "Accordingly, the budget includes an additional annual contribution of $500K to Fund 16 for the Community Center sinking fund."
+    }
+  },
+  "capitalPlan": {
+    "title": "Capital Improvement Program, FY 2026-27, by project",
+    "unit": "project",
+    "years": [
+      2027
+    ],
+    "lines": [
+      {
+        "name": "2027 Pavement Maintenance Project",
+        "years": {
+          "2027": 4000000
+        },
+        "total": 4000000,
+        "source": "S1",
+        "page": 21,
+        "quote": "2027 Pavement Maintenance Project 840,000 695,000 180,000 1,000,000 1,285,000 4,000,000",
+        "column": "Total",
+        "scanned": {
+          "image": "/us/ca/lafayette/scans/S1-p21.png"
+        }
+      },
+      {
+        "name": "Stanley Blvd and Quandt Rd Traffic Calming and Sidewalk",
+        "years": {
+          "2027": 1255000
+        },
+        "total": 1255000,
+        "source": "S1",
+        "page": 21,
+        "quote": "Stanley Blvd and Quandt Rd Traffic Calming and Sidewalk 1,255,000 1,255,000",
+        "column": "Total",
+        "scanned": {
+          "image": "/us/ca/lafayette/scans/S1-p21.png"
+        }
+      },
+      {
+        "name": "Capital projects overhead",
+        "years": {
+          "2027": 786108
+        },
+        "total": 786108,
+        "source": "S1",
+        "page": 21,
+        "quote": "Overhead 786,108 786,108",
+        "column": "Total",
+        "scanned": {
+          "image": "/us/ca/lafayette/scans/S1-p21.png"
+        }
+      },
+      {
+        "name": "Hastings Court Stabilization",
+        "years": {
+          "2027": 500000
+        },
+        "total": 500000,
+        "source": "S1",
+        "page": 21,
+        "quote": "Hastings Court Stabilization 150,000-350,000 500,000",
+        "column": "Total",
+        "scanned": {
+          "image": "/us/ca/lafayette/scans/S1-p21.png"
+        }
+      },
+      {
+        "name": "Aqueduct Pathway Design",
+        "years": {
+          "2027": 300000
+        },
+        "total": 300000,
+        "source": "S1",
+        "page": 21,
+        "quote": "Aqueduct Pathway Design 300,000 300,000",
+        "column": "Total",
+        "scanned": {
+          "image": "/us/ca/lafayette/scans/S1-p21.png"
+        }
+      },
+      {
+        "name": "Cemetery Storm Drain",
+        "years": {
+          "2027": 150000
+        },
+        "total": 150000,
+        "source": "S1",
+        "page": 21,
+        "quote": "Cemetary Storm Drain 150,000 150,000",
+        "column": "Total",
+        "scanned": {
+          "image": "/us/ca/lafayette/scans/S1-p21.png"
+        }
+      },
+      {
+        "name": "Parks facilities overhead",
+        "years": {
+          "2027": 34556
+        },
+        "total": 34556,
+        "source": "S1",
+        "page": 21,
+        "quote": "Overhead 34,556 $34,556",
+        "column": "Total",
+        "scanned": {
+          "image": "/us/ca/lafayette/scans/S1-p21.png"
+        }
+      }
+    ],
+    "total": {
+      "years": {
+        "2027": 7025664
+      },
+      "total": 7025664,
+      "source": "S1",
+      "page": 21,
+      "quote": "GRAND TOTAL: $300,000 $990,000 $695,000 $180,000 $820,664 $1,000,000 $350,000 $1,285,000 $1,405,000 $7,025,664",
+      "column": "Total",
+      "scanned": {
+        "image": "/us/ca/lafayette/scans/S1-p21.png"
+      }
+    }
+  },
+  "pension": {
+    "plan": "defined-contribution",
+    "noDefinedBenefit": {
+      "source": "S3",
+      "page": 12,
+      "quote": "Unlike most public sector organizations, the City of Lafayette does not participate in a defined benefit retirement program."
+    },
+    "rate": {
+      "rate": 0.1,
+      "source": "S3",
+      "page": 87,
+      "quote": "The contribution on behalf of each participant equal 10% of base earnings up to the maximum allowable by law."
+    },
+    "contribution": {
+      "amount": 842472,
+      "year": 2025,
+      "source": "S3",
+      "page": 87,
+      "quote": "Contributions to the Plan totaled $842,472 by the City"
+    },
+    "opeb": {
+      "amount": 758015,
+      "asOf": "June 30, 2025",
+      "source": "S3",
+      "page": 43,
+      "quote": "Net OPEB liability 758,015 90,539 848,554",
+      "column": "Governmental Activities"
+    }
+  },
+  "reservePosition": {
+    "year": 2027,
+    "balance": {
+      "amount": 17560643,
+      "source": "S1",
+      "page": 16,
+      "quote": "Total Core Cash Position 22,642,717 19,157,717 17,560,643",
+      "column": "June 30, 2027"
+    },
+    "level": {
+      "rate": 0.72,
+      "source": "S1",
+      "page": 16,
+      "quote": "% of General Fund Expenditures 114% 92% 72%",
+      "column": "June 30, 2027"
+    },
+    "policy": {
+      "rate": 0.6,
+      "source": "S1",
+      "page": 16,
+      "quote": "the City Council voted to maintain a targeted minimum reserve balance equivalent to 60% of total General Fund operations"
+    },
+    "change": {
+      "amount": -1760579,
+      "source": "S1",
+      "page": 17,
+      "quote": "Surplus or (Deficit)?: (3,971,696) (1,760,579) 109,575 (123,751) (153,282) (308,757)",
+      "column": "Budget 2026/27",
+      "scanned": {
+        "image": "/us/ca/lafayette/scans/S1-p17.png"
+      }
+    },
+    "outlook": {
+      "rate": 0.59,
+      "year": 2031,
+      "source": "S1",
+      "page": 17,
+      "quote": "% of General Fund Expenditures 92% 72% 68% 65% 62% 59%",
+      "column": "Projected 2030/31",
+      "scanned": {
+        "image": "/us/ca/lafayette/scans/S1-p17.png"
+      }
+    },
+    "notes": [
+      {
+        "text": "The City has said the drop in its reserves is on purpose. Last year's Final Budget called it “intentional and strategic”, a shift from building up reserves toward reinvesting in City facilities while keeping the reserve above its minimum.",
+        "cites": [
+          {
+            "source": "S2",
+            "page": 1,
+            "quote": "Importantly, the reduction in reserves reflected in the Final Budget is intentional and strategic."
+          },
+          {
+            "source": "S2",
+            "page": 1,
+            "quote": "the Final Budget reflects a shift from reserve accumulation toward reinvestment in critical City facilities while still maintaining the 60% threshold."
+          }
+        ]
+      }
+    ]
+  },
+  "coverage": {
+    "questions": [
+      {
+        "id": "everything",
+        "question": "Is this everything the City of Lafayette spends?",
+        "paragraphs": [
+          {
+            "text": "No. These pages show the City's [General Fund](glossary:General Fund), its main account for day-to-day services: {generalFund} in {year}. The City also keeps separate funds, for capital projects, recreation programs, the library, school buses and more, and those aren't in the squares on these pages.",
+            "cites": [
+              {
+                "source": "S1",
+                "page": 26,
+                "quote": "CAPITAL IMPROVEMENT FUNDS"
+              },
+              {
+                "source": "S1",
+                "page": 26,
+                "quote": "31 Recreation Programs $2,202,688 $2,306,637 $2,296,175 $2,306,491 $2,289,896 -0.3%"
+              },
+              {
+                "source": "S1",
+                "page": 26,
+                "quote": "37 Library Operations 1,436,963 1,425,303 1,492,032 1,458,461 1,533,577 2.8%"
+              },
+              {
+                "source": "S1",
+                "page": 26,
+                "quote": "74 School Bus Program 2,606,052 2,668,520 3,382,027 3,365,317 3,527,820 4.3%"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "schools",
+        "question": "Where are the schools?",
+        "paragraphs": [
+          {
+            "text": "Public schools in Lafayette are run by separate governments. The Lafayette School District runs four elementary schools and a middle school, and the high school is in the Acalanes district, which also serves Canyon, Moraga, Orinda and parts of Walnut Creek.",
+            "cites": [
+              {
+                "source": "S3",
+                "page": 10,
+                "quote": "The Lafayette School District operates 4 elementary schools and one middle school within the city boundary. The high school is in the Acalanes Unified High School District, which also serves the communities of Canyon, Moraga, Orinda, and portions of Walnut Creek."
+              }
+            ]
+          },
+          {
+            "text": "The City isn't financially responsible for them, so school spending isn't in the City's numbers.",
+            "cites": [
+              {
+                "source": "S3",
+                "page": 10,
+                "quote": "As a result, the City has only one component unit and no other legal entities for which it is financially or legally responsible."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "else",
+        "question": "What else isn't here?",
+        "paragraphs": [
+          {
+            "text": "The City's financial report lists services in Lafayette that separate agencies provide. Each has its own budget, so none of their spending is on these pages.",
+            "cites": [
+              {
+                "source": "S3",
+                "page": 10,
+                "quote": "Other examples of services delivered within the City that are provided by separate agencies are"
+              }
+            ]
+          }
+        ],
+        "agencies": [
+          {
+            "name": "Contra Costa County",
+            "does": "The county government. The City contracts with it for police, library, animal and building services.",
+            "cites": [
+              {
+                "source": "S3",
+                "page": 10,
+                "quote": "Lafayette is a limited service city and contracts with Contra Costa County for police, library, animal, and building services."
+              }
+            ]
+          },
+          {
+            "name": "Contra Costa Consolidated Fire District",
+            "does": "Fire service.",
+            "cites": [
+              {
+                "source": "S3",
+                "page": 10,
+                "quote": "fire service by the Contra Costa Consolidated Fire District"
+              }
+            ]
+          },
+          {
+            "name": "East Bay Municipal Utility District",
+            "does": "Water.",
+            "cites": [
+              {
+                "source": "S3",
+                "page": 10,
+                "quote": "water service by East Bay Municipal Utility District"
+              }
+            ]
+          },
+          {
+            "name": "Central Contra Costa Sanitary District",
+            "does": "Sewer.",
+            "cites": [
+              {
+                "source": "S3",
+                "page": 10,
+                "quote": "sewer service by the Central Contra Costa Sanitary District"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "property-tax",
+        "question": "Where does my property tax go?",
+        "paragraphs": [
+          {
+            "text": "The basic 1% property tax is pooled by the county and divided under state law among the county, cities, schools and [special districts](glossary:Special District).",
+            "cites": [
+              {
+                "source": "S5",
+                "page": 1,
+                "quote": "Your county auditor pools your 1 percent rate tax payment, as well as payments from other property owners in your county, into a single countywide pot."
+              },
+              {
+                "source": "S5",
+                "page": 1,
+                "quote": "State law directs how your county auditor distributes the revenue in the countywide pot."
+              },
+              {
+                "source": "S5",
+                "page": 1,
+                "quote": "your county auditor sets aside this $1,000 for your city, county, schools, and special districts."
+              }
+            ]
+          },
+          {
+            "text": "The City says it receives about 6.6% of the property taxes its residents pay, against an average of 10.5% for other cities in Contra Costa County. It didn't levy a property tax before Proposition 13 passed in 1978, so the state's formula gives it a low share.",
+            "cites": [
+              {
+                "source": "S3",
+                "page": 35,
+                "quote": "Currently, the City receives approximately 6.6% of the property taxes paid by its residents, compared to an average of 10.5% for other cities in Contra Costa."
+              },
+              {
+                "source": "S3",
+                "page": 35,
+                "quote": "the City did not levy a property tax prior to 1978 when Proposition 13 was adopted. Consequently, it receives a relatively low share of the property tax under the statutory formula."
+              }
+            ]
+          },
+          {
+            "text": "The {propertyTax} in property tax on these pages is only the City's share."
+          }
+        ]
+      },
+      {
+        "id": "city-pays",
+        "question": "Does the City pay for the schools?",
+        "paragraphs": [
+          {
+            "text": "The City runs a school bus program from its own fund, outside the General Fund, and it took over the crossing guard program after the school district stopped funding it.",
+            "cites": [
+              {
+                "source": "S1",
+                "page": 26,
+                "quote": "74 School Bus Program 2,606,052 2,668,520 3,382,027 3,365,317 3,527,820 4.3%"
+              },
+              {
+                "source": "S1",
+                "page": 11,
+                "quote": "Following the School District's decision to discontinue its funding and management of the Crossing Guard program, the City assumed full program responsibility."
+              }
+            ]
+          },
+          {
+            "text": "We haven't checked every line of the City's full budget, so small City grants or contracts with the districts can't be ruled out.",
+            "unsourced": "A limit of our own review, not a claim about a document."
+          }
+        ]
+      }
+    ],
+    "overview": {
+      "text": "Your property tax bill pays several governments, including the City, the school districts and the county. [This page shows only the City's part.](page:sources#what-this-covers)",
+      "unsourced": "Sums up the block's 'Where does my property tax go?' answer, which it links to and which carries the receipts."
+    },
+    "notInBudget": [
+      {
+        "id": "fire",
+        "name": "Fire",
+        "provider": "Contra Costa Consolidated Fire District",
+        "paragraph": {
+          "text": "Fire service comes from the Contra Costa Consolidated Fire District, a separate district with its own budget, so none of its cost is in the City's budget.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 10,
+              "quote": "Other examples of services delivered within the City that are provided by separate agencies are: fire service by the Contra Costa Consolidated Fire District"
+            },
+            {
+              "source": "S3",
+              "page": 179,
+              "quote": "Fire Protection: Contra Costa Fire District"
+            }
+          ]
+        }
+      },
+      {
+        "id": "library",
+        "name": "Library",
+        "provider": "Contra Costa County, under contract",
+        "paragraph": {
+          "text": "The City contracts with Contra Costa County for its library. The City's own library costs are in a separate Library Operations fund, outside the General Fund, so they aren't in these squares.",
+          "cites": [
+            {
+              "source": "S3",
+              "page": 10,
+              "quote": "Lafayette is a limited service city and contracts with Contra Costa County for police, library, animal, and building services."
+            },
+            {
+              "source": "S1",
+              "page": 26,
+              "quote": "37 Library Operations 1,436,963 1,425,303 1,492,032 1,458,461 1,533,577 2.8%"
+            }
+          ]
+        }
+      }
+    ],
+    "profile": {
+      "text": "Lafayette is a limited service city: it contracts with Contra Costa County for police, library, animal and building services, and separate agencies provide fire, water and sewer service.",
+      "cites": [
+        {
+          "source": "S3",
+          "page": 10,
+          "quote": "Lafayette is a limited service city and contracts with Contra Costa County for police, library, animal, and building services."
+        },
+        {
+          "source": "S3",
+          "page": 10,
+          "quote": "fire service by the Contra Costa Consolidated Fire District, water service by East Bay Municipal Utility District, and sewer service by the Central Contra Costa Sanitary District"
+        }
+      ]
+    }
+  }
+}

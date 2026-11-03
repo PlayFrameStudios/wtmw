@@ -119,7 +119,7 @@ describe('the data check (npm run data:check)', () => {
   it('passes the committed cities, and finds every one of them', async () => {
     const { cities, errors } = await checkCities(copy(() => {}));
     expect(errors).toEqual([]);
-    expect(cities.map((c) => c.path)).toEqual(['/test/cities/fixtureville/', '/us/ca/berkeley/', '/us/ca/fremont/']);
+    expect(cities.map((c) => c.path)).toEqual(['/test/cities/fixtureville/', '/us/ca/berkeley/', '/us/ca/fremont/', '/us/ca/lafayette/']);
   });
 
   it("fails a fiscal-position reason whose quote isn't on its page", async () => {

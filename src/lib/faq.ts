@@ -79,7 +79,8 @@ export function cityFaqItems(city: City, budget: CityBudget, pageUrl: URL): FaqI
     if (t === 'depts') return { kind: 'figure', text: shortMoney(o.baseline.value), figure: o.baseline };
     if (t === 'allFunds' || t === 'generalFund' || t === 'propertyTax') {
       const f = coverage?.figures[t];
-      if (!f) throw new Error(`FAQ: {${t}} needs the city's coverage block (#51)`);
+      if (!coverage) throw new Error(`FAQ: {${t}} needs the city's coverage block (#51)`);
+      if (!f) throw new Error(`FAQ: {${t}} isn't available for ${city.name}: its budget has no such figure (#59)`);
       return { kind: 'figure', text: shortMoney(f.value), figure: f };
     }
     const [kind, arg] = t.split(':');

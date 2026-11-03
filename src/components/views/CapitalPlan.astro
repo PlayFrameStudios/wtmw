@@ -22,20 +22,33 @@ if (!budget.capitalPlan) throw new Error(`${city.path}: the capital plan view ne
 const c = capitalPlanPage(budget.capitalPlan, (y) => fy(city.budget.labels, y));
 const colors = ['var(--bay)', 'var(--family-safety-1)', 'var(--family-people-3)', 'var(--family-running-start)'];
 const pct = (v: number) => `${Math.round(v * 100)}%`;
+const n = c.years.length;
+const words: Record<number, string> = { 5: 'five' };
+const over = n === 1 ? `for ${c.span}` : `over ${words[n] ?? n} years`;
+const yearsHeading = `${(words[n] ?? String(n)).replace(/^./, (ch) => ch.toUpperCase())} years`;
+const units = `${c.unit}s`;
+const unitHeading = c.unit.replace(/^./, (ch) => ch.toUpperCase());
 ---
 
-<Base title={`Capital program · ${city.name}`} city={city} description={`${city.name}'s capital improvement program, ${c.span}: streets, buildings and parks, by program and year. Every number links to the public document it came from.`}>
+<Base title={`Capital program · ${city.name}`} city={city} description={`${city.name}'s capital improvement program, ${c.span}: streets, buildings and parks, by ${c.unit}${n > 1 ? ' and year' : ''}. Every number links to the public document it came from.`}>
   <div class="cp-page wrap">
     <section class="cp-intro">
       <h1>Streets, buildings and parks, {c.span}</h1>
       <p class="cp-lede">
-        Besides day-to-day spending, the City plans <Sourced city={city} figure={c.total.total}>{shortMoney(c.total.total.value)}</Sourced> of capital projects over five
-        years. The two biggest programs, {c.lines[0].name} and {c.lines[1].name}, take {pct(c.lines[0].share + c.lines[1].share)} of it.
+        Besides day-to-day spending, the City plans <Sourced city={city} figure={c.total.total}>{shortMoney(c.total.total.value)}</Sourced> of capital projects {over}.
+        The two biggest {units}, {c.lines[0].name} and {c.lines[1].name}, take {pct(c.lines[0].share + c.lines[1].share)} of it.
       </p>
+      {
+        c.scanned && (
+          <p class="cp-note cp-scanned" data-scanned-note>
+            The City printed this table as an image, with no text to check against, so its figures are our reading of the page. Each figure's receipt links the page image.
+          </p>
+        )
+      }
     </section>
 
     <section class="cp-section" aria-labelledby="cp-share">
-      <h2 id="cp-share">By program, over five years</h2>
+      <h2 id="cp-share">By {c.unit}, {over}</h2>
       <div class="cp-bar" role="img" aria-label={`Capital plan, ${c.span}, by program: ${c.lines.map((l) => `${l.name} ${pct(l.share)}`).join(', ')}.`}>
         {c.lines.map((l, i) => <span style={`flex:${l.total.value};background:${colors[i % colors.length]}`} />)}
       </div>
@@ -57,6 +70,7 @@ const pct = (v: number) => `${Math.round(v * 100)}%`;
       </ul>
     </section>
 
+    {n > 1 && (
     <section class="cp-section" aria-labelledby="cp-years">
       <h2 id="cp-years">Year by year</h2>
       <p class="cp-note">The plan's first year is the one in progress; the later years are planned, and the City revises them each budget.</p>
@@ -64,9 +78,9 @@ const pct = (v: number) => `${Math.round(v * 100)}%`;
         <table class="cp-table">
           <thead>
             <tr>
-              <th scope="col">Program</th>
+              <th scope="col">{unitHeading}</th>
               {c.years.map((y) => <th scope="col" class="num">{y.label}</th>)}
-              <th scope="col" class="num">Five years</th>
+              <th scope="col" class="num">{yearsHeading}</th>
             </tr>
           </thead>
           <tbody>
@@ -112,6 +126,7 @@ const pct = (v: number) => `${Math.round(v * 100)}%`;
         </table>
       </div>
     </section>
+    )}
   </div>
 </Base>
 
@@ -142,6 +157,9 @@ const pct = (v: number) => `${Math.round(v * 100)}%`;
     margin: 0 0 1rem;
     color: var(--muted);
     line-height: 1.55;
+  }
+  .cp-intro .cp-scanned {
+    margin: 1rem 0 0;
   }
   .cp-bar {
     display: flex;

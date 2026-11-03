@@ -80,11 +80,13 @@ describe('Fremont: the build', () => {
   it('reads staffing, size, the capital plan, pension and the quoted facts', () => {
     expect(budget.staffing.fte).toBe(994.24);
     expect(budget.staffing.byDepartment).toHaveLength(15);
-    expect(budget.size.allFunds.amount).toBe(427_121_000);
+    expect(budget.size.allFunds!.amount).toBe(427_121_000);
     expect(budget.size.generalFund.amount).toBe(289_089_000);
     expect(budget.capitalPlan!.total.total).toBe(235_526_000);
-    expect(budget.pension!.fundedRatio.rate).toBe(0.704);
-    expect(budget.pension!.unfunded.amount).toBe(477_258_000);
+    const pension = budget.pension!;
+    if (pension.plan === 'defined-contribution') throw new Error('Fremont has a defined-benefit plan');
+    expect(pension.fundedRatio.rate).toBe(0.704);
+    expect(pension.unfunded.amount).toBe(477_258_000);
     expect(budget.facts!.citywideSavings.value).toBe(19_700_000);
     expect(budget.facts!.contingencyPolicy.value).toBe(0.167);
     expect(budget.facts!.population.value).toBe(233_974);

@@ -37,6 +37,11 @@ const recoveryFigure: Figure | undefined = recovery && {
   ref: recovery,
   tone: 'neutral',
 };
+// Say what the total leaves out, and which kinds of years the table shows, only as the data has them (#59).
+const beforeTransfers = /before transfers in/i.test(budget.revenue.totalName);
+const bases = new Set(r.columns.map((c) => c.basis));
+const context = [bases.has('actual') && 'Actual', bases.has('estimate') && 'estimated'].filter(Boolean).join(' and ');
+const columnNote = `${context ? `${context.charAt(0).toUpperCase()}${context.slice(1)} years for context, the adopted budget` : 'The adopted budget'}${bases.has('projected') ? ", and the City's forecast after it" : ''}.`;
 ---
 
 <Base title={`Revenue · ${city.name}`} city={city} description={`Where every $100 of ${city.name}'s ${y} General Fund revenue comes from, and how each source has grown. Every number links to the public document it came from.`}>
@@ -44,8 +49,9 @@ const recoveryFigure: Figure | undefined = recovery && {
     <section class="ro-intro">
       <h1>Where every $100 comes from</h1>
       <p class="ro-lede">
-        The City expects <Sourced city={city} figure={r.totalFigure}>{shortMoney(r.totalFigure.value)}</Sourced> of General Fund revenue in {y}, before money
-        transferred in from its other funds. Each square is $1 of every $100.
+        The City expects <Sourced city={city} figure={r.totalFigure}>{shortMoney(r.totalFigure.value)}</Sourced> of General Fund revenue in {y}{beforeTransfers
+          ? ', before money transferred in from its other funds'
+          : ''}. Each square is $1 of every $100.
       </p>
     </section>
 
@@ -72,7 +78,7 @@ const recoveryFigure: Figure | undefined = recovery && {
     <section class="ro-section" aria-labelledby="ro-lines">
       <h2 id="ro-lines">Every source, year by year</h2>
       <p class="ro-note">
-        Actual and estimated years for context, the adopted budget, and the City's forecast after it.{r.before && ` Change is the adopted budget against the ${r.before}.`}
+        {columnNote}{r.before && ` Change is the adopted budget against the ${r.before}.`}
       </p>
       <div class="ro-scroll">
         <table class="ro-table">

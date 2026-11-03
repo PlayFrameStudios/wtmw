@@ -1,0 +1,80 @@
+---
+/**
+ * Where the reserve stands (#59), on the Balance & Reserves page: what this budget draws from it, where it ends
+ * against the City's minimum, and where the City's forecast takes it, then what the City has said about it.
+ * Every figure is its own receipt; a figure read from a scanned page says so in its receipt.
+ */
+import SourceChip from './SourceChip.astro';
+import Sourced from './Sourced.astro';
+import type { City } from '../lib/cities';
+import { fy } from '../lib/city-settings';
+import { shortMoney } from '../lib/format';
+import { formatValue } from '../lib/receipts';
+import type { reservePositionOf } from '../lib/reserve-position';
+
+interface Props {
+  city: City;
+  position: NonNullable<ReturnType<typeof reservePositionOf>>;
+}
+
+const { city, position: r } = Astro.props;
+const label = (y: number) => fy(city.budget.labels, y);
+const pct = (v: number) => formatValue(v, 'percent');
+---
+
+<section class="position" aria-labelledby="position-heading" data-reserve-position>
+  <h2 id="position-heading">Where the reserve stands, {label(r.year)}</h2>
+  <p class="position-lede">
+    {
+      r.change && (
+        <>
+          This budget {r.change.drawn ? 'draws' : 'adds'}{' '}
+          <Sourced city={city} figure={r.change.figure}>
+            {shortMoney(r.change.figure.value)}
+          </Sourced>{' '}
+          {r.change.drawn ? 'from' : 'to'} the City's reserve.{' '}
+        </>
+      )
+    }
+    The reserve ends the year at <Sourced city={city} figure={r.balance}>{shortMoney(r.balance.value)}</Sourced>, or{' '}
+    <Sourced city={city} figure={r.level}>{pct(r.level.value)}</Sourced> of General Fund spending, against the City's minimum of{' '}
+    <Sourced city={city} figure={r.policy}>{pct(r.policy.value)}</Sourced>.
+    {
+      r.outlook && (
+        <>
+          {' '}
+          The City's forecast shows it at <Sourced city={city} figure={r.outlook.figure}>{pct(r.outlook.figure.value)}</Sourced> by {label(r.outlook.year)}
+          {r.outlook.belowPolicy ? ', below that minimum.' : '.'}
+        </>
+      )
+    }
+  </p>
+  {
+    r.notes.map((n) => (
+      <p class="position-note">
+        {n.text}
+        <SourceChip city={city} source={n.cites[0].source} at={n.cites[0]} also={n.cites.slice(1)} />
+      </p>
+    ))
+  }
+</section>
+
+<style>
+  .position {
+    max-width: 44rem;
+    margin-block-end: 2.5rem;
+  }
+  .position h2 {
+    margin: 0 0 1rem;
+  }
+  .position-lede {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+  .position-note {
+    margin: 1rem 0 0;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+</style>

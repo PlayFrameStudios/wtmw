@@ -25,10 +25,22 @@ export const normalize = (s: string) =>
     .replace(/\s+([,.;:)])/g, '$1')
     .trim();
 
-/** Throws unless `ref.quote` is on page `ref.page` (1 for a web page) of its source's excerpt. */
-export function checkQuote(ref: Pick<DocRef, 'source' | 'quote'> & { page?: number }, excerpts: Excerpts, where: string) {
+/** A scanned page's extracted text: nothing but its printed page marker ("--9--"), if that. */
+export const SCANNED_PAGE = /^(--\s*\d+\s*--)?$/;
+
+/**
+ * Throws unless `ref.quote` is on page `ref.page` (1 for a web page) of its source's excerpt. A scanned ref (#59) has
+ * no text to check against, so it must be on a page whose excerpt is empty but for its page marker: a page with text is quoted.
+ */
+export function checkQuote(ref: Pick<DocRef, 'source' | 'quote' | 'scanned'> & { page?: number }, excerpts: Excerpts, where: string) {
   const page = excerpts[ref.source]?.[String(ref.page ?? 1)];
   if (page === undefined) throw new Error(`${where}: no excerpt for ${ref.source} page ${ref.page ?? 1}`);
+  if (ref.scanned) {
+    if (ref.page === undefined) throw new Error(`${where}: a scanned figure needs its PDF page`);
+    if (!SCANNED_PAGE.test(normalize(page))) throw new Error(`${where}: ${ref.source} page ${ref.page} has text, so quote it instead of marking it scanned`);
+    if (!/^\/[\w/.-]+\.png$/.test(ref.scanned.image)) throw new Error(`${where}: scanned.image must be the rendered page's site path, a .png`);
+    return;
+  }
   if (!normalize(page).includes(normalize(ref.quote))) throw new Error(`${where}: "${ref.quote}" is not on ${ref.source} page ${ref.page ?? 1}`);
 }
 

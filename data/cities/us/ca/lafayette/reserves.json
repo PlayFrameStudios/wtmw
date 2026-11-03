@@ -1,0 +1,11 @@
+{
+  "year": 2027,
+  "reserves": [
+    {
+      "key": "core-cash",
+      "name": "Core operating cash",
+      "purpose": "Cash in the General Fund, Measure H, recreation and insurance funds, after setting aside the money saved in sinking funds. The City measures its reserve policy against it.",
+      "amount": { "source": "S1", "page": 16, "quote": "Total Core Cash Position 22,642,717 19,157,717 17,560,643", "figure": 3, "unit": 1 }
+    }
+  ]
+}

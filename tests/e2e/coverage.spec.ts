@@ -75,7 +75,7 @@ for (const c of CITIES) {
       const a = answer(page, 'everything');
       await expect(a.locator('h3')).toHaveText(`Is this everything the City of ${c.name} spends?`);
       await expect(a).toContainText('Yes, for the City government.');
-      await expect(a.locator('button.sourced')).toHaveText([shortMoney(b.size.allFunds.amount), shortMoney(b.size.generalFund.amount)]);
+      await expect(a.locator('button.sourced')).toHaveText([shortMoney(b.size.allFunds!.amount), shortMoney(b.size.generalFund.amount)]);
       const gf = a.getByRole('link', { name: 'General Fund' });
       await expect(gf).toHaveAttribute('href', `${path}glossary/#${c.generalFundTerm}`);
       await gf.click();
