@@ -16,12 +16,12 @@ const pages = (dir: string): string[] =>
 describe('sources page', () => {
   const rows = [...html.matchAll(/<li class="src-row" id="(S\d+)" data-type="(city|news|other)"/g)].map((m) => ({ id: m[1], type: m[2] }));
 
-  it('lists all 41 sources, in order: 20 city documents, 10 news reports, 11 from other governments (#51, #54, #63)', () => {
+  it('lists all 42 sources, in order: 21 city documents, 10 news reports, 11 from other governments (#51, #54, #63, #64)', () => {
     expect(rows.map((r) => r.id)).toEqual(b.sources.map((s) => s.id));
-    expect(rows.map((r) => r.id)).toEqual(Array.from({ length: 41 }, (_, i) => `S${i + 1}`));
-    expect(rows.filter((r) => r.type === 'city')).toHaveLength(20);
+    expect(rows.map((r) => r.id)).toEqual(Array.from({ length: 42 }, (_, i) => `S${i + 1}`));
+    expect(rows.filter((r) => r.type === 'city')).toHaveLength(21);
     expect(rows.filter((r) => r.type === 'other')).toHaveLength(11);
-    expect(text).toContain('City documents (20)');
+    expect(text).toContain('City documents (21)');
     expect(text).toContain('News reports (10)');
     expect(text).toContain('Other governments (11)');
   });
@@ -42,6 +42,8 @@ describe('sources page', () => {
     // #63: Item 21's FY2028 department table, and the annotated agenda's motion.
     expect(meta('S40')).toMatch(/· pp\. 11, 12$/);
     expect(meta('S41')).toMatch(/· pp\. 3, 4$/);
+    // #64: the Financial Summaries' revenue and spending totals.
+    expect(meta('S42')).toMatch(/· pp\. 8, 10$/);
     expect(meta('S1')).not.toMatch(/ p\. /);
   });
 

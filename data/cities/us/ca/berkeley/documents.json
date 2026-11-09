@@ -99,6 +99,16 @@
       "url": "https://berkeleyca.gov/sites/default/files/city-council-meetings/2026-06-23%20Annotated%20Agenda%20-%20Council.pdf",
       "type": "city",
       "usedFor": "The adopted motion: positions restored at adoption and the revenue transfers that pay for them"
+    },
+    {
+      "id": "S42",
+      "publisher": "City of Berkeley",
+      "title": "FY 2027 & FY 2028 Proposed Biennial Budget: Financial Summaries",
+      "date": "2026-05-14",
+      "dateLabel": "May 14 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/legislative-body-meeting-attachments/5.14.26%20Item2%20FY%202027%20-%20FY%202028%20Proposed%20Budget%20-%20Financial%20Summaries.pdf",
+      "type": "city",
+      "usedFor": "General Fund revenue and spending on the budget basis, FY2024–FY2028"
     }
   ],
   "quotes": {
@@ -481,5 +491,384 @@
         "bothYears": false
       }
     }
+  },
+  "history": {
+    "rows": [
+      {
+        "id": "acfr-revenues",
+        "label": "Revenues",
+        "source": "S39",
+        "page": 53,
+        "quote": "Revenues $ 285,841,172 $ 261,782,686 $ 241,247,508 $ 232,594,533 $ 213,739,932",
+        "columns": [
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2021,
+            "as": "actual"
+          }
+        ]
+      },
+      {
+        "id": "acfr-expenditures",
+        "label": "Expenditures",
+        "source": "S39",
+        "page": 53,
+        "quote": "Expenditures (276,941,924) (241,803,092) (211,303,884) (200,826,851) (189,313,176)",
+        "columns": [
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2021,
+            "as": "actual"
+          }
+        ]
+      },
+      {
+        "id": "acfr-other-financing",
+        "label": "Other financing sources (uses)",
+        "source": "S39",
+        "page": 53,
+        "quote": "Other financing sources (uses) (6,774,558) (25,417,480) (19,519,958) 4,393,666 (10,613,695)",
+        "columns": [
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2021,
+            "as": "actual"
+          }
+        ]
+      },
+      {
+        "id": "acfr-surplus",
+        "label": "Operating surplus/(deficit)",
+        "source": "S39",
+        "page": 53,
+        "quote": "Operating surplus/(deficit) 2,124,690 (5,437,886) 10,423,666 36,161,348 13,813,061",
+        "columns": [
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2021,
+            "as": "actual"
+          }
+        ]
+      },
+      {
+        "id": "acfr-beginning",
+        "label": "Beginning fund balance as restated",
+        "source": "S39",
+        "page": 53,
+        "quote": "Beginning fund balance as restated 152,752,975 158,467,144 148,043,478 111,882,130 98,069,069",
+        "columns": [
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2021,
+            "as": "actual"
+          }
+        ]
+      },
+      {
+        "id": "acfr-ending",
+        "label": "Ending fund balance",
+        "source": "S39",
+        "page": 53,
+        "quote": "Ending fund balance $ 154,877,665 $ 153,029,258 $ 158,467,144 $ 148,043,478 $ 111,882,130",
+        "columns": [
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2023,
+            "as": "actual"
+          },
+          {
+            "year": 2022,
+            "as": "actual"
+          },
+          {
+            "year": 2021,
+            "as": "actual"
+          }
+        ]
+      },
+      {
+        "id": "budget-expenditures",
+        "label": "Grand Total",
+        "source": "S42",
+        "page": 10,
+        "quote": "Grand Total 307,150,230 311,539,113 311,435,259 313,917,287 319,588,707",
+        "columns": [
+          {
+            "year": 2024,
+            "as": "actual"
+          },
+          {
+            "year": 2025,
+            "as": "actual"
+          },
+          {
+            "year": 2026,
+            "as": "adopted"
+          },
+          {
+            "year": 2027,
+            "as": "proposed"
+          },
+          {
+            "year": 2028,
+            "as": "proposed"
+          }
+        ]
+      },
+      {
+        "id": "budget-revenue",
+        "label": "Grand Total",
+        "source": "S42",
+        "page": 8,
+        "quote": "Grand Total 311,435,259 $ 314,898,507 $ 320,288,556 $",
+        "columns": [
+          {
+            "year": 2026,
+            "as": "adopted"
+          },
+          {
+            "year": 2027,
+            "as": "proposed"
+          },
+          {
+            "year": 2028,
+            "as": "proposed"
+          }
+        ]
+      }
+    ],
+    "panels": [
+      {
+        "id": "results",
+        "title": "Results: the City's annual financial report",
+        "sources": [
+          "S39"
+        ],
+        "basis": {
+          "text": "Audited results, on the accounting basis of the City's annual financial report: General Fund revenues and expenditures, other financing sources and uses, and the fund balance at each year's end.",
+          "cites": [
+            {
+              "source": "S39",
+              "page": 53,
+              "quote": "Below is a five-year trend on the General Fund:"
+            }
+          ]
+        },
+        "lines": [
+          {
+            "id": "revenue",
+            "label": "Revenues",
+            "kind": "flow",
+            "from": [
+              {
+                "row": "acfr-revenues"
+              }
+            ]
+          },
+          {
+            "id": "spending",
+            "label": "Expenditures",
+            "kind": "flow",
+            "from": [
+              {
+                "row": "acfr-expenditures"
+              }
+            ],
+            "negate": true
+          },
+          {
+            "id": "other-financing",
+            "label": "Other financing sources (uses)",
+            "kind": "net",
+            "from": [
+              {
+                "row": "acfr-other-financing"
+              }
+            ]
+          },
+          {
+            "id": "surplus",
+            "label": "Operating surplus/(deficit)",
+            "kind": "net",
+            "from": [
+              {
+                "row": "acfr-surplus"
+              }
+            ]
+          },
+          {
+            "id": "fund-balance",
+            "label": "Ending fund balance",
+            "kind": "balance",
+            "from": [
+              {
+                "row": "acfr-ending"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "budget",
+        "title": "Plans: the City's budget documents",
+        "sources": [
+          "S42"
+        ],
+        "basis": {
+          "text": "The City's budget figures, on a different basis from the annual report's: General Fund revenue includes transfers in, and Non-Departmental spending includes interfund transfers. The two bases give different figures for the same year, so each has its own chart.",
+          "cites": [
+            {
+              "source": "S42",
+              "page": 8,
+              "quote": "Transfers 23,842,130 $ 15,957,135 $ 3,477,720 $"
+            },
+            {
+              "source": "S42",
+              "page": 10,
+              "quote": "* Non-Departmental consists of operational overhead costs such as Property Insuranc and School Board salaries, Workers' Compensation costs, Debt Service, and Interfund Transfers."
+            }
+          ]
+        },
+        "lines": [
+          {
+            "id": "revenue",
+            "label": "Revenue",
+            "kind": "flow",
+            "from": [
+              {
+                "row": "budget-revenue"
+              }
+            ]
+          },
+          {
+            "id": "spending",
+            "label": "Expenditures",
+            "kind": "flow",
+            "from": [
+              {
+                "row": "budget-expenditures"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "ties": [
+      {
+        "kind": "sum",
+        "rows": [
+          "acfr-revenues",
+          "acfr-expenditures",
+          "acfr-other-financing"
+        ],
+        "equals": "acfr-surplus"
+      },
+      {
+        "kind": "sum",
+        "rows": [
+          "acfr-beginning",
+          "acfr-surplus"
+        ],
+        "equals": "acfr-ending"
+      },
+      {
+        "kind": "next",
+        "row": "acfr-ending",
+        "equals": "acfr-beginning",
+        "differs": {
+          "2024": "The report begins FY2025 from a fund balance \"as restated\", not from FY2024's ending balance."
+        }
+      },
+      {
+        "kind": "same",
+        "rows": [
+          "budget-revenue",
+          "budget-expenditures"
+        ],
+        "year": 2026
+      }
+    ]
   }
 }

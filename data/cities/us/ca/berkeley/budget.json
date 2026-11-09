@@ -455,6 +455,17 @@
       "type": "city",
       "usedFor": "The adopted motion: positions restored at adoption and the revenue transfers that pay for them",
       "number": 41
+    },
+    {
+      "id": "S42",
+      "publisher": "City of Berkeley",
+      "title": "FY 2027 & FY 2028 Proposed Biennial Budget: Financial Summaries",
+      "date": "2026-05-14",
+      "dateLabel": "May 14 2026",
+      "url": "https://berkeleyca.gov/sites/default/files/legislative-body-meeting-attachments/5.14.26%20Item2%20FY%202027%20-%20FY%202028%20Proposed%20Budget%20-%20Financial%20Summaries.pdf",
+      "type": "city",
+      "usedFor": "General Fund revenue and spending on the budget basis, FY2024–FY2028",
+      "number": 42
     }
   ],
   "generalFund": [
@@ -4234,5 +4245,276 @@
       "capitalProgram.lines.17.years.2027": "Capital program FY2027: Measure FF (Safe Streets)",
       "documentFacts.capitalNeed": "Unfunded capital and maintenance needs, current estimate"
     }
+  },
+  "history": {
+    "panels": [
+      {
+        "id": "results",
+        "title": "Results: the City's annual financial report",
+        "basis": {
+          "text": "Audited results, on the accounting basis of the City's annual financial report: General Fund revenues and expenditures, other financing sources and uses, and the fund balance at each year's end.",
+          "cites": [
+            {
+              "source": "S39",
+              "page": 53,
+              "quote": "Below is a five-year trend on the General Fund:"
+            }
+          ]
+        },
+        "lines": [
+          {
+            "id": "revenue",
+            "label": "Revenues",
+            "kind": "flow",
+            "series": [
+              {
+                "label": "Revenues",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2021": 213739932,
+                  "2022": 232594533,
+                  "2023": 241247508,
+                  "2024": 261782686,
+                  "2025": 285841172
+                },
+                "cite": {
+                  "source": "S39",
+                  "page": 53,
+                  "quote": "Revenues $ 285,841,172 $ 261,782,686 $ 241,247,508 $ 232,594,533 $ 213,739,932"
+                }
+              }
+            ]
+          },
+          {
+            "id": "spending",
+            "label": "Expenditures",
+            "kind": "flow",
+            "series": [
+              {
+                "label": "Expenditures",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2021": 189313176,
+                  "2022": 200826851,
+                  "2023": 211303884,
+                  "2024": 241803092,
+                  "2025": 276941924
+                },
+                "cite": {
+                  "source": "S39",
+                  "page": 53,
+                  "quote": "Expenditures (276,941,924) (241,803,092) (211,303,884) (200,826,851) (189,313,176)"
+                }
+              }
+            ]
+          },
+          {
+            "id": "other-financing",
+            "label": "Other financing sources (uses)",
+            "kind": "net",
+            "series": [
+              {
+                "label": "Other financing sources (uses)",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2021": -10613695,
+                  "2022": 4393666,
+                  "2023": -19519958,
+                  "2024": -25417480,
+                  "2025": -6774558
+                },
+                "cite": {
+                  "source": "S39",
+                  "page": 53,
+                  "quote": "Other financing sources (uses) (6,774,558) (25,417,480) (19,519,958) 4,393,666 (10,613,695)"
+                }
+              }
+            ]
+          },
+          {
+            "id": "surplus",
+            "label": "Operating surplus/(deficit)",
+            "kind": "net",
+            "series": [
+              {
+                "label": "Operating surplus/(deficit)",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2021": 13813061,
+                  "2022": 36161348,
+                  "2023": 10423666,
+                  "2024": -5437886,
+                  "2025": 2124690
+                },
+                "cite": {
+                  "source": "S39",
+                  "page": 53,
+                  "quote": "Operating surplus/(deficit) 2,124,690 (5,437,886) 10,423,666 36,161,348 13,813,061"
+                }
+              }
+            ]
+          },
+          {
+            "id": "fund-balance",
+            "label": "Ending fund balance",
+            "kind": "balance",
+            "series": [
+              {
+                "label": "Ending fund balance",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2021": 111882130,
+                  "2022": 148043478,
+                  "2023": 158467144,
+                  "2024": 153029258,
+                  "2025": 154877665
+                },
+                "cite": {
+                  "source": "S39",
+                  "page": 53,
+                  "quote": "Ending fund balance $ 154,877,665 $ 153,029,258 $ 158,467,144 $ 148,043,478 $ 111,882,130"
+                }
+              }
+            ]
+          }
+        ],
+        "notes": [],
+        "adjustments": [
+          {
+            "reason": "The report begins FY2025 from a fund balance \"as restated\", not from FY2024's ending balance.",
+            "from": {
+              "label": "Ending fund balance",
+              "year": 2024,
+              "value": 153029258,
+              "cite": {
+                "source": "S39",
+                "page": 53,
+                "quote": "Ending fund balance $ 154,877,665 $ 153,029,258 $ 158,467,144 $ 148,043,478 $ 111,882,130"
+              }
+            },
+            "to": {
+              "label": "Beginning fund balance as restated",
+              "year": 2025,
+              "value": 152752975,
+              "cite": {
+                "source": "S39",
+                "page": 53,
+                "quote": "Beginning fund balance as restated 152,752,975 158,467,144 148,043,478 111,882,130 98,069,069"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "budget",
+        "title": "Plans: the City's budget documents",
+        "basis": {
+          "text": "The City's budget figures, on a different basis from the annual report's: General Fund revenue includes transfers in, and Non-Departmental spending includes interfund transfers. The two bases give different figures for the same year, so each has its own chart.",
+          "cites": [
+            {
+              "source": "S42",
+              "page": 8,
+              "quote": "Transfers 23,842,130 $ 15,957,135 $ 3,477,720 $"
+            },
+            {
+              "source": "S42",
+              "page": 10,
+              "quote": "* Non-Departmental consists of operational overhead costs such as Property Insuranc and School Board salaries, Workers' Compensation costs, Debt Service, and Interfund Transfers."
+            }
+          ]
+        },
+        "lines": [
+          {
+            "id": "revenue",
+            "label": "Revenue",
+            "kind": "flow",
+            "series": [
+              {
+                "label": "Grand Total",
+                "basis": "budget",
+                "as": "adopted",
+                "years": {
+                  "2026": 311435259
+                },
+                "cite": {
+                  "source": "S42",
+                  "page": 8,
+                  "quote": "Grand Total 311,435,259 $ 314,898,507 $ 320,288,556 $"
+                }
+              },
+              {
+                "label": "Grand Total",
+                "basis": "budget",
+                "as": "proposed",
+                "years": {
+                  "2027": 314898507,
+                  "2028": 320288556
+                },
+                "cite": {
+                  "source": "S42",
+                  "page": 8,
+                  "quote": "Grand Total 311,435,259 $ 314,898,507 $ 320,288,556 $"
+                }
+              }
+            ]
+          },
+          {
+            "id": "spending",
+            "label": "Expenditures",
+            "kind": "flow",
+            "series": [
+              {
+                "label": "Grand Total",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2024": 307150230,
+                  "2025": 311539113
+                },
+                "cite": {
+                  "source": "S42",
+                  "page": 10,
+                  "quote": "Grand Total 307,150,230 311,539,113 311,435,259 313,917,287 319,588,707"
+                }
+              },
+              {
+                "label": "Grand Total",
+                "basis": "budget",
+                "as": "adopted",
+                "years": {
+                  "2026": 311435259
+                },
+                "cite": {
+                  "source": "S42",
+                  "page": 10,
+                  "quote": "Grand Total 307,150,230 311,539,113 311,435,259 313,917,287 319,588,707"
+                }
+              },
+              {
+                "label": "Grand Total",
+                "basis": "budget",
+                "as": "proposed",
+                "years": {
+                  "2027": 313917287,
+                  "2028": 319588707
+                },
+                "cite": {
+                  "source": "S42",
+                  "page": 10,
+                  "quote": "Grand Total 307,150,230 311,539,113 311,435,259 313,917,287 319,588,707"
+                }
+              }
+            ]
+          }
+        ],
+        "notes": [],
+        "adjustments": []
+      }
+    ]
   }
 }

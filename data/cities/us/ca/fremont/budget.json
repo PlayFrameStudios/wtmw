@@ -2672,5 +2672,293 @@
         "amount": 6249000
       }
     }
+  },
+  "history": {
+    "panels": [
+      {
+        "id": "budget",
+        "title": "The adopted budget's General Fund history",
+        "basis": {
+          "text": "From the adopted budget's table of General Fund sources and uses, printed in thousands of dollars and shown here in dollars. The City prints transfers in and out apart from revenue and expenditures, and so do we.",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 95,
+              "quote": "General Fund Historical and Adopted Budget FY 2026/27 (Thousands of Dollars)"
+            }
+          ]
+        },
+        "lines": [
+          {
+            "id": "revenue",
+            "label": "Revenue",
+            "kind": "flow",
+            "series": [
+              {
+                "label": "Total Revenues",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2022": 273894000,
+                  "2023": 291057000,
+                  "2024": 243634000,
+                  "2025": 257090000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Total Revenues 273,894 291,057 243,634 257,090 275,934 284,686"
+                }
+              },
+              {
+                "label": "Total Revenues",
+                "basis": "estimate",
+                "as": "estimate",
+                "years": {
+                  "2026": 275934000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Total Revenues 273,894 291,057 243,634 257,090 275,934 284,686"
+                }
+              },
+              {
+                "label": "Total Revenues",
+                "basis": "budget",
+                "as": "adopted",
+                "years": {
+                  "2027": 284686000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Total Revenues 273,894 291,057 243,634 257,090 275,934 284,686"
+                }
+              }
+            ]
+          },
+          {
+            "id": "spending",
+            "label": "Expenditures",
+            "kind": "flow",
+            "series": [
+              {
+                "label": "Total Expenditures",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2022": 210661000,
+                  "2023": 262571000,
+                  "2024": 247355000,
+                  "2025": 265838000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Total Expenditures 210,661 262,571 247,355 265,838 270,059 276,972"
+                }
+              },
+              {
+                "label": "Total Expenditures",
+                "basis": "estimate",
+                "as": "estimate",
+                "years": {
+                  "2026": 270059000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Total Expenditures 210,661 262,571 247,355 265,838 270,059 276,972"
+                }
+              },
+              {
+                "label": "Total Expenditures",
+                "basis": "budget",
+                "as": "adopted",
+                "years": {
+                  "2027": 276972000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Total Expenditures 210,661 262,571 247,355 265,838 270,059 276,972"
+                }
+              }
+            ]
+          },
+          {
+            "id": "transfers-in",
+            "label": "Transfers in",
+            "kind": "flow",
+            "series": [
+              {
+                "label": "Transfers In",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2022": 6446000,
+                  "2023": 5698000,
+                  "2024": 16018000,
+                  "2025": 6318000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Transfers In 6,446 5,698 16,018 6,318 6,760 6,361"
+                }
+              },
+              {
+                "label": "Transfers In",
+                "basis": "estimate",
+                "as": "estimate",
+                "years": {
+                  "2026": 6760000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Transfers In 6,446 5,698 16,018 6,318 6,760 6,361"
+                }
+              },
+              {
+                "label": "Transfers In",
+                "basis": "budget",
+                "as": "adopted",
+                "years": {
+                  "2027": 6361000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Transfers In 6,446 5,698 16,018 6,318 6,760 6,361"
+                }
+              }
+            ]
+          },
+          {
+            "id": "transfers-out",
+            "label": "Transfers out",
+            "kind": "flow",
+            "series": [
+              {
+                "label": "Transfers Out",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2022": 44630000,
+                  "2023": 50077000,
+                  "2024": 20905000,
+                  "2025": 14834000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Transfers Out 44,630 50,077 20,905 14,834 11,762 12,117"
+                }
+              },
+              {
+                "label": "Transfers Out",
+                "basis": "estimate",
+                "as": "estimate",
+                "years": {
+                  "2026": 11762000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Transfers Out 44,630 50,077 20,905 14,834 11,762 12,117"
+                }
+              },
+              {
+                "label": "Transfers Out",
+                "basis": "budget",
+                "as": "adopted",
+                "years": {
+                  "2027": 12117000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Transfers Out 44,630 50,077 20,905 14,834 11,762 12,117"
+                }
+              }
+            ]
+          },
+          {
+            "id": "fund-balance",
+            "label": "Ending fund balance",
+            "kind": "balance",
+            "series": [
+              {
+                "label": "Total Ending Fund Balance",
+                "basis": "actual",
+                "as": "actual",
+                "years": {
+                  "2022": 93252000,
+                  "2023": 77359000,
+                  "2024": 68751000,
+                  "2025": 51487000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Total Ending Fund Balance $ 93,252 $ 77,359 $ 68,751 $ 51,487 $ 52,360 $ 54,318"
+                }
+              },
+              {
+                "label": "Total Ending Fund Balance",
+                "basis": "estimate",
+                "as": "estimate",
+                "years": {
+                  "2026": 52360000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Total Ending Fund Balance $ 93,252 $ 77,359 $ 68,751 $ 51,487 $ 52,360 $ 54,318"
+                }
+              },
+              {
+                "label": "Total Ending Fund Balance",
+                "basis": "budget",
+                "as": "adopted",
+                "years": {
+                  "2027": 54318000
+                },
+                "cite": {
+                  "source": "S1",
+                  "page": 95,
+                  "quote": "Total Ending Fund Balance $ 93,252 $ 77,359 $ 68,751 $ 51,487 $ 52,360 $ 54,318"
+                }
+              }
+            ]
+          }
+        ],
+        "notes": [
+          {
+            "text": "The sales tax reduction in FY 2023/24 and FY 2024/25 reflects the impact of the State’s recovery of sales tax revenue misallocated to the City of Fremont in FY 2022/23.",
+            "cites": [
+              {
+                "source": "S1",
+                "page": 95,
+                "quote": "The sales tax reduction in FY 2023/24 and FY 2024/25 reflects the impact of the State’s recovery of sales tax revenue misallocated to the City of Fremont in FY 2022/23."
+              }
+            ]
+          },
+          {
+            "text": "The Maintenance Operations Department took over responsibility for building, fleet, park, and street maintenance from the Public Works and Community Services Departments in FY 2024/25. For comparability, the expenditures for those activities have been reallocated to the Maintenance Operations Department in the prior-year columns.",
+            "cites": [
+              {
+                "source": "S1",
+                "page": 95,
+                "quote": "The Maintenance Operations Department took over responsibility for building, fleet, park, and street maintenance from the Public Works and Community Services Departments in FY 2024/25. For comparability, the expenditures for those activities have been reallocated to the Maintenance Operations Department in the prior-year columns."
+              }
+            ]
+          }
+        ],
+        "adjustments": []
+      }
+    ]
   }
 }

@@ -188,22 +188,21 @@ describe('source numbers (#63)', () => {
   it('a later City document can be numbered past the files after it; the chain still runs S1–Sn', () => {
     expect(nextNumber([{ number: 1 }, { number: 2 }, { number: 40 }])).toBe(3);
     expect(checkNumbering(b.sources)).toEqual([]);
-    expect(b.sources.map((s) => s.number)).toEqual(Array.from({ length: 41 }, (_, i) => i + 1));
+    expect(b.sources.map((s) => s.number)).toEqual(Array.from({ length: 42 }, (_, i) => i + 1));
   });
 
-  it('the data build runs the check: S41 renumbered S42 leaves a gap at 41, and the build says so', async () => {
+  // Since #64, the last City document is S42 (the Financial Summaries); renumbering it S43 leaves the gap.
+  it('the data build runs the check: S42 renumbered S43 leaves a gap at 42, and the build says so', async () => {
     const tmp = mkdtempSync(join(tmpdir(), 'wtmw-63-'));
     try {
       cpSync(join(root, 'data'), join(tmp, 'data'), { recursive: true });
       const city = join(tmp, 'data/cities/us/ca/berkeley');
       const docs = JSON.parse(readFileSync(join(city, 'documents.json'), 'utf8'));
-      docs.sources.find((s: { id: string }) => s.id === 'S41').id = 'S42';
-      writeFileSync(join(city, 'documents.json'), JSON.stringify(docs).replaceAll('"source":"S41"', '"source":"S42"'));
-      cpSync(join(city, 'source/excerpts/S41.json'), join(city, 'source/excerpts/S42.json'));
-      const ballotFile = readFileSync(join(city, 'ballot.json'), 'utf8');
-      writeFileSync(join(city, 'ballot.json'), ballotFile.replaceAll('"source": "S41"', '"source": "S42"'));
+      docs.sources.find((s: { id: string }) => s.id === 'S42').id = 'S43';
+      writeFileSync(join(city, 'documents.json'), JSON.stringify(docs).replaceAll('"source":"S42"', '"source":"S43"').replaceAll('"S42"]', '"S43"]'));
+      cpSync(join(city, 'source/excerpts/S42.json'), join(city, 'source/excerpts/S43.json'));
       const { errors } = await buildCity(tmp, 'us/ca/berkeley');
-      expect(errors).toEqual(['us/ca/berkeley: no source is numbered 41: the numbers must run S1–S42 with no gaps']);
+      expect(errors).toEqual(['us/ca/berkeley: no source is numbered 42: the numbers must run S1–S43 with no gaps']);
     } finally {
       rmSync(tmp, { recursive: true, force: true });
     }
