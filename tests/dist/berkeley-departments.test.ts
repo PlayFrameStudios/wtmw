@@ -54,7 +54,11 @@ describe('Berkeley departments page (built)', () => {
       expect(r, l.id).toBeDefined();
       expect(r!.sources).toEqual([l.source]);
     }
-    expect(departments).not.toMatch(/FY2028/);
+    // The department lines are FY2027's only. "What staff cost" (#65) shows FY2024–FY2028 on purpose, as its own
+    // section after Staff positions, so the check stops where it begins.
+    const lines = departments.slice(0, departments.indexOf('id="staff-costs"'));
+    expect(departments.indexOf('id="staff-costs"')).toBeGreaterThan(0);
+    expect(lines).not.toMatch(/FY2028/);
   });
 
   it("the total and the staff count are the budget's, with receipts", () => {
