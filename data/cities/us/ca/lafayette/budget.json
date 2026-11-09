@@ -79,6 +79,15 @@
       "type": "city",
       "usedFor": "General Fund revenue, spending and transfers, FY 2021-22 to FY 2023-24",
       "number": 7
+    },
+    {
+      "id": "S8",
+      "publisher": "City of Lafayette",
+      "title": "Measure H Sales Tax",
+      "url": "https://www.lovelafayette.org/business/measure-h-sales-tax",
+      "type": "city",
+      "usedFor": "Measure H: where its revenue goes and what it was expected to raise",
+      "number": 8
     }
   ],
   "generalFund": [
@@ -2052,6 +2061,69 @@
                 "source": "S3",
                 "page": 87,
                 "quote": "The contribution on behalf of each participant equal 10% of base earnings up to the maximum allowable by law. In addition, each participant may contribute up to 5% of earnings to the Plan and the City has elected to match such contributions by the same percentage."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "voterTaxes": {
+    "taxes": [
+      {
+        "id": "measure-h",
+        "name": "Measure H (1/2 cent sales tax)",
+        "group": "general",
+        "kind": {
+          "source": "S8",
+          "quote": "All the revenue from the sales tax will go directly into the City’s General Fund"
+        },
+        "purpose": {
+          "source": "S1",
+          "page": 53,
+          "quote": "In November 2024 voters approved Measure H -- a 1/2 cent sales tax -- to support ongoing City programs."
+        },
+        "approved": {
+          "text": "November 2024; in effect from April 1, 2025 until March 30, 2032",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 53,
+              "quote": "In November 2024 voters approved Measure H"
+            },
+            {
+              "source": "S1",
+              "page": 53,
+              "quote": "The additional sales tax was effective on April 1, 2025 and will continue for 7 years until March 30, 2032."
+            }
+          ]
+        },
+        "rate": {
+          "text": "A 1/2 cent sales tax",
+          "cites": [
+            {
+              "source": "S1",
+              "page": 53,
+              "quote": "a 1/2 cent sales tax"
+            }
+          ]
+        },
+        "amount": {
+          "value": 3321356,
+          "as": "FY2026-27 proposed",
+          "cite": {
+            "source": "S1",
+            "page": 37,
+            "quote": "401.1 Measure H 0 702,518 2,800,000 3,237,593 3,321,356 18.6%"
+          }
+        },
+        "notes": [
+          {
+            "text": "The City's page says it was expected to raise approximately $2.4 million each year.",
+            "cites": [
+              {
+                "source": "S8",
+                "quote": "The funding measure is expected to generate approximately $2.4 million each year"
               }
             ]
           }

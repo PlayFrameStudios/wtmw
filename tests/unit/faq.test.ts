@@ -26,10 +26,12 @@ beforeAll(async () => {
   expect(b.errors).toEqual([]);
   expect(f.errors).toEqual([]);
   built = { berkeley: b.budget, fremont: f.budget };
-  // Fremont before its faq.json: the built budget without the FAQ and the sources it added.
+  // Fremont before its faq.json: the built budget without the FAQ and the sources it added. By id, not position:
+  // documents.json's S14 (#66) is numbered after them but read before them.
   base = structuredClone(f.budget);
   delete base.faq;
-  base.sources = base.sources.slice(0, base.sources.length - file.sources.length);
+  const faqIds = new Set(file.sources.map((s) => s.id));
+  base.sources = base.sources.filter((s) => !faqIds.has(s.id));
   excerpts = (await readDocuments(dir)).excerpts;
 });
 
@@ -56,10 +58,10 @@ describe('the FAQs as committed', () => {
   });
 
   it("number their sources after the city's others, the City's own documents typed 'city'", () => {
-    expect(built.fremont.sources.slice(-5).map((s) => [s.id, s.type])).toEqual([['S9', 'city'], ['S10', 'other'], ['S11', 'other'], ['S12', 'other'], ['S13', 'other']]);
-    // Berkeley's FAQ source follows coverage.json's; documents.json's S40–S44 come after it (#63, #64, #65).
+    expect(built.fremont.sources.slice(-6).map((s) => [s.id, s.type])).toEqual([['S9', 'city'], ['S10', 'other'], ['S11', 'other'], ['S12', 'other'], ['S13', 'other'], ['S14', 'city']]);
+    // Berkeley's FAQ source follows coverage.json's; documents.json's S40–S57 come after it (#63–#66). So does Fremont's S14 (#66).
     expect(built.berkeley.sources.find((s) => s.id === 'S39')).toMatchObject({ type: 'city', publisher: 'City of Berkeley' });
-    expect(built.berkeley.sources.map((s) => s.id)).toEqual(Array.from({ length: 44 }, (_, i) => `S${i + 1}`));
+    expect(built.berkeley.sources.map((s) => s.id)).toEqual(Array.from({ length: 57 }, (_, i) => `S${i + 1}`));
   });
 
   it("the site-wide FAQ cites no city's books", () => {

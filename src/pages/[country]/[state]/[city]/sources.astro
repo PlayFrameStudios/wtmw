@@ -23,6 +23,7 @@ import { folio } from '../../../../lib/open-at';
 import { pagesBySource, sourcesById } from '../../../../lib/receipts';
 import { coverageFor } from '../../../../lib/coverage';
 import { revenueGroupsFor } from '../../../../lib/revenue-groups';
+import { safeStreetsRates } from '../../../../lib/voter-taxes';
 
 export const getStaticPaths = cityStaticPaths();
 
@@ -42,9 +43,9 @@ const raw = new Map(budget.sources.map((s) => [s.id, s]));
 const plan = hasGapPlan(budget) ? budget : undefined;
 // The pages each document is cited at: every page a budget.json record quotes, for a city built from documents.
 // A department table a later document prints row by row cites its pages too (FY2028's, Item 21, #63), as do the
-// history (#64) and staff-cost (#65) rows.
+// history (#64) and staff-cost (#65) rows, and the voter-approved taxes (#66).
 const pages = plan
-  ? pagesBySource(plan.documentFacts, ballotFileFor(city.path), plan.departmentReductions, plan.history, plan.staffCosts)
+  ? pagesBySource(plan.documentFacts, ballotFileFor(city.path), plan.departmentReductions, plan.history, plan.staffCosts, plan.voterTaxes)
   : pagesBySource({ ...budget, sources: [] });
 const pageList = (id: (typeof sources)[number]['id'], ps: number[]) => `${ps.length > 1 ? 'pp.' : 'p.'} ${ps.map((p) => folio(raw.get(id)!, p)).join(', ')}`;
 const meta = (id: (typeof sources)[number]['id'], date?: string) =>
@@ -67,6 +68,8 @@ const g = plan && {
   // #63: what the annotated agenda records the Council changing at adoption.
   amendments: plan.documentFacts.adoptionAmendments,
   generalFund: plan.size.generalFund,
+  // #66: the City's property-tax page and the levy ordinance print different Safe Streets rates.
+  safeStreets: safeStreetsRates(plan),
 };
 const adoptedOn = g && new Date(`${g.adoption.date}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
 const liability = (asOf: string) => g!.liabilities.find((l) => l.asOf.startsWith(asOf))!;
@@ -251,6 +254,18 @@ const humanize = (name: string) =>
             <h3>Department totals differ by {shortMoney(g.itAllocation.baseline)}</h3>
             <p>The comparison table leaves out the {g.itAllocation.name}. Totals reconcile once it's added back.<SourceChip city={city} source="S1" /></p>
           </li>
+          {g.safeStreets && (
+            <li class="gap card" data-gap="safe-streets-rate">
+              <h3>Two Safe Streets rates</h3>
+              <p>
+                {g.safeStreets.web.text}
+                <SourceChip city={city} source={g.safeStreets.web.cites[0].source} at={g.safeStreets.web.cites[0]} />{' '}
+                The FY 2027 tax-rate ordinance sets{' '}
+                <Sourced city={city} source={g.safeStreets.ordinance.source} at={g.safeStreets.ordinance}>{g.safeStreets.rate}</Sourced>, and the Revenue page uses the
+                ordinance.
+              </p>
+            </li>
+          )}
         </ul>
         ) : (
         <ul class="gaps">

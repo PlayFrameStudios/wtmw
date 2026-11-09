@@ -7,6 +7,7 @@
  */
 import ListOrTable from '../ListOrTable.astro';
 import Sourced from '../Sourced.astro';
+import VoterTaxes from '../VoterTaxes.astro';
 import Waffle from '../Waffle.astro';
 import Base from '../../layouts/Base.astro';
 import { budgetFor } from '../../lib/budget';
@@ -15,6 +16,7 @@ import { fy } from '../../lib/city-settings';
 import { shortMoney } from '../../lib/format';
 import type { Figure } from '../../lib/receipts';
 import { revenueGroupsFor } from '../../lib/revenue-groups';
+import { voterTaxesView } from '../../lib/voter-taxes';
 import { revenueOutlook } from '../../lib/revenue-outlook';
 import { perHundred } from '../../lib/waffle';
 
@@ -42,6 +44,8 @@ const beforeTransfers = /before transfers in/i.test(budget.revenue.totalName);
 const bases = new Set(r.columns.map((c) => c.basis));
 const context = [bases.has('actual') && 'Actual', bases.has('estimate') && 'estimated'].filter(Boolean).join(' and ');
 const columnNote = `${context ? `${context.charAt(0).toUpperCase()}${context.slice(1)} years for context, the adopted budget` : 'The adopted budget'}${bases.has('projected') ? ", and the City's forecast after it" : ''}.`;
+// Money voters set aside (#66), last on the page.
+const voterTaxes = voterTaxesView(budget);
 ---
 
 <Base title={`Revenue · ${city.name}`} city={city} description={`Where every $100 of ${city.name}'s ${y} General Fund revenue comes from, and how each source has grown. Every number links to the public document it came from.`}>
@@ -156,6 +160,7 @@ const columnNote = `${context ? `${context.charAt(0).toUpperCase()}${context.sli
         )
       }
     </section>
+    {voterTaxes && <VoterTaxes city={city} groups={voterTaxes} />}
   </div>
 </Base>
 

@@ -270,7 +270,7 @@ describe('the chart (lib/history)', () => {
 });
 
 describe('Lafayette sources (#64)', () => {
-  it('the FY 2024-25 book is S7, after coverage.json’s S5 and S6, which keep their numbers', () => {
+  it('the FY 2024-25 book is S7, after coverage.json’s S5 and S6, which keep their numbers; the Measure H page is S8 (#66)', () => {
     expect(data.lafayette.budget.sources.map((s) => [s.id, s.type])).toEqual([
       ['S1', 'city'],
       ['S2', 'city'],
@@ -279,6 +279,7 @@ describe('Lafayette sources (#64)', () => {
       ['S5', 'other'],
       ['S6', 'other'],
       ['S7', 'city'],
+      ['S8', 'city'],
     ]);
     expect(data.lafayette.budget.sources.find((s) => s.id === 'S7')!.url).toBe('https://www.lovelafayette.org/home/showpublisheddocument/8038/638723780789770000');
   });
