@@ -15,7 +15,7 @@
       "format": "PDF",
       "pageOffset": 6,
       "type": "city",
-      "usedFor": "General Fund summary, revenue, forecast, positions, pension, capital plan"
+      "usedFor": "General Fund summary, department budgets, revenue, forecast, positions, pension, capital plan"
     },
     {
       "id": "S2",
@@ -2380,6 +2380,359 @@
         "amount": {
           "unsourced": true
         }
+      }
+    ]
+  },
+  "departmentBudgets": {
+    "note": "Each department's operating budget from the adopted budget's department chapters: its Sources of Funding block and its Expenditures by Category table (and, where the chapter prints one, its Major Service Area table). Every figure is parsed from its quote, the three tables' totals are held to be the same number, and each department's funding reconciles to its General Fund summary row (S1 p.66). Pages are PDF pages; S1.pageOffset turns them into the printed folios receipts cite.",
+    "source": "S1",
+    "adminHub": {
+      "source": "S1",
+      "page": 207,
+      "quote": "The Administrative Departments include the City Manager’s Office, City Attorney’s Office, City Clerk’s Office, Finance, Human Resources, and Information Technology Services.",
+      "memberIds": [
+        "city-manager",
+        "city-attorney",
+        "city-clerk",
+        "finance",
+        "human-resources",
+        "information-technology-services"
+      ]
+    },
+    "allocationNote": {
+      "text": "Salaries and benefits, operating and capital expenditures, and the department’s share of citywide support services, as the City allocates each department’s direct and indirect expenses.",
+      "cites": [
+        {
+          "source": "S1",
+          "page": 136,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        }
+      ]
+    },
+    "departments": [
+      {
+        "id": "city-council",
+        "name": "City Council",
+        "group": "department",
+        "tie": {
+          "kind": "with-overhead",
+          "summaryId": "city-council"
+        },
+        "fundingPage": 135,
+        "fundingLabels": [
+          "General Fund",
+          "Overhead Charges to Other Funds"
+        ],
+        "totalLabel": "City Council Total",
+        "categoryPage": 136
+      },
+      {
+        "id": "community-development",
+        "name": "Community Development",
+        "group": "department",
+        "tie": {
+          "kind": "direct",
+          "summaryId": "community-development"
+        },
+        "fundingPage": 144,
+        "fundingLabels": [
+          "Development Cost Center",
+          "Environmental Services",
+          "Housing Funds",
+          "General Fund",
+          "Homeless Services",
+          "Grants/Capital Projects"
+        ],
+        "totalLabel": "Community Development Total",
+        "categoryPage": 145,
+        "serviceAreaPage": 139,
+        "serviceAreaLabels": [
+          "Administration",
+          "Planning",
+          "Building and Safety",
+          "Code Enforcement",
+          "Environmental Services",
+          "Homeless Services Code Enforcement",
+          "SB2 and LEAP Housing Grants",
+          "Affordable Housing Investment",
+          "Affordable Housing Ordinance"
+        ]
+      },
+      {
+        "id": "community-services",
+        "name": "Community Services",
+        "group": "department",
+        "tie": {
+          "kind": "direct",
+          "summaryId": "community-services"
+        },
+        "fundingPage": 151,
+        "fundingLabels": [
+          "Recreation Cost Center",
+          "General Fund",
+          "Capital Projects",
+          "Development Cost Center",
+          "Homeless Services",
+          "Other Components"
+        ],
+        "totalLabel": "Community Services Total",
+        "categoryPage": 151,
+        "serviceAreaPage": 148,
+        "serviceAreaLabels": [
+          "Administration",
+          "Recreation",
+          "Urban Forestry",
+          "Park Planning and Design",
+          "Ranger Program",
+          "Homeless Services"
+        ]
+      },
+      {
+        "id": "economic-development",
+        "name": "Economic Development",
+        "group": "department",
+        "tie": {
+          "kind": "direct",
+          "summaryId": "economic-development"
+        },
+        "fundingPage": 160,
+        "fundingLabels": [
+          "General Fund"
+        ],
+        "totalLabel": "Economic Development Total",
+        "categoryPage": 161
+      },
+      {
+        "id": "fire",
+        "name": "Fire",
+        "group": "department",
+        "tie": {
+          "kind": "direct",
+          "summaryId": "fire"
+        },
+        "fundingPage": 170,
+        "fundingLabels": [
+          "General Fund",
+          "Public Safety Grants"
+        ],
+        "totalLabel": "Fire Total",
+        "categoryPage": 170,
+        "serviceAreaPage": 164,
+        "serviceAreaTitle": "Fire: Historical Expenditures/Budget by Major Service Area",
+        "serviceAreaLabels": [
+          "Administration",
+          "Operations/Emergency Medical Services",
+          "Prevention",
+          "Disaster Preparedness"
+        ]
+      },
+      {
+        "id": "human-services",
+        "name": "Human Services",
+        "group": "department",
+        "tie": {
+          "kind": "direct",
+          "summaryId": "human-services"
+        },
+        "fundingPage": 178,
+        "fundingLabels": [
+          "Human Services Grants",
+          "General Fund",
+          "Homeless Services",
+          "Paratransit",
+          "Community Development Block Grant",
+          "Senior Center Cost Center",
+          "Family Resource Center",
+          "Other (Rent Review, HOME, Opioid, Grants, Human Services)"
+        ],
+        "totalLabel": "Human Services Total",
+        "categoryPage": 179,
+        "serviceAreaPage": 174,
+        "serviceAreaLabels": [
+          "Administration",
+          "Family Resource Center",
+          "Youth and Family Services",
+          "Aging and Family Services",
+          "CDBG/Rent Review",
+          "Paratransit",
+          "Social Services Grants",
+          "Home Grant",
+          "Homeless Services"
+        ]
+      },
+      {
+        "id": "maintenance-operations",
+        "name": "Maintenance Operations",
+        "group": "department",
+        "tie": {
+          "kind": "with-overhead",
+          "summaryId": "maintenance-operations"
+        },
+        "fundingPage": 185,
+        "fundingLabels": [
+          "General Fund",
+          "Overhead Charges to Other Funds",
+          "LMD 88 Assessments, Developer Contributions, CFD 3 Special Tax"
+        ],
+        "totalLabel": "Maintenance Operations Total",
+        "categoryPage": 186,
+        "serviceAreaPage": 182,
+        "serviceAreaLabels": [
+          "Administration",
+          "Public Buildings",
+          "Fleet Maintenance",
+          "Park/Median Maintenance",
+          "Streets"
+        ]
+      },
+      {
+        "id": "police",
+        "name": "Police",
+        "group": "department",
+        "tie": {
+          "kind": "direct",
+          "summaryId": "police"
+        },
+        "fundingPage": 193,
+        "fundingLabels": [
+          "General Fund",
+          "Public Safety Grants"
+        ],
+        "totalLabel": "Police Total",
+        "categoryPage": 194,
+        "serviceAreaPage": 190,
+        "serviceAreaLabels": [
+          "Administration/Records",
+          "Patrol Operations/Dispatch",
+          "Investigations",
+          "Detention and Evidence Storage",
+          "Animal Services",
+          "Community Engagement/Public Affairs",
+          "Mobile Evaluation Team",
+          "SWAT Team"
+        ]
+      },
+      {
+        "id": "public-works",
+        "name": "Public Works",
+        "group": "department",
+        "tie": {
+          "kind": "direct",
+          "summaryId": "public-works"
+        },
+        "fundingPage": 204,
+        "fundingLabels": [
+          "Capital Projects",
+          "Development Cost Center",
+          "General Fund",
+          "CFD 1 Special Tax"
+        ],
+        "totalLabel": "Public Works Total",
+        "categoryPage": 204
+      },
+      {
+        "id": "city-manager",
+        "name": "City Manager",
+        "group": "administrative",
+        "tie": {
+          "kind": "admin-group"
+        },
+        "fundingPage": 214,
+        "fundingLabels": [
+          "General Fund",
+          "Homeless Services",
+          "Overhead Charges to Other Funds"
+        ],
+        "totalLabel": "City Manager Total",
+        "categoryPage": 214,
+        "serviceAreaPage": 210,
+        "serviceAreaLabels": [
+          "City Manager's Office",
+          "Communications and Marketing",
+          "Homeless Services"
+        ]
+      },
+      {
+        "id": "city-attorney",
+        "name": "City Attorney",
+        "group": "administrative",
+        "tie": {
+          "kind": "admin-group"
+        },
+        "fundingPage": 220,
+        "fundingLabels": [
+          "Direct Charges to General Fund (Risk Management)",
+          "General Fund",
+          "Direct Charges to Other Funds (Risk Management)",
+          "Overhead Charges to Other Funds (City Attorney)"
+        ],
+        "totalLabel": "City Attorney Total",
+        "categoryPage": 220,
+        "serviceAreaPage": 218,
+        "serviceAreaLabels": [
+          "City Attorney's Office",
+          "Risk Management"
+        ]
+      },
+      {
+        "id": "city-clerk",
+        "name": "City Clerk",
+        "group": "administrative",
+        "tie": {
+          "kind": "admin-group"
+        },
+        "fundingPage": 225,
+        "fundingLabels": [
+          "General Fund",
+          "Overhead Charges to Other Funds"
+        ],
+        "totalLabel": "City Clerk Total",
+        "categoryPage": 226
+      },
+      {
+        "id": "finance",
+        "name": "Finance",
+        "group": "administrative",
+        "tie": {
+          "kind": "admin-group"
+        },
+        "fundingPage": 229,
+        "fundingLabels": [
+          "General Fund",
+          "Overhead Charges to Other Funds"
+        ],
+        "totalLabel": "Finance Total",
+        "categoryPage": 229
+      },
+      {
+        "id": "human-resources",
+        "name": "Human Resources",
+        "group": "administrative",
+        "tie": {
+          "kind": "admin-group"
+        },
+        "fundingPage": 234,
+        "fundingLabels": [
+          "General Fund",
+          "Overhead Charges to Other Funds"
+        ],
+        "totalLabel": "Human Resources Total",
+        "categoryPage": 235
+      },
+      {
+        "id": "information-technology-services",
+        "name": "Information Technology Services",
+        "group": "administrative",
+        "tie": {
+          "kind": "internal-service"
+        },
+        "fundingPage": 242,
+        "fundingLabels": [
+          "Direct Charges to General Fund",
+          "Direct Charges to Other Funds"
+        ],
+        "totalLabel": "Information Technology Services Total",
+        "categoryPage": 243
       }
     ]
   }

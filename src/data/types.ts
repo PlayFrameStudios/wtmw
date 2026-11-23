@@ -561,6 +561,8 @@ export interface CityBudget {
   staffCosts?: StaffCosts;
   /** Money voters set aside (#66): each voter-approved City tax, general or special, from documents.json's voterTaxes. */
   voterTaxes?: VoterTaxes;
+  /** Per-department operating budgets (Fremont), from the adopted budget's department chapters. */
+  departmentDetails?: DepartmentDetails;
 }
 
 /** A staff-cost column's word: the History words, and "baseline" for a forecast before any decisions (Berkeley's January deck). */
@@ -628,6 +630,77 @@ export interface VoterTaxes {
   taxes: VoterTax[];
   /** Our sum of the special taxes' amounts, when there are two or more and all are the same kind of figure. */
   specialSum?: { value: number; count: number; as: string; cites: DocRef[] };
+}
+
+/** One line of a department's *Sources of Funding* block: the fund and its budgeted amount and printed share. */
+export interface DepartmentFundingLine extends DocRef {
+  name: string;
+  /** Budgeted amount in whole dollars, parsed from the quote. */
+  amount: number;
+  /** Printed share as a rate (e.g. 0.784 for "78.4%"), parsed from the quote. */
+  share: number;
+}
+
+/** One line of a department's *Expenditures by Category* or *Major Service Area* table. */
+export interface DepartmentExpenseLine extends DocRef {
+  id: string;
+  name: string;
+  /** FY 2026/27 Adopted amount in whole dollars. */
+  amount: number;
+}
+
+/**
+ * How a department's funding reconciles to the General Fund summary row that prints it (in thousands):
+ * 'direct' (its General Fund line rounds to the summary), 'with-overhead' (General Fund + Overhead
+ * Charges to Other Funds rounds to it), 'admin-group' (one of the offices rolled into the
+ * "Administrative Departments" row), or 'internal-service' (no General Fund line; charged to funds instead).
+ */
+export interface DepartmentGeneralFundTie {
+  kind: 'direct' | 'with-overhead' | 'admin-group' | 'internal-service';
+  /** Present for 'direct' and 'with-overhead': the matching DepartmentLine id on the General Fund summary. */
+  summaryId?: string;
+}
+
+/** One department's operating budget: its funding sources, spending by category, and (where printed) service areas. */
+export interface DepartmentBudgetDetail {
+  id: string;
+  name: string;
+  /** Top-level General Fund department, or one of the 6 offices under Administrative Departments. */
+  group: 'department' | 'administrative';
+  year: number;
+  generalFundTie: DepartmentGeneralFundTie;
+  funding: {
+    lines: DepartmentFundingLine[];
+    total: DocRef & { amount: number };
+  };
+  categories: {
+    lines: DepartmentExpenseLine[];
+    total: DocRef & { amount: number };
+  };
+  /** Present on the 8 departments whose chapter prints a Major Service Area breakdown. */
+  serviceAreas?: {
+    lines: DepartmentExpenseLine[];
+    total: DocRef & { amount: number };
+  };
+}
+
+/** The hub page for the General Fund's "Administrative Departments" row: the 6 offices it names. */
+export interface AdminDepartmentsHub {
+  id: 'administrative-departments';
+  name: string;
+  /** Quotes the page naming the 6 constituent departments. */
+  description: DocRef;
+  /** Slugs of the 6 constituent offices, in document order. */
+  memberIds: string[];
+}
+
+/** Per-department operating details (Fremont), from the adopted budget's department chapters. */
+export interface DepartmentDetails {
+  year: number;
+  /** Printed footnote explaining Direct/Indirect Expense Allocation. */
+  allocationNote: StepNote;
+  adminHub?: AdminDepartmentsHub;
+  departments: DepartmentBudgetDetail[];
 }
 
 /** What a printed column is, in the City's word: an actual result, an estimate, or an adopted or proposed budget. */

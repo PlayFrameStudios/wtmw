@@ -11,6 +11,7 @@ import { numberFromIds } from '../source-numbers.ts';
 import { readTable, tieOut, type TableRow, type TableSpec } from '../tables.ts';
 import type { BudgetColumn, CityBudget, DocRef, Fact, RevenueLine, Source, SourceId, StepNote } from '../types.ts';
 import { SCHEMA_VERSION } from '../types.ts';
+import { buildDepartmentDetails, type DepartmentBudgetsSpec } from './departments.ts';
 
 export interface FremontDocuments {
   notes: CityBudget['notes'];
@@ -24,6 +25,8 @@ export interface FremontDocuments {
   glossary: { term: string; source: SourceId; page: number; definition: string; quote?: string }[];
   /** What the staffing count leaves out (#60), in the City's words: for the departments page. */
   staffingScope?: StepNote;
+  /** Each department's operating budget (#…): funding sources, categories and service areas, from the department chapters. */
+  departmentBudgets?: DepartmentBudgetsSpec;
 }
 
 /** The budget year: FY 2026/27, by the year it ends in. */
@@ -390,5 +393,7 @@ export function buildFremont(file: FremontDocuments, excerpts: Excerpts): { budg
     capitalPlan,
     pension,
   };
-  return { budget, errors };
+  const departments = buildDepartmentDetails(file.departmentBudgets, budget, excerpts);
+  errors.push(...departments.errors);
+  return { budget: departments.budget, errors };
 }
