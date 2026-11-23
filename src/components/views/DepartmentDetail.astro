@@ -1,0 +1,432 @@
+---
+/**
+ * One department's subpage (Fremont): where its money comes from, how it is spent by category,
+ * and its major service areas where the budget prints them — or the Administrative Departments
+ * hub for the six offices under that General Fund row. Built from departmentDetailView() and
+ * adminHubView() in src/lib/department-detail.ts, reusing the .db-* visual language of the
+ * Departments page. No client JS beyond the receipt drawer.
+ */
+import SourceChip from '../SourceChip.astro';
+import Sourced from '../Sourced.astro';
+import Base from '../../layouts/Base.astro';
+import type { DepartmentPageView } from '../../lib/department-detail';
+import type { City } from '../../lib/cities';
+import { shortMoney } from '../../lib/format';
+import { formatValue, type Figure } from '../../lib/receipts';
+
+interface Props {
+  city: City;
+  view: DepartmentPageView;
+}
+
+const { city, view } = Astro.props;
+const width = (v: number, max: number) => `${((Math.abs(v) / max) * 100).toFixed(3)}%`;
+const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'percent') : shortMoney(f.value));
+---
+
+<Base
+  title={`${view.name} · Departments · ${city.name}`}
+  city={city}
+  description={
+    view.kind === 'department'
+      ? `How ${view.name}'s ${view.yearLabel} operating budget is funded and spent${view.serviceAreas ? ', and what its major service areas cost' : ''}. Every number links to the public document it came from.`
+      : `The six administrative offices grouped under Administrative Departments on ${city.name}'s General Fund summary, and where their funding comes from. Every number links to the public document it came from.`
+  }
+>
+  <div class="db-page wrap">
+    <nav class="dd-back" aria-label="Department breadcrumb">
+      <a href={view.allDepartmentsHref}>← All departments</a>
+      {view.kind === 'department' && view.parent && (
+        <>
+          <span aria-hidden="true"> · </span>
+          <a href={view.parent.href}>← {view.parent.label}</a>
+        </>
+      )}
+    </nav>
+
+    {
+      view.kind === 'department' ? (
+        <>
+          <section class="db-intro">
+            <h1>{view.name}</h1>
+            <p class="dd-lede">
+              {
+                view.lede.map((f) =>
+                  f.figure ? (
+                    <>
+                      {f.text}
+                      <Sourced city={city} figure={f.figure}>
+                        {display(f.figure)}
+                      </Sourced>
+                    </>
+                  ) : (
+                    f.text
+                  ),
+                )
+              }
+            </p>
+          </section>
+
+          <section class="db-section" aria-labelledby="dd-funding">
+            <h2 id="dd-funding">Where the money comes from · {view.yearLabel}</h2>
+            <ol class="db-list" role="list">
+              {
+                view.funding.lines.map((l) => (
+                  <li class="db-row">
+                    <span class="db-name">{l.name}</span>
+                    <span class="db-amount num">
+                      <Sourced city={city} figure={l.figure}>
+                        {l.isZero ? '$0' : shortMoney(l.figure.value)}
+                      </Sourced>
+                    </span>
+                    <span class="db-per num">{l.sharePct}</span>
+                    <span class="db-bar" aria-hidden="true">
+                      <span style={`width:${width(l.figure.value, view.funding.max)};background:${view.color}`} />
+                    </span>
+                  </li>
+                ))
+              }
+            </ol>
+            <table class="db-sum">
+              <caption>Total funding, {view.yearLabel}</caption>
+              <tbody>
+                <tr class="db-total">
+                  <th scope="row">Totals</th>
+                  <td class="num">
+                    <Sourced city={city} figure={view.funding.total}>
+                      {shortMoney(view.funding.total.value)}
+                    </Sourced>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="db-section" aria-labelledby="dd-categories">
+            <h2 id="dd-categories">How it is spent by category · {view.yearLabel}</h2>
+            <p class="db-note">
+              {view.categories.allocationNote.text}
+              <SourceChip city={city} source={view.categories.allocationNote.cites[0].source} at={view.categories.allocationNote.cites[0]} also={view.categories.allocationNote.cites.slice(1)} />
+            </p>
+            <ol class="db-list" role="list">
+              {
+                view.categories.lines.map((l) => (
+                  <li class="db-row">
+                    <span class="db-name">{l.name}</span>
+                    <span class="db-amount num">
+                      <Sourced city={city} figure={l.figure}>
+                        {l.isZero ? '$0' : shortMoney(l.figure.value)}
+                      </Sourced>
+                    </span>
+                    <span class="db-per num">{l.sharePct}</span>
+                    <span class="db-bar" aria-hidden="true">
+                      <span style={`width:${width(l.figure.value, view.categories.max)};background:${view.color}`} />
+                    </span>
+                  </li>
+                ))
+              }
+            </ol>
+            <table class="db-sum">
+              <caption>Total spending by category, {view.yearLabel}</caption>
+              <tbody>
+                <tr class="db-total">
+                  <th scope="row">Totals</th>
+                  <td class="num">
+                    <Sourced city={city} figure={view.categories.total}>
+                      {shortMoney(view.categories.total.value)}
+                    </Sourced>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          {
+            view.serviceAreas && (
+              <section class="db-section" aria-labelledby="dd-service-areas">
+                <h2 id="dd-service-areas">How it is spent by major service area · {view.yearLabel}</h2>
+                <ol class="db-list" role="list">
+                  {
+                    view.serviceAreas.lines.map((l) => (
+                      <li class="db-row">
+                        <span class="db-name">{l.name}</span>
+                        <span class="db-amount num">
+                          <Sourced city={city} figure={l.figure}>
+                            {l.isZero ? '$0' : shortMoney(l.figure.value)}
+                          </Sourced>
+                        </span>
+                        <span class="db-per num">{l.sharePct}</span>
+                        <span class="db-bar" aria-hidden="true">
+                          <span style={`width:${width(l.figure.value, view.serviceAreas!.max)};background:${view.color}`} />
+                        </span>
+                      </li>
+                    ))
+                  }
+                </ol>
+                <table class="db-sum">
+                  <caption>Total by major service area, {view.yearLabel}</caption>
+                  <tbody>
+                    <tr class="db-total">
+                      <th scope="row">Totals</th>
+                      <td class="num">
+                        <Sourced city={city} figure={view.serviceAreas.total}>
+                          {shortMoney(view.serviceAreas.total.value)}
+                        </Sourced>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            )
+          }
+        </>
+      ) : (
+        <>
+          <section class="db-intro">
+            <h1>{view.name}</h1>
+            <p class="dd-lede">On {city.name}'s General Fund summary, the six administrative offices are one row: <Sourced city={city} figure={view.summary}>{shortMoney(view.summary.value)}</Sourced>.</p>
+            <p class="dd-quote">
+              “{view.description.quote}”
+              <SourceChip city={city} source={view.description.source} at={view.description} />
+            </p>
+          </section>
+
+          <section class="db-section" aria-labelledby="dd-offices">
+            <h2 id="dd-offices">The six offices</h2>
+            <p class="db-note">
+              Five of the six are General Fund offices; Information Technology Services is an internal service fund, charged across departments rather than included in that General Fund row.
+            </p>
+            <h3 class="dd-group">General Fund offices</h3>
+            <ol class="db-list" role="list">
+              {
+                view.generalFundOffices.map((o) => (
+                  <li class="db-row db-row--office">
+                    <span class="db-name"><span class="db-swatch" style={`background:${o.color}`} aria-hidden="true" /><a class="db-link" href={o.href}>{o.name}</a></span>
+                    <span class="db-amount num">
+                      <Sourced city={city} figure={o.total}>
+                        {shortMoney(o.total.value)}
+                      </Sourced>
+                    </span>
+                    <p class="db-provided">
+                      {
+                        o.note.map((f) =>
+                          f.figure ? (
+                            <>
+                              {f.text}
+                              <Sourced city={city} figure={f.figure}>
+                                {display(f.figure)}
+                              </Sourced>
+                            </>
+                          ) : (
+                            f.text
+                          ),
+                        )
+                      }
+                    </p>
+                  </li>
+                ))
+              }
+            </ol>
+            <h3 class="dd-group">Internal service fund</h3>
+            <ol class="db-list" role="list">
+              <li class="db-row db-row--office">
+                <span class="db-name"><span class="db-swatch" style={`background:${view.internalService.color}`} aria-hidden="true" /><a class="db-link" href={view.internalService.href}>{view.internalService.name}</a></span>
+                <span class="db-amount num">
+                  <Sourced city={city} figure={view.internalService.total}>
+                    {shortMoney(view.internalService.total.value)}
+                  </Sourced>
+                </span>
+                <p class="db-provided">
+                  {
+                    view.internalService.note.map((f) =>
+                      f.figure ? (
+                        <>
+                          {f.text}
+                          <Sourced city={city} figure={f.figure}>
+                            {display(f.figure)}
+                          </Sourced>
+                        </>
+                      ) : (
+                        f.text
+                      ),
+                    )
+                  }
+                </p>
+              </li>
+            </ol>
+          </section>
+        </>
+      )
+    }
+  </div>
+</Base>
+
+<style is:inline>
+  .dd-back {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    max-width: 52rem;
+    padding-top: 1.25rem;
+    font-size: 0.9375rem;
+  }
+  .dd-back a {
+    color: var(--bay);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .dd-back a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+  .dd-back a:focus-visible {
+    outline: 2px solid var(--bay);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .db-intro {
+    max-width: 44rem;
+    padding-block: clamp(2rem, 5vw, 3.5rem) 1.5rem;
+  }
+  .db-intro h1 {
+    margin: 0;
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: 1.1;
+  }
+  .dd-lede {
+    margin: 1.25rem 0 0;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+  .dd-quote {
+    margin: 0.75rem 0 0;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .db-section {
+    max-width: 52rem;
+    padding-block: 1rem 2rem;
+  }
+  .db-section h2 {
+    margin: 0 0 1rem;
+  }
+  .dd-group {
+    margin: 1.25rem 0 0.5rem;
+    font-size: 1rem;
+  }
+  .db-note {
+    max-width: 44rem;
+    margin: 0 0 1rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .db-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+  .db-row {
+    display: grid;
+    /* A fixed second column, so every row's bar ends at the same place. */
+    grid-template-columns: minmax(0, 1fr) 9.5rem;
+    grid-template-areas: 'name amount' 'bar per';
+    gap: 0.25rem 1rem;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .db-row--office {
+    grid-template-areas: 'name amount' 'note note';
+  }
+  .db-name {
+    grid-area: name;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-weight: 700;
+    min-width: 0;
+  }
+  .db-swatch {
+    flex: none;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 2px;
+  }
+  .db-link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--bay);
+    text-underline-offset: 0.18em;
+  }
+  .db-link:hover {
+    text-decoration-style: solid;
+  }
+  .db-link:focus-visible {
+    outline: 2px solid var(--bay);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  .db-amount {
+    grid-area: amount;
+    font-weight: 800;
+    text-align: right;
+  }
+  .db-per {
+    grid-area: per;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .db-bar {
+    grid-area: bar;
+    display: block;
+    height: 0.5rem;
+    border-radius: 0.25rem;
+    background: var(--rule);
+    overflow: hidden;
+  }
+  .db-bar > span {
+    display: block;
+    height: 100%;
+    background: var(--bay);
+  }
+  .db-provided {
+    grid-area: note;
+    max-width: 44rem;
+    margin: 0.25rem 0 0;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+  .db-sum {
+    width: 100%;
+    max-width: 30rem;
+    margin-top: 1.5rem;
+    border-collapse: collapse;
+  }
+  .db-sum caption {
+    margin-bottom: 0.5rem;
+    color: var(--muted);
+    font-weight: 700;
+    text-align: left;
+  }
+  .db-sum th,
+  .db-sum td {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+    font-weight: 400;
+  }
+  .db-sum td {
+    text-align: right;
+  }
+  .db-total th,
+  .db-total td {
+    border-bottom: 0;
+    border-top: 2px solid var(--ink);
+    font-weight: 800;
+  }
+</style>

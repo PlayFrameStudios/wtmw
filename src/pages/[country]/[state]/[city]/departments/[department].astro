@@ -1,0 +1,36 @@
+---
+/**
+ * A department's subpage (Fremont): its total operating budget, where its funding comes from,
+ * how it is spent by category, and its major service areas where the budget prints them — plus
+ * the Administrative Departments hub for the six offices under that General Fund row. Cities
+ * without per-department operating details (Berkeley, Lafayette) emit no routes here.
+ */
+import DepartmentDetail from '../../../../../components/views/DepartmentDetail.astro';
+import { budgetFor } from '../../../../../lib/budget';
+import { allCities, type City } from '../../../../../lib/cities';
+import { fy } from '../../../../../lib/city-settings';
+import { adminHubView, departmentDetailView } from '../../../../../lib/department-detail';
+import { fullNames } from '../../../../../lib/departments';
+import { familiesFor } from '../../../../../lib/families';
+
+export const getStaticPaths = () =>
+  allCities.flatMap((city) => {
+    const budget = budgetFor(city);
+    if (!budget?.departmentDetails) return [];
+    const slugs = [...budget.departmentDetails.departments.map((d) => d.id), 'administrative-departments'];
+    return slugs.map((department) => ({ params: { ...city.slug, department }, props: { city } }));
+  });
+
+const { city } = Astro.props as { city: City };
+const department = Astro.params.department!;
+const budget = budgetFor(city)!;
+const families = familiesFor(city, budget);
+const label = (year: number) => fy(city.budget.labels, year);
+const y = label(budget.departmentDetails!.year);
+const view =
+  department === 'administrative-departments'
+    ? adminHubView(city.path, budget, families, y)
+    : departmentDetailView(city.path, budget, families, fullNames(city.path, budget), department, y);
+---
+
+<DepartmentDetail city={city} view={view} />
