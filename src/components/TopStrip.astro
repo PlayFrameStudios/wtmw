@@ -25,12 +25,15 @@ const crumbs = city ? [city.slug.country, city.slug.state, city.slug.city] : [];
             {city && i === crumbs.length - 1 ? <a href={city.path}>{c}</a> : <span>{c}</span>}
           </>
         ))}
-        {page && (
-          <>
-            <span aria-hidden="true"> / </span>
-            <span>{page}</span>
-          </>
-        )}
+        {
+          page &&
+            page.split('/').map((segment, i, segments) => (
+              <>
+                <span aria-hidden="true"> / </span>
+                {i === segments.length - 1 ? <span>{segment}</span> : <a href={`${city?.path ?? ''}${segments.slice(0, i + 1).join('/')}/`}>{segment}</a>}
+              </>
+            ))
+        }
         {city && <span class="sep" aria-hidden="true"> · </span>}
       </span>
       {city && <span data-independence>Independent. Not affiliated with the {city.government}.</span>}

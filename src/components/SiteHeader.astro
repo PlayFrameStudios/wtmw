@@ -12,6 +12,9 @@ interface Props {
 
 const { city, sections = [] } = Astro.props;
 const here = Astro.url.pathname.replace(/\/?$/, '/');
+// "page" on the page itself; "true" (the bay underline) on a page under a section, e.g. a department
+// subpage under Departments. A city's overview is never "current" on its own subpages.
+const navCurrent = (href: string) => (href === here ? 'page' : city && href !== city.path && here.startsWith(href) ? 'true' : undefined);
 const links = city
   ? [
       { href: city.path, label: 'Overview' },
@@ -59,7 +62,7 @@ const choose = cities.length > 0 ? { href: '/#covered', label: 'Choose a city' }
       {
         links.map((l) => (
           <li>
-            <a href={l.href} aria-current={l.href === here ? 'page' : undefined}>
+            <a href={l.href} aria-current={navCurrent(l.href)}>
               {l.label}
             </a>
           </li>
@@ -97,7 +100,7 @@ const choose = cities.length > 0 ? { href: '/#covered', label: 'Choose a city' }
           {
             links.map((l) => (
               <li>
-                <a href={l.href} aria-current={l.href === here ? 'page' : undefined}>
+                <a href={l.href} aria-current={navCurrent(l.href)}>
                   {l.label}
                 </a>
               </li>
@@ -257,7 +260,7 @@ const choose = cities.length > 0 ? { href: '/#covered', label: 'Choose a city' }
   .links a:hover {
     color: var(--ink);
   }
-  .links a[aria-current='page'] {
+  .links a[aria-current] {
     color: var(--ink);
     font-weight: 700;
     border-bottom-color: var(--bay);
