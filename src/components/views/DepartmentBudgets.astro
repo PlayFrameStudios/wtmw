@@ -18,6 +18,7 @@ import { hasPage, type City } from '../../lib/cities';
 import { fy } from '../../lib/city-settings';
 import { coverageFor } from '../../lib/coverage';
 import { departmentBudgets } from '../../lib/department-budgets';
+import { departmentHref } from '../../lib/department-detail';
 import { fullNames, generalFundNoun } from '../../lib/departments';
 import { siteFaqHref } from '../../lib/faq';
 import { familiesFor } from '../../lib/families';
@@ -46,6 +47,8 @@ const width = (v: number, max: number) => `${((Math.abs(v) / max) * 100).toFixed
 const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 });
 // What staff cost (#65), after the positions: one city's figures only, each block on the basis it names.
 const costs = staffCostsView(budget, label);
+// Where a department's own operating-budget page lives, when this city has them (Fremont): by slug, or by printed staff name.
+const subpage = (id: string) => departmentHref(city.path, budget, id);
 ---
 
 <Base
@@ -97,7 +100,7 @@ const costs = staffCostsView(budget, label);
             <li class="db-row" id={r.id}>
               <span class="db-name">
                 <span class="db-swatch" style={`background:${r.color}`} aria-hidden="true" />
-                {r.name}
+                {subpage(r.id) ? <a class="db-link" href={subpage(r.id)}>{r.name}</a> : r.name}
               </span>
               <span class="db-amount num">
                 <Sourced city={city} figure={r.figure}>
@@ -186,7 +189,7 @@ const costs = staffCostsView(budget, label);
           <ol class="db-list" role="list">
             {p.staff.rows.map((r) => (
               <li class="db-row db-row--staff">
-                <span class="db-name">{r.name}</span>
+                <span class="db-name">{subpage(r.name) ? <a class="db-link" href={subpage(r.name)}>{r.name}</a> : r.name}</span>
                 <span class="db-amount num">
                   <Sourced city={city} figure={r.figure}>
                     {fte(r.figure.value)}
@@ -264,6 +267,20 @@ const costs = staffCostsView(budget, label);
     flex: none;
     width: 0.75rem;
     height: 0.75rem;
+    border-radius: 2px;
+  }
+  .db-link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--bay);
+    text-underline-offset: 0.18em;
+  }
+  .db-link:hover {
+    text-decoration-style: solid;
+  }
+  .db-link:focus-visible {
+    outline: 2px solid var(--bay);
+    outline-offset: 2px;
     border-radius: 2px;
   }
   .db-amount {
