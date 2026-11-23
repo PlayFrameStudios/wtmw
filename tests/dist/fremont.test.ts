@@ -40,7 +40,18 @@ describe('Fremont (built)', () => {
 
   it('offers its data and no workbook', () => {
     const files = readdirSync(join(dist, 'us/ca/fremont/data')).sort();
-    expect(files).toEqual(['budget.json', 'capital-plan.csv', 'general-fund-fy2027.csv', 'positions.csv', 'revenue.csv', 'source-usage.json', 'sources.csv']);
+    expect(files).toEqual([
+      'budget.json',
+      'capital-plan.csv',
+      'department-categories.csv',
+      'department-funding.csv',
+      'department-service-areas.csv',
+      'general-fund-fy2027.csv',
+      'positions.csv',
+      'revenue.csv',
+      'source-usage.json',
+      'sources.csv',
+    ]);
     expect(html('sources/')).not.toMatch(/workbook/i);
   });
 
@@ -78,8 +89,9 @@ describe('Fremont (built)', () => {
 
   it('the sources list names printed pages', () => {
     const t = text(html('sources/'));
-    // 19, 107, 112, 176, 184 and 188 are cited by the FAQ (#54); 33, by the staffing scope (#60); 40, by retiree health (#65); 36, by the 2002 bonds (#66).
-    expect(t).toMatch(/pp\. 19, 27, 28, 29, 32, 33, 34, 36, 39, 40, 65, 66, 67, 68, 71, 73, 75, 85, 87, 89, 107, 112, 114, 120, 137, 176, 184, 186, 188,/);
+    // 19, 107, 112, 176, 184 and 188 are cited by the FAQ (#54); 33, by the staffing scope (#60); 40, by retiree health (#65); 36, by the 2002 bonds (#66);
+    // 129-237, by the department budgets (Part 2).
+    expect(t).toMatch(/pp\. 19, 27, 28, 29, 32, 33, 34, 36, 39, 40, 65, 66, 67, 68, 71, 73, 75, 85, 87, 89, 107, 112, 114, 120, 129, 130, 133, 137, 138, 139, 142, 145, 154, 155, 158, 164, 168, 172, 173, 176, 179, 180, 184, 186, 187, 188, 198, 201, 204, 208, 212, 214, 219, 220, 223, 228, 229, 236, 237,/);
     // FUSD's budget report has four pages before its printed page 1 (#51).
     expect(t).toMatch(/Fremont Unified School District · June 24, 2026 · .* · pp\. 1, 13, 18/);
     expect(t).not.toMatch(/pp\. 33, 38/);
