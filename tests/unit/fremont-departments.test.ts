@@ -213,11 +213,72 @@ describe('Fremont department subpages: $ of every $100', () => {
     }
   });
 
-  it('departmentHref resolves the printed staff name, and is undefined without departmentDetails', () => {
-    expect(departmentHref(fremont.path, budget, 'police')).toBe('/us/ca/fremont/departments/police/');
+  it('departmentHref resolves every General Fund row and every printed staff name', () => {
+    const details = budget.departmentDetails!;
+    const slugs = new Set([...details.departments.map((d) => d.id), details.adminHub!.id]);
+    // The 10 rows in #db-depts: nine departments and the Administrative Departments hub.
+    const rows = budget.generalFund[0].lines.filter((l) => l.kind === 'department');
+    expect(rows).toHaveLength(10);
+    for (const row of rows) expect(departmentHref(fremont.path, budget, row.id), row.name).toBe(`/us/ca/fremont/departments/${row.id}/`);
+    // The 15 rows in #db-staff, by their printed names: "City Manager’s Office" → city-manager.
+    const staff = budget.staffing.byDepartment!;
+    expect(staff).toHaveLength(15);
+    for (const s of staff) {
+      const href = departmentHref(fremont.path, budget, s.name);
+      expect(href, s.name).toBeDefined();
+      expect(slugs.has(href!.split('/').at(-2)!), `${s.name} → ${href}`).toBe(true);
+    }
     expect(departmentHref(fremont.path, budget, 'City Manager’s Office')).toBe('/us/ca/fremont/departments/city-manager/');
+    // Without departmentDetails (Berkeley, Lafayette), nothing links to a subpage.
     const without = { ...budget, departmentDetails: undefined };
     expect(departmentHref(fremont.path, without, 'police')).toBeUndefined();
+    for (const s of staff) expect(departmentHref(fremont.path, without, s.name), s.name).toBeUndefined();
+  });
+
+  it('departmentDetailView covers all four General Fund ties, with and without major service areas', () => {
+    const details = budget.departmentDetails!;
+    const kind = (id: string) => details.departments.find((d) => d.id === id)!.generalFundTie.kind;
+    const ids = (k: string) => details.departments.filter((d) => d.generalFundTie.kind === k).map((d) => d.id);
+    expect(ids('direct')).toHaveLength(7);
+    expect(ids('with-overhead')).toEqual(['city-council', 'maintenance-operations']);
+    expect(ids('admin-group')).toHaveLength(5);
+    expect(ids('internal-service')).toEqual(['information-technology-services']);
+    expect(kind('police')).toBe('direct');
+    expect(kind('economic-development')).toBe('direct');
+
+    const withAreas = details.departments.filter((d) => d.serviceAreas).map((d) => d.id);
+    expect(withAreas).toEqual(['community-development', 'community-services', 'fire', 'human-services', 'maintenance-operations', 'police', 'city-manager', 'city-attorney']);
+
+    for (const d of details.departments) {
+      const v = view(d.id);
+      expect(v.kind, d.id).toBe('department');
+      expect(v.id, d.id).toBe(d.id);
+      expect(v.total.value, d.id).toBe(d.funding.total.amount);
+      // Funding is largest first, and every row has a share and a bar.
+      expect(v.funding.lines.map((l) => l.figure.value), d.id).toEqual([...d.funding.lines.map((l) => l.amount)].sort((a, b) => b - a));
+      for (const l of v.funding.lines) {
+        expect(l.barRatio, `${d.id} ${l.name}`).toBeGreaterThan(0);
+        expect(l.barRatio, `${d.id} ${l.name}`).toBeLessThanOrEqual(1);
+        expect(l.figure.tone, `${d.id} ${l.name}`).toBe('neutral');
+      }
+      // The four printed categories, in the City's order.
+      expect(v.categories.lines.map((l) => l.name), d.id).toEqual(['Salaries and Benefits', 'Operating Expenditures', 'Capital Expenditures', 'Direct/Indirect Expense Allocation']);
+      expect(v.categories.total.value, d.id).toBe(d.categories.total.amount);
+      expect(v.categories.allocationNote.cites.length, d.id).toBeGreaterThan(0);
+      // Service areas only where the chapter prints them, and they total the same budget.
+      expect(Boolean(v.serviceAreas), `${d.id} service areas`).toBe(Boolean(d.serviceAreas));
+      if (v.serviceAreas) expect(v.serviceAreas.total.value, d.id).toBe(v.total.value);
+      // Only the six administrative offices carry a parent link.
+      expect(Boolean(v.parent), d.id).toBe(d.group === 'administrative');
+    }
+    // A $0 category still renders as an accountable row.
+    expect(view('economic-development').categories.lines.find((l) => l.name === 'Capital Expenditures')!.isZero).toBe(true);
+    // The four ties say different things in the lede.
+    const lede = (id: string) => view(id).lede.map((f) => f.text + (f.figure ? `[${f.figure.value}]` : '')).join('');
+    expect(lede('economic-development')).toContain('all of it from the General Fund');
+    expect(lede('police')).toContain('comes from the General Fund');
+    expect(lede('city-council')).toContain('Together those two match the [898000]');
+    expect(lede('information-technology-services')).toContain('budgeted as an internal service fund');
   });
 
   it('the administrative offices carry their slice of the $23.6M row, and IT Services is the internal service fund', () => {

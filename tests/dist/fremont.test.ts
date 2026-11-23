@@ -16,7 +16,7 @@ const PAGES = ['', 'revenue/', 'reserves/', 'departments/', 'capital/', 'sources
 const html = (p: string) => readFileSync(join(dist, 'us/ca/fremont', p, 'index.html'), 'utf8');
 const text = (h: string) => h.replace(/<(script|style)[\s\S]*?<\/\1>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ');
 const decode = (s: string) => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-type Receipt = { kind: string; value?: string; sources: string[]; page?: number; quote?: string; column?: string; label?: string; tone?: string };
+type Receipt = { kind: string; value?: string; sources: string[]; page?: number; quote?: string; column?: string; label?: string; tone?: string; csv?: string };
 const receipts = (h: string) => [...h.matchAll(/data-receipt="([^"]*)"/g)].map((m) => JSON.parse(decode(m[1])) as Receipt);
 const figure = (p: string, label: RegExp) => {
   const found = receipts(html(p)).filter((r) => r.kind === 'figure' && label.test(r.label ?? ''));
@@ -256,5 +256,44 @@ describe('Fremont department subpages (built)', () => {
     expect(existsSync(join(dist, 'us/ca/fremont/departments/police/index.html'))).toBe(true);
     for (const c of ['berkeley', 'lafayette']) expect(existsSync(join(dist, `us/ca/${c}/departments/police`))).toBe(false);
     expect(existsSync(join(dist, 'test/cities/fixtureville/departments/police'))).toBe(false);
+  });
+
+  it('the Departments list links all 10 General Fund rows and all 15 staff rows to their subpages', () => {
+    const h = html('departments/');
+    const section = (id: string) => {
+      const start = h.indexOf(`id="${id}"`);
+      expect(start, id).toBeGreaterThan(0);
+      return h.slice(start, h.indexOf('</section>', start));
+    };
+    const depts = section('db-depts');
+    for (const row of b.generalFund[0].lines.filter((l) => l.kind === 'department')) expect(depts, row.name).toContain(`href="/us/ca/fremont/departments/${row.id}/"`);
+    // The staff list has its own names ("City Manager’s Office"), and every one resolves to a page.
+    const details = b.departmentDetails!;
+    const slugs = new Set([...details.departments.map((d) => d.id), details.adminHub!.id]);
+    const staffHrefs = [...section('db-staff').matchAll(/href="\/us\/ca\/fremont\/departments\/([a-z-]+)\/"/g)].map((m) => m[1]);
+    expect(staffHrefs).toHaveLength(b.staffing.byDepartment!.length);
+    expect(staffHrefs.length).toBe(15);
+    for (const id of staffHrefs) expect(slugs.has(id), id).toBe(true);
+    expect(staffHrefs).toContain('city-manager');
+  });
+
+  it('every figure on the subpages downloads a CSV that exists, and all three department tables are used', () => {
+    const dataDir = join(dist, 'us/ca/fremont/data');
+    const used = new Set<string>();
+    let n = 0;
+    for (const slug of SLUGS) {
+      for (const r of receipts(html(`departments/${slug}`))) {
+        if (r.kind !== 'figure') continue;
+        expect(r.csv, `${slug} ${r.label}`).toBeDefined();
+        const name = r.csv!.split('/').pop()!;
+        expect(existsSync(join(dataDir, name)), `${slug} ${r.label}: ${name}`).toBe(true);
+        used.add(name);
+        n++;
+      }
+    }
+    expect(n).toBeGreaterThan(100);
+    // The three department tables carry the funding, category and service-area rows; the hub's $23.6M
+    // summary row is the General Fund table's, so its receipt opens that download.
+    expect([...used].sort()).toEqual(['department-categories.csv', 'department-funding.csv', 'department-service-areas.csv', 'general-fund-fy2027.csv']);
   });
 });

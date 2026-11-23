@@ -77,8 +77,14 @@ test.describe('Fremont department subpages: navigation', () => {
     await expect(page).toHaveURL('/us/ca/fremont/departments/police/');
     await expect(page.locator('nav[aria-label="Main"] .links a[href="/us/ca/fremont/departments/"]')).toHaveAttribute('aria-current', 'true');
     await expect(page.locator('.dd-per100')).toContainText('$45.14 of every $100');
-    // The breadcrumb links back to all departments.
-    await expect(page.locator('nav[aria-label="Department breadcrumb"]').getByRole('link', { name: /All departments/ })).toHaveAttribute('href', '/us/ca/fremont/departments/');
+    // The top strip names both segments, and links "departments" back to the list.
+    await expect(page.locator('.strip .crumbs')).toContainText('departments / police');
+    await expect(page.locator('.strip .crumbs a[href="/us/ca/fremont/departments/"]')).toHaveText('departments');
+    // The breadcrumb goes back to all departments.
+    const back = page.locator('nav[aria-label="Department breadcrumb"]').getByRole('link', { name: /All departments/ });
+    await expect(back).toHaveAttribute('href', '/us/ca/fremont/departments/');
+    await back.click();
+    await expect(page).toHaveURL('/us/ca/fremont/departments/');
   });
 
   test('a funding-source figure opens its receipt at the right printed page, with a CSV', async ({ page }) => {
@@ -88,6 +94,8 @@ test.describe('Fremont department subpages: navigation', () => {
     await expect(d).toBeVisible();
     await expect(d.locator('.figure')).toHaveText('$129,087,241');
     await expect(d.getByText('p. 187 (page 193 of the PDF)')).toBeVisible();
+    // The link names the printed page and opens the PDF page (#page= counts PDF pages, not printed folios).
+    await expect(d.getByRole('link', { name: 'Open the PDF at page 187 ↗' })).toHaveAttribute('href', 'https://www.fremont.gov/home/showpublisheddocument/21162#page=193');
     await expect(d.getByRole('link', { name: 'CSV' })).toHaveAttribute('href', '/us/ca/fremont/data/department-funding.csv');
   });
 });

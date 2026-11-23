@@ -169,6 +169,25 @@ describe('"Used on" index', () => {
     expect(Object.keys(usage)).toHaveLength(57);
   });
 
+  it('folds a department subpage into the Departments row, and keeps a source only a subpage cites', () => {
+    const dist = mkdtempSync(join(tmpdir(), 'wtmw-depts-'));
+    const write = (path: string, body: string) => {
+      mkdirSync(join(dist, path, '..'), { recursive: true });
+      writeFileSync(join(dist, path), body);
+    };
+    write('us/ca/fremont/data/budget.json', JSON.stringify({ sources: [{ id: 'S1' }, { id: 'S9' }] }));
+    // The list page cites S1; so do both subpages.
+    write('us/ca/fremont/departments/index.html', '<button data-source-chip="S1"></button>');
+    write('us/ca/fremont/departments/police/index.html', '<button data-source-chip="S1"></button><button data-source-chip="S9"></button>');
+    write('us/ca/fremont/departments/fire/index.html', '<button data-source-chip="S1"></button>');
+    buildUsage(dist);
+    const usage = JSON.parse(readFileSync(join(dist, 'us/ca/fremont/data/source-usage.json'), 'utf8'));
+    // S1 is on the list page, so its subpages fold into one link: no wall of one link per department.
+    expect(usage.S1).toEqual([{ path: '/us/ca/fremont/departments/', label: 'Departments' }]);
+    // A source only the Police subpage cites is kept, with a label that names the page.
+    expect(usage.S9).toEqual([{ path: '/us/ca/fremont/departments/police/', label: 'Departments: Police' }]);
+  });
+
   it('labels chips on the Sources page as Methods, and fills "used on" placeholders', () => {
     const dist = mkdtempSync(join(tmpdir(), 'wtmw-dist-'));
     const write = (path: string, body: string) => {
