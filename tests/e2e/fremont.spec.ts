@@ -38,6 +38,86 @@ test.describe('Fremont receipts', () => {
   });
 });
 
+test.describe('Fremont department subpages: $ of every $100', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test('each page names its slice of every $100', async ({ page }) => {
+    await page.goto('/us/ca/fremont/departments/police/');
+    await expect(page.locator('.dd-per100')).toContainText('$45.14 of every $100 of General Fund department budgets · FY 2026/27');
+    await page.goto('/us/ca/fremont/departments/administrative-departments/');
+    await expect(page.locator('.dd-per100')).toContainText('$8.25 of every $100 of General Fund department budgets · FY 2026/27');
+    await page.goto('/us/ca/fremont/departments/finance/');
+    await expect(page.locator('.dd-per100')).toContainText('$2.78 of every $100');
+    await page.goto('/us/ca/fremont/departments/information-technology-services/');
+    await expect(page.locator('.dd-per100')).toContainText("Internal service fund — charged across departments' budgets rather than a separate slice of every $100 · FY 2026/27");
+  });
+
+  const SLUGS = [
+    'city-council', 'community-development', 'community-services', 'economic-development', 'fire', 'human-services',
+    'maintenance-operations', 'police', 'public-works', 'city-manager', 'city-attorney', 'city-clerk', 'finance',
+    'human-resources', 'information-technology-services', 'administrative-departments',
+  ];
+
+  for (const slug of SLUGS) {
+    test(`/us/ca/fremont/departments/${slug}/ does not scroll sideways`, async ({ page }) => {
+      await page.goto(`/us/ca/fremont/departments/${slug}/`);
+      const { sw, cw } = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth }));
+      expect(sw).toBeLessThanOrEqual(cw);
+    });
+  }
+});
+
+test.describe('Fremont department subpages: navigation', () => {
+  test.use({ viewport: { width: 1280, height: 900 } });
+
+  test('clicking a department from /departments/ lands on its subpage with Departments active', async ({ page }) => {
+    await page.goto('/us/ca/fremont/departments/');
+    // "Police" links to its subpage in both the departments list and the staff list; the first is the department's.
+    await page.locator('a[href="/us/ca/fremont/departments/police/"]').first().click();
+    await expect(page).toHaveURL('/us/ca/fremont/departments/police/');
+    await expect(page.locator('nav[aria-label="Main"] .links a[href="/us/ca/fremont/departments/"]')).toHaveAttribute('aria-current', 'true');
+    await expect(page.locator('.dd-per100')).toContainText('$45.14 of every $100');
+    // The breadcrumb links back to all departments.
+    await expect(page.locator('nav[aria-label="Department breadcrumb"]').getByRole('link', { name: /All departments/ })).toHaveAttribute('href', '/us/ca/fremont/departments/');
+  });
+
+  test('a funding-source figure opens its receipt at the right printed page, with a CSV', async ({ page }) => {
+    await page.goto('/us/ca/fremont/departments/police/');
+    await page.getByRole('button', { name: /^\$129\.1M, source: FY 2026\/27 Adopted Operating Budget$/ }).first().click();
+    const d = page.locator('dialog[data-receipt-dialog]');
+    await expect(d).toBeVisible();
+    await expect(d.locator('.figure')).toHaveText('$129,087,241');
+    await expect(d.getByText('p. 187 (page 193 of the PDF)')).toBeVisible();
+    await expect(d.getByRole('link', { name: 'CSV' })).toHaveAttribute('href', '/us/ca/fremont/data/department-funding.csv');
+  });
+});
+
+test.describe('Fremont department subpages: the Administrative Departments hub', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test('adds $19.8M General Fund and $3.8M overhead to the $23.6M row, and opens the two lines from each office', async ({ page }) => {
+    await page.goto('/us/ca/fremont/departments/administrative-departments/');
+    const rows = page.locator('.db-sum tr');
+    await expect(rows.filter({ hasText: 'General Fund, five offices' })).toContainText('$19.8M');
+    await expect(rows.filter({ hasText: 'Overhead charged to other funds' })).toContainText('+$3.8M');
+    await expect(rows.filter({ hasText: 'Administrative Departments, General Fund summary' })).toContainText('$23.6M');
+    // An office's figure is its slice of the row, not its all-funds total (City Attorney's is $18.1M with Risk Management).
+    const attorney = page.locator('.db-row--office', { hasText: 'City Attorney' });
+    await expect(attorney.locator('.db-amount')).toContainText('$3.2M');
+    await expect(attorney).toContainText('Its $18.1M all-funds total includes the $14.9M Risk Management internal service fund');
+    await attorney.getByRole('button', { name: /^\$3\.2M, source: FY 2026\/27 Adopted Operating Budget$/ }).click();
+    const d = dialog(page);
+    await expect(d).toBeVisible();
+    await expect(d.locator('.figure')).toHaveText('$3,155,917');
+    // The drawer adds the office's two lines, both counted in the $23.6M row.
+    const parts = d.locator('.built .part');
+    await expect(parts.nth(0)).toContainText('General Fund');
+    await expect(parts.nth(0)).toContainText('$2,574,950');
+    await expect(parts.nth(1)).toContainText('Overhead charges to other funds');
+    await expect(parts.nth(1)).toContainText('$580,967');
+  });
+});
+
 test.describe('Fremont at phone width', () => {
   test.use({ viewport: { width: 390, height: 844 }, isMobile: true });
 

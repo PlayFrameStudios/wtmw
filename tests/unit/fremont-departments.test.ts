@@ -13,6 +13,11 @@ import { buildCity, readDocuments } from '../../src/data/pipeline';
 import { splitRow } from '../../src/data/tables';
 import type { CityBudget } from '../../src/data/types';
 import { allCities } from '../../src/lib/cities';
+import { adminHubView, departmentDetailView, departmentHref } from '../../src/lib/department-detail';
+import { departmentBudgets } from '../../src/lib/department-budgets';
+import { fy } from '../../src/lib/city-settings';
+import { fullNames } from '../../src/lib/departments';
+import { familiesFor } from '../../src/lib/families';
 
 const root = join(import.meta.dirname, '../..');
 const dir = join(root, 'data/cities/us/ca/fremont');
@@ -163,6 +168,117 @@ describe('Fremont department budgets: each check, broken', () => {
     // Finance's General Fund line moves $1,000: the five offices no longer round to "Administrative Departments".
     const changed = edited(229, 'General Fund $6,545,566 82.4%', 'General Fund $6,546,566 82.4%');
     expect(errorsFor(file, changed)).toMatch(/administrative offices' .* doesn't round to the summary's 23,606,000/);
+  });
+});
+
+describe('Fremont department subpages: $ of every $100', () => {
+  let families: ReturnType<typeof familiesFor>;
+  let names: ReturnType<typeof fullNames>;
+  const y = 'FY 2026/27';
+  let view: (id: string) => ReturnType<typeof departmentDetailView>;
+  let hub: ReturnType<typeof adminHubView>;
+  beforeAll(() => {
+    families = familiesFor(fremont, budget);
+    names = fullNames(fremont.path, budget);
+    view = (id: string) => departmentDetailView(fremont.path, budget, families, names, id, y);
+    hub = adminHubView(fremont.path, budget, families, y);
+  });
+
+  it('each top-level department matches the Departments page $ of every $100, to the cent', () => {
+    const expected: Record<string, string> = {
+      police: '45.14', fire: '27.46', 'maintenance-operations': '13.59', 'human-services': '1.94',
+      'community-services': '1.14', 'public-works': '0.81', 'community-development': '0.80',
+      'economic-development': '0.56', 'city-council': '0.31',
+    };
+    for (const [id, txt] of Object.entries(expected)) {
+      expect(view(id).per100, id).toBeDefined();
+      expect(view(id).per100!.toFixed(2), id).toBe(txt);
+    }
+  });
+
+  it('the line names General Fund department budgets and the year', () => {
+    expect(view('police').per100Text).toBe('$45.14 of every $100 of General Fund department budgets · FY 2026/27');
+  });
+
+  it('matches the Departments page $ of every $100, so the two pages can never drift', () => {
+    const label = (y: number) => fy(fremont.budget.labels, y);
+    const byId = new Map(departmentBudgets(budget, families, names, label).rows.map((r) => [r.id, r.per100]));
+    for (const [id, txt] of Object.entries({
+      police: '45.14', fire: '27.46', 'maintenance-operations': '13.59', 'human-services': '1.94',
+      'community-services': '1.14', 'public-works': '0.81', 'community-development': '0.80',
+      'economic-development': '0.56', 'city-council': '0.31',
+    })) {
+      expect(view(id).per100!.toFixed(2), id).toBe(txt);
+      expect(view(id).per100!.toFixed(2), `${id} vs /departments/`).toBe(byId.get(id)!.toFixed(2));
+    }
+  });
+
+  it('departmentHref resolves the printed staff name, and is undefined without departmentDetails', () => {
+    expect(departmentHref(fremont.path, budget, 'police')).toBe('/us/ca/fremont/departments/police/');
+    expect(departmentHref(fremont.path, budget, 'City Manager’s Office')).toBe('/us/ca/fremont/departments/city-manager/');
+    const without = { ...budget, departmentDetails: undefined };
+    expect(departmentHref(fremont.path, without, 'police')).toBeUndefined();
+  });
+
+  it('the administrative offices carry their slice of the $23.6M row, and IT Services is the internal service fund', () => {
+    const offices: Record<string, string> = { finance: '2.78', 'human-resources': '1.99', 'city-manager': '1.98', 'city-attorney': '1.10', 'city-clerk': '0.41' };
+    for (const [id, txt] of Object.entries(offices)) {
+      expect(view(id).per100, id).toBeDefined();
+      expect(view(id).per100!.toFixed(2), id).toBe(txt);
+    }
+    expect(view('information-technology-services').per100).toBeUndefined();
+    expect(view('information-technology-services').per100Text).toContain('Internal service fund');
+    // The five offices together are the hub's $8.25 of every $100 (exact shares, before display rounding).
+    const sum = Object.keys(offices).reduce((a, id) => a + view(id).per100!, 0);
+    expect(sum).toBeCloseTo(hub.per100, 2);
+  });
+
+  it('the hub shows $8.25 of every $100 and lists each of the five offices under it', () => {
+    expect(hub.per100).toBeDefined();
+    expect(hub.per100!.toFixed(2)).toBe('8.25');
+    expect(hub.per100Text).toBe('$8.25 of every $100 of General Fund department budgets · FY 2026/27');
+    const office = (id: string) => hub.generalFundOffices.find((o: { id: string }) => o.id === id)!;
+    expect(office('finance').per100!.toFixed(2)).toBe('2.78');
+    expect(hub.internalService.per100).toBeUndefined();
+  });
+
+  it('the hub adds the five offices to the General Fund row: $19.8M General Fund + $3.8M overhead = $23.6M', () => {
+    expect(hub.generalFundOnly.value).toBe(19_767_060);
+    expect(hub.overheadOnly.value).toBe(3_838_722);
+    expect(hub.generalFundOnly.value + hub.overheadOnly.value).toBe(23_605_782);
+    expect(hub.summary.value).toBe(23_606_000);
+    expect(Math.round((hub.generalFundOnly.value + hub.overheadOnly.value) / 1000) * 1000).toBe(hub.summary.value);
+    // Biggest slice of the row first, as the page lists them.
+    expect(hub.generalFundOffices.map((o) => o.id)).toEqual(['finance', 'human-resources', 'city-manager', 'city-attorney', 'city-clerk']);
+    const expected: Record<string, number> = {
+      finance: 7_940_882,
+      'human-resources': 5_684_069,
+      'city-manager': 5_666_327,
+      'city-attorney': 3_155_917,
+      'city-clerk': 1_158_587,
+    };
+    for (const [id, amount] of Object.entries(expected)) {
+      const o = hub.generalFundOffices.find((x) => x.id === id)!;
+      // The figure beside each office is its General Fund + overhead lines, never its all-funds total.
+      expect(o.generalFundRow!.value, id).toBe(amount);
+      expect(o.generalFundRow!.parts!.reduce((a, p) => a + p.value, 0), `${id} parts`).toBe(amount);
+    }
+    expect(hub.generalFundMax).toBe(7_940_882);
+    // The two sums' parts name every office, so the drawer shows the sum a reader can check.
+    expect(hub.generalFundOnly.parts!.map((p) => p.label)).toEqual(['Finance', 'Human Resources', 'City Manager', 'City Attorney', 'City Clerk']);
+    expect(hub.generalFundOnly.parts!.reduce((a, p) => a + p.value, 0)).toBe(hub.generalFundOnly.value);
+    expect(hub.overheadOnly.parts!.reduce((a, p) => a + p.value, 0)).toBe(hub.overheadOnly.value);
+    expect(hub.internalService.generalFundRow).toBeUndefined();
+  });
+
+  it('each General Fund office page says its two lines are what counts toward the row', () => {
+    const lede = (id: string) => view(id).lede.map((f) => f.text + (f.figure ? `[${f.figure.value}]` : '')).join('');
+    // Clerk, Finance and Human Resources are only General Fund + overhead, so their lede is the row in two parts.
+    expect(lede('finance')).toContain('Both count toward the [23606000] Administrative Departments row');
+    expect(lede('city-clerk')).toContain('Both count toward the [23606000] Administrative Departments row');
+    // City Manager and City Attorney carry money outside the row, so the share of the row is stated before it.
+    expect(lede('city-manager')).toContain('[5666327] toward the [23606000] Administrative Departments row');
+    expect(lede('city-attorney')).toContain('[3155917] toward the [23606000] Administrative Departments row');
   });
 });
 

@@ -27,6 +27,16 @@ export const cities = [
 
 /** Every city page, fixtures included. */
 export const cityRoutes = cities.flatMap((c) => c.routes);
+/**
+ * Fremont's department subpages, representative members of its 16 (#43). They're routes, not
+ * members of a page set, so they're listed here for the a11y, overflow and receipt suites.
+ */
+export const departmentSubpages = [
+  '/us/ca/fremont/departments/police/',
+  '/us/ca/fremont/departments/community-development/',
+  '/us/ca/fremont/departments/administrative-departments/',
+  '/us/ca/fremont/departments/information-technology-services/',
+];
 /** The cities the landing page lists, as it orders them: published (not fixtures, not drafts), alphabetical (#49). */
 export const listed = cities.filter((c) => !c.fixture && !c.draft).sort((a, b) => a.name.localeCompare(b.name));
 export const berkeley = cities.find((c) => c.path === '/us/ca/berkeley/')!;

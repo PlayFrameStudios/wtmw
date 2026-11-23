@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
-import { berkeley, cityRoutes, fixture } from './cities';
+import { berkeley, cityRoutes, departmentSubpages, fixture } from './cities';
 
-const ROUTES = ['/', '/faq/', ...cityRoutes, '/us/ca/nowhere/'];
+const ROUTES = ['/', '/faq/', ...cityRoutes, ...departmentSubpages, '/us/ca/nowhere/'];
 
 /**
  * Elements whose right edge passes the layout viewport, plus the document's own overflow.

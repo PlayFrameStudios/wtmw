@@ -16,7 +16,7 @@ const PAGES = ['', 'revenue/', 'reserves/', 'departments/', 'capital/', 'sources
 const html = (p: string) => readFileSync(join(dist, 'us/ca/fremont', p, 'index.html'), 'utf8');
 const text = (h: string) => h.replace(/<(script|style)[\s\S]*?<\/\1>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ');
 const decode = (s: string) => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-type Receipt = { kind: string; value?: string; sources: string[]; page?: number; quote?: string; column?: string; label?: string };
+type Receipt = { kind: string; value?: string; sources: string[]; page?: number; quote?: string; column?: string; label?: string; tone?: string };
 const receipts = (h: string) => [...h.matchAll(/data-receipt="([^"]*)"/g)].map((m) => JSON.parse(decode(m[1])) as Receipt);
 const figure = (p: string, label: RegExp) => {
   const found = receipts(html(p)).filter((r) => r.kind === 'figure' && label.test(r.label ?? ''));
@@ -164,5 +164,97 @@ describe('Fremont (built)', () => {
     expect(g).toContain('The General Fund Contingency Reserve is intended to mitigate the effects of unanticipated situations');
     expect(g).toContain('historical experience of under-spending total allocated resources, primarily due to salary savings from vacant positions');
     expect(g).not.toMatch(/6\.[67]%/);
+  });
+
+  it('each department subpage and the hub name their slice of every $100 of General Fund department budgets', () => {
+    const sub = (slug: string) => text(readFileSync(join(dist, 'us/ca/fremont/departments', slug, 'index.html'), 'utf8'));
+    const expected: Record<string, string> = {
+      police: '$45.14', fire: '$27.46', 'maintenance-operations': '$13.59', 'human-services': '$1.94',
+      'community-services': '$1.14', 'public-works': '$0.81', 'community-development': '$0.80',
+      'economic-development': '$0.56', 'city-council': '$0.31', finance: '$2.78',
+      'human-resources': '$1.99', 'city-manager': '$1.98', 'city-attorney': '$1.10', 'city-clerk': '$0.41',
+    };
+    for (const [slug, value] of Object.entries(expected)) {
+      expect(sub(slug), slug).toContain(`${value} of every $100 of General Fund department budgets · FY 2026/27`);
+    }
+    // The hub shows the $23.6M office row as one line, then splits it across the five General Fund offices.
+    expect(sub('administrative-departments')).toContain('$8.25 of every $100 of General Fund department budgets · FY 2026/27');
+    for (const v of ['$2.78', '$1.99', '$1.98', '$1.10', '$0.41']) expect(sub('administrative-departments'), v).toContain(`${v} of every $100`);
+  });
+
+  it('Information Technology Services is the internal service fund, not a slice of every $100', () => {
+    const t = text(readFileSync(join(dist, 'us/ca/fremont/departments/information-technology-services/index.html'), 'utf8'));
+    expect(t).toContain("Internal service fund — charged across departments' budgets rather than a separate slice of every $100 · FY 2026/27");
+    expect(t).not.toMatch(/\$0\.00 of every \$100|\$6\.12 of every \$100/);
+  });
+
+  it('the Administrative Departments hub adds the five offices to the $23.6M row: $19.8M General Fund plus $3.8M overhead', () => {
+    const h = html('departments/administrative-departments');
+    const t = text(h);
+    expect(t).toContain('That row is their $19.8M of General Fund money plus $3.8M in overhead charged to other funds');
+    // Each office shows its slice of the row (General Fund + overhead), not its all-funds total.
+    expect(t).toContain('Finance $7.9M');
+    expect(t).toContain('Human Resources $5.7M');
+    expect(t).toContain('City Manager $5.7M');
+    expect(t).toContain('City Attorney $3.2M');
+    expect(t).toContain('City Clerk $1.2M');
+    // City Manager's and City Attorney's money outside the row is named, so their all-funds totals still reconcile.
+    expect(t).toContain('Its $6.0M all-funds total adds $311K in Homeless Services funding outside the General Fund row.');
+    expect(t).toContain('Its $18.1M all-funds total includes the $14.9M Risk Management internal service fund outside the General Fund row.');
+    // The table is the sum a reader can check.
+    expect(t).toContain('General Fund, five offices $19.8M');
+    expect(t).toContain('Overhead charged to other funds +$3.8M');
+    expect(t).toContain('Administrative Departments, General Fund summary $23.6M');
+    expect(t).toContain("add up to $23,605,782");
+    // The receipts carry whole dollars, and the parts add to the figure (figureReceipt() would throw otherwise).
+    const rows = receipts(h);
+    const at = (label: string) => rows.find((r) => r.kind === 'figure' && r.label === label);
+    expect(at('City Attorney, FY 2026/27: General Fund and overhead charges to other funds')?.value).toBe('$3,155,917');
+    expect(at('Administrative Departments, FY 2026/27: General Fund, five offices')?.value).toBe('$19,767,060');
+    expect(at('Administrative Departments, FY 2026/27: overhead charges to other funds, five offices')?.value).toBe('$3,838,722');
+  });
+});
+
+describe('Fremont department subpages (built)', () => {
+  const SLUGS = [
+    'city-council', 'community-development', 'community-services', 'economic-development', 'fire', 'human-services',
+    'maintenance-operations', 'police', 'public-works', 'city-manager', 'city-attorney', 'city-clerk', 'finance',
+    'human-resources', 'information-technology-services', 'administrative-departments',
+  ];
+  const pages = Object.fromEntries(b.sources.map((s) => [s.id, excerpt(s.id)])) as Record<string, Record<string, string>>;
+  const norm = (s: string) => s.replace(/\s+/g, ' ').trim();
+
+  it('all 16 subpages build, link from /departments/, and carry no deficit-plan copy or red/gold tones', () => {
+    const listing = html('departments/');
+    for (const slug of SLUGS) {
+      const h = html(`departments/${slug}`);
+      expect(h, slug).toContain('of every $100');
+      expect(listing, slug).toContain(`href="/us/ca/fremont/departments/${slug}/"`);
+      expect(text(h), slug).not.toMatch(/before cuts|sales tax vote|Measure |workbook/);
+      // No money-short or one-time-money tones: these pages explain operating budgets, not deficits or reserves.
+      const figures = receipts(h).filter((r) => r.kind === 'figure');
+      expect(figures.length, slug).toBeGreaterThan(5);
+      for (const r of figures) expect(r.tone, `${slug} ${r.label}`).toBe('neutral');
+    }
+  });
+
+  it('every subpage figure cites a source, and that source’s excerpt holds its quote', () => {
+    let n = 0;
+    for (const slug of SLUGS) {
+      for (const r of receipts(html(`departments/${slug}`))) {
+        expect(b.sources.map((s) => s.id), `${slug} ${r.label}`).toContain(r.sources[0]);
+        if (r.page === undefined) continue;
+        n++;
+        expect(norm(pages[r.sources[0]][String(r.page)] ?? ''), `${slug} ${r.label}`).toContain(norm(r.quote!));
+      }
+    }
+    expect(n).toBeGreaterThan(100);
+  });
+
+  it('no city without departmentDetails emits a department subpage', () => {
+    // Liveness: Fremont's sibling exists, so a fixture/other-city directory would mean the route leaked.
+    expect(existsSync(join(dist, 'us/ca/fremont/departments/police/index.html'))).toBe(true);
+    for (const c of ['berkeley', 'lafayette']) expect(existsSync(join(dist, `us/ca/${c}/departments/police`))).toBe(false);
+    expect(existsSync(join(dist, 'test/cities/fixtureville/departments/police'))).toBe(false);
   });
 });
