@@ -21,6 +21,7 @@ interface Props {
 
 const { city, view } = Astro.props;
 const width = (v: number, max: number) => `${((Math.abs(v) / max) * 100).toFixed(3)}%`;
+const dollars = (v: number) => `$${v.toLocaleString('en-US')}`;
 const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'percent') : shortMoney(f.value));
 ---
 
@@ -30,7 +31,7 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
   description={
     view.kind === 'department'
       ? `How ${view.name}'s ${view.yearLabel} operating budget is funded and spent${view.serviceAreas ? ', and what its major service areas cost' : ''}. Every number links to the public document it came from.`
-      : `The six administrative offices grouped under Administrative Departments on ${city.name}'s General Fund summary, and where their funding comes from. Every number links to the public document it came from.`
+      : `The five General Fund offices grouped under Administrative Departments on ${city.name}'s General Fund summary, their share of that row, and the internal service fund budgeted alongside them. Every number links to the public document it came from.`
   }
 >
   <div class="db-page wrap">
@@ -49,6 +50,10 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
         <>
           <section class="db-intro">
             <h1>{view.name}</h1>
+            <p class="dd-per100 num">
+              <span class="db-swatch" style={`background:${view.color}`} aria-hidden="true" />
+              <span>{view.per100Text}</span>
+            </p>
             <p class="dd-lede">
               {
                 view.lede.map((f) =>
@@ -184,7 +189,13 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
         <>
           <section class="db-intro">
             <h1>{view.name}</h1>
-            <p class="dd-lede">On {city.name}'s General Fund summary, the six administrative offices are one row: <Sourced city={city} figure={view.summary}>{shortMoney(view.summary.value)}</Sourced>.</p>
+            <p class="dd-per100 num">
+              <span class="db-swatch" style={`background:${view.color}`} aria-hidden="true" />
+              <span>{view.per100Text}</span>
+            </p>
+            <p class="dd-lede">
+              On {city.name}'s General Fund summary, five of the six administrative offices share one row: <Sourced city={city} figure={view.summary}>{shortMoney(view.summary.value)}</Sourced>. That row is their <Sourced city={city} figure={view.generalFundOnly}>{shortMoney(view.generalFundOnly.value)}</Sourced> of General Fund money plus <Sourced city={city} figure={view.overheadOnly}>{shortMoney(view.overheadOnly.value)}</Sourced> in overhead charged to other funds, rounded to the nearest thousand.
+            </p>
             <p class="dd-quote">
               “{view.description.quote}”
               <SourceChip city={city} source={view.description.source} at={view.description} />
@@ -192,9 +203,9 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
           </section>
 
           <section class="db-section" aria-labelledby="dd-offices">
-            <h2 id="dd-offices">The six offices</h2>
+            <h2 id="dd-offices">The five General Fund offices</h2>
             <p class="db-note">
-              Five of the six are General Fund offices; Information Technology Services is an internal service fund, charged across departments rather than included in that General Fund row.
+              These five offices make up the Administrative Departments row. Each one's General Fund line and its overhead charges to other funds both count toward that row, so the amount beside each office below is the two together, not its all-funds total.
             </p>
             <h3 class="dd-group">General Fund offices</h3>
             <ol class="db-list" role="list">
@@ -203,10 +214,16 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
                   <li class="db-row db-row--office">
                     <span class="db-name"><span class="db-swatch" style={`background:${o.color}`} aria-hidden="true" /><a class="db-link" href={o.href}>{o.name}</a></span>
                     <span class="db-amount num">
-                      <Sourced city={city} figure={o.total}>
-                        {shortMoney(o.total.value)}
+                      <Sourced city={city} figure={o.generalFundRow!}>
+                        {shortMoney(o.generalFundRow!.value)}
                       </Sourced>
                     </span>
+                    <span class="db-bar" aria-hidden="true">
+                      <span style={`width:${width(o.gfPlusOverhead, view.generalFundMax)};background:${o.color}`} />
+                    </span>
+                    {o.per100 !== undefined && (
+                      <span class="db-per num">${o.per100.toFixed(2)} of every $100</span>
+                    )}
                     <p class="db-provided">
                       {
                         o.note.map((f) =>
@@ -227,6 +244,38 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
                 ))
               }
             </ol>
+            <table class="db-sum">
+              <caption>How the five offices make up the row, {view.yearLabel}</caption>
+              <tbody>
+                <tr>
+                  <th scope="row">General Fund, five offices</th>
+                  <td class="num">
+                    <Sourced city={city} figure={view.generalFundOnly}>
+                      {shortMoney(view.generalFundOnly.value)}
+                    </Sourced>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Overhead charged to other funds</th>
+                  <td class="num">
+                    <Sourced city={city} figure={view.overheadOnly}>
+                      +{shortMoney(view.overheadOnly.value)}
+                    </Sourced>
+                  </td>
+                </tr>
+                <tr class="db-total">
+                  <th scope="row">Administrative Departments, General Fund summary</th>
+                  <td class="num">
+                    <Sourced city={city} figure={view.summary}>
+                      {shortMoney(view.summary.value)}
+                    </Sourced>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="db-note">
+              The General Fund summary prints its row in thousands, so it reads {shortMoney(view.summary.value)} where the offices' own pages add up to {dollars(view.generalFundOnly.value + view.overheadOnly.value)}.
+            </p>
             <h3 class="dd-group">Internal service fund</h3>
             <ol class="db-list" role="list">
               <li class="db-row db-row--office">
@@ -299,6 +348,20 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
     font-size: 1.125rem;
     line-height: 1.6;
   }
+  .dd-per100 {
+    /* A color swatch that must not orphan onto its own line when the line wraps. */
+    display: block;
+    margin: 0.75rem 0 0;
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .dd-per100 .db-swatch {
+    display: inline-block;
+    vertical-align: -0.08em;
+    margin-right: 0.5rem;
+  }
   .dd-quote {
     margin: 0.75rem 0 0;
     color: var(--muted);
@@ -339,6 +402,9 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
   }
   .db-row--office {
     grid-template-areas: 'name amount' 'note note';
+  }
+  .db-row--office:has(.db-bar) {
+    grid-template-areas: 'name amount' 'bar per' 'note note';
   }
   .db-name {
     grid-area: name;
