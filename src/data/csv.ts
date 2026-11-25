@@ -71,6 +71,36 @@ function documentTables(b: CityBudget): CsvTable[] {
           },
         ]
       : []),
+    // Fremont's department budgets: every figure's row keeps the page and line it was read from.
+    ...(b.departmentDetails
+      ? [
+          {
+            name: 'department-funding',
+            columns: withDoc(['departmentId', 'department', 'name', 'amount', 'share']),
+            rows: b.departmentDetails.departments.flatMap((d) => [
+              ...d.funding.lines.map((l) => ({ departmentId: d.id, department: d.name, name: l.name, amount: l.amount, share: l.share, source: l.source, page: l.page, quote: l.quote })),
+              { departmentId: d.id, department: d.name, ...d.funding.total, name: 'Total', share: 1 },
+            ]),
+          },
+          {
+            name: 'department-categories',
+            // `column` names the printed column each amount is read from ("FY 2026/27 Adopted"): a row's quote holds five years.
+            columns: withDoc(['departmentId', 'department', 'id', 'name', 'amount', 'column']),
+            rows: b.departmentDetails.departments.flatMap((d) => [
+              ...d.categories.lines.map((l) => ({ departmentId: d.id, department: d.name, ...l })),
+              { departmentId: d.id, department: d.name, id: 'total', name: 'Totals', ...d.categories.total },
+            ]),
+          },
+          {
+            name: 'department-service-areas',
+            columns: withDoc(['departmentId', 'department', 'id', 'name', 'amount', 'column']),
+            rows: b.departmentDetails.departments.flatMap((d) => [
+              ...(d.serviceAreas?.lines ?? []).map((l) => ({ departmentId: d.id, department: d.name, ...l })),
+              ...(d.serviceAreas ? [{ departmentId: d.id, department: d.name, id: 'total', name: 'Totals', ...d.serviceAreas.total }] : []),
+            ]),
+          },
+        ]
+      : []),
     {
       name: 'sources',
       columns: ['id', 'number', 'type', 'publisher', 'title', 'committee', 'date', 'url', 'pageOffset', 'usedFor'],

@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
 import { openAt } from '../../src/lib/open-at';
 import type { Receipt } from '../../src/lib/receipts';
-import { cityRoutes } from './cities';
+import { cityRoutes, departmentSubpages } from './cities';
 
 // #30: every receipt on every page, opened for real: the drawer's PDF links carry the quote's page.
-const ROUTES = ['/', ...cityRoutes];
+const ROUTES = ['/', ...cityRoutes, ...departmentSubpages];
 test.use({ viewport: { width: 1440, height: 900 } });
 
 for (const route of ROUTES) {

@@ -5,19 +5,21 @@
  * positions, by department where the budget lists them, with what FTE means (#60). Every number from
  * departmentBudgets() in src/lib/department-budgets.ts.
  * A city with a deficit plan (#61) shows its baseline before the proposed cuts, and links to who's being asked to
- * cut, a section of The Gap. Styles are inline, as they were when this was one of two views.
+ * cut, a section of The Gap. The list/totals styles are shared with the department subpages (src/styles/departments.css).
  */
 import CitedText from '../CitedText.astro';
 import SourceChip from '../SourceChip.astro';
 import Sourced from '../Sourced.astro';
 import StaffCosts from '../StaffCosts.astro';
 import Base from '../../layouts/Base.astro';
+import '../../styles/departments.css';
 import { hasGapPlan } from '../../data/types';
 import { budgetFor } from '../../lib/budget';
 import { hasPage, type City } from '../../lib/cities';
 import { fy } from '../../lib/city-settings';
 import { coverageFor } from '../../lib/coverage';
 import { departmentBudgets } from '../../lib/department-budgets';
+import { departmentHref } from '../../lib/department-detail';
 import { fullNames, generalFundNoun } from '../../lib/departments';
 import { siteFaqHref } from '../../lib/faq';
 import { familiesFor } from '../../lib/families';
@@ -46,6 +48,8 @@ const width = (v: number, max: number) => `${((Math.abs(v) / max) * 100).toFixed
 const fte = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 });
 // What staff cost (#65), after the positions: one city's figures only, each block on the basis it names.
 const costs = staffCostsView(budget, label);
+// Where a department's own operating-budget page lives, when this city has them (Fremont): by slug, or by printed staff name.
+const subpage = (id: string) => departmentHref(city.path, budget, id);
 ---
 
 <Base
@@ -97,7 +101,7 @@ const costs = staffCostsView(budget, label);
             <li class="db-row" id={r.id}>
               <span class="db-name">
                 <span class="db-swatch" style={`background:${r.color}`} aria-hidden="true" />
-                {r.name}
+                {subpage(r.id) ? <a class="db-link" href={subpage(r.id)}>{r.name}</a> : r.name}
               </span>
               <span class="db-amount num">
                 <Sourced city={city} figure={r.figure}>
@@ -186,7 +190,7 @@ const costs = staffCostsView(budget, label);
           <ol class="db-list" role="list">
             {p.staff.rows.map((r) => (
               <li class="db-row db-row--staff">
-                <span class="db-name">{r.name}</span>
+                <span class="db-name">{subpage(r.name) ? <a class="db-link" href={subpage(r.name)}>{r.name}</a> : r.name}</span>
                 <span class="db-amount num">
                   <Sourced city={city} figure={r.figure}>
                     {fte(r.figure.value)}
@@ -220,87 +224,11 @@ const costs = staffCostsView(budget, label);
     font-size: 1.125rem;
     line-height: 1.6;
   }
-  .db-section {
-    max-width: 52rem;
-    padding-block: 1rem 2rem;
-  }
-  .db-section h2 {
-    margin: 0 0 1rem;
-  }
-  .db-note {
-    max-width: 44rem;
-    margin: 0 0 1rem;
-    color: var(--muted);
-    line-height: 1.55;
-  }
-  .db-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-top: 1px solid var(--rule);
-  }
-  .db-row {
-    display: grid;
-    /* A fixed second column, so every row's bar ends at the same place. */
-    grid-template-columns: minmax(0, 1fr) 9.5rem;
-    grid-template-areas: 'name amount' 'bar per';
-    gap: 0.25rem 1rem;
-    align-items: center;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--rule);
-  }
   .db-row--staff {
     grid-template-areas: 'name amount' 'bar bar';
   }
-  .db-name {
-    grid-area: name;
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    font-weight: 700;
-    min-width: 0;
-  }
-  .db-swatch {
-    flex: none;
-    width: 0.75rem;
-    height: 0.75rem;
-    border-radius: 2px;
-  }
-  .db-amount {
-    grid-area: amount;
-    font-weight: 800;
-    text-align: right;
-  }
-  .db-per {
-    grid-area: per;
-    color: var(--muted);
-    font-size: 0.8125rem;
-    text-align: right;
-    white-space: nowrap;
-  }
-  .db-bar {
-    grid-area: bar;
-    display: block;
-    height: 0.5rem;
-    border-radius: 0.25rem;
-    background: var(--rule);
-    overflow: hidden;
-  }
-  .db-bar > span {
-    display: block;
-    height: 100%;
-    background: var(--bay);
-  }
   .db-row:has(.db-provided) {
     grid-template-areas: 'name amount' 'bar per' 'note note';
-  }
-  .db-provided {
-    grid-area: note;
-    max-width: 44rem;
-    margin: 0.25rem 0 0;
-    color: var(--muted);
-    font-size: 0.9375rem;
-    line-height: 1.55;
   }
   /* A service someone else provides: no square, no bar, no figure (#59). */
   .db-row.db-row--outside {
@@ -313,33 +241,5 @@ const costs = staffCostsView(budget, label);
   }
   .db-row--outside .db-amount {
     font-size: 0.875rem;
-  }
-  .db-sum {
-    width: 100%;
-    max-width: 30rem;
-    margin-top: 1.5rem;
-    border-collapse: collapse;
-  }
-  .db-sum caption {
-    margin-bottom: 0.5rem;
-    color: var(--muted);
-    font-weight: 700;
-    text-align: left;
-  }
-  .db-sum th,
-  .db-sum td {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--rule);
-    text-align: left;
-    font-weight: 400;
-  }
-  .db-sum td {
-    text-align: right;
-  }
-  .db-total th,
-  .db-total td {
-    border-bottom: 0;
-    border-top: 2px solid var(--ink);
-    font-weight: 800;
   }
 </style>

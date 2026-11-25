@@ -99,6 +99,13 @@ describe('figure receipts', () => {
     expect(() => figureReceipt(budget, city, { ...figure, related: ['S99'] }, page)).toThrow(/unknown source S99/);
   });
 
+  it('keeps the other pages a figure rests on, and refuses an unknown one there too', () => {
+    const r = figureReceipt(budget, city, { ...figure, also: [{ source: 'S1', page: 9, quote: 'B' }] }, page);
+    expect(r.also).toEqual([{ source: 'S1', page: 9, quote: 'B' }]);
+    expect(r.citation).toMatch(/^Also: .*\(p\. 9\)\.\n"B"/m);
+    expect(() => figureReceipt(budget, city, { ...figure, also: [{ source: 'S99' as never, page: 9 }] }, page)).toThrow(/unknown source S99/);
+  });
+
   it('lists every source of a figure that combines several', () => {
     const fy2021 = budget.personnelAndPension.unfundedLiabilities.find((l) => l.asOf === 'FY2021')!;
     const combined = figureReceipt(budget, city, { value: fy2021.amount, label: 'Unfunded liabilities, FY2021', ref: fy2021 }, page);
@@ -167,6 +174,25 @@ describe('"Used on" index', () => {
     expect(usage.S15).toEqual([{ path: '/us/ca/berkeley/gap/', label: 'The Gap' }]);
     expect(usage.S2).toEqual([]);
     expect(Object.keys(usage)).toHaveLength(57);
+  });
+
+  it('folds a department subpage into the Departments row, and keeps a source only a subpage cites', () => {
+    const dist = mkdtempSync(join(tmpdir(), 'wtmw-depts-'));
+    const write = (path: string, body: string) => {
+      mkdirSync(join(dist, path, '..'), { recursive: true });
+      writeFileSync(join(dist, path), body);
+    };
+    write('us/ca/fremont/data/budget.json', JSON.stringify({ sources: [{ id: 'S1' }, { id: 'S9' }] }));
+    // The list page cites S1; so do both subpages.
+    write('us/ca/fremont/departments/index.html', '<button data-source-chip="S1"></button>');
+    write('us/ca/fremont/departments/police/index.html', '<button data-source-chip="S1"></button><button data-source-chip="S9"></button>');
+    write('us/ca/fremont/departments/fire/index.html', '<button data-source-chip="S1"></button>');
+    buildUsage(dist);
+    const usage = JSON.parse(readFileSync(join(dist, 'us/ca/fremont/data/source-usage.json'), 'utf8'));
+    // S1 is on the list page, so its subpages fold into one link: no wall of one link per department.
+    expect(usage.S1).toEqual([{ path: '/us/ca/fremont/departments/', label: 'Departments' }]);
+    // A source only the Police subpage cites is kept, with a label that names the page.
+    expect(usage.S9).toEqual([{ path: '/us/ca/fremont/departments/police/', label: 'Departments: Police' }]);
   });
 
   it('labels chips on the Sources page as Methods, and fills "used on" placeholders', () => {

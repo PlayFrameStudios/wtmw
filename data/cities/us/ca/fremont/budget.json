@@ -15,7 +15,7 @@
       "format": "PDF",
       "pageOffset": 6,
       "type": "city",
-      "usedFor": "General Fund summary, revenue, forecast, positions, pension, capital plan",
+      "usedFor": "General Fund summary, department budgets, revenue, forecast, positions, pension, capital plan",
       "number": 1
     },
     {
@@ -2016,6 +2016,2006 @@
       "quote": "Total Employer Contribution $ 22,586 $ 42,648 $ 65,234",
       "column": "Combined"
     }
+  },
+  "departmentDetails": {
+    "year": 2027,
+    "allocationNote": {
+      "text": "Salaries and benefits, operating and capital expenditures, and the department’s share of citywide support services, as the City allocates each department’s direct and indirect expenses.",
+      "cites": [
+        {
+          "source": "S1",
+          "page": 136,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        }
+      ]
+    },
+    "adminHub": {
+      "id": "administrative-departments",
+      "name": "Administrative Departments",
+      "description": {
+        "source": "S1",
+        "page": 207,
+        "quote": "The Administrative Departments include the City Manager’s Office, City Attorney’s Office, City Clerk’s Office, Finance, Human Resources, and Information Technology Services."
+      },
+      "memberIds": [
+        "city-manager",
+        "city-attorney",
+        "city-clerk",
+        "finance",
+        "human-resources",
+        "information-technology-services"
+      ]
+    },
+    "departments": [
+      {
+        "id": "city-council",
+        "name": "City Council",
+        "group": "department",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "with-overhead",
+          "summaryId": "city-council"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 135,
+              "quote": "General Fund $ 703,863 78.4%",
+              "name": "General Fund",
+              "amount": 703863,
+              "share": 0.784
+            },
+            {
+              "source": "S1",
+              "page": 135,
+              "quote": "Overhead Charges to Other Funds $ 193,778 21.6%",
+              "name": "Overhead Charges to Other Funds",
+              "amount": 193778,
+              "share": 0.216
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 135,
+            "quote": "City Council Total $ 897,642",
+            "amount": 897642
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 525493,
+              "source": "S1",
+              "page": 136,
+              "quote": "Salaries and Benefits $ 296,062 $ 308,458 $ 319,273 $ 351,594 $ 525,493",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 253111,
+              "source": "S1",
+              "page": 136,
+              "quote": "Operating Expenditures 223,340 199,749 227,651 252,793 253,111",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 0,
+              "source": "S1",
+              "page": 136,
+              "quote": "Capital Expenditures - - - - -",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 119037,
+              "source": "S1",
+              "page": 136,
+              "quote": "Direct/Indirect Expense Allocation* 25,274 18,444 54,488 95,293 119,037",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 897642,
+            "source": "S1",
+            "page": 136,
+            "quote": "Totals $ 544,676 $ 526,651 $ 601,411 $ 699,680 $ 897,642",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 136,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        }
+      },
+      {
+        "id": "community-development",
+        "name": "Community Development",
+        "group": "department",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "direct",
+          "summaryId": "community-development"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 144,
+              "quote": "Development Cost Center $ 19,126,248 42.0%",
+              "name": "Development Cost Center",
+              "amount": 19126248,
+              "share": 0.42
+            },
+            {
+              "source": "S1",
+              "page": 144,
+              "quote": "Environmental Services $ 17,825,447 39.1%",
+              "name": "Environmental Services",
+              "amount": 17825447,
+              "share": 0.391
+            },
+            {
+              "source": "S1",
+              "page": 144,
+              "quote": "Housing Funds $ 5,157,564 11.3%",
+              "name": "Housing Funds",
+              "amount": 5157564,
+              "share": 0.113
+            },
+            {
+              "source": "S1",
+              "page": 144,
+              "quote": "General Fund $ 2,286,352 5.0%",
+              "name": "General Fund",
+              "amount": 2286352,
+              "share": 0.05
+            },
+            {
+              "source": "S1",
+              "page": 144,
+              "quote": "Homeless Services $ 488,309 1.1%",
+              "name": "Homeless Services",
+              "amount": 488309,
+              "share": 0.011
+            },
+            {
+              "source": "S1",
+              "page": 144,
+              "quote": "Grants/Capital Projects $ 687,540 1.5%",
+              "name": "Grants/Capital Projects",
+              "amount": 687540,
+              "share": 0.015
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 144,
+            "quote": "Community Development Total $ 45,571,461",
+            "amount": 45571461
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 22734844,
+              "source": "S1",
+              "page": 145,
+              "quote": "Salaries and Benefits $ 20,004,748 $ 20,846,286 $ 20,691,290 $ 21,770,788 $ 22,734,844",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 16230678,
+              "source": "S1",
+              "page": 145,
+              "quote": "Operating Expenditures 36,156,458 16,151,966 34,907,703 14,886,709 16,230,678",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 381945,
+              "source": "S1",
+              "page": 145,
+              "quote": "Capital Expenditures 138,385 5,116 1,602,082 893,852 381,945",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 6223994,
+              "source": "S1",
+              "page": 145,
+              "quote": "Direct/Indirect Expense Allocation* 5,651,935 4,899,955 6,102,041 5,950,270 6,223,994",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 45571461,
+            "source": "S1",
+            "page": 145,
+            "quote": "Totals $ 61,951,526 $ 41,903,323 $ 63,303,115 $ 43,501,619 $ 45,571,461",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 145,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        },
+        "serviceAreas": {
+          "lines": [
+            {
+              "id": "administration",
+              "name": "Administration",
+              "amount": 463447,
+              "source": "S1",
+              "page": 139,
+              "quote": "Administration $ 809,069 $ 539,445 $ 425,647 $ 451,126 $ 463,447",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "planning",
+              "name": "Planning",
+              "amount": 6040198,
+              "source": "S1",
+              "page": 139,
+              "quote": "Planning 4,818,514 4,387,773 4,894,657 5,306,722 6,040,198",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "building-and-safety",
+              "name": "Building and Safety",
+              "amount": 13482250,
+              "source": "S1",
+              "page": 139,
+              "quote": "Building and Safety 12,399,072 12,195,752 12,559,421 12,660,513 13,482,250",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "code-enforcement",
+              "name": "Code Enforcement",
+              "amount": 1822905,
+              "source": "S1",
+              "page": 139,
+              "quote": "Code Enforcement 1,503,920 1,574,390 1,642,979 1,802,039 1,822,905",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "environmental-services",
+              "name": "Environmental Services",
+              "amount": 18116787,
+              "source": "S1",
+              "page": 139,
+              "quote": "Environmental Services 13,751,666 14,739,508 17,936,735 17,976,223 18,116,787",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "homeless-services-code-enforcement",
+              "name": "Homeless Services Code Enforcement",
+              "amount": 488309,
+              "source": "S1",
+              "page": 139,
+              "quote": "Homeless Services Code Enforcement 187,771 190,961 201,879 450,625 488,309",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "sb2-and-leap-housing-grants",
+              "name": "SB2 and LEAP Housing Grants",
+              "amount": 0,
+              "source": "S1",
+              "page": 139,
+              "quote": "SB2 and LEAP Housing Grants 394,472 350,093 - - -",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "affordable-housing-investment",
+              "name": "Affordable Housing Investment",
+              "amount": 1578638,
+              "source": "S1",
+              "page": 139,
+              "quote": "Affordable Housing Investment 5,050,533 1,138,962 5,261,777 1,474,770 1,578,638",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "affordable-housing-ordinance",
+              "name": "Affordable Housing Ordinance",
+              "amount": 3578926,
+              "source": "S1",
+              "page": 139,
+              "quote": "Affordable Housing Ordinance 23,036,509 6,786,439 20,380,020 3,379,601 3,578,926",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 45571461,
+            "source": "S1",
+            "page": 139,
+            "quote": "Totals $ 61,951,526 $ 41,903,323 $ 63,303,115 $ 43,501,619 $ 45,571,461",
+            "column": "FY 2026/27 Adopted"
+          }
+        }
+      },
+      {
+        "id": "community-services",
+        "name": "Community Services",
+        "group": "department",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "direct",
+          "summaryId": "community-services"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 151,
+              "quote": "Recreation Cost Center $ 12,312,906 65.5%",
+              "name": "Recreation Cost Center",
+              "amount": 12312906,
+              "share": 0.655
+            },
+            {
+              "source": "S1",
+              "page": 151,
+              "quote": "General Fund $ 3,255,508 17.3%",
+              "name": "General Fund",
+              "amount": 3255508,
+              "share": 0.173
+            },
+            {
+              "source": "S1",
+              "page": 151,
+              "quote": "Capital Projects $ 2,496,859 13.3%",
+              "name": "Capital Projects",
+              "amount": 2496859,
+              "share": 0.133
+            },
+            {
+              "source": "S1",
+              "page": 151,
+              "quote": "Development Cost Center $ 293,192 1.6%",
+              "name": "Development Cost Center",
+              "amount": 293192,
+              "share": 0.016
+            },
+            {
+              "source": "S1",
+              "page": 151,
+              "quote": "Homeless Services $ 188,134 1.0%",
+              "name": "Homeless Services",
+              "amount": 188134,
+              "share": 0.01
+            },
+            {
+              "source": "S1",
+              "page": 151,
+              "quote": "Other Components $ 260,000 1.3%",
+              "name": "Other Components",
+              "amount": 260000,
+              "share": 0.013
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 151,
+            "quote": "Community Services Total $ 18,806,598",
+            "amount": 18806598
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 13317597,
+              "source": "S1",
+              "page": 151,
+              "quote": "Salaries and Benefits $ 9,596,498 $ 10,523,071 $ 11,132,858 $ 12,448,388 $ 13,317,597",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 3526964,
+              "source": "S1",
+              "page": 151,
+              "quote": "Operating Expenditures 2,294,396 2,589,197 2,755,396 3,015,000 3,526,964",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 118852,
+              "source": "S1",
+              "page": 151,
+              "quote": "Capital Expenditures 55,889 35,861 103,771 173,993 118,852",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 1843185,
+              "source": "S1",
+              "page": 151,
+              "quote": "Direct/Indirect Expense Allocation** 1,251,284 1,175,134 1,879,020 1,756,928 1,843,185",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 18806598,
+            "source": "S1",
+            "page": 151,
+            "quote": "Totals $ 13,198,067 $ 14,323,262 $ 15,871,046 $ 17,394,309 $ 18,806,598",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 151,
+          "quote": "**Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        },
+        "serviceAreas": {
+          "lines": [
+            {
+              "id": "administration",
+              "name": "Administration",
+              "amount": 898617,
+              "source": "S1",
+              "page": 148,
+              "quote": "Administration $ 399,007 $ 375,902 $ 700,942 $ 823,540 $ 898,617",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "recreation",
+              "name": "Recreation",
+              "amount": 12312906,
+              "source": "S1",
+              "page": 148,
+              "quote": "Recreation 8,984,343 9,824,191 10,658,061 11,401,657 12,312,906",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "urban-forestry",
+              "name": "Urban Forestry",
+              "amount": 1226426,
+              "source": "S1",
+              "page": 148,
+              "quote": "Urban Forestry 329,363 591,857 896,871 900,897 1,226,426",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "park-planning-and-design",
+              "name": "Park Planning and Design",
+              "amount": 2790051,
+              "source": "S1",
+              "page": 148,
+              "quote": "Park Planning and Design 2,286,893 2,376,280 2,238,445 2,770,792 2,790,051",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "ranger-program",
+              "name": "Ranger Program",
+              "amount": 1390464,
+              "source": "S1",
+              "page": 148,
+              "quote": "Ranger Program 1,137,668 1,076,358 1,227,347 1,314,931 1,390,464",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "homeless-services",
+              "name": "Homeless Services",
+              "amount": 188134,
+              "source": "S1",
+              "page": 148,
+              "quote": "Homeless Services 60,793 78,674 149,379 182,492 188,134",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 18806598,
+            "source": "S1",
+            "page": 148,
+            "quote": "Totals $ 13,198,067 $ 14,323,262 $ 15,871,046 $ 17,394,309 $ 18,806,598",
+            "column": "FY 2026/27 Adopted"
+          }
+        }
+      },
+      {
+        "id": "economic-development",
+        "name": "Economic Development",
+        "group": "department",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "direct",
+          "summaryId": "economic-development"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 160,
+              "quote": "General Fund $ 1,587,544 100.0%",
+              "name": "General Fund",
+              "amount": 1587544,
+              "share": 1
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 160,
+            "quote": "Economic Development Total $ 1,587,544",
+            "amount": 1587544
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 1091061,
+              "source": "S1",
+              "page": 161,
+              "quote": "Salaries and Benefits $843,300 $1,087,174 $1,184,329 $1,020,382 $1,091,061",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 337125,
+              "source": "S1",
+              "page": 161,
+              "quote": "Operating Expenditures 253,114 172,273 292,570 349,125 337,125",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 0,
+              "source": "S1",
+              "page": 161,
+              "quote": "Capital Expenditures - - - - -",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 159358,
+              "source": "S1",
+              "page": 161,
+              "quote": "Direct/Indirect Expense Allocation* 180,054 143,221 206,168 165,844 159,358",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 1587544,
+            "source": "S1",
+            "page": 161,
+            "quote": "Totals $1,276,469 $1,402,668 $1,683,067 $1,535,351 $1,587,544",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 161,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        }
+      },
+      {
+        "id": "fire",
+        "name": "Fire",
+        "group": "department",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "direct",
+          "summaryId": "fire"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 170,
+              "quote": "General Fund $ 78,517,271 99.8%",
+              "name": "General Fund",
+              "amount": 78517271,
+              "share": 0.998
+            },
+            {
+              "source": "S1",
+              "page": 170,
+              "quote": "Public Safety Grants $ 152,100 0.2%",
+              "name": "Public Safety Grants",
+              "amount": 152100,
+              "share": 0.002
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 170,
+            "quote": "Fire Total $ 78,669,371",
+            "amount": 78669371
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 66393584,
+              "source": "S1",
+              "page": 170,
+              "quote": "Salaries and Benefits $ 52,789,026 $ 60,213,132 $ 59,627,755 $ 62,466,347 $ 66,393,584",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 3973830,
+              "source": "S1",
+              "page": 170,
+              "quote": "Operating Expenditures 2,674,423 3,125,515 3,181,106 3,987,362 3,973,830",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 689403,
+              "source": "S1",
+              "page": 170,
+              "quote": "Capital Expenditures 728,970 585,408 687,243 656,436 689,403",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 7612554,
+              "source": "S1",
+              "page": 170,
+              "quote": "Direct/Indirect Expense Allocation* 10,787,034 9,224,180 10,633,835 10,157,420 7,612,554",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 78669371,
+            "source": "S1",
+            "page": 170,
+            "quote": "Totals $ 66,979,452 $ 73,148,236 $ 74,129,940 $ 77,267,565 $ 78,669,371",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 170,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        },
+        "serviceAreas": {
+          "lines": [
+            {
+              "id": "administration",
+              "name": "Administration",
+              "amount": 10924340,
+              "source": "S1",
+              "page": 164,
+              "quote": "Administration $ 10,147,624 $ 8,706,030 $ 10,545,483 $ 9,933,536 $ 10,924,340",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operations-emergency-medical-services",
+              "name": "Operations/Emergency Medical Services",
+              "amount": 63595164,
+              "source": "S1",
+              "page": 164,
+              "quote": "Operations/Emergency Medical Services 53,938,952 61,229,836 60,330,605 63,347,759 63,595,164",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "prevention",
+              "name": "Prevention",
+              "amount": 3629100,
+              "source": "S1",
+              "page": 164,
+              "quote": "Prevention 2,217,814 2,650,165 2,880,265 3,463,279 3,629,100",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "disaster-preparedness",
+              "name": "Disaster Preparedness",
+              "amount": 520767,
+              "source": "S1",
+              "page": 164,
+              "quote": "Disaster Preparedness 675,061 562,205 373,588 522,992 520,767",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 78669371,
+            "source": "S1",
+            "page": 164,
+            "quote": "Totals $ 66,979,452 $ 73,148,236 $ 74,129,940 $ 77,267,565 $ 78,669,371",
+            "column": "FY 2026/27 Adopted"
+          }
+        }
+      },
+      {
+        "id": "human-services",
+        "name": "Human Services",
+        "group": "department",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "direct",
+          "summaryId": "human-services"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 178,
+              "quote": "Human Services Grants $ 9,005,539 28.2%",
+              "name": "Human Services Grants",
+              "amount": 9005539,
+              "share": 0.282
+            },
+            {
+              "source": "S1",
+              "page": 178,
+              "quote": "General Fund $ 5,558,283 17.4%",
+              "name": "General Fund",
+              "amount": 5558283,
+              "share": 0.174
+            },
+            {
+              "source": "S1",
+              "page": 178,
+              "quote": "Homeless Services $ 3,844,288 12.0%",
+              "name": "Homeless Services",
+              "amount": 3844288,
+              "share": 0.12
+            },
+            {
+              "source": "S1",
+              "page": 178,
+              "quote": "Paratransit $ 3,042,181 9.5%",
+              "name": "Paratransit",
+              "amount": 3042181,
+              "share": 0.095
+            },
+            {
+              "source": "S1",
+              "page": 178,
+              "quote": "Community Development Block Grant $ 2,688,512 8.4%",
+              "name": "Community Development Block Grant",
+              "amount": 2688512,
+              "share": 0.084
+            },
+            {
+              "source": "S1",
+              "page": 178,
+              "quote": "Senior Center Cost Center $ 2,391,544 7.5%",
+              "name": "Senior Center Cost Center",
+              "amount": 2391544,
+              "share": 0.075
+            },
+            {
+              "source": "S1",
+              "page": 178,
+              "quote": "Family Resource Center $ 1,982,435 6.2%",
+              "name": "Family Resource Center",
+              "amount": 1982435,
+              "share": 0.062
+            },
+            {
+              "source": "S1",
+              "page": 178,
+              "quote": "Other (Rent Review, HOME, Opioid, Grants, Human Services) $ 3,445,318 10.8%",
+              "name": "Other (Rent Review, HOME, Opioid, Grants, Human Services)",
+              "amount": 3445318,
+              "share": 0.108
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 178,
+            "quote": "Human Services Total $ 31,958,100 %",
+            "amount": 31958100
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 15993357,
+              "source": "S1",
+              "page": 179,
+              "quote": "Salaries and Benefits $ 12,869,282 $ 13,880,994 $ 14,822,344 $ 15,998,919 $ 15,993,357",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 12392630,
+              "source": "S1",
+              "page": 179,
+              "quote": "Operating Expenditures 10,470,316 11,249,248 10,241,191 12,079,743 12,392,630",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 218720,
+              "source": "S1",
+              "page": 179,
+              "quote": "Capital Expenditures 39,648 57,326 81,911 290,829 218,720",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 3353394,
+              "source": "S1",
+              "page": 179,
+              "quote": "Direct/Indirect Expense Allocation* 2,674,465 2,248,909 3,604,824 3,453,146 3,353,394",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 31958100,
+            "source": "S1",
+            "page": 179,
+            "quote": "Totals $ 26,053,711 $ 27,436,478 $ 28,750,270 $ 31,822,637 $ 31,958,100",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 179,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        },
+        "serviceAreas": {
+          "lines": [
+            {
+              "id": "administration",
+              "name": "Administration",
+              "amount": 3572578,
+              "source": "S1",
+              "page": 174,
+              "quote": "Administration $ 2,699,014 $ 2,806,718 $ 2,885,230 $ 3,027,196 $ 3,572,578",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "family-resource-center",
+              "name": "Family Resource Center",
+              "amount": 3422874,
+              "source": "S1",
+              "page": 174,
+              "quote": "Family Resource Center 6,390,290 3,866,915 3,844,863 3,668,571 3,422,874",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "youth-and-family-services",
+              "name": "Youth and Family Services",
+              "amount": 5525836,
+              "source": "S1",
+              "page": 174,
+              "quote": "Youth and Family Services 3,399,742 3,579,616 4,239,499 5,421,007 5,525,836",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "aging-and-family-services",
+              "name": "Aging and Family Services",
+              "amount": 5752461,
+              "source": "S1",
+              "page": 174,
+              "quote": "Aging and Family Services 5,517,507 5,720,272 6,620,496 6,887,303 5,752,461",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "cdbg-rent-review",
+              "name": "CDBG/Rent Review",
+              "amount": 3120316,
+              "source": "S1",
+              "page": 174,
+              "quote": "CDBG/Rent Review 1,753,865 2,313,813 2,230,814 2,628,122 3,120,316",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "paratransit",
+              "name": "Paratransit",
+              "amount": 3042181,
+              "source": "S1",
+              "page": 174,
+              "quote": "Paratransit 1,735,698 2,099,383 2,307,297 3,259,719 3,042,181",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "social-services-grants",
+              "name": "Social Services Grants",
+              "amount": 914533,
+              "source": "S1",
+              "page": 174,
+              "quote": "Social Services Grants 831,254 876,342 893,229 914,533 914,533",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "home-grant",
+              "name": "Home Grant",
+              "amount": 493468,
+              "source": "S1",
+              "page": 174,
+              "quote": "Home Grant 260,690 1,118,242 217,340 249,287 493,468",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "homeless-services",
+              "name": "Homeless Services",
+              "amount": 6113854,
+              "source": "S1",
+              "page": 174,
+              "quote": "Homeless Services 3,465,651 5,055,177 5,511,501 5,766,898 6,113,854",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 31958100,
+            "source": "S1",
+            "page": 174,
+            "quote": "Totals $ 26,053,711 $ 27,436,478 $ 28,750,270 $ 31,822,637 $ 31,958,100",
+            "column": "FY 2026/27 Adopted"
+          }
+        }
+      },
+      {
+        "id": "maintenance-operations",
+        "name": "Maintenance Operations",
+        "group": "department",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "with-overhead",
+          "summaryId": "maintenance-operations"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 185,
+              "quote": "General Fund $ 37,782,062 95.9%",
+              "name": "General Fund",
+              "amount": 37782062,
+              "share": 0.959
+            },
+            {
+              "source": "S1",
+              "page": 185,
+              "quote": "Overhead Charges to Other Funds $ 1,079,004 2.7%",
+              "name": "Overhead Charges to Other Funds",
+              "amount": 1079004,
+              "share": 0.027
+            },
+            {
+              "source": "S1",
+              "page": 185,
+              "quote": "LMD 88 Assessments, Developer Contributions, CFD 3 Special Tax $ 517,303 1.3%",
+              "name": "LMD 88 Assessments, Developer Contributions, CFD 3 Special Tax",
+              "amount": 517303,
+              "share": 0.013
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 185,
+            "quote": "Maintenance Operations Total $ 39,378,369",
+            "amount": 39378369
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 16249592,
+              "source": "S1",
+              "page": 186,
+              "quote": "Salaries and Benefits $ 12,553,661 $ 13,028,041 $ 14,132,590 $ 15,479,857 $ 16,249,592",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 19301748,
+              "source": "S1",
+              "page": 186,
+              "quote": "Operating Expenditures 13,902,095 16,664,449 17,203,819 18,574,760 19,301,748",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 53040,
+              "source": "S1",
+              "page": 186,
+              "quote": "Capital Expenditures 137,267 304,107 278,644 73,040 53,040",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 3773988,
+              "source": "S1",
+              "page": 186,
+              "quote": "Direct/Indirect Expense Allocation** 4,168,457 2,600,592 4,099,432 3,376,902 3,773,988",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 39378369,
+            "source": "S1",
+            "page": 186,
+            "quote": "Totals $ 30,761,479 $ 32,597,189 $ 35,714,484 $ 37,504,559 $ 39,378,369",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 186,
+          "quote": "**Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        },
+        "serviceAreas": {
+          "lines": [
+            {
+              "id": "administration",
+              "name": "Administration",
+              "amount": 3993828,
+              "source": "S1",
+              "page": 182,
+              "quote": "Administration $ 2,639,042 $ 2,149,575 $ 3,117,300 $ 3,504,548 $ 3,993,828",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "public-buildings",
+              "name": "Public Buildings",
+              "amount": 11350099,
+              "source": "S1",
+              "page": 182,
+              "quote": "Public Buildings 8,842,035 9,564,844 10,321,601 10,823,820 11,350,099",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "fleet-maintenance",
+              "name": "Fleet Maintenance",
+              "amount": 5260895,
+              "source": "S1",
+              "page": 182,
+              "quote": "Fleet Maintenance 4,671,273 4,529,208 4,539,526 5,254,733 5,260,895",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "park-median-maintenance",
+              "name": "Park/Median Maintenance",
+              "amount": 12471094,
+              "source": "S1",
+              "page": 182,
+              "quote": "Park/Median Maintenance 11,163,026 11,851,187 12,101,413 12,077,793 12,471,094",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "streets",
+              "name": "Streets",
+              "amount": 6302454,
+              "source": "S1",
+              "page": 182,
+              "quote": "Streets 3,446,104 4,502,375 5,634,644 5,843,666 6,302,454",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 39378369,
+            "source": "S1",
+            "page": 182,
+            "quote": "Totals $ 30,761,479 $ 32,597,189 $ 35,714,484 $ 37,504,559 $ 39,378,369",
+            "column": "FY 2026/27 Adopted"
+          }
+        }
+      },
+      {
+        "id": "police",
+        "name": "Police",
+        "group": "department",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "direct",
+          "summaryId": "police"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 193,
+              "quote": "General Fund $ 129,087,241 98.6%",
+              "name": "General Fund",
+              "amount": 129087241,
+              "share": 0.986
+            },
+            {
+              "source": "S1",
+              "page": 193,
+              "quote": "Public Safety Grants $ 1,828,362 1.4%",
+              "name": "Public Safety Grants",
+              "amount": 1828362,
+              "share": 0.014
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 193,
+            "quote": "Police Total $ 130,915,603",
+            "amount": 130915603
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 107643747,
+              "source": "S1",
+              "page": 194,
+              "quote": "Salaries and Benefits $ 82,855,478 $ 87,640,258 $ 92,785,366 $ 104,358,281 $ 107,643,747",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 7014211,
+              "source": "S1",
+              "page": 194,
+              "quote": "Operating Expenditures 5,513,439 5,749,515 6,550,424 7,642,814 7,014,211",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 1244274,
+              "source": "S1",
+              "page": 194,
+              "quote": "Capital Expenditures 770,907 1,335,066 564,701 1,677,792 1,244,274",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 15013371,
+              "source": "S1",
+              "page": 194,
+              "quote": "Direct/Indirect Expense Allocation* 19,367,294 10,399,628 14,811,562 14,087,203 15,013,371",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 130915603,
+            "source": "S1",
+            "page": 194,
+            "quote": "Totals $ 108,507,118 $ 105,124,466 $ 114,712,053 $ 127,766,090 $ 130,915,603",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 194,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        },
+        "serviceAreas": {
+          "lines": [
+            {
+              "id": "administration-records",
+              "name": "Administration/Records",
+              "amount": 29928288,
+              "source": "S1",
+              "page": 190,
+              "quote": "Administration/Records $ 25,741,422 $ 23,471,195 $ 28,352,411 $ 29,119,770 $ 29,928,288",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "patrol-operations-dispatch",
+              "name": "Patrol Operations/Dispatch",
+              "amount": 69282975,
+              "source": "S1",
+              "page": 190,
+              "quote": "Patrol Operations/Dispatch 59,697,526 58,313,340 60,851,269 68,155,145 69,282,975",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "investigations",
+              "name": "Investigations",
+              "amount": 16618143,
+              "source": "S1",
+              "page": 190,
+              "quote": "Investigations 13,195,615 13,171,012 12,826,781 15,661,314 16,618,143",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "detention-and-evidence-storage",
+              "name": "Detention and Evidence Storage",
+              "amount": 5327977,
+              "source": "S1",
+              "page": 190,
+              "quote": "Detention and Evidence Storage 2,924,307 2,530,334 4,566,560 5,175,417 5,327,977",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "animal-services",
+              "name": "Animal Services",
+              "amount": 3022123,
+              "source": "S1",
+              "page": 190,
+              "quote": "Animal Services 1,695,249 1,859,339 2,213,327 2,868,058 3,022,123",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "community-engagement-public-affairs",
+              "name": "Community Engagement/Public Affairs",
+              "amount": 4468404,
+              "source": "S1",
+              "page": 190,
+              "quote": "Community Engagement/Public Affairs 3,560,263 3,797,376 3,990,468 4,584,905 4,468,404",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "mobile-evaluation-team",
+              "name": "Mobile Evaluation Team",
+              "amount": 1484437,
+              "source": "S1",
+              "page": 190,
+              "quote": "Mobile Evaluation Team 1,162,380 1,275,283 1,490,531 1,439,788 1,484,437",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "swat-team",
+              "name": "SWAT Team",
+              "amount": 783255,
+              "source": "S1",
+              "page": 190,
+              "quote": "SWAT Team 530,356 706,588 420,706 761,693 783,255",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 130915603,
+            "source": "S1",
+            "page": 190,
+            "quote": "Totals $ 108,507,118 $ 105,124,466 $ 114,712,053 $ 127,766,090 $ 130,915,603",
+            "column": "FY 2026/27 Adopted"
+          }
+        }
+      },
+      {
+        "id": "public-works",
+        "name": "Public Works",
+        "group": "department",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "direct",
+          "summaryId": "public-works"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 204,
+              "quote": "Capital Projects $ 10,155,600 45.0%",
+              "name": "Capital Projects",
+              "amount": 10155600,
+              "share": 0.45
+            },
+            {
+              "source": "S1",
+              "page": 204,
+              "quote": "Development Cost Center $ 8,658,070 38.4%",
+              "name": "Development Cost Center",
+              "amount": 8658070,
+              "share": 0.384
+            },
+            {
+              "source": "S1",
+              "page": 204,
+              "quote": "General Fund $ 2,325,629 10.3%",
+              "name": "General Fund",
+              "amount": 2325629,
+              "share": 0.103
+            },
+            {
+              "source": "S1",
+              "page": 204,
+              "quote": "CFD 1 Special Tax $ 1,430,511 6.3%",
+              "name": "CFD 1 Special Tax",
+              "amount": 1430511,
+              "share": 0.063
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 204,
+            "quote": "Public Works Total $ 22,569,811",
+            "amount": 22569811
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 16657136,
+              "source": "S1",
+              "page": 204,
+              "quote": "Salaries and Benefits $ 13,063,057 $ 13,379,927 $ 13,037,468 $ 15,957,179 $ 16,657,136",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 2212875,
+              "source": "S1",
+              "page": 204,
+              "quote": "Operating Expenditures 1,796,967 1,086,154 1,455,153 2,478,199 2,212,875",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 11050,
+              "source": "S1",
+              "page": 204,
+              "quote": "Capital Expenditures 4,874 4,083 19,979 26,050 11,050",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 3688750,
+              "source": "S1",
+              "page": 204,
+              "quote": "Direct/Indirect Expense Allocation** 2,601,487 2,742,571 3,690,174 3,698,859 3,688,750",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 22569811,
+            "source": "S1",
+            "page": 204,
+            "quote": "Totals $ 17,466,384 $ 17,212,736 $ 18,202,774 $ 22,160,287 $ 22,569,811",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 204,
+          "quote": "**Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        }
+      },
+      {
+        "id": "city-manager",
+        "name": "City Manager",
+        "group": "administrative",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "admin-group"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 214,
+              "quote": "General Fund $ 4,871,586 81.5%",
+              "name": "General Fund",
+              "amount": 4871586,
+              "share": 0.815
+            },
+            {
+              "source": "S1",
+              "page": 214,
+              "quote": "Homeless Services $ 310,619 5.2%",
+              "name": "Homeless Services",
+              "amount": 310619,
+              "share": 0.052
+            },
+            {
+              "source": "S1",
+              "page": 214,
+              "quote": "Overhead Charges to Other Funds $ 794,741 13.3%",
+              "name": "Overhead Charges to Other Funds",
+              "amount": 794741,
+              "share": 0.133
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 214,
+            "quote": "City Manager Total $ 5,976,946",
+            "amount": 5976946
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 4345199,
+              "source": "S1",
+              "page": 214,
+              "quote": "Salaries and Benefits $ 2,807,401 $ 3,011,158 $ 3,512,750 $ 4,222,680 $ 4,345,199",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 1059553,
+              "source": "S1",
+              "page": 214,
+              "quote": "Operating Expenditures 672,278 890,321 718,303 934,917 1,059,553",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 3000,
+              "source": "S1",
+              "page": 214,
+              "quote": "Capital Expenditures 4,962 605 5,328 3,000 3,000",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 569194,
+              "source": "S1",
+              "page": 214,
+              "quote": "Direct/Indirect Expense Allocation* 823,461 348,405 583,524 483,390 569,194",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 5976946,
+            "source": "S1",
+            "page": 214,
+            "quote": "Totals $ 4,308,102 $ 4,250,489 $ 4,819,904 $ 5,643,986 $ 5,976,946",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 214,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        },
+        "serviceAreas": {
+          "lines": [
+            {
+              "id": "city-manager-s-office",
+              "name": "City Manager's Office",
+              "amount": 4338901,
+              "source": "S1",
+              "page": 210,
+              "quote": "City Manager's Office $ 3,481,786 $ 3,384,639 $ 3,541,101 $ 4,085,485 $ 4,338,901",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "communications-and-marketing",
+              "name": "Communications and Marketing",
+              "amount": 1327426,
+              "source": "S1",
+              "page": 210,
+              "quote": "Communications and Marketing 826,316 750,718 1,013,464 1,265,760 1,327,426",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "homeless-services",
+              "name": "Homeless Services",
+              "amount": 310619,
+              "source": "S1",
+              "page": 210,
+              "quote": "Homeless Services - 115,132 265,340 292,741 310,619",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 5976946,
+            "source": "S1",
+            "page": 210,
+            "quote": "Totals $ 4,308,102 $ 4,250,489 $ 4,819,904 $ 5,643,986 $ 5,976,946",
+            "column": "FY 2026/27 Adopted"
+          }
+        }
+      },
+      {
+        "id": "city-attorney",
+        "name": "City Attorney",
+        "group": "administrative",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "admin-group"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 220,
+              "quote": "Direct Charges to General Fund (Risk Management) $ 12,507,429 69.1%",
+              "name": "Direct Charges to General Fund (Risk Management)",
+              "amount": 12507429,
+              "share": 0.691
+            },
+            {
+              "source": "S1",
+              "page": 220,
+              "quote": "General Fund $ 2,574,950 14.2%",
+              "name": "General Fund",
+              "amount": 2574950,
+              "share": 0.142
+            },
+            {
+              "source": "S1",
+              "page": 220,
+              "quote": "Direct Charges to Other Funds (Risk Management) $ 2,429,841 13.4%",
+              "name": "Direct Charges to Other Funds (Risk Management)",
+              "amount": 2429841,
+              "share": 0.134
+            },
+            {
+              "source": "S1",
+              "page": 220,
+              "quote": "Overhead Charges to Other Funds (City Attorney) $ 580,967 3.2%",
+              "name": "Overhead Charges to Other Funds (City Attorney)",
+              "amount": 580967,
+              "share": 0.032
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 220,
+            "quote": "City Attorney Total $ 18,093,187",
+            "amount": 18093187
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 4276873,
+              "source": "S1",
+              "page": 220,
+              "quote": "Salaries and Benefits $ 2,802,526 $ 3,082,430 $ 3,673,960 $ 3,723,710 $ 4,276,873",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 13482807,
+              "source": "S1",
+              "page": 220,
+              "quote": "Operating Expenditures 8,464,213 12,757,008 16,489,003 12,995,280 13,482,807",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 0,
+              "source": "S1",
+              "page": 220,
+              "quote": "Capital Expenditures - - - - -",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 333506,
+              "source": "S1",
+              "page": 220,
+              "quote": "Direct/Indirect Expense Allocation* 471,387 232,646 367,406 304,118 333,506",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 18093187,
+            "source": "S1",
+            "page": 220,
+            "quote": "Totals $ 11,738,126 $ 16,072,084 $ 20,530,368 $ 17,023,108 $ 18,093,187",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 220,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        },
+        "serviceAreas": {
+          "lines": [
+            {
+              "id": "city-attorney-s-office",
+              "name": "City Attorney's Office",
+              "amount": 3155917,
+              "source": "S1",
+              "page": 218,
+              "quote": "City Attorney's Office $ 2,333,278 $ 2,269,361 $ 2,570,453 $ 3,120,100 $ 3,155,917",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "risk-management",
+              "name": "Risk Management",
+              "amount": 14937270,
+              "source": "S1",
+              "page": 218,
+              "quote": "Risk Management 9,404,849 13,802,723 17,959,916 13,903,008 14,937,270",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 18093187,
+            "source": "S1",
+            "page": 218,
+            "quote": "Totals $ 11,738,126 $ 16,072,084 $ 20,530,368 $ 17,023,108 $ 18,093,187",
+            "column": "FY 2026/27 Adopted"
+          }
+        }
+      },
+      {
+        "id": "city-clerk",
+        "name": "City Clerk",
+        "group": "administrative",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "admin-group"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 225,
+              "quote": "General Fund $ 821,986 70.9%",
+              "name": "General Fund",
+              "amount": 821986,
+              "share": 0.709
+            },
+            {
+              "source": "S1",
+              "page": 225,
+              "quote": "Overhead Charges to Other Funds $ 336,601 29.1%",
+              "name": "Overhead Charges to Other Funds",
+              "amount": 336601,
+              "share": 0.291
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 225,
+            "quote": "City Clerk Total $ 1,158,587",
+            "amount": 1158587
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 748052,
+              "source": "S1",
+              "page": 226,
+              "quote": "Salaries and Benefits $ 827,837 $ 768,754 $ 857,149 $ 779,712 $ 748,052",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 256380,
+              "source": "S1",
+              "page": 226,
+              "quote": "Operating Expenditures 180,995 221,874 234,025 260,381 256,380",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 3000,
+              "source": "S1",
+              "page": 226,
+              "quote": "Capital Expenditures - - - 6,000 3,000",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 151155,
+              "source": "S1",
+              "page": 226,
+              "quote": "Direct/Indirect Expense Allocation* 156,766 104,522 183,272 138,072 151,155",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 1158587,
+            "source": "S1",
+            "page": 226,
+            "quote": "Totals $ 1,165,598 $ 1,095,150 $ 1,274,447 $ 1,184,165 $ 1,158,587",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 226,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        }
+      },
+      {
+        "id": "finance",
+        "name": "Finance",
+        "group": "administrative",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "admin-group"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 229,
+              "quote": "General Fund $6,545,566 82.4%",
+              "name": "General Fund",
+              "amount": 6545566,
+              "share": 0.824
+            },
+            {
+              "source": "S1",
+              "page": 229,
+              "quote": "Overhead Charges to Other Funds $1,395,316 17.6%",
+              "name": "Overhead Charges to Other Funds",
+              "amount": 1395316,
+              "share": 0.176
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 229,
+            "quote": "Finance Total $7,940,882",
+            "amount": 7940882
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 6208850,
+              "source": "S1",
+              "page": 229,
+              "quote": "Salaries and Benefits $ 4,257,325 $ 4,900,907 $ 5,211,400 $ 5,971,449 $ 6,208,850",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 764635,
+              "source": "S1",
+              "page": 229,
+              "quote": "Operating Expenditures 529,057 618,700 659,604 791,100 764,635",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 5500,
+              "source": "S1",
+              "page": 229,
+              "quote": "Capital Expenditures 33,894 12,029 15,731 10,500 5,500",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 961897,
+              "source": "S1",
+              "page": 229,
+              "quote": "Direct/Indirect Expense Allocation* 1,002,715 592,169 1,033,606 869,059 961,897",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 7940882,
+            "source": "S1",
+            "page": 229,
+            "quote": "Totals $ 5,822,991 $ 6,123,805 $ 6,920,341 $ 7,642,109 $ 7,940,882",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 229,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        }
+      },
+      {
+        "id": "human-resources",
+        "name": "Human Resources",
+        "group": "administrative",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "admin-group"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 234,
+              "quote": "General Fund $ 4,952,972 87.1%",
+              "name": "General Fund",
+              "amount": 4952972,
+              "share": 0.871
+            },
+            {
+              "source": "S1",
+              "page": 234,
+              "quote": "Overhead Charges to Other Funds $ 731,097 12.9%",
+              "name": "Overhead Charges to Other Funds",
+              "amount": 731097,
+              "share": 0.129
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 234,
+            "quote": "Human Resources Total $ 5,684,069",
+            "amount": 5684069
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 4447558,
+              "source": "S1",
+              "page": 235,
+              "quote": "Salaries and Benefits $ 3,251,244 $ 3,666,443 $ 3,715,402 $ 4,292,587 $ 4,447,558",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 580380,
+              "source": "S1",
+              "page": 235,
+              "quote": "Operating Expenditures 258,901 433,668 503,862 580,379 580,380",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 0,
+              "source": "S1",
+              "page": 235,
+              "quote": "Capital Expenditures 11,734 13,506 - - -",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 656131,
+              "source": "S1",
+              "page": 235,
+              "quote": "Direct/Indirect Expense Allocation* 598,162 419,378 723,879 575,977 656,131",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 5684069,
+            "source": "S1",
+            "page": 235,
+            "quote": "Totals $ 4,120,042 $ 4,532,994 $ 4,943,143 $ 5,448,944 $ 5,684,069",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 235,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        }
+      },
+      {
+        "id": "information-technology-services",
+        "name": "Information Technology Services",
+        "group": "administrative",
+        "year": 2027,
+        "generalFundTie": {
+          "kind": "internal-service"
+        },
+        "funding": {
+          "lines": [
+            {
+              "source": "S1",
+              "page": 242,
+              "quote": "Direct Charges to General Fund $ 17,511,078 69.3%",
+              "name": "Direct Charges to General Fund",
+              "amount": 17511078,
+              "share": 0.693
+            },
+            {
+              "source": "S1",
+              "page": 242,
+              "quote": "Direct Charges to Other Funds $ 7,773,591 30.7%",
+              "name": "Direct Charges to Other Funds",
+              "amount": 7773591,
+              "share": 0.307
+            }
+          ],
+          "total": {
+            "source": "S1",
+            "page": 242,
+            "quote": "Information Technology Services Total $ 25,284,669",
+            "amount": 25284669
+          }
+        },
+        "categories": {
+          "lines": [
+            {
+              "id": "salaries",
+              "name": "Salaries and Benefits",
+              "amount": 7204144,
+              "source": "S1",
+              "page": 243,
+              "quote": "Salaries and Benefits $5,865,929 $5,895,361 $6,701,934 $6,874,514 $7,204,144",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "operating",
+              "name": "Operating Expenditures",
+              "amount": 8788906,
+              "source": "S1",
+              "page": 243,
+              "quote": "Operating Expenditures 4,934,137 6,540,067 6,974,897 8,441,690 8,788,906",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "capital",
+              "name": "Capital Expenditures",
+              "amount": 8814455,
+              "source": "S1",
+              "page": 243,
+              "quote": "Capital Expenditures 1,025,894 1,034,189 1,702,061 5,206,294 8,814,455",
+              "column": "FY 2026/27 Adopted"
+            },
+            {
+              "id": "allocation",
+              "name": "Direct/Indirect Expense Allocation",
+              "amount": 477164,
+              "source": "S1",
+              "page": 243,
+              "quote": "Direct/Indirect Expense Allocation* 162,122 266,748 440,121 315,987 477,164",
+              "column": "FY 2026/27 Adopted"
+            }
+          ],
+          "total": {
+            "amount": 25284669,
+            "source": "S1",
+            "page": 243,
+            "quote": "Totals $11,988,080 $13,736,364 $15,819,013 $20,838,485 $25,284,669",
+            "column": "FY 2026/27 Adopted"
+          }
+        },
+        "allocationNote": {
+          "source": "S1",
+          "page": 243,
+          "quote": "*Direct expense allocations include the department’s share of the City’s total costs for workers’ compensation costs, general liability insurance, information technology, retiree healthcare, accrued leave liquidation, vehicle replacement, and fire capital replacement. Indirect expense allocations include the department’s share of the General Fund’s cost of support services allocated through a cost allocation plan."
+        }
+      }
+    ]
   },
   "coverage": {
     "questions": [

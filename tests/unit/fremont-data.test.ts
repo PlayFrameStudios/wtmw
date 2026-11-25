@@ -228,7 +228,7 @@ describe('Fremont: the site', () => {
 
   it('downloads keep each row’s page and quote, and a figure links to its CSV', () => {
     const names = csvTables(budget).map((t) => t.name);
-    expect(names).toEqual(['revenue', 'general-fund-fy2027', 'positions', 'capital-plan', 'sources']);
+    expect(names).toEqual(['revenue', 'general-fund-fy2027', 'positions', 'capital-plan', 'department-funding', 'department-categories', 'department-service-areas', 'sources']);
     const police = budget.generalFund[0].lines.find((l) => l.id === 'police')!;
     expect(csvHref(budget, fremont, police)).toBe('/us/ca/fremont/data/general-fund-fy2027.csv');
     expect(csvHref(budget, fremont, { source: 'S1', page: 72, quote: 'not a row' })).toBeUndefined();

@@ -1,8 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { cityRoutes } from './cities';
+import { cityRoutes, departmentSubpages } from './cities';
 
-const ROUTES = ['/', '/faq/', ...cityRoutes, '/test/receipts/', '/us/ca/nowhere/'];
+const ROUTES = ['/', '/faq/', ...cityRoutes, ...departmentSubpages, '/test/receipts/', '/us/ca/nowhere/'];
 
 async function violations(page: Page) {
   const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();

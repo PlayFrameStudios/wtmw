@@ -30,7 +30,19 @@ function label(cityPath: string, pagePath: string): string {
   if (!slug) return 'Overview';
   // Chips on the Sources page sit in its methods and known-gaps cards (its own list uses plain badges).
   if (slug === 'sources') return 'Methods';
-  return CITY_PAGES.find((p) => p.slug === slug)?.label ?? slug;
+  const [page, ...rest] = slug.split('/');
+  // A nested page: "departments/police" → "Departments: Police", folded into the Departments row below
+  // when that list page cites the same source.
+  const base = CITY_PAGES.find((p) => p.slug === page)?.label ?? page;
+  return rest.length ? `${base}: ${rest.map(titleCase).join(' ')}` : base;
+}
+
+/** "information-technology-services" → "Information Technology Services". */
+function titleCase(slug: string): string {
+  return slug
+    .split('-')
+    .map((word) => (word ? word[0].toUpperCase() + word.slice(1) : word))
+    .join(' ');
 }
 
 export function buildUsage(dist: string, featured = featuredPath()) {
@@ -52,7 +64,16 @@ export function buildUsage(dist: string, featured = featuredPath()) {
         usage[id].push({ path: pagePath, label: label(cityPath, pagePath) });
       }
     }
-    for (const pages of Object.values(usage)) pages.sort((a, b) => a.path.localeCompare(b.path));
+    for (const pages of Object.values(usage)) {
+      // A source cited on a department subpage collapses into its Departments row when that list page
+      // cites it too, so a receipt's "Used on" line doesn't become a wall of one link per department.
+      if (pages.some((p) => p.path === `${cityPath}departments/`)) {
+        const kept = pages.filter((p) => p.path === `${cityPath}departments/` || !p.path.startsWith(`${cityPath}departments/`));
+        pages.length = 0;
+        pages.push(...kept);
+      }
+      pages.sort((a, b) => a.path.localeCompare(b.path));
+    }
     const out = join(dist, cityPath, 'data/source-usage.json');
     writeFileSync(out, JSON.stringify(usage, null, 2) + '\n');
     written.push(out);

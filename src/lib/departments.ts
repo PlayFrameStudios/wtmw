@@ -4,6 +4,7 @@
  * year × tax × sort view, and the receipts behind each number.
  */
 import type { CityBudget, GapBudget, DepartmentReduction } from '../data/types.ts';
+import { departmentHref } from './department-detail.ts';
 import { departmentsOf } from './families.ts';
 import type { Families } from './families.ts';
 import { dataDirOf } from './cities.ts';
@@ -64,7 +65,7 @@ export function departmentItems(cityPath: string, b: CityBudget, shares: Share<{
     value: s.item.amount,
     squares: s.squares,
     exact: s.exact,
-    href: `${cityPath}departments/#${s.item.id}`,
+    href: departmentHref(cityPath, b, s.item.id) ?? `${cityPath}departments/#${s.item.id}`,
     details: `${unit[0].toUpperCase()}${unit.slice(1)} details`,
     ...(lines.get(s.item.id)?.providedBy?.short ? { note: lines.get(s.item.id)!.providedBy!.short } : {}),
   }));
