@@ -174,6 +174,20 @@ function readFiveColumnTable(
   };
 }
 
+/**
+ * The footnote every category table prints under it, as this department's page prints it (with its own * or ** marker,
+ * so a reader opening the receipt lands on the table it explains rather than another chapter's copy).
+ */
+function readAllocationNote(where: string, source: SourceId, page: number, excerpts: Excerpts): DocRef {
+  const text = excerpts[source]?.[String(page)];
+  if (text === undefined) throw new Error(`${where}: no excerpt for ${source} page ${page}`);
+  const found = normalize(text).match(/\*+Direct expense allocations include[\s\S]*?cost allocation plan\./);
+  if (!found) throw new Error(`${where}: no Direct/Indirect Expense Allocation footnote on ${source} page ${page}`);
+  const ref: DocRef = { source, page, quote: found[0] };
+  checkQuote(ref, excerpts, where);
+  return ref;
+}
+
 /** The four category rows every department prints (the allocation row carries a * or ** marker). */
 function readCategories(where: string, source: SourceId, page: number, excerpts: Excerpts) {
   const table = readDepartmentTable(source, page, CATEGORY_TITLE, excerpts);
@@ -193,6 +207,7 @@ function readCategories(where: string, source: SourceId, page: number, excerpts:
       ...row.at(ADOPTED),
     })),
     total: { amount: totals.values[ADOPTED], ...totals.at(ADOPTED) },
+    allocationNote: readAllocationNote(where, source, page, excerpts),
   };
 }
 
@@ -247,7 +262,7 @@ export function buildDepartmentDetails(
         errors.push(`${where}: Sources of Funding totals ${funding.total.amount.toLocaleString('en-US')}, but Expenditures by Category totals ${categories.total.amount.toLocaleString('en-US')}`);
       if (serviceAreas && serviceAreas.total.amount !== categories.total.amount)
         errors.push(`${where}: Major Service Areas totals ${serviceAreas.total.amount.toLocaleString('en-US')}, but Expenditures by Category totals ${categories.total.amount.toLocaleString('en-US')}`);
-      const detail: DepartmentBudgetDetail = { id: d.id, name: d.name, group: d.group, year: YEAR, generalFundTie: d.tie, funding, categories, ...(serviceAreas ? { serviceAreas } : {}) };
+      const detail: DepartmentBudgetDetail = { id: d.id, name: d.name, group: d.group, year: YEAR, generalFundTie: d.tie, funding, categories: { lines: categories.lines, total: categories.total }, allocationNote: categories.allocationNote, ...(serviceAreas ? { serviceAreas } : {}) };
       departments.push(detail);
       const gf = detail.funding.lines.find((l) => l.name === 'General Fund');
       const overhead = detail.funding.lines.find((l) => l.name.startsWith('Overhead Charges to Other Funds'));
@@ -295,8 +310,8 @@ export function buildDepartmentDetails(
     const adminRow = summary.get('administrative-departments');
     if (!adminRow) errors.push(`${at}: no "Administrative Departments" General Fund summary row`);
     else {
+      // The offices' General Fund and overhead lines, together, are the row (printed in thousands, so tied by rounding).
       const sum = adminOffices.reduce((a, x) => a + x.office, 0);
-      if (sum !== 23_605_782) errors.push(`${at}: the administrative offices' General Fund + overhead totals ${sum.toLocaleString('en-US')}, not 23,605,782`);
       if (Math.round(sum / 1000) * 1000 !== adminRow.amount)
         errors.push(`${at}: the administrative offices' ${sum.toLocaleString('en-US')} doesn't round to the summary's ${adminRow.amount.toLocaleString('en-US')}`);
     }

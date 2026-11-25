@@ -29,6 +29,8 @@ export interface Figure {
   tone?: 'short' | 'one-time' | 'neutral';
   /** Sources the page adds, e.g. news that also reported the figure. */
   related?: SourceId[];
+  /** Other documents, or pages of the same one, the figure rests on: "Also p. 229". */
+  also?: AlsoCite[];
   /** For a derived figure: how it's built ("How this number is built"). */
   parts?: FigurePart[];
   /** Words after the total line's number: "= $12,113 left over". */
@@ -146,6 +148,12 @@ export function figureReceipt(budget: CityBudget, city: City, figure: Figure, pa
   const ids = [...new Set([figure.ref.source, ...(figure.ref.related ?? []), ...(figure.related ?? [])])];
   const views = sourcesById(budget);
   for (const id of ids) if (!views.has(id)) throw new Error(`figure "${figure.label}": unknown source ${id}`);
+  // The other lines or pages a figure rests on (a sum, or two printed lines read as one): each needs its source here too.
+  const also = (figure.also ?? []).map(({ source, page, quote }) => ({ source, ...(page ? { page } : {}), ...(quote ? { quote } : {}) }));
+  for (const c of also) {
+    if (!views.has(c.source)) throw new Error(`figure "${figure.label}": unknown source ${c.source}`);
+    if (!ids.includes(c.source)) ids.push(c.source);
+  }
   if (figure.parts) {
     const sum = figure.parts.reduce((a, p) => a + p.value, 0);
     if (Math.abs(sum - figure.value) > 0.5) {
@@ -156,9 +164,14 @@ export function figureReceipt(budget: CityBudget, city: City, figure: Figure, pa
   const ref = figure.ref;
   const where =
     'quote' in ref ? `${ref.page ? `p. ${folio(views.get(ref.source)!, ref.page)}` : 'web page'}${ref.column ? `, column “${ref.column}”` : ''}` : `${ref.table}, row ${ref.row}`;
+  const cite = (c: { source: SourceId; page?: number; quote?: string }) => {
+    const view = views.get(c.source)!;
+    return `${view.citation}${c.page ? ` (p. ${folio(view, c.page)})` : ''}.${c.quote ? `\n"${c.quote}"` : ''}`;
+  };
   const citation = [
     `${figure.label}: ${value}.`,
     ...ids.map((id, i) => `${i === 0 ? 'Source' : 'Also'}: ${views.get(id)!.citation}${i === 0 ? ` (${where}${'quote' in ref && ref.scanned ? '; read from a scanned table, not checked against text' : ''})` : ''}.`),
+    ...also.map((c) => `Also: ${cite(c)}`),
     `Via ${SITE.name}, ${pageUrl.href}`,
   ].join('\n');
   return {
@@ -168,6 +181,7 @@ export function figureReceipt(budget: CityBudget, city: City, figure: Figure, pa
     label: figure.label,
     sources: ids,
     ...('quote' in ref ? { page: ref.page, quote: ref.quote, ...(ref.column && { column: ref.column }), ...(ref.scanned && { scanned: ref.scanned }) } : { table: ref.table, row: ref.row }),
+    ...(also.length ? { also } : {}),
     csv: csvHref(budget, city, figure.ref),
     parts: figure.parts?.map((p) => ({
       sign: p.value < 0 ? MINUS : '+',

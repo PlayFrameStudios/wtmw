@@ -16,7 +16,7 @@ const PAGES = ['', 'revenue/', 'reserves/', 'departments/', 'capital/', 'sources
 const html = (p: string) => readFileSync(join(dist, 'us/ca/fremont', p, 'index.html'), 'utf8');
 const text = (h: string) => h.replace(/<(script|style)[\s\S]*?<\/\1>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ');
 const decode = (s: string) => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-type Receipt = { kind: string; value?: string; sources: string[]; page?: number; quote?: string; column?: string; label?: string; tone?: string; csv?: string };
+type Receipt = { kind: string; value?: string; sources: string[]; page?: number; quote?: string; column?: string; label?: string; tone?: string; csv?: string; also?: { source: string; page?: number; quote?: string }[] };
 const receipts = (h: string) => [...h.matchAll(/data-receipt="([^"]*)"/g)].map((m) => JSON.parse(decode(m[1])) as Receipt);
 const figure = (p: string, label: RegExp) => {
   const found = receipts(html(p)).filter((r) => r.kind === 'figure' && label.test(r.label ?? ''));
@@ -212,6 +212,18 @@ describe('Fremont (built)', () => {
     expect(at('City Attorney, FY 2026/27: General Fund and overhead charges to other funds')?.value).toBe('$3,155,917');
     expect(at('Administrative Departments, FY 2026/27: General Fund, five offices')?.value).toBe('$19,767,060');
     expect(at('Administrative Departments, FY 2026/27: overhead charges to other funds, five offices')?.value).toBe('$3,838,722');
+    // The internal service fund is its own section, not nested under "The five General Fund offices".
+    expect(h).toContain('<h2 id="dd-internal-service">The internal service fund</h2>');
+    const start = h.indexOf('<section class="db-section" aria-labelledby="dd-offices">');
+    const end = h.indexOf('<section class="db-section" aria-labelledby="dd-internal-service">');
+    expect(start, 'the five offices section').toBeGreaterThan(0);
+    expect(end, 'the internal service section').toBeGreaterThan(start);
+    const general = h.slice(start, end);
+    expect(general).toContain('<h2 id="dd-offices">The five General Fund offices</h2>');
+    expect(general).not.toContain('Information Technology Services');
+    // The drawer lists every office a sum adds, not just the first: Finance (p. 223) plus the other four.
+    const sum = rows.find((r) => r.kind === 'figure' && r.label === 'Administrative Departments, FY 2026/27: General Fund, five offices') as Receipt & { also?: { page?: number }[] };
+    expect(sum.also?.map((c) => c.page)).toEqual([234, 214, 220, 225]);
   });
 });
 
@@ -256,6 +268,18 @@ describe('Fremont department subpages (built)', () => {
     expect(existsSync(join(dist, 'us/ca/fremont/departments/police/index.html'))).toBe(true);
     for (const c of ['berkeley', 'lafayette']) expect(existsSync(join(dist, `us/ca/${c}/departments/police`))).toBe(false);
     expect(existsSync(join(dist, 'test/cities/fixtureville/departments/police'))).toBe(false);
+  });
+
+  it('each subpage’s allocation note opens that department’s own chapter', () => {
+    const generic = b.departmentDetails!.allocationNote.cites[0].page;
+    for (const d of b.departmentDetails!.departments) {
+      const note = receipts(html(`departments/${d.id}`)).find((r) => r.kind === 'source' && /^\*+Direct expense allocations/.test(r.quote ?? ''));
+      expect(note?.page, d.id).toBe(d.allocationNote.page);
+      // Only City Council shares the generic cite: every other page names its own chapter, not City Council's.
+      if (d.id !== 'city-council') expect(note?.page, d.id).not.toBe(generic);
+      expect(norm(pages.S1[String(note!.page)] ?? '')).toContain(norm(note!.quote!));
+    }
+    expect(receipts(html('departments/police')).find((r) => r.kind === 'source' && /^\*+Direct expense allocations/.test(r.quote ?? ''))?.page).toBe(194);
   });
 
   it('the Departments list links all 10 General Fund rows and all 15 staff rows to their subpages', () => {

@@ -13,11 +13,12 @@ import { buildCity, readDocuments } from '../../src/data/pipeline';
 import { splitRow } from '../../src/data/tables';
 import type { CityBudget } from '../../src/data/types';
 import { allCities } from '../../src/lib/cities';
-import { adminHubView, departmentDetailView, departmentHref } from '../../src/lib/department-detail';
+import { adminHubView, departmentDetailView, departmentHref, departmentSubpageSlugs, possessive } from '../../src/lib/department-detail';
 import { departmentBudgets } from '../../src/lib/department-budgets';
 import { fy } from '../../src/lib/city-settings';
 import { fullNames } from '../../src/lib/departments';
 import { familiesFor } from '../../src/lib/families';
+import { figureReceipt } from '../../src/lib/receipts';
 
 const root = join(import.meta.dirname, '../..');
 const dir = join(root, 'data/cities/us/ca/fremont');
@@ -99,6 +100,26 @@ describe('Fremont department budgets: the data', () => {
     const officeSum = offices.reduce((a, id) => a + gfLine(id).amount + overheadLine(id).amount, 0);
     expect(officeSum).toBe(23_605_782);
     expect(Math.round(officeSum / 1000) * 1000).toBe(23_606_000);
+  });
+
+  it('gives every department its own category footnote, on its own page, and the route one slug per page', () => {
+    const d = budget.departmentDetails!;
+    for (const dept of d.departments) {
+      // The footnote under the table this page prints, not another chapter's copy of it.
+      expect(dept.allocationNote.page, dept.id).toBe(dept.categories.total.page);
+      expect(dept.allocationNote.quote, dept.id).toMatch(/^\*+Direct expense allocations include/);
+      expect(dept.allocationNote.quote, dept.id).toContain('cost allocation plan.');
+    }
+    // documents.json keeps City Council's copy for the sentence; each page cites its own (Police's is p. 194).
+    expect(d.allocationNote.cites[0].page).toBe(136);
+    expect(d.departments.find((x) => x.id === 'police')!.allocationNote.page).toBe(194);
+    // The route covers every department and the hub — and nothing where the data has no hub, or no departments.
+    expect(departmentSubpageSlugs(budget)).toHaveLength(16);
+    expect(departmentSubpageSlugs(budget)).toContain('administrative-departments');
+    const noHub = { ...budget, departmentDetails: { ...d, adminHub: undefined } };
+    expect(departmentSubpageSlugs(noHub)).toHaveLength(15);
+    expect(departmentSubpageSlugs(noHub)).not.toContain('administrative-departments');
+    expect(departmentSubpageSlugs({ ...budget, departmentDetails: undefined })).toEqual([]);
   });
 
   it('every quote in departmentDetails is on its page, under both the quote check and the strict flat check', () => {
@@ -281,6 +302,31 @@ describe('Fremont department subpages: $ of every $100', () => {
     expect(lede('information-technology-services')).toContain('budgeted as an internal service fund');
   });
 
+  it("each page's category note cites that department's own chapter, not City Council's", () => {
+    for (const d of budget.departmentDetails!.departments) {
+      const note = view(d.id).categories.allocationNote;
+      expect(note.cites.map((c) => c.page), d.id).toEqual([d.allocationNote.page]);
+      // Our sentence is the same on every page; only the cite it opens changes.
+      expect(note.text, d.id).toBe(budget.departmentDetails!.allocationNote.text);
+    }
+    expect(view('police').categories.allocationNote.cites[0]).toMatchObject({ source: 'S1', page: 194 });
+  });
+
+  it('names a plural department in the possessive without doubling its s', () => {
+    const text = (id: string) => view(id).lede.map((f) => f.text).join('');
+    expect(possessive('Human Services')).toBe('Human Services’');
+    expect(possessive('Maintenance Operations')).toBe('Maintenance Operations’');
+    expect(possessive('Public Works')).toBe('Public Works’');
+    expect(possessive('Human Resources')).toBe('Human Resources’');
+    expect(possessive('Police')).toBe('Police’s');
+    expect(possessive('Finance')).toBe('Finance’s');
+    // The lede opens with it, so the page never reads "Human Services's FY 2026/27".
+    expect(text('human-services')).toMatch(/^Human Services’ FY 2026\/27 adopted operating budget is /);
+    expect(text('maintenance-operations')).toMatch(/^Maintenance Operations’ FY 2026\/27 adopted/);
+    expect(text('public-works')).toMatch(/^Public Works’ FY 2026\/27 adopted/);
+    expect(text('police')).toMatch(/^Police’s FY 2026\/27 adopted/);
+  });
+
   it('the administrative offices carry their slice of the $23.6M row, and IT Services is the internal service fund', () => {
     const offices: Record<string, string> = { finance: '2.78', 'human-resources': '1.99', 'city-manager': '1.98', 'city-attorney': '1.10', 'city-clerk': '0.41' };
     for (const [id, txt] of Object.entries(offices)) {
@@ -332,6 +378,24 @@ describe('Fremont department subpages: $ of every $100', () => {
     expect(hub.internalService.generalFundRow).toBeUndefined();
   });
 
+  it("the hub's two sums cite every office they add, and an office's two-line figure cites its overhead", () => {
+    const page = new URL('https://wherethemoneywent.com/us/ca/fremont/departments/administrative-departments/');
+    // Finance's page is the figure's own cite; the other four offices come with it, so no office's line is silent.
+    const gf = figureReceipt(budget, fremont, hub.generalFundOnly, page);
+    expect(gf.page).toBe(229);
+    expect(gf.also!.map((c) => c.page)).toEqual([234, 214, 220, 225]);
+    // Every one of the five lines is in the citation, each with its printed page.
+    expect(gf.citation.match(/^Also: /gm)).toHaveLength(4);
+    for (const p of ['p. 228', 'p. 208', 'p. 214', 'p. 219']) expect(gf.citation).toContain(p);
+    const overhead = figureReceipt(budget, fremont, hub.overheadOnly, page);
+    expect(overhead.also!.map((c) => c.page)).toEqual([234, 214, 220, 225]);
+    // An office's row figure reads its General Fund line and its overhead line, both printed on its own page.
+    const attorney = hub.generalFundOffices.find((o) => o.id === 'city-attorney')!;
+    const row = figureReceipt(budget, fremont, attorney.generalFundRow!, page);
+    expect([row.page, ...row.also!.map((c) => c.page)]).toEqual([220, 220]);
+    expect(row.also![0].quote).toBe('Overhead Charges to Other Funds (City Attorney) $ 580,967 3.2%');
+  });
+
   it('each General Fund office page says its two lines are what counts toward the row', () => {
     const lede = (id: string) => view(id).lede.map((f) => f.text + (f.figure ? `[${f.figure.value}]` : '')).join('');
     // Clerk, Finance and Human Resources are only General Fund + overhead, so their lede is the row in two parts.
@@ -366,5 +430,16 @@ describe('Fremont department budgets: CSV downloads', () => {
     expect(policeTotal.page).toBe(193);
     expect(policeTotal.quote).toBe('Police Total $ 130,915,603');
     expect(fremont.path).toBe('/us/ca/fremont/');
+  });
+
+  it('the two five-column tables name the column their amount comes from', () => {
+    for (const name of ['department-categories', 'department-service-areas']) {
+      const t = csvTables(budget).find((x) => x.name === name)!;
+      expect(t.columns, name).toContain('column');
+      const rows = t.rows as { column?: string; quote: string }[];
+      expect(rows.length, name).toBeGreaterThan(30);
+      // A row's quote holds five years; `column` says which one `amount` is ("FY 2026/27 Adopted").
+      for (const r of rows) expect(r.column, `${name}: ${r.quote}`).toBe('FY 2026/27 Adopted');
+    }
   });
 });

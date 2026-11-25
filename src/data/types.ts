@@ -677,6 +677,8 @@ export interface DepartmentBudgetDetail {
     lines: DepartmentExpenseLine[];
     total: DocRef & { amount: number };
   };
+  /** The footnote printed under *this* department's category table, with its own page and marker. */
+  allocationNote: DocRef;
   /** Present on the 8 departments whose chapter prints a Major Service Area breakdown. */
   serviceAreas?: {
     lines: DepartmentExpenseLine[];

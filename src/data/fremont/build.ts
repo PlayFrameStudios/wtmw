@@ -25,7 +25,7 @@ export interface FremontDocuments {
   glossary: { term: string; source: SourceId; page: number; definition: string; quote?: string }[];
   /** What the staffing count leaves out (#60), in the City's words: for the departments page. */
   staffingScope?: StepNote;
-  /** Each department's operating budget (#…): funding sources, categories and service areas, from the department chapters. */
+  /** Each department's operating budget: funding sources, categories and service areas, from the department chapters. */
   departmentBudgets?: DepartmentBudgetsSpec;
 }
 

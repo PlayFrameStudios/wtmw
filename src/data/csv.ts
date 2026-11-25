@@ -84,7 +84,8 @@ function documentTables(b: CityBudget): CsvTable[] {
           },
           {
             name: 'department-categories',
-            columns: withDoc(['departmentId', 'department', 'id', 'name', 'amount']),
+            // `column` names the printed column each amount is read from ("FY 2026/27 Adopted"): a row's quote holds five years.
+            columns: withDoc(['departmentId', 'department', 'id', 'name', 'amount', 'column']),
             rows: b.departmentDetails.departments.flatMap((d) => [
               ...d.categories.lines.map((l) => ({ departmentId: d.id, department: d.name, ...l })),
               { departmentId: d.id, department: d.name, id: 'total', name: 'Totals', ...d.categories.total },
@@ -92,7 +93,7 @@ function documentTables(b: CityBudget): CsvTable[] {
           },
           {
             name: 'department-service-areas',
-            columns: withDoc(['departmentId', 'department', 'id', 'name', 'amount']),
+            columns: withDoc(['departmentId', 'department', 'id', 'name', 'amount', 'column']),
             rows: b.departmentDetails.departments.flatMap((d) => [
               ...(d.serviceAreas?.lines ?? []).map((l) => ({ departmentId: d.id, department: d.name, ...l })),
               ...(d.serviceAreas ? [{ departmentId: d.id, department: d.name, id: 'total', name: 'Totals', ...d.serviceAreas.total }] : []),

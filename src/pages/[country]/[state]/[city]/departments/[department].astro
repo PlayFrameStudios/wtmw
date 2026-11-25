@@ -9,16 +9,15 @@ import DepartmentDetail from '../../../../../components/views/DepartmentDetail.a
 import { budgetFor } from '../../../../../lib/budget';
 import { allCities, type City } from '../../../../../lib/cities';
 import { fy } from '../../../../../lib/city-settings';
-import { adminHubView, departmentDetailView } from '../../../../../lib/department-detail';
+import { adminHubView, departmentDetailView, departmentSubpageSlugs } from '../../../../../lib/department-detail';
 import { fullNames } from '../../../../../lib/departments';
 import { familiesFor } from '../../../../../lib/families';
 
 export const getStaticPaths = () =>
   allCities.flatMap((city) => {
     const budget = budgetFor(city);
-    if (!budget?.departmentDetails) return [];
-    const slugs = [...budget.departmentDetails.departments.map((d) => d.id), 'administrative-departments'];
-    return slugs.map((department) => ({ params: { ...city.slug, department }, props: { city } }));
+    if (!budget) return [];
+    return departmentSubpageSlugs(budget).map((department) => ({ params: { ...city.slug, department }, props: { city } }));
   });
 
 const { city } = Astro.props as { city: City };

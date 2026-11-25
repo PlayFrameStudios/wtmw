@@ -107,6 +107,15 @@ export function hasDepartmentSubpages(b: CityBudget): boolean {
   return Boolean(b.departmentDetails);
 }
 
+/**
+ * Every slug a city's department routes cover: its departments, plus the Administrative Departments hub where the
+ * data carries one. A city without departmentDetails has no subpages, so the route emits none.
+ */
+export function departmentSubpageSlugs(b: CityBudget): string[] {
+  if (!b.departmentDetails) return [];
+  return [...b.departmentDetails.departments.map((d) => d.id), ...(b.departmentDetails.adminHub ? [b.departmentDetails.adminHub.id] : [])];
+}
+
 /** The page for a department, by its slug ("police", "administrative-departments") or its printed staffing-table name ("City Manager’s Office"). */
 export function departmentHref(cityPath: string, b: CityBudget, idOrStaffName: string): string | undefined {
   if (!b.departmentDetails) return undefined;
@@ -169,6 +178,12 @@ function shareFigure(d: DepartmentBudgetDetail, y: string, line: DepartmentFundi
   return { value: line.share, label: `${d.name}, ${y}: share of funding from ${line.name}`, ref: line, format: 'percent', tone: 'neutral' };
 }
 
+/** An `also` cite for each line but the figure's own ref, so the drawer lists every line a sum reads. */
+const otherLines = (lines: DepartmentFundingLine[], ref: DepartmentFundingLine) =>
+  lines
+    .filter((l) => l !== ref)
+    .map(({ source, page, quote }) => ({ source, page, quote }));
+
 /** City Attorney's Risk Management internal service fund: its two direct-charge lines, summed. */
 function riskFigure(d: DepartmentBudgetDetail, y: string): Figure {
   const gfCharge = d.funding.lines.find((l) => l.name.startsWith('Direct Charges to General Fund'))!;
@@ -178,6 +193,7 @@ function riskFigure(d: DepartmentBudgetDetail, y: string): Figure {
     label: `${d.name}, ${y}: Risk Management internal service fund`,
     ref: gfCharge,
     tone: 'neutral',
+    also: otherLines([gfCharge, otherCharge], gfCharge),
     parts: [
       { label: 'Direct charges to the General Fund', value: gfCharge.amount },
       { label: 'Direct charges to other funds', value: otherCharge.amount },
@@ -192,12 +208,16 @@ function officeGeneralFundFigure(d: DepartmentBudgetDetail, y: string, gf: Depar
     label: `${d.name}, ${y}: General Fund and overhead charges to other funds`,
     ref: gf,
     tone: 'neutral',
+    also: otherLines([gf, overhead], gf),
     parts: [
       { label: 'General Fund', value: gf.amount },
       { label: 'Overhead charges to other funds', value: overhead.amount },
     ],
   };
 }
+
+/** A name in the possessive: "Police's", but "Human Services'" (no doubled s after a plural name). */
+export const possessive = (name: string) => `${name}${/s$/i.test(name) ? '’' : '’s'}`;
 
 const frag = (text: string, figure?: Figure): LedeFragment => (figure ? { text, figure } : { text });
 
@@ -211,21 +231,21 @@ function reconciliation(d: DepartmentBudgetDetail, b: CityBudget, y: string, nam
       // A chapter listing one source is 100% General Fund: Economic Development.
       if (d.funding.lines.length === 1) {
         return [
-          frag(`${name}'s ${y} adopted operating budget is `, total),
+          frag(`${possessive(name)} ${y} adopted operating budget is `, total),
           frag(', all of it from the General Fund. On the General Fund summary, that budget is the '),
           frag('', summaryFigure(b, y, d.generalFundTie.summaryId!)),
           frag(' line — the same figure, rounded to the nearest thousand.'),
         ];
       }
       return [
-        frag(`${name}'s ${y} adopted operating budget is `, total),
+        frag(`${possessive(name)} ${y} adopted operating budget is `, total),
         frag(' across all funds. Of that, ', fundingFigure(d, y, gf!)),
         frag(' comes from the General Fund — ', shareFigure(d, y, gf!)),
         frag(" of the total. The rest is paid from the department's own cost centers, dedicated fees, grants and special revenue funds."),
       ];
     case 'with-overhead':
       return [
-        frag(`${name}'s ${y} adopted operating budget is `, total),
+        frag(`${possessive(name)} ${y} adopted operating budget is `, total),
         frag(' across all funds. Of that, ', fundingFigure(d, y, gf!)),
         frag(' comes from the General Fund and ', fundingFigure(d, y, overhead!)),
         frag(' is overhead the City charges to its other funds. Together those two match the ', summaryFigure(b, y, d.generalFundTie.summaryId!)),
@@ -234,7 +254,7 @@ function reconciliation(d: DepartmentBudgetDetail, b: CityBudget, y: string, nam
     case 'admin-group':
       if (d.funding.lines.length === 2) {
         return [
-          frag(`${name}'s ${y} adopted operating budget is `, total),
+          frag(`${possessive(name)} ${y} adopted operating budget is `, total),
           frag(': ', fundingFigure(d, y, gf!)),
           frag(' from the General Fund and ', fundingFigure(d, y, overhead!)),
           frag(' in overhead charged to other funds. Both count toward the ', summaryFigure(b, y, 'administrative-departments')),
@@ -242,7 +262,7 @@ function reconciliation(d: DepartmentBudgetDetail, b: CityBudget, y: string, nam
         ];
       }
       return [
-        frag(`${name}'s ${y} adopted operating budget is `, total),
+        frag(`${possessive(name)} ${y} adopted operating budget is `, total),
         frag(' across all funds. Of that, ', fundingFigure(d, y, gf!)),
         frag(' comes from the General Fund and ', fundingFigure(d, y, overhead!)),
         frag(' is overhead charged to other funds — ', officeGeneralFundFigure(d, y, gf!, overhead!)),
@@ -332,7 +352,7 @@ export function departmentDetailView(cityPath: string, b: CityBudget, families: 
     },
     categories: {
       lines: d.categories.lines.map((l) => viewOf(l.name, categoryFigure(d, y, l), l.amount / d.categories.total.amount, categoriesMax)),
-      allocationNote: b.departmentDetails!.allocationNote,
+      allocationNote: { text: b.departmentDetails!.allocationNote.text, cites: [d.allocationNote] },
       total: { value: d.categories.total.amount, label: `${d.name}, ${y}: total expenditures by category`, ref: d.categories.total, tone: 'neutral' } satisfies Figure,
       max: categoriesMax,
     },
@@ -401,11 +421,14 @@ export function adminHubView(cityPath: string, b: CityBudget, families: Families
     return { name: d.name, gf, overhead };
   });
   const sum = (of: (m: (typeof members)[number]) => DepartmentFundingLine) => members.reduce((a, m) => a + of(m).amount, 0);
+  const allGf = members.map((m) => m.gf);
+  const allOverhead = members.map((m) => m.overhead);
   const generalFundOnly: Figure = {
     value: sum((m) => m.gf),
     label: `${hub.name}, ${y}: General Fund, five offices`,
     ref: members[0].gf,
     tone: 'neutral',
+    also: otherLines(allGf, members[0].gf),
     parts: members.map((m) => ({ label: m.name, value: m.gf.amount })),
   };
   const overheadOnly: Figure = {
@@ -413,6 +436,7 @@ export function adminHubView(cityPath: string, b: CityBudget, families: Families
     label: `${hub.name}, ${y}: overhead charges to other funds, five offices`,
     ref: members[0].overhead,
     tone: 'neutral',
+    also: otherLines(allOverhead, members[0].overhead),
     parts: members.map((m) => ({ label: m.name, value: m.overhead.amount })),
   };
 

@@ -99,6 +99,13 @@ describe('figure receipts', () => {
     expect(() => figureReceipt(budget, city, { ...figure, related: ['S99'] }, page)).toThrow(/unknown source S99/);
   });
 
+  it('keeps the other pages a figure rests on, and refuses an unknown one there too', () => {
+    const r = figureReceipt(budget, city, { ...figure, also: [{ source: 'S1', page: 9, quote: 'B' }] }, page);
+    expect(r.also).toEqual([{ source: 'S1', page: 9, quote: 'B' }]);
+    expect(r.citation).toMatch(/^Also: .*\(p\. 9\)\.\n"B"/m);
+    expect(() => figureReceipt(budget, city, { ...figure, also: [{ source: 'S99' as never, page: 9 }] }, page)).toThrow(/unknown source S99/);
+  });
+
   it('lists every source of a figure that combines several', () => {
     const fy2021 = budget.personnelAndPension.unfundedLiabilities.find((l) => l.asOf === 'FY2021')!;
     const combined = figureReceipt(budget, city, { value: fy2021.amount, label: 'Unfunded liabilities, FY2021', ref: fy2021 }, page);

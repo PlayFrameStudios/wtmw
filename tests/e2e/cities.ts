@@ -28,12 +28,16 @@ export const cities = [
 /** Every city page, fixtures included. */
 export const cityRoutes = cities.flatMap((c) => c.routes);
 /**
- * Fremont's department subpages, representative members of its 16 (#43). They're routes, not
- * members of a page set, so they're listed here for the a11y, overflow and receipt suites.
+ * Fremont's department subpages, representative members of its 16 (#43): one of each page shape —
+ * a General Fund department with service areas, one without, a with-overhead department, an
+ * admin-group office (its breadcrumb), the hub, and the internal service fund. They're routes,
+ * not members of a page set, so they're listed here for the a11y, overflow and receipt suites.
  */
 export const departmentSubpages = [
   '/us/ca/fremont/departments/police/',
   '/us/ca/fremont/departments/community-development/',
+  '/us/ca/fremont/departments/city-council/',
+  '/us/ca/fremont/departments/city-attorney/',
   '/us/ca/fremont/departments/administrative-departments/',
   '/us/ca/fremont/departments/information-technology-services/',
 ];

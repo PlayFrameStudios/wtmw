@@ -9,7 +9,8 @@
 import SourceChip from '../SourceChip.astro';
 import Sourced from '../Sourced.astro';
 import Base from '../../layouts/Base.astro';
-import type { DepartmentPageView } from '../../lib/department-detail';
+import '../../styles/departments.css';
+import { possessive, type DepartmentPageView } from '../../lib/department-detail';
 import type { City } from '../../lib/cities';
 import { shortMoney } from '../../lib/format';
 import { formatValue, type Figure } from '../../lib/receipts';
@@ -20,6 +21,8 @@ interface Props {
 }
 
 const { city, view } = Astro.props;
+/** A row's bar width: the view model's ratio of the section's biggest line (a $0 line draws nothing). */
+const bar = (ratio: number) => `${(ratio * 100).toFixed(3)}%`;
 const width = (v: number, max: number) => `${((Math.abs(v) / max) * 100).toFixed(3)}%`;
 const dollars = (v: number) => `$${v.toLocaleString('en-US')}`;
 const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'percent') : shortMoney(f.value));
@@ -30,7 +33,7 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
   city={city}
   description={
     view.kind === 'department'
-      ? `How ${view.name}'s ${view.yearLabel} operating budget is funded and spent${view.serviceAreas ? ', and what its major service areas cost' : ''}. Every number links to the public document it came from.`
+      ? `How ${possessive(view.name)} ${view.yearLabel} operating budget is funded and spent${view.serviceAreas ? ', and what its major service areas cost' : ''}. Every number links to the public document it came from.`
       : `The five General Fund offices grouped under Administrative Departments on ${city.name}'s General Fund summary, their share of that row, and the internal service fund budgeted alongside them. Every number links to the public document it came from.`
   }
 >
@@ -86,7 +89,7 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
                     </span>
                     <span class="db-per num">{l.sharePct}</span>
                     <span class="db-bar" aria-hidden="true">
-                      <span style={`width:${width(l.figure.value, view.funding.max)};background:${view.color}`} />
+                      <span style={`width:${bar(l.barRatio)};background:${view.color}`} />
                     </span>
                   </li>
                 ))
@@ -125,7 +128,7 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
                     </span>
                     <span class="db-per num">{l.sharePct}</span>
                     <span class="db-bar" aria-hidden="true">
-                      <span style={`width:${width(l.figure.value, view.categories.max)};background:${view.color}`} />
+                      <span style={`width:${bar(l.barRatio)};background:${view.color}`} />
                     </span>
                   </li>
                 ))
@@ -162,7 +165,7 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
                         </span>
                         <span class="db-per num">{l.sharePct}</span>
                         <span class="db-bar" aria-hidden="true">
-                          <span style={`width:${width(l.figure.value, view.serviceAreas!.max)};background:${view.color}`} />
+                          <span style={`width:${bar(l.barRatio)};background:${view.color}`} />
                         </span>
                       </li>
                     ))
@@ -207,7 +210,6 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
             <p class="db-note">
               These five offices make up the Administrative Departments row. Each one's General Fund line and its overhead charges to other funds both count toward that row, so the amount beside each office below is the two together, not its all-funds total.
             </p>
-            <h3 class="dd-group">General Fund offices</h3>
             <ol class="db-list" role="list">
               {
                 view.generalFundOffices.map((o) => (
@@ -276,7 +278,13 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
             <p class="db-note">
               The General Fund summary prints its row in thousands, so it reads {shortMoney(view.summary.value)} where the offices' own pages add up to {dollars(view.generalFundOnly.value + view.overheadOnly.value)}.
             </p>
-            <h3 class="dd-group">Internal service fund</h3>
+          </section>
+
+          <section class="db-section" aria-labelledby="dd-internal-service">
+            <h2 id="dd-internal-service">The internal service fund</h2>
+            <p class="db-note">
+              Information Technology Services is budgeted as an internal service fund: its costs are charged across departments rather than counted in the Administrative Departments row, and the General Fund pays its share as a direct charge.
+            </p>
             <ol class="db-list" role="list">
               <li class="db-row db-row--office">
                 <span class="db-name"><span class="db-swatch" style={`background:${view.internalService.color}`} aria-hidden="true" /><a class="db-link" href={view.internalService.href}>{view.internalService.name}</a></span>
@@ -367,132 +375,10 @@ const display = (f: Figure) => (f.format === 'percent' ? formatValue(f.value, 'p
     color: var(--muted);
     line-height: 1.55;
   }
-  .db-section {
-    max-width: 52rem;
-    padding-block: 1rem 2rem;
-  }
-  .db-section h2 {
-    margin: 0 0 1rem;
-  }
-  .dd-group {
-    margin: 1.25rem 0 0.5rem;
-    font-size: 1rem;
-  }
-  .db-note {
-    max-width: 44rem;
-    margin: 0 0 1rem;
-    color: var(--muted);
-    line-height: 1.55;
-  }
-  .db-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-top: 1px solid var(--rule);
-  }
-  .db-row {
-    display: grid;
-    /* A fixed second column, so every row's bar ends at the same place. */
-    grid-template-columns: minmax(0, 1fr) 9.5rem;
-    grid-template-areas: 'name amount' 'bar per';
-    gap: 0.25rem 1rem;
-    align-items: center;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--rule);
-  }
   .db-row--office {
     grid-template-areas: 'name amount' 'note note';
   }
   .db-row--office:has(.db-bar) {
     grid-template-areas: 'name amount' 'bar per' 'note note';
-  }
-  .db-name {
-    grid-area: name;
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    font-weight: 700;
-    min-width: 0;
-  }
-  .db-swatch {
-    flex: none;
-    width: 0.75rem;
-    height: 0.75rem;
-    border-radius: 2px;
-  }
-  .db-link {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-color: var(--bay);
-    text-underline-offset: 0.18em;
-  }
-  .db-link:hover {
-    text-decoration-style: solid;
-  }
-  .db-link:focus-visible {
-    outline: 2px solid var(--bay);
-    outline-offset: 2px;
-    border-radius: 2px;
-  }
-  .db-amount {
-    grid-area: amount;
-    font-weight: 800;
-    text-align: right;
-  }
-  .db-per {
-    grid-area: per;
-    color: var(--muted);
-    font-size: 0.8125rem;
-    text-align: right;
-    white-space: nowrap;
-  }
-  .db-bar {
-    grid-area: bar;
-    display: block;
-    height: 0.5rem;
-    border-radius: 0.25rem;
-    background: var(--rule);
-    overflow: hidden;
-  }
-  .db-bar > span {
-    display: block;
-    height: 100%;
-    background: var(--bay);
-  }
-  .db-provided {
-    grid-area: note;
-    max-width: 44rem;
-    margin: 0.25rem 0 0;
-    color: var(--muted);
-    font-size: 0.9375rem;
-    line-height: 1.55;
-  }
-  .db-sum {
-    width: 100%;
-    max-width: 30rem;
-    margin-top: 1.5rem;
-    border-collapse: collapse;
-  }
-  .db-sum caption {
-    margin-bottom: 0.5rem;
-    color: var(--muted);
-    font-weight: 700;
-    text-align: left;
-  }
-  .db-sum th,
-  .db-sum td {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--rule);
-    text-align: left;
-    font-weight: 400;
-  }
-  .db-sum td {
-    text-align: right;
-  }
-  .db-total th,
-  .db-total td {
-    border-bottom: 0;
-    border-top: 2px solid var(--ink);
-    font-weight: 800;
   }
 </style>

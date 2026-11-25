@@ -123,6 +123,14 @@ test.describe('Fremont department subpages: the Administrative Departments hub',
     await expect(parts.nth(0)).toContainText('$2,574,950');
     await expect(parts.nth(1)).toContainText('Overhead charges to other funds');
     await expect(parts.nth(1)).toContainText('$580,967');
+    await page.keyboard.press('Escape');
+    await expect(d).toBeHidden();
+    // The five-office sum cites all five lines it adds, not just Finance's: one Source and four Also pages.
+    await page.getByRole('button', { name: /^\$19\.8M, source: FY 2026\/27 Adopted Operating Budget$/ }).last().click();
+    await expect(d.locator('.figure')).toHaveText('$19,767,060');
+    await expect(d.locator('dt').filter({ hasText: /^Also p\./ })).toHaveCount(4);
+    await expect(d.locator('q.quote')).toHaveCount(5);
+    await expect(d.getByText('General Fund $ 4,952,972 87.1%')).toBeVisible();
   });
 });
 
